@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storage and Database APIs - HTML Advanced</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            color: #34495e;
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .demo-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .danger {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .success {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .warning {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+
+        .output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .form-group {
+            margin: 1rem 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .storage-item {
+            background: #ecf0f1;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .storage-item .details {
+            flex-grow: 1;
+        }
+
+        .storage-item .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .storage-item button {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .highlight {
+            background: rgba(52, 152, 219, 0.2);
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        .sync-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .synced {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+
+        .pending {
+            background: #fef9e7;
+            color: #f39c12;
+        }
+
+        .error {
+            background: #fadbd8;
+            color: #e74c3c;
+        }
+
+        .cache-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🗄️ Storage and Database APIs</h1>
+            <p>Master client-side storage with IndexedDB, Cache API, and advanced data synchronization patterns. Build
+                offline-first applications with sophisticated storage strategies.</p>
+        </header>
+
+        <!-- IndexedDB Demo -->
+        <section class="demo-section">
+            <h2>IndexedDB - Client-Side Database</h2>
+            <p>IndexedDB provides a powerful, asynchronous database for storing large amounts of structured data in the
+                browser.</p>
+
+            <div class="form-group">
+                <label for="idb-name">Name:</label>
+                <input type="text" id="idb-name" placeholder="Enter name">
+            </div>
+
+            <div class="form-group">
+                <label for="idb-email">Email:</label>
+                <input type="email" id="idb-email" placeholder="Enter email">
+            </div>
+
+            <div class="form-group">
+                <label for="idb-age">Age:</label>
+                <input type="number" id="idb-age" placeholder="Enter age">
+            </div>
+
+            <div class="demo-controls">
+                <button onclick="idbAddUser()" class="success">Add User</button>
+                <button onclick="idbLoadUsers()">Load All Users</button>
+                <button onclick="idbSearchUsers()">Search Users</button>
+                <button onclick="idbClearDatabase()" class="danger">Clear Database</button>
+            </div>
+
+            <div id="idb-output" class="output">IndexedDB operations will appear here...</div>
+            <div id="idb-users"></div>
+
+            <div class="code-block">
+                // IndexedDB Database Setup
+                const dbRequest = indexedDB.open('UserDatabase', 1);
+
+                dbRequest.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                const store = db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
+                store.createIndex('email', 'email', { unique: true });
+                store.createIndex('name', 'name', { unique: false });
+                };
+
+                // Add user with error handling
+                async function addUser(userData) {
+                return new Promise((resolve, reject) => {
+                const transaction = db.transaction(['users'], 'readwrite');
+                const store = transaction.objectStore('users');
+                const request = store.add(userData);
+
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+                });
+                }
+            </div>
+        </section>
+
+        <!-- Cache API Demo -->
+        <section class="demo-section">
+            <h2>Cache API - Resource Caching</h2>
+            <p>The Cache API provides programmatic management of cached HTTP requests and responses.</p>
+
+            <div class="cache-stats" id="cache-stats">
+                <div class="stat-card">
+                    <span class="stat-value" id="cache-size">0</span>
+                    <span class="stat-label">Cached Items</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="cache-storage">0KB</span>
+                    <span class="stat-label">Storage Used</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="cache-url">URL to Cache:</label>
+                <input type="url" id="cache-url" value="https://jsonplaceholder.typicode.com/posts/1"
+                    placeholder="Enter URL">
+            </div>
+
+            <div class="demo-controls">
+                <button onclick="cacheResource()" class="success">Cache Resource</button>
+                <button onclick="getCachedResource()">Get Cached</button>
+                <button onclick="listCachedResources()">List All Cached</button>
+                <button onclick="clearCache()" class="danger">Clear Cache</button>
+                <button onclick="updateCacheStats()">Update Stats</button>
+            </div>
+
+            <div id="cache-output" class="output">Cache API operations will appear here...</div>
+
+            <div class="code-block">
+                // Cache API with versioning
+                class CacheManager {
+                constructor(cacheName = 'app-cache-v1') {
+                this.cacheName = cacheName;
+                }
+
+                async cache(request, response) {
+                const cache = await caches.open(this.cacheName);
+                await cache.put(request, response.clone());
+                return response;
+                }
+
+                async get(request) {
+                const cache = await caches.open(this.cacheName);
+                return await cache.match(request);
+                }
+
+                async invalidate(pattern) {
+                const cache = await caches.open(this.cacheName);
+                const keys = await cache.keys();
+
+                for (const request of keys) {
+                if (request.url.includes(pattern)) {
+                await cache.delete(request);
+                }
+                }
+                }
+                }
+            </div>
+        </section>
+
+        <!-- Web Storage Demo -->
+        <section class="demo-section">
+            <h2>Web Storage Optimization</h2>
+            <p>Advanced patterns for localStorage and sessionStorage with compression and encryption.</p>
+
+            <div class="form-group">
+                <label for="storage-key">Storage Key:</label>
+                <input type="text" id="storage-key" placeholder="Enter key">
+            </div>
+
+            <div class="form-group">
+                <label for="storage-value">Storage Value:</label>
+                <textarea id="storage-value" rows="3" placeholder="Enter value (JSON supported)"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="storage-type">Storage Type:</label>
+                <select id="storage-type">
+                    <option value="localStorage">Local Storage</option>
+                    <option value="sessionStorage">Session Storage</option>
+                    <option value="compressed">Compressed Storage</option>
+                    <option value="encrypted">Encrypted Storage</option>
+                </select>
+            </div>
+
+            <div class="demo-controls">
+                <button onclick="setStorageItem()" class="success">Set Item</button>
+                <button onclick="getStorageItem()">Get Item</button>
+                <button onclick="removeStorageItem()" class="warning">Remove Item</button>
+                <button onclick="listStorageItems()">List All Items</button>
+                <button onclick="clearAllStorage()" class="danger">Clear All</button>
+            </div>
+
+            <div id="storage-output" class="output">Storage operations will appear here...</div>
+            <div id="storage-list"></div>
+
+            <div class="code-block">
+                // Advanced Storage Manager
+                class StorageManager {
+                constructor() {
+                this.compressionEnabled = true;
+                this.encryptionKey = 'your-secret-key';
+                }
+
+                async set(key, value, options = {}) {
+                let processedValue = JSON.stringify(value);
+
+                if (options.compress && this.compressionEnabled) {
+                processedValue = await this.compress(processedValue);
+                }
+
+                if (options.encrypt) {
+                processedValue = await this.encrypt(processedValue);
+                }
+
+                const metadata = {
+                timestamp: Date.now(),
+                compressed: options.compress || false,
+                encrypted: options.encrypt || false,
+                size: processedValue.length
+                };
+
+                const storage = options.session ? sessionStorage : localStorage;
+                storage.setItem(key, JSON.stringify({ data: processedValue, meta: metadata }));
+                }
+
+                async get(key, options = {}) {
+                const storage = options.session ? sessionStorage : localStorage;
+                const item = storage.getItem(key);
+
+                if (!item) return null;
+
+                const { data, meta } = JSON.parse(item);
+                let processedData = data;
+
+                if (meta.encrypted) {
+                processedData = await this.decrypt(processedData);
+                }
+
+                if (meta.compressed) {
+                processedData = await this.decompress(processedData);
+                }
+
+                return JSON.parse(processedData);
+                }
+                }
+            </div>
+        </section>
+
+        <!-- Data Synchronization Demo -->
+        <section class="demo-section">
+            <h2>Data Synchronization Patterns</h2>
+            <p>Implement offline-first data synchronization with conflict resolution and background sync.</p>
+
+            <div class="form-group">
+                <label for="sync-data">Data to Sync:</label>
+                <textarea id="sync-data" rows="3" placeholder='{"title": "My Task", "completed": false}'></textarea>
+            </div>
+
+            <div class="demo-controls">
+                <button onclick="addSyncData()" class="success">Add Data</button>
+                <button onclick="syncToServer()">Sync to Server</button>
+                <button onclick="simulateOffline()" class="warning">Simulate Offline</button>
+                <button onclick="simulateOnline()" class="success">Simulate Online</button>
+                <button onclick="showSyncQueue()">Show Queue</button>
+                <button onclick="clearSyncData()" class="danger">Clear All</button>
+            </div>
+
+            <div id="sync-output" class="output">Synchronization status will appear here...</div>
+            <div id="sync-queue"></div>
+
+            <div class="code-block">
+                // Data Synchronization Manager
+                class SyncManager {
+                constructor() {
+                this.isOnline = navigator.onLine;
+                this.syncQueue = [];
+                this.conflictResolver = new ConflictResolver();
+
+                window.addEventListener('online', () => this.handleOnline());
+                window.addEventListener('offline', () => this.handleOffline());
+                }
+
+                async addToQueue(operation, data) {
+                const syncItem = {
+                id: crypto.randomUUID(),
+                operation,
+                data,
+                timestamp: Date.now(),
+                attempts: 0,
+                status: 'pending'
+                };
+
+                this.syncQueue.push(syncItem);
+                await this.persistQueue();
+
+                if (this.isOnline) {
+                await this.processSyncQueue();
+                }
+                }
+
+                async processSyncQueue() {
+                const pendingItems = this.syncQueue.filter(item => item.status === 'pending');
+
+                for (const item of pendingItems) {
+                try {
+                await this.syncItem(item);
+                item.status = 'synced';
+                } catch (error) {
+                item.attempts++;
+                item.lastError = error.message;
+
+                if (item.attempts >= 3) {
+                item.status = 'failed';
+                }
+                }
+                }
+
+                await this.persistQueue();
+                }
+
+                async syncItem(item) {
+                const response = await fetch('/api/sync', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(item)
+                });
+
+                if (!response.ok) {
+                throw new Error(`Sync failed: ${response.statusText}`);
+                }
+
+                return response.json();
+                }
+                }
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // IndexedDB Implementation
+        let db;
+        const dbName = 'UserDatabase';
+        const dbVersion = 1;
+
+        // Initialize IndexedDB
+        const initDB = () => {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(dbName, dbVersion);
+
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                    db = request.result;
+                    resolve(db);
+                };
+
+                request.onupgradeneeded = (event) => {
+                    db = event.target.result;
+
+                    if (!db.objectStoreNames.contains('users')) {
+                        const store = db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
+                        store.createIndex('email', 'email', { unique: true });
+                        store.createIndex('name', 'name', { unique: false });
+                    }
+                };
+            });
+        };
+
+        // IndexedDB Operations
+        async function idbAddUser() {
+            const name = document.getElementById('idb-name').value;
+            const email = document.getElementById('idb-email').value;
+            const age = parseInt(document.getElementById('idb-age').value);
+
+            if (!name || !email || !age) {
+                updateOutput('idb-output', 'Please fill all fields');
+                return;
+            }
+
+            try {
+                const transaction = db.transaction(['users'], 'readwrite');
+                const store = transaction.objectStore('users');
+                const request = store.add({ name, email, age, created: new Date().toISOString() });
+
+                request.onsuccess = () => {
+                    updateOutput('idb-output', `User added with ID: ${request.result}`);
+                    clearInputs();
+                    idbLoadUsers();
+                };
+
+                request.onerror = () => {
+                    updateOutput('idb-output', `Error: ${request.error.message}`);
+                };
+            } catch (error) {
+                updateOutput('idb-output', `Error: ${error.message}`);
+            }
+        }
+
+        async function idbLoadUsers() {
+            try {
+                const transaction = db.transaction(['users'], 'readonly');
+                const store = transaction.objectStore('users');
+                const request = store.getAll();
+
+                request.onsuccess = () => {
+                    const users = request.result;
+                    updateOutput('idb-output', `Loaded ${users.length} users`);
+                    displayUsers(users);
+                };
+            } catch (error) {
+                updateOutput('idb-output', `Error: ${error.message}`);
+            }
+        }
+
+        async function idbSearchUsers() {
+            const searchTerm = prompt('Enter name to search:');
+            if (!searchTerm) return;
+
+            try {
+                const transaction = db.transaction(['users'], 'readonly');
+                const store = transaction.objectStore('users');
+                const index = store.index('name');
+                const request = index.getAll(IDBKeyRange.bound(searchTerm, searchTerm + '\uffff'));
+
+                request.onsuccess = () => {
+                    const users = request.result;
+                    updateOutput('idb-output', `Found ${users.length} users matching "${searchTerm}"`);
+                    displayUsers(users);
+                };
+            } catch (error) {
+                updateOutput('idb-output', `Error: ${error.message}`);
+            }
+        }
+
+        async function idbClearDatabase() {
+            if (!confirm('Clear all users?')) return;
+
+            try {
+                const transaction = db.transaction(['users'], 'readwrite');
+                const store = transaction.objectStore('users');
+                const request = store.clear();
+
+                request.onsuccess = () => {
+                    updateOutput('idb-output', 'Database cleared');
+                    document.getElementById('idb-users').innerHTML = '';
+                };
+            } catch (error) {
+                updateOutput('idb-output', `Error: ${error.message}`);
+            }
+        }
+
+        function displayUsers(users) {
+            const container = document.getElementById('idb-users');
+            container.innerHTML = users.map(user => `
+                <div class="storage-item">
+                    <div class="details">
+                        <strong>${user.name}</strong> (${user.email}) - Age: ${user.age}
+                        <br><small>ID: ${user.id} | Created: ${new Date(user.created).toLocaleString()}</small>
+                    </div>
+                    <div class="actions">
+                        <button onclick="idbDeleteUser(${user.id})" class="danger">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function idbDeleteUser(id) {
+            try {
+                const transaction = db.transaction(['users'], 'readwrite');
+                const store = transaction.objectStore('users');
+                const request = store.delete(id);
+
+                request.onsuccess = () => {
+                    updateOutput('idb-output', `User ${id} deleted`);
+                    idbLoadUsers();
+                };
+            } catch (error) {
+                updateOutput('idb-output', `Error: ${error.message}`);
+            }
+        }
+
+        // Cache API Implementation
+        const cacheName = 'demo-cache-v1';
+
+        async function cacheResource() {
+            const url = document.getElementById('cache-url').value;
+            if (!url) return;
+
+            try {
+                const cache = await caches.open(cacheName);
+                const response = await fetch(url);
+
+                if (response.ok) {
+                    await cache.put(url, response.clone());
+                    updateOutput('cache-output', `Cached: ${url}`);
+                    updateCacheStats();
+                } else {
+                    updateOutput('cache-output', `Failed to cache: ${response.statusText}`);
+                }
+            } catch (error) {
+                updateOutput('cache-output', `Error: ${error.message}`);
+            }
+        }
+
+        async function getCachedResource() {
+            const url = document.getElementById('cache-url').value;
+            if (!url) return;
+
+            try {
+                const cache = await caches.open(cacheName);
+                const response = await cache.match(url);
+
+                if (response) {
+                    const data = await response.text();
+                    updateOutput('cache-output', `Retrieved from cache:\n${data.substring(0, 200)}...`);
+                } else {
+                    updateOutput('cache-output', `Not found in cache: ${url}`);
+                }
+            } catch (error) {
+                updateOutput('cache-output', `Error: ${error.message}`);
+            }
+        }
+
+        async function listCachedResources() {
+            try {
+                const cache = await caches.open(cacheName);
+                const keys = await cache.keys();
+
+                const urls = keys.map(request => request.url);
+                updateOutput('cache-output', `Cached resources:\n${urls.join('\n')}`);
+            } catch (error) {
+                updateOutput('cache-output', `Error: ${error.message}`);
+            }
+        }
+
+        async function clearCache() {
+            try {
+                await caches.delete(cacheName);
+                updateOutput('cache-output', 'Cache cleared');
+                updateCacheStats();
+            } catch (error) {
+                updateOutput('cache-output', `Error: ${error.message}`);
+            }
+        }
+
+        async function updateCacheStats() {
+            try {
+                const cache = await caches.open(cacheName);
+                const keys = await cache.keys();
+
+                document.getElementById('cache-size').textContent = keys.length;
+
+                if ('storage' in navigator && 'estimate' in navigator.storage) {
+                    const estimate = await navigator.storage.estimate();
+                    const usedMB = (estimate.usage / 1024 / 1024).toFixed(2);
+                    document.getElementById('cache-storage').textContent = `${usedMB}MB`;
+                }
+            } catch (error) {
+                console.error('Error updating cache stats:', error);
+            }
+        }
+
+        // Storage Manager Implementation
+        class AdvancedStorage {
+            constructor() {
+                this.prefix = 'demo_';
+            }
+
+            set(key, value, options = {}) {
+                const storage = options.session ? sessionStorage : localStorage;
+                const metadata = {
+                    timestamp: Date.now(),
+                    type: typeof value,
+                    compressed: options.compress || false,
+                    expires: options.expires || null
+                };
+
+                const item = {
+                    data: value,
+                    meta: metadata
+                };
+
+                storage.setItem(this.prefix + key, JSON.stringify(item));
+            }
+
+            get(key, options = {}) {
+                const storage = options.session ? sessionStorage : localStorage;
+                const item = storage.getItem(this.prefix + key);
+
+                if (!item) return null;
+
+                try {
+                    const parsed = JSON.parse(item);
+
+                    // Check expiration
+                    if (parsed.meta.expires && Date.now() > parsed.meta.expires) {
+                        this.remove(key, options);
+                        return null;
+                    }
+
+                    return parsed.data;
+                } catch (error) {
+                    return null;
+                }
+            }
+
+            remove(key, options = {}) {
+                const storage = options.session ? sessionStorage : localStorage;
+                storage.removeItem(this.prefix + key);
+            }
+
+            list(options = {}) {
+                const storage = options.session ? sessionStorage : localStorage;
+                const items = [];
+
+                for (let i = 0; i < storage.length; i++) {
+                    const key = storage.key(i);
+                    if (key.startsWith(this.prefix)) {
+                        const cleanKey = key.replace(this.prefix, '');
+                        const value = this.get(cleanKey, options);
+                        items.push({ key: cleanKey, value });
+                    }
+                }
+
+                return items;
+            }
+
+            clear(options = {}) {
+                const storage = options.session ? sessionStorage : localStorage;
+                const keysToRemove = [];
+
+                for (let i = 0; i < storage.length; i++) {
+                    const key = storage.key(i);
+                    if (key.startsWith(this.prefix)) {
+                        keysToRemove.push(key);
+                    }
+                }
+
+                keysToRemove.forEach(key => storage.removeItem(key));
+            }
+        }
+
+        const advancedStorage = new AdvancedStorage();
+
+        // Storage Operations
+        function setStorageItem() {
+            const key = document.getElementById('storage-key').value;
+            const value = document.getElementById('storage-value').value;
+            const type = document.getElementById('storage-type').value;
+
+            if (!key || !value) return;
+
+            try {
+                let parsedValue = value;
+                try {
+                    parsedValue = JSON.parse(value);
+                } catch {
+                    // Keep as string if not valid JSON
+                }
+
+                const options = {
+                    session: type === 'sessionStorage',
+                    compress: type === 'compressed',
+                    encrypt: type === 'encrypted'
+                };
+
+                advancedStorage.set(key, parsedValue, options);
+                updateOutput('storage-output', `Stored "${key}" with type: ${type}`);
+                listStorageItems();
+            } catch (error) {
+                updateOutput('storage-output', `Error: ${error.message}`);
+            }
+        }
+
+        function getStorageItem() {
+            const key = document.getElementById('storage-key').value;
+            if (!key) return;
+
+            const value = advancedStorage.get(key);
+            if (value !== null) {
+                updateOutput('storage-output', `Retrieved "${key}":\n${JSON.stringify(value, null, 2)}`);
+            } else {
+                updateOutput('storage-output', `Key "${key}" not found`);
+            }
+        }
+
+        function removeStorageItem() {
+            const key = document.getElementById('storage-key').value;
+            if (!key) return;
+
+            advancedStorage.remove(key);
+            updateOutput('storage-output', `Removed "${key}"`);
+            listStorageItems();
+        }
+
+        function listStorageItems() {
+            const items = advancedStorage.list();
+            const container = document.getElementById('storage-list');
+
+            container.innerHTML = items.map(item => `
+                <div class="storage-item">
+                    <div class="details">
+                        <strong>${item.key}</strong>
+                        <br><small>${JSON.stringify(item.value).substring(0, 100)}...</small>
+                    </div>
+                    <div class="actions">
+                        <button onclick="loadStorageItem('${item.key}')">Load</button>
+                        <button onclick="deleteStorageItem('${item.key}')" class="danger">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadStorageItem(key) {
+            document.getElementById('storage-key').value = key;
+            const value = advancedStorage.get(key);
+            document.getElementById('storage-value').value = JSON.stringify(value, null, 2);
+        }
+
+        function deleteStorageItem(key) {
+            advancedStorage.remove(key);
+            updateOutput('storage-output', `Deleted "${key}"`);
+            listStorageItems();
+        }
+
+        function clearAllStorage() {
+            if (!confirm('Clear all storage?')) return;
+
+            advancedStorage.clear();
+            updateOutput('storage-output', 'All storage cleared');
+            listStorageItems();
+        }
+
+        // Sync Manager Implementation
+        class MockSyncManager {
+            constructor() {
+                this.isOnline = true;
+                this.syncQueue = [];
+                this.serverData = [];
+            }
+
+            addToQueue(data) {
+                const item = {
+                    id: crypto.randomUUID(),
+                    data: JSON.parse(data),
+                    timestamp: Date.now(),
+                    status: 'pending'
+                };
+
+                this.syncQueue.push(item);
+                updateOutput('sync-output', `Added to sync queue: ${item.id}`);
+                this.showQueue();
+
+                if (this.isOnline) {
+                    setTimeout(() => this.processQueue(), 1000);
+                }
+            }
+
+            async processQueue() {
+                const pendingItems = this.syncQueue.filter(item => item.status === 'pending');
+
+                for (const item of pendingItems) {
+                    if (this.isOnline) {
+                        // Simulate server sync
+                        item.status = 'synced';
+                        this.serverData.push(item.data);
+                        updateOutput('sync-output', `Synced item: ${item.id}`);
+                    }
+                }
+
+                this.showQueue();
+            }
+
+            setOffline() {
+                this.isOnline = false;
+                updateOutput('sync-output', 'Went offline - items will queue for sync');
+            }
+
+            setOnline() {
+                this.isOnline = true;
+                updateOutput('sync-output', 'Back online - processing queue');
+                this.processQueue();
+            }
+
+            showQueue() {
+                const container = document.getElementById('sync-queue');
+                container.innerHTML = this.syncQueue.map(item => `
+                    <div class="storage-item">
+                        <div class="details">
+                            <strong>ID: ${item.id.substring(0, 8)}...</strong>
+                            <span class="sync-status ${item.status}">${item.status.toUpperCase()}</span>
+                            <br><small>${JSON.stringify(item.data)}</small>
+                            <br><small>Created: ${new Date(item.timestamp).toLocaleString()}</small>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            clear() {
+                this.syncQueue = [];
+                this.serverData = [];
+                updateOutput('sync-output', 'Sync data cleared');
+                this.showQueue();
+            }
+        }
+
+        const syncManager = new MockSyncManager();
+
+        // Sync Operations
+        function addSyncData() {
+            const data = document.getElementById('sync-data').value;
+            if (!data) return;
+
+            try {
+                JSON.parse(data); // Validate JSON
+                syncManager.addToQueue(data);
+            } catch (error) {
+                updateOutput('sync-output', `Invalid JSON: ${error.message}`);
+            }
+        }
+
+        function syncToServer() {
+            syncManager.processQueue();
+        }
+
+        function simulateOffline() {
+            syncManager.setOffline();
+        }
+
+        function simulateOnline() {
+            syncManager.setOnline();
+        }
+
+        function showSyncQueue() {
+            syncManager.showQueue();
+        }
+
+        function clearSyncData() {
+            syncManager.clear();
+        }
+
+        // Utility Functions
+        function updateOutput(elementId, message) {
+            const output = document.getElementById(elementId);
+            const timestamp = new Date().toLocaleTimeString();
+            output.textContent = `[${timestamp}] ${message}`;
+        }
+
+        function clearInputs() {
+            document.getElementById('idb-name').value = '';
+            document.getElementById('idb-email').value = '';
+            document.getElementById('idb-age').value = '';
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                await initDB();
+                updateOutput('idb-output', 'IndexedDB initialized successfully');
+                updateCacheStats();
+                listStorageItems();
+                syncManager.showQueue();
+            } catch (error) {
+                updateOutput('idb-output', `Failed to initialize IndexedDB: ${error.message}`);
+            }
+        });
+    </script>
+</body>
+
+</html>

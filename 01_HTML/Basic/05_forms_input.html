@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Forms and Input Elements</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        form {
+            background: #f4f4f4;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        input[type="date"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .checkbox-group,
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 5px;
+        }
+
+        .checkbox-group label,
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+        }
+
+        .checkbox-group input,
+        .radio-group input {
+            width: auto;
+            margin-right: 5px;
+        }
+
+        .required {
+            color: red;
+        }
+
+        .form-section {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .code-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>HTML Forms and Input Elements</h1>
+
+    <p>
+        Forms are essential for collecting user data. This lesson covers all major form elements,
+        input types, validation, and accessibility best practices.
+    </p>
+
+    <!-- Basic Form Structure -->
+    <section class="form-section">
+        <h2>1. Basic Form Structure</h2>
+        <p>Forms use the &lt;form&gt; element to wrap all input elements.</p>
+
+        <div class="code-example">
+            &lt;form action="/submit" method="POST"&gt;
+            &lt;!-- Form elements go here --&gt;
+            &lt;/form&gt;
+        </div>
+
+        <form action="#" method="post">
+            <div class="form-group">
+                <label for="name">Full Name <span class="required">*</span></label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address <span class="required">*</span></label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+
+    <!-- Input Types -->
+    <section class="form-section">
+        <h2>2. Input Types</h2>
+        <p>HTML5 provides many input types for different data types and user experiences.</p>
+
+        <form action="#" method="post">
+            <div class="form-group">
+                <label for="username">Username (Text)</label>
+                <input type="text" id="username" name="username" placeholder="Enter username">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter password">
+            </div>
+
+            <div class="form-group">
+                <label for="age">Age (Number)</label>
+                <input type="number" id="age" name="age" min="1" max="120" placeholder="Enter age">
+            </div>
+
+            <div class="form-group">
+                <label for="birthdate">Birth Date</label>
+                <input type="date" id="birthdate" name="birthdate">
+            </div>
+
+            <div class="form-group">
+                <label for="website">Website URL</label>
+                <input type="url" id="website" name="website" placeholder="https://example.com">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="(123) 456-7890">
+            </div>
+
+            <div class="form-group">
+                <label for="search">Search</label>
+                <input type="search" id="search" name="search" placeholder="Search...">
+            </div>
+
+            <div class="form-group">
+                <label for="range">Experience Level (1-10)</label>
+                <input type="range" id="range" name="range" min="1" max="10" value="5">
+                <output>5</output>
+            </div>
+
+            <div class="form-group">
+                <label for="color">Favorite Color</label>
+                <input type="color" id="color" name="color" value="#007bff">
+            </div>
+        </form>
+    </section>
+
+    <!-- Textarea and Select -->
+    <section class="form-section">
+        <h2>3. Textarea and Select Elements</h2>
+
+        <form action="#" method="post">
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" placeholder="Enter your message here..." rows="4"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="country">Country</label>
+                <select id="country" name="country">
+                    <option value="">Select a country</option>
+                    <option value="us">United States</option>
+                    <option value="ca">Canada</option>
+                    <option value="uk">United Kingdom</option>
+                    <option value="au">Australia</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="languages">Programming Languages (Multiple)</label>
+                <select id="languages" name="languages[]" multiple size="4">
+                    <option value="html">HTML</option>
+                    <option value="css">CSS</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="java">Java</option>
+                    <option value="cpp">C++</option>
+                </select>
+                <small>Hold Ctrl (Cmd on Mac) to select multiple options</small>
+            </div>
+        </form>
+    </section>
+
+    <!-- Radio Buttons and Checkboxes -->
+    <section class="form-section">
+        <h2>4. Radio Buttons and Checkboxes</h2>
+
+        <form action="#" method="post">
+            <div class="form-group">
+                <label>Experience Level <span class="required">*</span></label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="experience" value="beginner" required>
+                        Beginner
+                    </label>
+                    <label>
+                        <input type="radio" name="experience" value="intermediate">
+                        Intermediate
+                    </label>
+                    <label>
+                        <input type="radio" name="experience" value="advanced">
+                        Advanced
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Skills (Select all that apply)</label>
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" name="skills[]" value="html">
+                        HTML
+                    </label>
+                    <label>
+                        <input type="checkbox" name="skills[]" value="css">
+                        CSS
+                    </label>
+                    <label>
+                        <input type="checkbox" name="skills[]" value="javascript">
+                        JavaScript
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="newsletter" value="yes">
+                    Subscribe to newsletter
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="terms" value="agree" required>
+                    I agree to the terms and conditions <span class="required">*</span>
+                </label>
+            </div>
+        </form>
+    </section>
+
+    <!-- Form Validation -->
+    <section class="form-section">
+        <h2>5. Form Validation</h2>
+        <p>HTML5 provides built-in validation attributes for better user experience.</p>
+
+        <form action="#" method="post">
+            <div class="form-group">
+                <label for="required-field">Required Field <span class="required">*</span></label>
+                <input type="text" id="required-field" name="required-field" required>
+            </div>
+
+            <div class="form-group">
+                <label for="min-length">Minimum Length (5 characters)</label>
+                <input type="text" id="min-length" name="min-length" minlength="5" placeholder="At least 5 characters">
+            </div>
+
+            <div class="form-group">
+                <label for="pattern">Pattern (Letters only)</label>
+                <input type="text" id="pattern" name="pattern" pattern="[A-Za-z]+" title="Letters only"
+                    placeholder="Letters only">
+            </div>
+
+            <div class="form-group">
+                <label for="number-range">Number Range (1-100)</label>
+                <input type="number" id="number-range" name="number-range" min="1" max="100">
+            </div>
+
+            <button type="submit">Validate and Submit</button>
+        </form>
+    </section>
+
+    <!-- Accessibility and Best Practices -->
+    <section class="form-section">
+        <h2>6. Accessibility and Best Practices</h2>
+
+        <h3>Key Principles:</h3>
+        <ul>
+            <li><strong>Labels:</strong> Always use proper &lt;label&gt; elements with for attributes</li>
+            <li><strong>Required Fields:</strong> Mark required fields clearly</li>
+            <li><strong>Error Messages:</strong> Provide clear, helpful error messages</li>
+            <li><strong>Keyboard Navigation:</strong> Ensure all form elements are keyboard accessible</li>
+            <li><strong>Fieldsets:</strong> Group related fields with &lt;fieldset&gt; and &lt;legend&gt;</li>
+        </ul>
+
+        <form action="#" method="post">
+            <fieldset>
+                <legend>Personal Information</legend>
+
+                <div class="form-group">
+                    <label for="first-name">First Name <span class="required">*</span></label>
+                    <input type="text" id="first-name" name="first-name" required aria-describedby="first-name-error">
+                    <div id="first-name-error" class="error" style="color: red; font-size: 14px;"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="last-name">Last Name <span class="required">*</span></label>
+                    <input type="text" id="last-name" name="last-name" required aria-describedby="last-name-help">
+                    <div id="last-name-help" class="help" style="font-size: 12px; color: #666;">
+                        Enter your full last name
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Contact Information</legend>
+
+                <div class="form-group">
+                    <label for="contact-email">Email Address <span class="required">*</span></label>
+                    <input type="email" id="contact-email" name="contact-email" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="contact-phone">Phone Number</label>
+                    <input type="tel" id="contact-phone" name="contact-phone" autocomplete="tel">
+                </div>
+            </fieldset>
+
+            <button type="submit">Submit Form</button>
+        </form>
+    </section>
+
+    <!-- Senior Engineer Tips -->
+    <section class="form-section" style="background: #e8f5e8; border: 1px solid #28a745;">
+        <h2>🎯 Senior Engineer Tips</h2>
+        <ul>
+            <li><strong>Progressive Enhancement:</strong> Start with basic HTML forms, then enhance with JavaScript</li>
+            <li><strong>Client-Side Validation:</strong> Use HTML5 validation as a baseline, add JavaScript for complex
+                validation</li>
+            <li><strong>Server-Side Validation:</strong> NEVER trust client-side validation alone</li>
+            <li><strong>Autocomplete:</strong> Use autocomplete attributes to help users and password managers</li>
+            <li><strong>CSRF Protection:</strong> Always implement CSRF tokens for forms that modify data</li>
+            <li><strong>Sanitization:</strong> Sanitize all user input on the server side</li>
+            <li><strong>UX Considerations:</strong> Show validation errors inline, not just on submit</li>
+            <li><strong>Mobile Optimization:</strong> Use appropriate input types for mobile keyboards</li>
+        </ul>
+    </section>
+
+    <!-- Practice Exercises -->
+    <section class="form-section" style="background: #fff3cd; border: 1px solid #ffc107;">
+        <h2>📝 Practice Exercises</h2>
+        <ol>
+            <li>Create a contact form with validation</li>
+            <li>Build a user registration form with password confirmation</li>
+            <li>Design a survey form with various input types</li>
+            <li>Create a job application form with file upload</li>
+            <li>Build a login form with proper accessibility</li>
+        </ol>
+    </section>
+
+    <script>
+        // Simple JavaScript to demonstrate form interaction
+        document.getElementById('range').addEventListener('input', function () {
+            this.nextElementSibling.textContent = this.value;
+        });
+
+        // Basic form validation feedback
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                alert('Form submitted! (This is just a demo)');
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Responsive Design</title>
+    <style>
+        /* Advanced Responsive Design Foundations */
+        :root {
+            /* Fluid Typography Scale */
+            --font-size-sm: clamp(0.8rem, 0.75rem + 0.25vw, 0.9rem);
+            --font-size-base: clamp(1rem, 0.9rem + 0.5vw, 1.2rem);
+            --font-size-lg: clamp(1.2rem, 1rem + 1vw, 1.8rem);
+            --font-size-xl: clamp(1.5rem, 1.2rem + 1.5vw, 2.5rem);
+            --font-size-2xl: clamp(2rem, 1.5rem + 2.5vw, 4rem);
+
+            /* Fluid Spacing */
+            --space-xs: clamp(0.25rem, 0.2rem + 0.25vw, 0.5rem);
+            --space-sm: clamp(0.5rem, 0.4rem + 0.5vw, 1rem);
+            --space-md: clamp(1rem, 0.8rem + 1vw, 2rem);
+            --space-lg: clamp(1.5rem, 1rem + 2.5vw, 4rem);
+            --space-xl: clamp(2rem, 1.5rem + 2.5vw, 5rem);
+
+            /* Container Queries Breakpoints */
+            --container-xs: 20rem;
+            --container-sm: 24rem;
+            --container-md: 28rem;
+            --container-lg: 32rem;
+            --container-xl: 36rem;
+
+            /* Color System */
+            --color-primary: #3b82f6;
+            --color-secondary: #10b981;
+            --color-accent: #f59e0b;
+            --color-neutral-50: #f9fafb;
+            --color-neutral-100: #f3f4f6;
+            --color-neutral-200: #e5e7eb;
+            --color-neutral-300: #d1d5db;
+            --color-neutral-500: #6b7280;
+            --color-neutral-700: #374151;
+            --color-neutral-900: #111827;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+            /* Transitions */
+            --transition-fast: 150ms ease-in-out;
+            --transition-normal: 300ms ease-in-out;
+            --transition-slow: 500ms ease-in-out;
+        }
+
+        /* Modern CSS Reset */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: var(--font-size-base);
+            line-height: 1.6;
+            color: var(--color-neutral-700);
+            background-color: var(--color-neutral-50);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        img,
+        picture,
+        video,
+        canvas,
+        svg {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        input,
+        button,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+        /* Container Queries Implementation */
+        .container-query-demo {
+            container-type: inline-size;
+            container-name: demo-container;
+            background: white;
+            border: 2px solid var(--color-neutral-200);
+            border-radius: 12px;
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            resize: horizontal;
+            overflow: auto;
+            min-width: 200px;
+            max-width: 100%;
+        }
+
+        .adaptive-card {
+            background: linear-gradient(135deg, var(--color-primary), #1d4ed8);
+            color: white;
+            padding: var(--space-sm);
+            border-radius: 8px;
+            text-align: center;
+            transition: var(--transition-normal);
+        }
+
+        /* Container Query Styles */
+        @container demo-container (min-width: 300px) {
+            .adaptive-card {
+                padding: var(--space-md);
+                display: flex;
+                align-items: center;
+                gap: var(--space-sm);
+                text-align: left;
+            }
+        }
+
+        @container demo-container (min-width: 500px) {
+            .adaptive-card {
+                padding: var(--space-lg);
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .adaptive-card h3 {
+                font-size: var(--font-size-xl);
+            }
+        }
+
+        /* Intrinsic Web Design Grid */
+        .intrinsic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+            gap: var(--space-md);
+            margin: var(--space-md) 0;
+        }
+
+        .grid-item {
+            background: white;
+            padding: var(--space-md);
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--color-neutral-200);
+            transition: var(--transition-normal);
+        }
+
+        .grid-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Responsive Typography with clamp() */
+        .hero {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            color: white;
+            padding: var(--space-xl) var(--space-md);
+            text-align: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .hero-title {
+            font-size: var(--font-size-2xl);
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: var(--font-size-lg);
+            opacity: 0.9;
+            max-width: 60ch;
+            margin: 0 auto;
+        }
+
+        /* Modern CSS Layout Techniques */
+        .layout-container {
+            max-width: min(1200px, 90vw);
+            margin: 0 auto;
+            padding: 0 var(--space-md);
+        }
+
+        /* Flexible Sidebar Layout */
+        .sidebar-layout {
+            display: grid;
+            grid-template-columns: minmax(250px, 1fr) 3fr;
+            gap: var(--space-lg);
+            align-items: start;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sidebar {
+            background: white;
+            padding: var(--space-md);
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: var(--space-md);
+        }
+
+        .main-content {
+            background: white;
+            padding: var(--space-lg);
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Responsive Images with aspect-ratio */
+        .responsive-image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-md);
+            margin: var(--space-md) 0;
+        }
+
+        .image-container {
+            aspect-ratio: 16 / 9;
+            background: linear-gradient(45deg, var(--color-neutral-200), var(--color-neutral-300));
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition-normal);
+        }
+
+        .image-container:hover {
+            transform: scale(1.02);
+        }
+
+        .image-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-lg);
+            color: var(--color-neutral-500);
+        }
+
+        /* Progressive Enhancement Demo */
+        .progressive-demo {
+            background: white;
+            padding: var(--space-md);
+            border-radius: 8px;
+            border: 1px solid var(--color-neutral-200);
+            margin: var(--space-md) 0;
+        }
+
+        /* Base styles (mobile-first) */
+        .progressive-card {
+            background: var(--color-neutral-100);
+            padding: var(--space-sm);
+            border-radius: 4px;
+            margin-bottom: var(--space-sm);
+        }
+
+        /* Enhanced styles for larger screens */
+        @supports (display: grid) {
+            .progressive-cards {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: var(--space-md);
+            }
+
+            .progressive-card {
+                margin-bottom: 0;
+            }
+        }
+
+        @supports (backdrop-filter: blur(10px)) {
+            .progressive-card {
+                background: rgba(255, 255, 255, 0.7);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        /* Modern CSS Features */
+        .modern-features-demo {
+            background: white;
+            padding: var(--space-lg);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            margin: var(--space-lg) 0;
+        }
+
+        /* CSS Subgrid (where supported) */
+        .subgrid-demo {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-md);
+        }
+
+        @supports (grid-template-rows: subgrid) {
+            .subgrid-item {
+                display: grid;
+                grid-template-rows: subgrid;
+                grid-row: span 3;
+            }
+        }
+
+        /* CSS Container Queries for Components */
+        .responsive-component {
+            container-type: inline-size;
+            background: white;
+            border: 1px solid var(--color-neutral-200);
+            border-radius: 8px;
+            padding: var(--space-sm);
+            margin: var(--space-sm) 0;
+        }
+
+        .component-content {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        @container (min-width: 400px) {
+            .component-content {
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+
+        /* Responsive Navigation */
+        .nav-demo {
+            background: white;
+            padding: var(--space-md);
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+            margin: var(--space-md) 0;
+        }
+
+        .nav-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+            list-style: none;
+        }
+
+        .nav-item {
+            flex: 1;
+            min-width: max-content;
+        }
+
+        .nav-link {
+            display: block;
+            padding: var(--space-sm);
+            text-decoration: none;
+            color: var(--color-neutral-700);
+            border-radius: 4px;
+            text-align: center;
+            transition: var(--transition-fast);
+        }
+
+        .nav-link:hover {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* Advanced Media Queries */
+        @media (hover: hover) {
+            .hover-effects {
+                cursor: pointer;
+            }
+
+            .hover-effects:hover {
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-lg);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-neutral-50: #111827;
+                --color-neutral-100: #1f2937;
+                --color-neutral-200: #374151;
+                --color-neutral-700: #f3f4f6;
+                --color-neutral-900: #f9fafb;
+            }
+        }
+
+        /* High Density Display Support */
+        @media (-webkit-min-device-pixel-ratio: 2),
+        (min-resolution: 192dpi) {
+            .high-res-content {
+                /* Styles for high-resolution displays */
+                font-weight: 300;
+                /* Thinner fonts look better on retina */
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            .print-friendly {
+                background: white !important;
+                color: black !important;
+                box-shadow: none !important;
+            }
+        }
+
+        /* Accessibility Features */
+        .accessible-focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+        }
+
+        .accessible-focus:focus {
+            outline-color: var(--color-primary);
+        }
+
+        @media (forced-colors: active) {
+            .accessible-focus:focus {
+                outline: 2px solid ButtonText;
+            }
+        }
+
+        /* Demo Controls */
+        .demo-controls {
+            background: white;
+            padding: var(--space-md);
+            border-radius: 8px;
+            margin: var(--space-md) 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .control-group {
+            display: flex;
+            gap: var(--space-sm);
+            align-items: center;
+            margin-bottom: var(--space-sm);
+        }
+
+        .control-label {
+            font-weight: 500;
+            min-width: 120px;
+        }
+
+        .control-input {
+            flex: 1;
+            padding: var(--space-xs);
+            border: 1px solid var(--color-neutral-300);
+            border-radius: 4px;
+        }
+
+        /* Code Examples */
+        .code-example {
+            background: var(--color-neutral-900);
+            color: var(--color-neutral-100);
+            padding: var(--space-md);
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: var(--space-md) 0;
+        }
+
+        .code-highlight {
+            background: rgba(59, 130, 246, 0.2);
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+        }
+
+        /* Responsive Text */
+        .responsive-text {
+            font-size: clamp(1rem, 2.5vw, 2rem);
+            line-height: 1.4;
+        }
+
+        /* Section Styling */
+        .section {
+            margin: var(--space-xl) 0;
+        }
+
+        .section-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: var(--color-neutral-900);
+            margin-bottom: var(--space-md);
+        }
+
+        .section-description {
+            font-size: var(--font-size-lg);
+            color: var(--color-neutral-500);
+            margin-bottom: var(--space-lg);
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hero">
+        <div class="layout-container">
+            <h1 class="hero-title">Advanced Responsive Design</h1>
+            <p class="hero-subtitle">Container Queries, Intrinsic Web Design, and Modern CSS Layout Techniques</p>
+        </div>
+    </div>
+
+    <div class="layout-container">
+        <!-- Container Queries Demo -->
+        <section class="section">
+            <h2 class="section-title">Container Queries</h2>
+            <p class="section-description">
+                Container queries allow components to respond to their container's size instead of the viewport size,
+                enabling truly modular and reusable responsive components.
+            </p>
+
+            <div class="demo-controls no-print">
+                <h3>Resize the container below to see container queries in action:</h3>
+                <p>Drag the resize handle in the bottom-right corner of the container.</p>
+            </div>
+
+            <div class="container-query-demo">
+                <div class="adaptive-card">
+                    <div>
+                        <h3>Adaptive Component</h3>
+                        <p>This component changes its layout based on container width, not viewport width.</p>
+                    </div>
+                    <div>
+                        <button class="accessible-focus"
+                            style="padding: var(--space-xs) var(--space-sm); background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 4px; cursor: pointer;">Action</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-example">
+                <span class="code-highlight">.container-query-demo {
+                    container-type: inline-size;
+                    container-name: demo-container;
+                    }</span>
+
+                <span class="code-highlight">@container demo-container (min-width: 300px) {
+                    .adaptive-card {
+                    display: flex;
+                    align-items: center;
+                    text-align: left;
+                    }
+                    }</span>
+
+                @container demo-container (min-width: 500px) {
+                .adaptive-card {
+                flex-direction: column;
+                text-align: center;
+                }
+                }
+            </div>
+        </section>
+
+        <!-- Intrinsic Web Design -->
+        <section class="section">
+            <h2 class="section-title">Intrinsic Web Design</h2>
+            <p class="section-description">
+                Intrinsic web design uses CSS Grid and flexible units to create layouts that adapt naturally
+                to their content and container, reducing the need for explicit breakpoints.
+            </p>
+
+            <div class="intrinsic-grid">
+                <div class="grid-item hover-effects">
+                    <h3>Flexible Grid Item</h3>
+                    <p>This grid automatically adjusts the number of columns based on available space and minimum
+                        content size.</p>
+                </div>
+                <div class="grid-item hover-effects">
+                    <h3>Responsive by Default</h3>
+                    <p>No media queries needed - the layout responds intrinsically to content and container size.</p>
+                </div>
+                <div class="grid-item hover-effects">
+                    <h3>Content-Aware</h3>
+                    <p>The layout considers both content requirements and available space to determine the optimal
+                        arrangement.</p>
+                </div>
+                <div class="grid-item hover-effects">
+                    <h3>Future-Proof</h3>
+                    <p>Works across all screen sizes and device types without modification.</p>
+                </div>
+            </div>
+
+            <div class="code-example">
+                <span class="code-highlight">.intrinsic-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+                    gap: var(--space-md);
+                    }</span>
+
+                /* The min(300px, 100%) ensures items never exceed container width
+                while maintaining a minimum size for readability */
+            </div>
+        </section>
+
+        <!-- Fluid Typography -->
+        <section class="section">
+            <h2 class="section-title">Fluid Typography & Spacing</h2>
+            <p class="section-description">
+                Fluid typography uses CSS clamp() to create scalable text that adapts smoothly between minimum
+                and maximum sizes based on viewport width.
+            </p>
+
+            <div class="modern-features-demo">
+                <h3 class="responsive-text">This heading scales fluidly with viewport size</h3>
+                <p>Resize your browser window to see how the text above smoothly adapts without sudden jumps at
+                    breakpoints.</p>
+
+                <div class="code-example">
+                    <span class="code-highlight">/* Fluid typography with clamp() */
+                        --font-size-responsive: clamp(1rem, 2.5vw, 2rem);</span>
+
+                    /* Breakdown:
+                    - 1rem: minimum size (mobile)
+                    - 2.5vw: preferred size (scales with viewport)
+                    - 2rem: maximum size (desktop) */
+
+                    <span class="code-highlight">/* Fluid spacing */
+                        --space-fluid: clamp(1rem, 0.8rem + 1vw, 2rem);</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modern Layout Patterns -->
+        <section class="section">
+            <h2 class="section-title">Modern Layout Patterns</h2>
+            <p class="section-description">
+                Advanced CSS layout techniques that create flexible, maintainable responsive designs.
+            </p>
+
+            <div class="sidebar-layout">
+                <div class="sidebar">
+                    <h3>Flexible Sidebar</h3>
+                    <nav class="nav-demo">
+                        <ul class="nav-list">
+                            <li class="nav-item"><a href="#" class="nav-link accessible-focus">Home</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link accessible-focus">About</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link accessible-focus">Services</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link accessible-focus">Contact</a></li>
+                        </ul>
+                    </nav>
+                    <p>This sidebar uses sticky positioning and automatically stacks on mobile.</p>
+                </div>
+
+                <div class="main-content">
+                    <h3>Main Content Area</h3>
+                    <p>This layout uses CSS Grid to create a flexible two-column design that automatically becomes
+                        single-column on smaller screens.</p>
+
+                    <div class="responsive-image-grid">
+                        <div class="image-container hover-effects">
+                            <div class="image-placeholder">16:9 Aspect Ratio</div>
+                        </div>
+                        <div class="image-container hover-effects">
+                            <div class="image-placeholder">Responsive Image</div>
+                        </div>
+                        <div class="image-container hover-effects">
+                            <div class="image-placeholder">Auto-sizing Grid</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progressive Enhancement -->
+        <section class="section">
+            <h2 class="section-title">Progressive Enhancement</h2>
+            <p class="section-description">
+                Building robust responsive designs that work across all devices and browsers by starting with
+                a solid foundation and progressively enhancing with modern features.
+            </p>
+
+            <div class="progressive-demo">
+                <h3>Progressive Enhancement Demo</h3>
+                <p>These cards demonstrate progressive enhancement - basic layout for all browsers, enhanced with Grid
+                    and backdrop filters where supported.</p>
+
+                <div class="progressive-cards">
+                    <div class="progressive-card">
+                        <h4>Base Experience</h4>
+                        <p>Works in all browsers with basic styling.</p>
+                    </div>
+                    <div class="progressive-card">
+                        <h4>Grid Enhanced</h4>
+                        <p>Uses CSS Grid where supported for better layout.</p>
+                    </div>
+                    <div class="progressive-card">
+                        <h4>Modern Effects</h4>
+                        <p>Adds backdrop filter for browsers that support it.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-example">
+                /* Base styles (work everywhere) */
+                .progressive-card {
+                background: var(--color-neutral-100);
+                padding: var(--space-sm);
+                margin-bottom: var(--space-sm);
+                }
+
+                <span class="code-highlight">/* Enhanced with feature detection */
+                    @supports (display: grid) {
+                    .progressive-cards {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                    }
+                    }</span>
+
+                <span class="code-highlight">@supports (backdrop-filter: blur(10px)) {
+                    .progressive-card {
+                    background: rgba(255, 255, 255, 0.7);
+                    backdrop-filter: blur(10px);
+                    }
+                    }</span>
+            </div>
+        </section>
+
+        <!-- Component-Based Responsive Design -->
+        <section class="section">
+            <h2 class="section-title">Component-Based Responsive Design</h2>
+            <p class="section-description">
+                Creating self-contained responsive components that adapt to their context rather than the global
+                viewport.
+            </p>
+
+            <div style="display: grid; gap: var(--space-md); grid-template-columns: 1fr 1fr;">
+                <div class="responsive-component">
+                    <div class="component-content">
+                        <div>
+                            <h4>Narrow Container</h4>
+                            <p>Stacked layout in narrow spaces.</p>
+                        </div>
+                        <button class="accessible-focus"
+                            style="padding: var(--space-xs) var(--space-sm); background: var(--color-primary); color: white; border: none; border-radius: 4px; cursor: pointer;">Button</button>
+                    </div>
+                </div>
+
+                <div class="responsive-component" style="grid-column: 1 / -1;">
+                    <div class="component-content">
+                        <div>
+                            <h4>Wide Container</h4>
+                            <p>Horizontal layout when space allows. The same component, different layout based on
+                                available width.</p>
+                        </div>
+                        <button class="accessible-focus"
+                            style="padding: var(--space-xs) var(--space-sm); background: var(--color-primary); color: white; border: none; border-radius: 4px; cursor: pointer;">Button</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advanced Media Queries -->
+        <section class="section">
+            <h2 class="section-title">Advanced Media Queries</h2>
+            <p class="section-description">
+                Modern CSS provides sophisticated media queries that go beyond screen size to consider user preferences,
+                device capabilities, and environmental conditions.
+            </p>
+
+            <div class="modern-features-demo">
+                <h3>Environmental & Preference Queries</h3>
+
+                <div
+                    style="display: grid; gap: var(--space-md); grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                    <div style="padding: var(--space-md); background: var(--color-neutral-100); border-radius: 8px;">
+                        <h4>🎨 Color Scheme</h4>
+                        <p>Adapts to user's preferred color scheme (light/dark mode).</p>
+                        <code
+                            style="font-size: 0.9rem; color: var(--color-neutral-600);">@media (prefers-color-scheme: dark)</code>
+                    </div>
+
+                    <div style="padding: var(--space-md); background: var(--color-neutral-100); border-radius: 8px;">
+                        <h4>🎭 Reduced Motion</h4>
+                        <p>Respects user's motion sensitivity preferences.</p>
+                        <code
+                            style="font-size: 0.9rem; color: var(--color-neutral-600);">@media (prefers-reduced-motion: reduce)</code>
+                    </div>
+
+                    <div style="padding: var(--space-md); background: var(--color-neutral-100); border-radius: 8px;">
+                        <h4>👆 Hover Capability</h4>
+                        <p>Detects if device supports hover interactions.</p>
+                        <code style="font-size: 0.9rem; color: var(--color-neutral-600);">@media (hover: hover)</code>
+                    </div>
+
+                    <div style="padding: var(--space-md); background: var(--color-neutral-100); border-radius: 8px;">
+                        <h4>📱 Display Density</h4>
+                        <p>Optimizes for high-resolution displays.</p>
+                        <code
+                            style="font-size: 0.9rem; color: var(--color-neutral-600);">@media (min-resolution: 192dpi)</code>
+                    </div>
+                </div>
+
+                <div class="code-example">
+                    <span class="code-highlight">/* Respect user preferences */
+                        @media (prefers-reduced-motion: reduce) {
+                        * {
+                        animation-duration: 0.01ms !important;
+                        transition-duration: 0.01ms !important;
+                        }
+                        }</span>
+
+                    <span class="code-highlight">/* Adapt to color scheme preferences */
+                        @media (prefers-color-scheme: dark) {
+                        :root {
+                        --color-background: #1a1a1a;
+                        --color-text: #ffffff;
+                        }
+                        }</span>
+
+                    <span class="code-highlight">/* Optimize for touch vs mouse */
+                        @media (hover: hover) and (pointer: fine) {
+                        .interactive-element:hover {
+                        transform: scale(1.05);
+                        }
+                        }</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance Considerations -->
+        <section class="section">
+            <h2 class="section-title">Performance Considerations</h2>
+            <p class="section-description">
+                Building responsive designs that perform well across all devices and network conditions.
+            </p>
+
+            <div
+                style="display: grid; gap: var(--space-md); grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                <div class="grid-item">
+                    <h4>🚀 CSS Optimization</h4>
+                    <ul style="margin-top: var(--space-sm); padding-left: 1.5rem;">
+                        <li>Use efficient selectors</li>
+                        <li>Minimize layout thrashing</li>
+                        <li>Leverage CSS containment</li>
+                        <li>Optimize critical rendering path</li>
+                    </ul>
+                </div>
+
+                <div class="grid-item">
+                    <h4>📱 Mobile Performance</h4>
+                    <ul style="margin-top: var(--space-sm); padding-left: 1.5rem;">
+                        <li>Minimize DOM complexity</li>
+                        <li>Use hardware acceleration wisely</li>
+                        <li>Optimize touch interactions</li>
+                        <li>Consider battery usage</li>
+                    </ul>
+                </div>
+
+                <div class="grid-item">
+                    <h4>🖼️ Image Optimization</h4>
+                    <ul style="margin-top: var(--space-sm); padding-left: 1.5rem;">
+                        <li>Use responsive images</li>
+                        <li>Implement lazy loading</li>
+                        <li>Choose appropriate formats</li>
+                        <li>Serve scaled images</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Container query polyfill demo
+        function demonstrateContainerQueries() {
+            const container = document.querySelector('.container-query-demo');
+            const observer = new ResizeObserver(entries => {
+                for (let entry of entries) {
+                    const width = entry.contentRect.width;
+                    console.log(`Container width: ${width}px`);
+
+                    // Update display info for demo purposes
+                    if (!container.querySelector('.size-indicator')) {
+                        const indicator = document.createElement('div');
+                        indicator.className = 'size-indicator';
+                        indicator.style.cssText = `
+                            position: absolute;
+                            top: 10px;
+                            right: 10px;
+                            background: rgba(0,0,0,0.7);
+                            color: white;
+                            padding: 4px 8px;
+                            border-radius: 4px;
+                            font-size: 12px;
+                        `;
+                        container.style.position = 'relative';
+                        container.appendChild(indicator);
+                    }
+
+                    const indicator = container.querySelector('.size-indicator');
+                    indicator.textContent = `${Math.round(width)}px`;
+                }
+            });
+
+            observer.observe(container);
+        }
+
+        // Responsive utilities
+        class ResponsiveUtilities {
+            static getViewportSize() {
+                return {
+                    width: window.innerWidth,
+                    height: window.innerHeight
+                };
+            }
+
+            static isReducedMotion() {
+                return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            }
+
+            static isDarkMode() {
+                return window.matchMedia('(prefers-color-scheme: dark)').matches;
+            }
+
+            static hasHover() {
+                return window.matchMedia('(hover: hover)').matches;
+            }
+
+            static isHighDensity() {
+                return window.matchMedia('(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)').matches;
+            }
+
+            static getDeviceInfo() {
+                return {
+                    viewport: this.getViewportSize(),
+                    reducedMotion: this.isReducedMotion(),
+                    darkMode: this.isDarkMode(),
+                    hasHover: this.hasHover(),
+                    highDensity: this.isHighDensity(),
+                    touchDevice: 'ontouchstart' in window,
+                    userAgent: navigator.userAgent
+                };
+            }
+        }
+
+        // Intersection Observer for animations
+        function setupScrollAnimations() {
+            if (ResponsiveUtilities.isReducedMotion()) {
+                return; // Skip animations if user prefers reduced motion
+            }
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            // Add subtle entrance animations
+            document.querySelectorAll('.grid-item, .progressive-card').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        }
+
+        // Responsive image loading
+        function setupResponsiveImages() {
+            const images = document.querySelectorAll('.image-container');
+
+            images.forEach((container, index) => {
+                container.addEventListener('click', () => {
+                    const placeholder = container.querySelector('.image-placeholder');
+                    placeholder.textContent = 'Loading...';
+
+                    // Simulate image loading
+                    setTimeout(() => {
+                        placeholder.textContent = `Image ${index + 1} Loaded`;
+                        container.style.background = `linear-gradient(45deg, 
+                            hsl(${index * 60}, 70%, 70%), 
+                            hsl(${index * 60 + 30}, 70%, 80%))`;
+                    }, 1000);
+                });
+            });
+        }
+
+        // Performance monitoring
+        function monitorPerformance() {
+            // Monitor layout shifts
+            new PerformanceObserver((list) => {
+                for (const entry of list.getEntries()) {
+                    if (!entry.hadRecentInput) {
+                        console.log('Layout shift detected:', entry.value);
+                    }
+                }
+            }).observe({ type: 'layout-shift', buffered: true });
+
+            // Monitor largest contentful paint
+            new PerformanceObserver((list) => {
+                for (const entry of list.getEntries()) {
+                    console.log('LCP:', entry.startTime);
+                }
+            }).observe({ type: 'largest-contentful-paint', buffered: true });
+        }
+
+        // Initialize responsive features
+        document.addEventListener('DOMContentLoaded', () => {
+            demonstrateContainerQueries();
+            setupScrollAnimations();
+            setupResponsiveImages();
+
+            if ('PerformanceObserver' in window) {
+                monitorPerformance();
+            }
+
+            // Log device capabilities
+            console.log('Device Info:', ResponsiveUtilities.getDeviceInfo());
+
+            // Handle orientation changes
+            window.addEventListener('orientationchange', () => {
+                setTimeout(() => {
+                    console.log('Orientation changed:', ResponsiveUtilities.getViewportSize());
+                }, 100);
+            });
+        });
+
+        // Export utilities for external use
+        window.ResponsiveUtilities = ResponsiveUtilities;
+    </script>
+</body>
+
+</html>

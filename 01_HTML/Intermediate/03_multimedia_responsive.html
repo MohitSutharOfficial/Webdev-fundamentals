@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Intermediate - Multimedia & Responsive Design</title>
+    <style>
+        /* Basic styling for demonstration */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+
+        .demo-section {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .responsive-media {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+        }
+
+        .video-container iframe,
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .picture-demo {
+            margin: 20px 0;
+        }
+
+        .srcset-demo img {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .grid-item {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .senior-tip {
+            background-color: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🎥 Multimedia & Responsive Design</h1>
+
+        <p>Master responsive multimedia implementation with modern HTML techniques. This lesson covers responsive
+            images, video optimization, and advanced media queries.</p>
+
+        <h2>🖼️ Responsive Images</h2>
+
+        <h3>1. Basic Responsive Image</h3>
+        <div class="code-block">
+            &lt;!-- Basic responsive image --&gt;
+            &lt;img src="image.jpg" alt="Description" class="responsive-media"&gt;
+
+            &lt;style&gt;
+            .responsive-media {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            }
+            &lt;/style&gt;
+        </div>
+
+        <div class="demo-section">
+            <h4>📸 Demo: Basic Responsive Image</h4>
+            <img src="https://via.placeholder.com/800x400/3498db/ffffff?text=Responsive+Image"
+                alt="Example responsive image" class="responsive-media">
+        </div>
+
+        <h3>2. Srcset for Different Resolutions</h3>
+        <div class="code-block">
+            &lt;!-- Srcset for different screen densities --&gt;
+            &lt;img src="image-400.jpg"
+            srcset="image-400.jpg 400w,
+            image-800.jpg 800w,
+            image-1200.jpg 1200w"
+            sizes="(max-width: 600px) 400px,
+            (max-width: 1000px) 800px,
+            1200px"
+            alt="High-resolution responsive image"&gt;
+        </div>
+
+        <div class="demo-section srcset-demo">
+            <h4>📱 Demo: Srcset Implementation</h4>
+            <img src="https://via.placeholder.com/400x200/e74c3c/ffffff?text=400w" srcset="https://via.placeholder.com/400x200/e74c3c/ffffff?text=400w 400w,
+                         https://via.placeholder.com/800x400/e74c3c/ffffff?text=800w 800w,
+                         https://via.placeholder.com/1200x600/e74c3c/ffffff?text=1200w 1200w" sizes="(max-width: 600px) 400px,
+                        (max-width: 1000px) 800px,
+                        1200px" alt="Srcset demonstration">
+        </div>
+
+        <h3>3. Picture Element for Art Direction</h3>
+        <div class="code-block">
+            &lt;!-- Picture element for different layouts --&gt;
+            &lt;picture&gt;
+            &lt;source media="(max-width: 600px)"
+            srcset="mobile-image.jpg"&gt;
+            &lt;source media="(max-width: 1000px)"
+            srcset="tablet-image.jpg"&gt;
+            &lt;source media="(min-width: 1001px)"
+            srcset="desktop-image.jpg"&gt;
+            &lt;img src="desktop-image.jpg"
+            alt="Responsive image with art direction"&gt;
+            &lt;/picture&gt;
+        </div>
+
+        <div class="demo-section picture-demo">
+            <h4>🎨 Demo: Picture Element</h4>
+            <picture>
+                <source media="(max-width: 600px)"
+                    srcset="https://via.placeholder.com/400x300/9b59b6/ffffff?text=Mobile+View">
+                <source media="(max-width: 1000px)"
+                    srcset="https://via.placeholder.com/600x300/f39c12/ffffff?text=Tablet+View">
+                <source media="(min-width: 1001px)"
+                    srcset="https://via.placeholder.com/800x300/27ae60/ffffff?text=Desktop+View">
+                <img src="https://via.placeholder.com/800x300/27ae60/ffffff?text=Desktop+View"
+                    alt="Picture element demonstration">
+            </picture>
+            <p><em>Resize your browser window to see different images load!</em></p>
+        </div>
+
+        <h2>🎬 Responsive Video</h2>
+
+        <h3>1. HTML5 Video Element</h3>
+        <div class="code-block">
+            &lt;!-- Responsive HTML5 video --&gt;
+            &lt;video controls preload="metadata" class="responsive-media"&gt;
+            &lt;source src="video.mp4" type="video/mp4"&gt;
+            &lt;source src="video.webm" type="video/webm"&gt;
+            &lt;track kind="captions" src="captions.vtt" srclang="en" label="English"&gt;
+            &lt;p&gt;Your browser doesn't support HTML5 video.
+            &lt;a href="video.mp4"&gt;Download the video&lt;/a&gt;.&lt;/p&gt;
+            &lt;/video&gt;
+        </div>
+
+        <div class="demo-section">
+            <h4>🎥 Demo: HTML5 Video</h4>
+            <video controls preload="metadata" class="responsive-media">
+                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                <p>Your browser doesn't support HTML5 video.
+                    <a href="https://www.w3schools.com/html/mov_bbb.mp4">Download the video</a>.
+                </p>
+            </video>
+        </div>
+
+        <h3>2. Responsive Video Container</h3>
+        <div class="code-block">
+            &lt;!-- Responsive video wrapper --&gt;
+            &lt;div class="video-container"&gt;
+            &lt;iframe src="https://www.youtube.com/embed/VIDEO_ID"
+            title="Video title"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen&gt;&lt;/iframe&gt;
+            &lt;/div&gt;
+
+            &lt;style&gt;
+            .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+            }
+
+            .video-container iframe,
+            .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            }
+            &lt;/style&gt;
+        </div>
+
+        <div class="demo-section">
+            <h4>📺 Demo: Responsive Video Container</h4>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Example Video" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <h2>🎵 Audio Implementation</h2>
+
+        <div class="code-block">
+            &lt;!-- HTML5 audio element --&gt;
+            &lt;audio controls preload="metadata"&gt;
+            &lt;source src="audio.mp3" type="audio/mpeg"&gt;
+            &lt;source src="audio.ogg" type="audio/ogg"&gt;
+            &lt;p&gt;Your browser doesn't support HTML5 audio.
+            &lt;a href="audio.mp3"&gt;Download the audio&lt;/a&gt;.&lt;/p&gt;
+            &lt;/audio&gt;
+        </div>
+
+        <div class="demo-section">
+            <h4>🎶 Demo: HTML5 Audio</h4>
+            <audio controls preload="metadata">
+                <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" type="audio/mpeg">
+                <p>Your browser doesn't support HTML5 audio.</p>
+            </audio>
+        </div>
+
+        <h2>📱 Advanced Media Queries</h2>
+
+        <div class="code-block">
+            &lt;!-- Advanced media queries --&gt;
+            &lt;style&gt;
+            /* High-resolution displays */
+            @media (-webkit-min-device-pixel-ratio: 2),
+            (min-resolution: 2dppx) {
+            .high-res-image {
+            background-image: url('image@2x.jpg');
+            }
+            }
+
+            /* Orientation-based styles */
+            @media (orientation: landscape) {
+            .landscape-only {
+            display: block;
+            }
+            }
+
+            @media (orientation: portrait) {
+            .portrait-only {
+            display: block;
+            }
+            }
+
+            /* Hover capability detection */
+            @media (hover: hover) {
+            .hover-effects:hover {
+            transform: scale(1.05);
+            }
+            }
+
+            /* Reduced motion preference */
+            @media (prefers-reduced-motion: reduce) {
+            * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            }
+            }
+
+            /* Dark mode support */
+            @media (prefers-color-scheme: dark) {
+            body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            }
+            }
+            &lt;/style&gt;
+        </div>
+
+        <div class="grid-container">
+            <div class="grid-item">
+                <h3>🖥️ Desktop View</h3>
+                <p>Optimized for large screens with full functionality.</p>
+            </div>
+            <div class="grid-item">
+                <h3>📱 Mobile View</h3>
+                <p>Touch-friendly interface with essential features.</p>
+            </div>
+            <div class="grid-item">
+                <h3>🎨 Adaptive Design</h3>
+                <p>Responds to user preferences and capabilities.</p>
+            </div>
+        </div>
+
+        <div class="senior-tip">
+            <h3>🚀 Senior Engineer Tips:</h3>
+            <ul>
+                <li><strong>Lazy Loading:</strong> Use `loading="lazy"` for images below the fold</li>
+                <li><strong>WebP Support:</strong> Use Picture element to serve modern formats with fallbacks</li>
+                <li><strong>Intersection Observer:</strong> Implement custom lazy loading for better control</li>
+                <li><strong>Performance Budget:</strong> Monitor image sizes and optimize delivery</li>
+                <li><strong>Accessibility:</strong> Always provide meaningful alt text and captions</li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            <h3>⚠️ Common Pitfalls:</h3>
+            <ul>
+                <li>Not providing fallbacks for older browsers</li>
+                <li>Forgetting to optimize images for different screen sizes</li>
+                <li>Using fixed aspect ratios without considering content</li>
+                <li>Not testing on real devices with slow connections</li>
+                <li>Ignoring accessibility requirements for multimedia</li>
+            </ul>
+        </div>
+
+        <h2>🛠️ Practical Exercises</h2>
+
+        <div class="demo-section">
+            <h3>Exercise 1: Responsive Image Gallery</h3>
+            <p>Create a responsive image gallery that:</p>
+            <ul>
+                <li>Uses srcset for different screen densities</li>
+                <li>Implements lazy loading</li>
+                <li>Provides proper alt text</li>
+                <li>Works on all device sizes</li>
+            </ul>
+
+            <h3>Exercise 2: Video Landing Page</h3>
+            <p>Build a landing page with:</p>
+            <ul>
+                <li>Hero video that's responsive</li>
+                <li>Fallback image for unsupported browsers</li>
+                <li>Proper video compression and formats</li>
+                <li>Accessibility controls</li>
+            </ul>
+
+            <h3>Exercise 3: Progressive Enhancement</h3>
+            <p>Implement progressive enhancement for:</p>
+            <ul>
+                <li>WebP images with JPEG fallbacks</li>
+                <li>Modern video formats with MP4 fallbacks</li>
+                <li>CSS Grid with Flexbox fallbacks</li>
+                <li>Touch gestures with mouse fallbacks</li>
+            </ul>
+        </div>
+
+        <h2>📚 Resources & Next Steps</h2>
+
+        <ul>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding"
+                    target="_blank">MDN: Multimedia and Embedding</a></li>
+            <li><a href="https://web.dev/responsive-images/" target="_blank">Web.dev: Responsive Images</a></li>
+            <li><a href="https://caniuse.com/" target="_blank">Can I Use: Browser Support</a></li>
+            <li><a href="https://imageoptim.com/" target="_blank">Image Optimization Tools</a></li>
+        </ul>
+
+        <p><strong>Next:</strong> Continue to <a href="04_accessibility_aria.html">Accessibility & ARIA</a> to learn
+            about making your multimedia content accessible to all users.</p>
+    </div>
+</body>
+
+</html>

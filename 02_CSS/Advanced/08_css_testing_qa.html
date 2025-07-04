@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Testing & Quality Assurance</title>
+    <style>
+        /* Testing-friendly CSS Foundation */
+        :root {
+            /* Design Tokens for Consistent Testing */
+            --color-primary: #3b82f6;
+            --color-secondary: #10b981;
+            --color-success: #22c55e;
+            --color-warning: #f59e0b;
+            --color-error: #ef4444;
+            --color-info: #06b6d4;
+
+            --color-neutral-50: #f9fafb;
+            --color-neutral-100: #f3f4f6;
+            --color-neutral-200: #e5e7eb;
+            --color-neutral-300: #d1d5db;
+            --color-neutral-500: #6b7280;
+            --color-neutral-700: #374151;
+            --color-neutral-900: #111827;
+
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 1.875rem;
+
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+
+            --radius-md: 0.375rem;
+            --radius-lg: 0.5rem;
+
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+            --transition-fast: 150ms ease-in-out;
+            --transition-normal: 300ms ease-in-out;
+        }
+
+        /* Reset for consistent cross-browser testing */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            height: 100%;
+            font-size: 16px;
+            /* Explicit base font size for testing */
+        }
+
+        body {
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: var(--font-size-base);
+            line-height: 1.6;
+            color: var(--color-neutral-700);
+            background-color: var(--color-neutral-50);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Accessibility-first components */
+        .visually-hidden {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: var(--color-primary);
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            z-index: 1000;
+        }
+
+        .skip-link:focus {
+            top: 6px;
+        }
+
+        /* Layout Components */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-4);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--color-primary), #1d4ed8);
+            color: white;
+            padding: var(--space-8) 0;
+            text-align: center;
+        }
+
+        .header-title {
+            font-size: var(--font-size-3xl);
+            font-weight: 700;
+            margin-bottom: var(--space-2);
+        }
+
+        .header-subtitle {
+            font-size: var(--font-size-lg);
+            opacity: 0.9;
+        }
+
+        /* Component Library for Testing */
+
+        /* Button Component with all states */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-6);
+            font-family: inherit;
+            font-size: var(--font-size-base);
+            font-weight: 500;
+            line-height: 1.25;
+            text-decoration: none;
+            border: 1px solid transparent;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        .btn:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Button variants for cross-browser testing */
+        .btn--primary {
+            background-color: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        .btn--primary:hover:not(:disabled) {
+            background-color: #2563eb;
+            border-color: #2563eb;
+        }
+
+        .btn--primary:active {
+            background-color: #1d4ed8;
+        }
+
+        .btn--secondary {
+            background-color: var(--color-secondary);
+            color: white;
+            border-color: var(--color-secondary);
+        }
+
+        .btn--outline {
+            background-color: transparent;
+            color: var(--color-primary);
+            border-color: var(--color-primary);
+        }
+
+        .btn--outline:hover:not(:disabled) {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        /* Form Components for Testing */
+        .form-group {
+            margin-bottom: var(--space-6);
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            color: var(--color-neutral-700);
+            margin-bottom: var(--space-2);
+        }
+
+        .form-label--required::after {
+            content: " *";
+            color: var(--color-error);
+        }
+
+        .form-input {
+            display: block;
+            width: 100%;
+            padding: var(--space-3);
+            font-size: var(--font-size-base);
+            line-height: 1.25;
+            color: var(--color-neutral-900);
+            background-color: white;
+            border: 1px solid var(--color-neutral-300);
+            border-radius: var(--radius-md);
+            transition: var(--transition-fast);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-input:invalid {
+            border-color: var(--color-error);
+        }
+
+        .form-input:invalid:focus {
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        .form-error {
+            color: var(--color-error);
+            font-size: var(--font-size-sm);
+            margin-top: var(--space-2);
+        }
+
+        .form-help {
+            color: var(--color-neutral-500);
+            font-size: var(--font-size-sm);
+            margin-top: var(--space-2);
+        }
+
+        /* Card Component */
+        .card {
+            background: white;
+            border: 1px solid var(--color-neutral-200);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: var(--space-6);
+            border-bottom: 1px solid var(--color-neutral-200);
+            background-color: var(--color-neutral-50);
+        }
+
+        .card-body {
+            padding: var(--space-6);
+        }
+
+        .card-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: var(--color-neutral-900);
+            margin-bottom: var(--space-2);
+        }
+
+        /* Status Components for Testing */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: var(--space-2) var(--space-3);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        .status-badge--success {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .status-badge--warning {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-badge--error {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-badge--info {
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+
+        /* Testing Tools UI */
+        .testing-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-6);
+            margin: var(--space-8) 0;
+        }
+
+        .test-section {
+            background: white;
+            border: 1px solid var(--color-neutral-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .test-section-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--color-neutral-900);
+            margin-bottom: var(--space-4);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .test-result {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-3);
+            margin: var(--space-2) 0;
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-sm);
+        }
+
+        .test-result--pass {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .test-result--fail {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .test-result--warning {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        /* Browser Compatibility Grid */
+        .browser-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: var(--space-3);
+            margin: var(--space-4) 0;
+        }
+
+        .browser-item {
+            text-align: center;
+            padding: var(--space-3);
+            border: 1px solid var(--color-neutral-200);
+            border-radius: var(--radius-md);
+            background: white;
+        }
+
+        .browser-icon {
+            font-size: 2rem;
+            margin-bottom: var(--space-2);
+        }
+
+        .browser-version {
+            font-size: var(--font-size-sm);
+            color: var(--color-neutral-500);
+        }
+
+        /* Performance Testing Display */
+        .performance-metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-3);
+            border-bottom: 1px solid var(--color-neutral-200);
+        }
+
+        .performance-metric:last-child {
+            border-bottom: none;
+        }
+
+        .metric-name {
+            font-weight: 500;
+        }
+
+        .metric-value {
+            font-family: monospace;
+            font-weight: 600;
+        }
+
+        .metric-value--good {
+            color: var(--color-success);
+        }
+
+        .metric-value--warning {
+            color: var(--color-warning);
+        }
+
+        .metric-value--poor {
+            color: var(--color-error);
+        }
+
+        /* Code Examples */
+        .code-block {
+            background: var(--color-neutral-900);
+            color: var(--color-neutral-100);
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: var(--space-4) 0;
+        }
+
+        .code-highlight {
+            background: rgba(59, 130, 246, 0.2);
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+        }
+
+        /* Accessibility Testing Helpers */
+        .focus-visible-test {
+            padding: var(--space-3);
+            margin: var(--space-2);
+            border: 1px solid var(--color-neutral-300);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+        }
+
+        .focus-visible-test:focus-visible {
+            outline: 2px solid var(--color-primary);
+            outline-offset: 2px;
+        }
+
+        /* High Contrast Mode Support */
+        @media (forced-colors: active) {
+            .btn {
+                border: 1px solid ButtonText;
+            }
+
+            .btn:focus {
+                outline: 2px solid ButtonText;
+            }
+        }
+
+        /* Reduced Motion Support */
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            .card,
+            .test-section {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+        }
+
+        /* Mobile-specific testing styles */
+        @media (max-width: 768px) {
+            .testing-dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .browser-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Testing utilities */
+        .debug-grid {
+            background-image:
+                linear-gradient(rgba(255, 0, 0, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .debug-outline * {
+            outline: 1px solid red !important;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="header">
+        <div class="container">
+            <h1 class="header-title">CSS Testing & Quality Assurance</h1>
+            <p class="header-subtitle">Visual Regression Testing, Cross-browser Compatibility, and Accessibility Testing
+            </p>
+        </div>
+    </header>
+
+    <main id="main-content" class="container">
+        <!-- Testing Dashboard -->
+        <section class="testing-dashboard">
+            <!-- Visual Regression Testing -->
+            <div class="test-section">
+                <h2 class="test-section-title">
+                    <span aria-hidden="true">📸</span>
+                    Visual Regression Testing
+                </h2>
+
+                <div class="test-result test-result--pass">
+                    <span aria-hidden="true">✅</span>
+                    <span>Button component styling - Pass</span>
+                </div>
+
+                <div class="test-result test-result--pass">
+                    <span aria-hidden="true">✅</span>
+                    <span>Card layout consistency - Pass</span>
+                </div>
+
+                <div class="test-result test-result--warning">
+                    <span aria-hidden="true">⚠️</span>
+                    <span>Typography spacing - Minor differences</span>
+                </div>
+
+                <div class="test-result test-result--fail">
+                    <span aria-hidden="true">❌</span>
+                    <span>Mobile breakpoint layout - Failed</span>
+                </div>
+
+                <div class="code-block">
+                    // Percy.io visual testing example
+                    const percySnapshot = require('@percy/testcafe');
+
+                    test('Button Component Visual Test', async t => {
+                    await t.navigateToUrl('/components/button');
+                    await percySnapshot(t, 'Button - All States');
+                    });
+                </div>
+            </div>
+
+            <!-- Cross-browser Compatibility -->
+            <div class="test-section">
+                <h2 class="test-section-title">
+                    <span aria-hidden="true">🌐</span>
+                    Browser Compatibility
+                </h2>
+
+                <div class="browser-grid">
+                    <div class="browser-item">
+                        <div class="browser-icon">🔵</div>
+                        <div>Chrome</div>
+                        <div class="browser-version">v120+</div>
+                        <div class="status-badge status-badge--success">Supported</div>
+                    </div>
+
+                    <div class="browser-item">
+                        <div class="browser-icon">🦊</div>
+                        <div>Firefox</div>
+                        <div class="browser-version">v118+</div>
+                        <div class="status-badge status-badge--success">Supported</div>
+                    </div>
+
+                    <div class="browser-item">
+                        <div class="browser-icon">🟦</div>
+                        <div>Edge</div>
+                        <div class="browser-version">v120+</div>
+                        <div class="status-badge status-badge--success">Supported</div>
+                    </div>
+
+                    <div class="browser-item">
+                        <div class="browser-icon">🍎</div>
+                        <div>Safari</div>
+                        <div class="browser-version">v16+</div>
+                        <div class="status-badge status-badge--warning">Partial</div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    /* Autoprefixer configuration */
+                    module.exports = {
+                    plugins: [
+                    require('autoprefixer')({
+                    overrideBrowserslist: [
+                    '> 1%',
+                    'last 2 versions',
+                    'Firefox ESR',
+                    'not dead'
+                    ]
+                    })
+                    ]
+                    }
+                </div>
+            </div>
+
+            <!-- Accessibility Testing -->
+            <div class="test-section">
+                <h2 class="test-section-title">
+                    <span aria-hidden="true">♿</span>
+                    Accessibility Testing
+                </h2>
+
+                <div class="test-result test-result--pass">
+                    <span aria-hidden="true">✅</span>
+                    <span>Color contrast ratios - WCAG AA</span>
+                </div>
+
+                <div class="test-result test-result--pass">
+                    <span aria-hidden="true">✅</span>
+                    <span>Focus indicators - Visible</span>
+                </div>
+
+                <div class="test-result test-result--pass">
+                    <span aria-hidden="true">✅</span>
+                    <span>Semantic HTML structure - Valid</span>
+                </div>
+
+                <div class="test-result test-result--warning">
+                    <span aria-hidden="true">⚠️</span>
+                    <span>Touch target sizes - Some too small</span>
+                </div>
+
+                <!-- Focus Testing Demo -->
+                <div style="margin-top: var(--space-4);">
+                    <h3 style="margin-bottom: var(--space-2);">Focus Testing:</h3>
+                    <div class="focus-visible-test" tabindex="0">Focusable element 1</div>
+                    <div class="focus-visible-test" tabindex="0">Focusable element 2</div>
+                    <button class="btn btn--primary">Button test</button>
+                </div>
+            </div>
+
+            <!-- Performance Testing -->
+            <div class="test-section">
+                <h2 class="test-section-title">
+                    <span aria-hidden="true">⚡</span>
+                    Performance Metrics
+                </h2>
+
+                <div class="performance-metric">
+                    <span class="metric-name">CSS Bundle Size</span>
+                    <span class="metric-value metric-value--good">45.2 KB</span>
+                </div>
+
+                <div class="performance-metric">
+                    <span class="metric-name">First Contentful Paint</span>
+                    <span class="metric-value metric-value--good">1.2s</span>
+                </div>
+
+                <div class="performance-metric">
+                    <span class="metric-name">Largest Contentful Paint</span>
+                    <span class="metric-value metric-value--warning">2.8s</span>
+                </div>
+
+                <div class="performance-metric">
+                    <span class="metric-name">Cumulative Layout Shift</span>
+                    <span class="metric-value metric-value--good">0.05</span>
+                </div>
+
+                <div class="performance-metric">
+                    <span class="metric-name">CSS Parse Time</span>
+                    <span class="metric-value metric-value--good">12ms</span>
+                </div>
+            </div>
+
+            <!-- CSS Linting -->
+            <div class="test-section">
+                <h2 class="test-section-title">
+                    <span aria-hidden="true">🔍</span>
+                    CSS Linting & Quality
+                </h2>
+
+                <div class="test-result test-result--pass">
+                    <span aria-hidden="true">✅</span>
+                    <span>Stylelint rules - No errors</span>
+                </div>
+
+                <div class="test-result test-result--pass">
+                    <span aria-hidden="true">✅</span>
+                    <span>CSS validator - Valid CSS3</span>
+                </div>
+
+                <div class="test-result test-result--warning">
+                    <span aria-hidden="true">⚠️</span>
+                    <span>Unused CSS rules - 15% unused</span>
+                </div>
+
+                <div class="test-result test-result--pass">
+                    <span aria-hidden="true">✅</span>
+                    <span>Property ordering - Consistent</span>
+                </div>
+
+                <div class="code-block">
+                    // Stylelint configuration
+                    {
+                    "extends": [
+                    "stylelint-config-standard",
+                    "stylelint-config-recess-order"
+                    ],
+                    "rules": {
+                    <span class="code-highlight">"color-contrast": true,
+                        "declaration-property-unit-allowed-list": {
+                        "font-size": ["rem", "em"],
+                        "margin": ["rem", "em", "px"],
+                        "padding": ["rem", "em", "px"]
+                        }</span>
+                    }
+                    }
+                </div>
+            </div>
+
+            <!-- Responsive Testing -->
+            <div class="test-section">
+                <h2 class="test-section-title">
+                    <span aria-hidden="true">📱</span>
+                    Responsive Testing
+                </h2>
+
+                <div class="test-result test-result--pass">
+                    <span aria-hidden="true">✅</span>
+                    <span>Mobile breakpoints - Working</span>
+                </div>
+
+                <div class="test-result test-result--pass">
+                    <span aria-hidden="true">✅</span>
+                    <span>Touch targets - 44px minimum</span>
+                </div>
+
+                <div class="test-result test-result--warning">
+                    <span aria-hidden="true">⚠️</span>
+                    <span>Landscape orientation - Minor issues</span>
+                </div>
+
+                <div class="test-result test-result--pass">
+                    <span aria-hidden="true">✅</span>
+                    <span>Text scaling - 200% zoom</span>
+                </div>
+
+                <div style="margin-top: var(--space-4);">
+                    <h3 style="margin-bottom: var(--space-2);">Test Components:</h3>
+                    <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+                        <button class="btn btn--primary btn--sm" style="min-height: 44px;">Touch Target</button>
+                        <button class="btn btn--secondary" style="min-height: 44px;">44px Minimum</button>
+                        <button class="btn btn--outline" style="min-height: 44px;">Accessible Size</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Component Testing Examples -->
+        <section style="margin: var(--space-8) 0;">
+            <h2 style="font-size: var(--font-size-2xl); margin-bottom: var(--space-6);">Component Testing Examples</h2>
+
+            <!-- Form Testing -->
+            <div class="card" style="margin-bottom: var(--space-6);">
+                <div class="card-header">
+                    <h3 class="card-title">Form Component Testing</h3>
+                </div>
+                <div class="card-body">
+                    <form style="max-width: 400px;">
+                        <div class="form-group">
+                            <label for="email" class="form-label form-label--required">Email Address</label>
+                            <input type="email" id="email" class="form-input" placeholder="user@example.com" required
+                                aria-describedby="email-help">
+                            <div id="email-help" class="form-help">We'll never share your email address.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password" class="form-label form-label--required">Password</label>
+                            <input type="password" id="password" class="form-input" minlength="8" required
+                                aria-describedby="password-error">
+                            <div id="password-error" class="form-error">Password must be at least 8 characters long.
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn--primary">Sign In</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Status Components Testing -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Status Components Testing</h3>
+                </div>
+                <div class="card-body">
+                    <div style="display: flex; gap: var(--space-3); flex-wrap: wrap; margin-bottom: var(--space-4);">
+                        <span class="status-badge status-badge--success">Success</span>
+                        <span class="status-badge status-badge--warning">Warning</span>
+                        <span class="status-badge status-badge--error">Error</span>
+                        <span class="status-badge status-badge--info">Info</span>
+                    </div>
+
+                    <p>These status badges are tested for:</p>
+                    <ul style="margin-left: 1.5rem; margin-top: var(--space-2);">
+                        <li>Color contrast ratios (WCAG AA compliance)</li>
+                        <li>High contrast mode compatibility</li>
+                        <li>Screen reader announcements</li>
+                        <li>Consistent sizing across browsers</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testing Tools & Resources -->
+        <section style="margin: var(--space-8) 0;">
+            <h2 style="font-size: var(--font-size-2xl); margin-bottom: var(--space-6);">Testing Tools & Methodologies
+            </h2>
+
+            <div class="testing-dashboard">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Visual Testing Tools</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: var(--space-2) 0; border-bottom: 1px solid var(--color-neutral-200);">
+                                <strong>Percy.io</strong> - Visual regression testing
+                            </li>
+                            <li style="padding: var(--space-2) 0; border-bottom: 1px solid var(--color-neutral-200);">
+                                <strong>Chromatic</strong> - Storybook visual testing
+                            </li>
+                            <li style="padding: var(--space-2) 0; border-bottom: 1px solid var(--color-neutral-200);">
+                                <strong>BackstopJS</strong> - Open source visual testing
+                            </li>
+                            <li style="padding: var(--space-2) 0;">
+                                <strong>Playwright</strong> - Browser automation testing
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">CSS Linting Tools</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: var(--space-2) 0; border-bottom: 1px solid var(--color-neutral-200);">
+                                <strong>Stylelint</strong> - CSS/SCSS linting
+                            </li>
+                            <li style="padding: var(--space-2) 0; border-bottom: 1px solid var(--color-neutral-200);">
+                                <strong>CSScomb</strong> - CSS property ordering
+                            </li>
+                            <li style="padding: var(--space-2) 0; border-bottom: 1px solid var(--color-neutral-200);">
+                                <strong>PurgeCSS</strong> - Unused CSS detection
+                            </li>
+                            <li style="padding: var(--space-2) 0;">
+                                <strong>CSS Validator</strong> - W3C CSS validation
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Accessibility Tools</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: var(--space-2) 0; border-bottom: 1px solid var(--color-neutral-200);">
+                                <strong>axe-core</strong> - Accessibility testing engine
+                            </li>
+                            <li style="padding: var(--space-2) 0; border-bottom: 1px solid var(--color-neutral-200);">
+                                <strong>Pa11y</strong> - Command line accessibility testing
+                            </li>
+                            <li style="padding: var(--space-2) 0; border-bottom: 1px solid var(--color-neutral-200);">
+                                <strong>WAVE</strong> - Web accessibility evaluation
+                            </li>
+                            <li style="padding: var(--space-2) 0;">
+                                <strong>Lighthouse</strong> - Performance & accessibility audits
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Performance Testing</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: var(--space-2) 0; border-bottom: 1px solid var(--color-neutral-200);">
+                                <strong>WebPageTest</strong> - Performance analysis
+                            </li>
+                            <li style="padding: var(--space-2) 0; border-bottom: 1px solid var(--color-neutral-200);">
+                                <strong>PageSpeed Insights</strong> - Core Web Vitals
+                            </li>
+                            <li style="padding: var(--space-2) 0; border-bottom: 1px solid var(--color-neutral-200);">
+                                <strong>Bundle Analyzer</strong> - CSS bundle analysis
+                            </li>
+                            <li style="padding: var(--space-2) 0;">
+                                <strong>Coverage Tab</strong> - DevTools CSS usage
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testing Code Examples -->
+        <section style="margin: var(--space-8) 0;">
+            <h2 style="font-size: var(--font-size-2xl); margin-bottom: var(--space-6);">Testing Implementation Examples
+            </h2>
+
+            <div class="card" style="margin-bottom: var(--space-6);">
+                <div class="card-header">
+                    <h3 class="card-title">Automated Visual Testing Setup</h3>
+                </div>
+                <div class="card-body">
+                    <div class="code-block">
+                        // Jest + Puppeteer visual regression test
+                        const puppeteer = require('puppeteer');
+                        const { toMatchImageSnapshot } = require('jest-image-snapshot');
+
+                        expect.extend({ toMatchImageSnapshot });
+
+                        describe('Button Component', () => {
+                        let browser, page;
+
+                        beforeAll(async () => {
+                        browser = await puppeteer.launch();
+                        page = await browser.newPage();
+                        await page.setViewport({ width: 1200, height: 800 });
+                        });
+
+                        <span class="code-highlight">test('renders all button variants correctly', async () => {
+                            await page.goto('http://localhost:3000/components/buttons');
+
+                            const screenshot = await page.screenshot({
+                            fullPage: true
+                            });
+
+                            expect(screenshot).toMatchImageSnapshot({
+                            threshold: 0.2,
+                            thresholdType: 'percent'
+                            });
+                            });</span>
+
+                        afterAll(async () => {
+                        await browser.close();
+                        });
+                        });
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Accessibility Testing Implementation</h3>
+                </div>
+                <div class="card-body">
+                    <div class="code-block">
+                        // axe-core accessibility testing
+                        const { AxePuppeteer } = require('@axe-core/puppeteer');
+
+                        describe('Accessibility Tests', () => {
+                        <span class="code-highlight">test('should not have any accessibility violations', async () => {
+                            await page.goto('http://localhost:3000');
+
+                            const results = await new AxePuppeteer(page)
+                            .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
+                            .analyze();
+
+                            expect(results.violations).toHaveLength(0);
+                            });</span>
+
+                        test('form elements have proper labels', async () => {
+                        const inputs = await page.$$('input');
+
+                        for (const input of inputs) {
+                        const id = await input.evaluate(el => el.id);
+                        const label = await page.$(`label[for="${id}"]`);
+                        expect(label).toBeTruthy();
+                        }
+                        });
+                        });
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // CSS Testing Utilities
+        class CSSTestingUtils {
+            // Check if CSS features are supported
+            static supportsFeature(property, value) {
+                return CSS.supports(property, value);
+            }
+
+            // Get computed styles for testing
+            static getComputedStyle(element, property) {
+                return window.getComputedStyle(element).getPropertyValue(property);
+            }
+
+            // Test color contrast ratio
+            static getColorContrast(foreground, background) {
+                // Simplified contrast calculation
+                const getLuminance = (color) => {
+                    const rgb = color.match(/\d+/g);
+                    const [r, g, b] = rgb.map(c => {
+                        c = parseInt(c) / 255;
+                        return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+                    });
+                    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+                };
+
+                const l1 = getLuminance(foreground);
+                const l2 = getLuminance(background);
+                const lighter = Math.max(l1, l2);
+                const darker = Math.min(l1, l2);
+
+                return (lighter + 0.05) / (darker + 0.05);
+            }
+
+            // Check viewport sizes
+            static isViewportSize(width, height) {
+                return window.innerWidth === width && window.innerHeight === height;
+            }
+
+            // Test touch target sizes
+            static checkTouchTargets() {
+                const interactiveElements = document.querySelectorAll('button, a, input, [tabindex]');
+                const results = [];
+
+                interactiveElements.forEach(element => {
+                    const rect = element.getBoundingClientRect();
+                    const size = Math.min(rect.width, rect.height);
+
+                    results.push({
+                        element,
+                        size,
+                        meets44px: size >= 44,
+                        selector: this.getSelector(element)
+                    });
+                });
+
+                return results;
+            }
+
+            // Generate CSS selector for element
+            static getSelector(element) {
+                if (element.id) {
+                    return `#${element.id}`;
+                }
+                if (element.className) {
+                    return `.${element.className.split(' ')[0]}`;
+                }
+                return element.tagName.toLowerCase();
+            }
+
+            // Performance testing
+            static measureCSS() {
+                const stylesheets = Array.from(document.styleSheets);
+                let totalRules = 0;
+                let totalSize = 0;
+
+                stylesheets.forEach(sheet => {
+                    try {
+                        totalRules += sheet.cssRules.length;
+                        if (sheet.href) {
+                            fetch(sheet.href)
+                                .then(response => response.text())
+                                .then(css => {
+                                    totalSize += new Blob([css]).size;
+                                });
+                        }
+                    } catch (e) {
+                        console.log('Cannot access stylesheet:', sheet.href);
+                    }
+                });
+
+                return {
+                    stylesheetCount: stylesheets.length,
+                    totalRules,
+                    estimatedSize: totalSize
+                };
+            }
+        }
+
+        // Accessibility testing functions
+        function runAccessibilityTests() {
+            const tests = [];
+
+            // Test focus indicators
+            const focusableElements = document.querySelectorAll('button, a, input, [tabindex]');
+            focusableElements.forEach(element => {
+                element.addEventListener('focus', () => {
+                    const outline = window.getComputedStyle(element).outline;
+                    const boxShadow = window.getComputedStyle(element).boxShadow;
+
+                    if (outline === 'none' && boxShadow === 'none') {
+                        console.warn('Element lacks focus indicator:', element);
+                    }
+                });
+            });
+
+            // Test color contrast
+            const textElements = document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, span, div');
+            textElements.forEach(element => {
+                const color = window.getComputedStyle(element).color;
+                const backgroundColor = window.getComputedStyle(element).backgroundColor;
+
+                if (color !== 'rgba(0, 0, 0, 0)' && backgroundColor !== 'rgba(0, 0, 0, 0)') {
+                    const contrast = CSSTestingUtils.getColorContrast(color, backgroundColor);
+                    if (contrast < 4.5) {
+                        console.warn('Low contrast detected:', element, `Ratio: ${contrast.toFixed(2)}`);
+                    }
+                }
+            });
+
+            return tests;
+        }
+
+        // Performance monitoring
+        function monitorCSSPerformance() {
+            // Measure CSS load time
+            const perfEntries = performance.getEntriesByType('resource');
+            const cssFiles = perfEntries.filter(entry =>
+                entry.name.endsWith('.css') || entry.initiatorType === 'css'
+            );
+
+            cssFiles.forEach(entry => {
+                console.log(`CSS file: ${entry.name}, Load time: ${entry.duration}ms`);
+            });
+
+            // Monitor layout shifts
+            new PerformanceObserver((list) => {
+                for (const entry of list.getEntries()) {
+                    if (!entry.hadRecentInput) {
+                        console.log('Layout shift detected:', entry.value);
+                    }
+                }
+            }).observe({ type: 'layout-shift', buffered: true });
+        }
+
+        // Visual regression test helper
+        function captureComponentScreenshot(selector) {
+            const element = document.querySelector(selector);
+            if (!element) return null;
+
+            return html2canvas(element).then(canvas => {
+                return canvas.toDataURL();
+            });
+        }
+
+        // Initialize testing utilities
+        document.addEventListener('DOMContentLoaded', () => {
+            // Run accessibility tests
+            runAccessibilityTests();
+
+            // Monitor performance
+            monitorCSSPerformance();
+
+            // Check touch targets
+            const touchTargetResults = CSSTestingUtils.checkTouchTargets();
+            console.log('Touch target analysis:', touchTargetResults);
+
+            // Test CSS features
+            const modernFeatures = [
+                'display: grid',
+                'backdrop-filter: blur(10px)',
+                'container-type: inline-size',
+                'scroll-behavior: smooth'
+            ];
+
+            modernFeatures.forEach(feature => {
+                const [property, value] = feature.split(': ');
+                const supported = CSSTestingUtils.supportsFeature(property, value);
+                console.log(`${feature}: ${supported ? 'Supported' : 'Not supported'}`);
+            });
+
+            // Log CSS metrics
+            console.log('CSS Metrics:', CSSTestingUtils.measureCSS());
+        });
+
+        // Export testing utilities
+        window.CSSTestingUtils = CSSTestingUtils;
+        window.runAccessibilityTests = runAccessibilityTests;
+    </script>
+</body>
+
+</html>

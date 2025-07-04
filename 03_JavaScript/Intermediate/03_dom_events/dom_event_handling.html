@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Manipulation and Event Handling</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+
+        .section h2 {
+            color: #495057;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #007bff;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .demo-area {
+            background: white;
+            border: 2px dashed #007bff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            min-height: 100px;
+        }
+
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 0.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .form-control.error {
+            border-color: #dc3545;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 0.25rem;
+        }
+
+        .item {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+
+        .counter {
+            background: #28a745;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 0.5rem;
+        }
+
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .log-entry {
+            padding: 0.25rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .tip {
+            background: #d4edda;
+            border: 1px solid #28a745;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .warning {
+            background: #f8d7da;
+            border: 1px solid #dc3545;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>DOM Manipulation & Event Handling</h1>
+            <p>Master modern JavaScript DOM APIs and event systems</p>
+        </div>
+
+        <div class="content">
+            <!-- DOM Selection Methods -->
+            <div class="section">
+                <h2>1. Modern DOM Selection</h2>
+                <p>Learn the modern ways to select and manipulate DOM elements efficiently.</p>
+
+                <div class="code-block">// Modern DOM Selection Methods
+                    const element = document.querySelector('#my-id');
+                    const elements = document.querySelectorAll('.my-class');
+                    const parent = element.closest('.parent-class');
+                    const children = element.children;
+                    const siblings = element.nextElementSibling;
+
+                    // Check if element exists before using
+                    if (element) {
+                    element.textContent = 'New content';
+                    element.classList.add('active');
+                    }</div>
+
+                <div class="demo-area">
+                    <h3>DOM Selection Demo</h3>
+                    <div id="selection-demo">
+                        <p class="demo-text">Original text</p>
+                        <p class="demo-text">Another paragraph</p>
+                        <div class="parent-div">
+                            <span class="child-span">Child element</span>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="selectAndModify()">Select & Modify Elements</button>
+                    <button class="btn btn-warning" onclick="resetSelection()">Reset</button>
+                </div>
+            </div>
+
+            <!-- Event Handling -->
+            <div class="section">
+                <h2>2. Event Handling Patterns</h2>
+                <p>Modern event handling with addEventListener and event delegation.</p>
+
+                <div class="code-block">// Basic Event Handling
+                    button.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent default behavior
+                    console.log('Button clicked!', event.target);
+                    });
+
+                    // Arrow function with event handling
+                    button.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Stop event bubbling
+                    handleButtonClick(e.target);
+                    });
+
+                    // Event delegation for dynamic content
+                    document.addEventListener('click', (event) => {
+                    if (event.target.matches('.dynamic-button')) {
+                    handleDynamicButton(event.target);
+                    }
+                    });</div>
+
+                <div class="demo-area">
+                    <h3>Event Handling Demo</h3>
+                    <div class="grid">
+                        <div>
+                            <h4>Basic Events</h4>
+                            <button class="btn" id="click-btn">Click Me</button>
+                            <button class="btn btn-success" id="double-click-btn">Double Click</button>
+                            <input type="text" class="form-control" id="text-input" placeholder="Type something...">
+                        </div>
+                        <div>
+                            <h4>Event Log</h4>
+                            <div class="log" id="event-log">
+                                <div class="log-entry">Event log will appear here...</div>
+                            </div>
+                            <button class="btn btn-warning" onclick="clearLog()">Clear Log</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Content Creation -->
+            <div class="section">
+                <h2>3. Dynamic Content Creation</h2>
+                <p>Create, modify, and remove DOM elements dynamically.</p>
+
+                <div class="code-block">// Creating elements
+                    function createTaskElement(task) {
+                    const div = document.createElement('div');
+                    div.className = 'task-item';
+                    div.innerHTML = `
+                    &lt;span&gt;${task.text}&lt;/span&gt;
+                    &lt;button class="delete-btn" data-id="${task.id}"&gt;Delete&lt;/button&gt;
+                    `;
+                    return div;
+                    }
+
+                    // Using document fragments for performance
+                    function addMultipleElements(items) {
+                    const fragment = document.createDocumentFragment();
+                    items.forEach(item => {
+                    const element = createItemElement(item);
+                    fragment.appendChild(element);
+                    });
+                    container.appendChild(fragment);
+                    }</div>
+
+                <div class="demo-area">
+                    <h3>Dynamic Content Demo</h3>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="task-input" placeholder="Enter a task...">
+                        <button class="btn" onclick="addTask()">Add Task</button>
+                        <button class="btn btn-danger" onclick="clearTasks()">Clear All</button>
+                    </div>
+                    <div id="task-list"></div>
+                </div>
+            </div>
+
+            <!-- Form Validation -->
+            <div class="section">
+                <h2>4. Interactive Form Validation</h2>
+                <p>Real-time form validation with custom error messages.</p>
+
+                <div class="code-block">// Form validation function
+                    function validateField(field, rules) {
+                    const value = field.value.trim();
+                    const errors = [];
+
+                    if (rules.required && !value) {
+                    errors.push('This field is required');
+                    }
+
+                    if (rules.minLength && value.length < rules.minLength) { errors.push(`Must be at least
+                        ${rules.minLength} characters`); } if (rules.email && !isValidEmail(value)) {
+                        errors.push('Please enter a valid email address'); } return errors; }</div>
+
+                        <div class="demo-area">
+                            <h3>Form Validation Demo</h3>
+                            <form id="validation-form">
+                                <div class="grid">
+                                    <div>
+                                        <div class="form-group">
+                                            <label for="name">Name (required, min 3 chars)</label>
+                                            <input type="text" class="form-control" id="name" name="name">
+                                            <div class="error-message" id="name-error"></div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="email">Email (required, valid format)</label>
+                                            <input type="email" class="form-control" id="email" name="email">
+                                            <div class="error-message" id="email-error"></div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="phone">Phone (optional, 10 digits)</label>
+                                            <input type="tel" class="form-control" id="phone" name="phone">
+                                            <div class="error-message" id="phone-error"></div>
+                                        </div>
+
+                                        <button type="submit" class="btn">Submit Form</button>
+                                    </div>
+                                    <div>
+                                        <h4>Validation Status</h4>
+                                        <div id="validation-status">
+                                            <p>Fill out the form to see real-time validation...</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                </div>
+
+                <!-- Event Delegation -->
+                <div class="section">
+                    <h2>5. Event Delegation</h2>
+                    <p>Handle events efficiently for dynamic content using event delegation.</p>
+
+                    <div class="code-block">// Event delegation example
+                        document.addEventListener('click', function(event) {
+                        // Handle different types of buttons
+                        if (event.target.matches('.increment-btn')) {
+                        incrementCounter(event.target);
+                        } else if (event.target.matches('.decrement-btn')) {
+                        decrementCounter(event.target);
+                        } else if (event.target.matches('.remove-btn')) {
+                        removeCounter(event.target.closest('.counter-item'));
+                        }
+                        });</div>
+
+                    <div class="demo-area">
+                        <h3>Event Delegation Demo</h3>
+                        <button class="btn" onclick="addCounter()">Add Counter</button>
+                        <div id="counters-container"></div>
+                    </div>
+                </div>
+
+                <!-- Advanced Interactions -->
+                <div class="section">
+                    <h2>6. Advanced DOM Interactions</h2>
+                    <p>Complex interactions with modals, drag-and-drop, and animations.</p>
+
+                    <div class="demo-area">
+                        <h3>Advanced Interactions Demo</h3>
+                        <div class="grid">
+                            <div>
+                                <button class="btn" onclick="showModal()">Show Modal</button>
+                                <button class="btn btn-success" onclick="animateElement()">Animate Element</button>
+                                <button class="btn btn-warning" onclick="createToast()">Show Toast</button>
+                            </div>
+                            <div>
+                                <div id="animation-target"
+                                    style="width: 100px; height: 100px; background: #007bff; border-radius: 8px; transition: all 0.3s ease;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Tips -->
+                <div class="tip">
+                    <h3>🎯 Performance Tips</h3>
+                    <ul>
+                        <li><strong>Cache DOM references:</strong> Store frequently used elements in variables</li>
+                        <li><strong>Use event delegation:</strong> Attach fewer event listeners to parent elements</li>
+                        <li><strong>Batch DOM updates:</strong> Use document fragments for multiple insertions</li>
+                        <li><strong>Debounce expensive operations:</strong> Limit how often functions execute</li>
+                        <li><strong>Use requestAnimationFrame:</strong> For smooth animations</li>
+                    </ul>
+                </div>
+
+                <!-- Senior Engineer Insights -->
+                <div class="highlight">
+                    <h3>💡 Senior Engineer Insights</h3>
+                    <ul>
+                        <li><strong>Separation of Concerns:</strong> Keep HTML structure, CSS presentation, and
+                            JavaScript behavior separate</li>
+                        <li><strong>Progressive Enhancement:</strong> Build core functionality first, then enhance with
+                            JavaScript</li>
+                        <li><strong>Accessibility:</strong> Ensure keyboard navigation and screen reader compatibility
+                        </li>
+                        <li><strong>Error Handling:</strong> Always check if elements exist before manipulating them
+                        </li>
+                        <li><strong>Memory Leaks:</strong> Remove event listeners when elements are destroyed</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal" id="demo-modal">
+            <div class="modal-content">
+                <span class="close" onclick="hideModal()">&times;</span>
+                <h3>Demo Modal</h3>
+                <p>This is a modal dialog created and controlled with JavaScript!</p>
+                <button class="btn" onclick="hideModal()">Close Modal</button>
+            </div>
+        </div>
+
+        <script>
+            // Global variables for demo
+            let taskCounter = 0;
+            let counterCounter = 0;
+
+            // DOM Selection Demo
+            function selectAndModify() {
+                const texts = document.querySelectorAll('.demo-text');
+                texts.forEach((text, index) => {
+                    text.textContent = `Modified text ${index + 1}`;
+                    text.style.color = '#007bff';
+                    text.style.fontWeight = 'bold';
+                });
+
+                const childSpan = document.querySelector('.child-span');
+                if (childSpan) {
+                    childSpan.textContent = 'Modified child!';
+                    childSpan.style.background = '#28a745';
+                    childSpan.style.color = 'white';
+                    childSpan.style.padding = '5px';
+                    childSpan.style.borderRadius = '3px';
+                }
+            }
+
+            function resetSelection() {
+                const texts = document.querySelectorAll('.demo-text');
+                texts[0].textContent = 'Original text';
+                texts[1].textContent = 'Another paragraph';
+                texts.forEach(text => {
+                    text.style.color = '';
+                    text.style.fontWeight = '';
+                });
+
+                const childSpan = document.querySelector('.child-span');
+                if (childSpan) {
+                    childSpan.textContent = 'Child element';
+                    childSpan.style.background = '';
+                    childSpan.style.color = '';
+                    childSpan.style.padding = '';
+                    childSpan.style.borderRadius = '';
+                }
+            }
+
+            // Event logging
+            function logEvent(message) {
+                const log = document.getElementById('event-log');
+                const entry = document.createElement('div');
+                entry.className = 'log-entry';
+                entry.textContent = `${new Date().toLocaleTimeString()}: ${message}`;
+                log.appendChild(entry);
+                log.scrollTop = log.scrollHeight;
+            }
+
+            function clearLog() {
+                const log = document.getElementById('event-log');
+                log.innerHTML = '<div class="log-entry">Event log cleared...</div>';
+            }
+
+            // Event handlers setup
+            document.addEventListener('DOMContentLoaded', function () {
+                // Basic event handlers
+                const clickBtn = document.getElementById('click-btn');
+                const doubleClickBtn = document.getElementById('double-click-btn');
+                const textInput = document.getElementById('text-input');
+
+                clickBtn.addEventListener('click', () => {
+                    logEvent('Single click detected');
+                });
+
+                doubleClickBtn.addEventListener('dblclick', () => {
+                    logEvent('Double click detected');
+                });
+
+                textInput.addEventListener('input', (e) => {
+                    logEvent(`Text input: "${e.target.value}"`);
+                });
+
+                textInput.addEventListener('focus', () => {
+                    logEvent('Input field focused');
+                });
+
+                textInput.addEventListener('blur', () => {
+                    logEvent('Input field lost focus');
+                });
+
+                // Form validation setup
+                setupFormValidation();
+
+                // Event delegation for dynamic content
+                document.addEventListener('click', function (event) {
+                    if (event.target.matches('.delete-task')) {
+                        event.target.closest('.item').remove();
+                        logEvent('Task deleted');
+                    } else if (event.target.matches('.toggle-task')) {
+                        const item = event.target.closest('.item');
+                        item.classList.toggle('completed');
+                        logEvent('Task toggled');
+                    } else if (event.target.matches('.increment-btn')) {
+                        incrementCounter(event.target);
+                    } else if (event.target.matches('.decrement-btn')) {
+                        decrementCounter(event.target);
+                    } else if (event.target.matches('.remove-counter')) {
+                        event.target.closest('.item').remove();
+                        logEvent('Counter removed');
+                    }
+                });
+            });
+
+            // Task management
+            function addTask() {
+                const input = document.getElementById('task-input');
+                const text = input.value.trim();
+
+                if (!text) {
+                    alert('Please enter a task!');
+                    return;
+                }
+
+                const taskList = document.getElementById('task-list');
+                const task = document.createElement('div');
+                task.className = 'item fade-in';
+                task.innerHTML = `
+                <span>${text}</span>
+                <div>
+                    <button class="btn btn-success toggle-task">Toggle</button>
+                    <button class="btn btn-danger delete-task">Delete</button>
+                </div>
+            `;
+
+                taskList.appendChild(task);
+                input.value = '';
+                logEvent(`Task added: "${text}"`);
+            }
+
+            function clearTasks() {
+                const taskList = document.getElementById('task-list');
+                taskList.innerHTML = '';
+                logEvent('All tasks cleared');
+            }
+
+            // Counter management
+            function addCounter() {
+                const container = document.getElementById('counters-container');
+                const counter = document.createElement('div');
+                counter.className = 'item fade-in';
+                counter.innerHTML = `
+                <span>Counter ${++counterCounter}: <span class="counter-value">0</span></span>
+                <div>
+                    <button class="btn decrement-btn">-</button>
+                    <button class="btn increment-btn">+</button>
+                    <button class="btn btn-danger remove-counter">Remove</button>
+                </div>
+            `;
+                container.appendChild(counter);
+                logEvent(`Counter ${counterCounter} added`);
+            }
+
+            function incrementCounter(button) {
+                const valueSpan = button.closest('.item').querySelector('.counter-value');
+                const currentValue = parseInt(valueSpan.textContent);
+                valueSpan.textContent = currentValue + 1;
+                logEvent(`Counter incremented to ${currentValue + 1}`);
+            }
+
+            function decrementCounter(button) {
+                const valueSpan = button.closest('.item').querySelector('.counter-value');
+                const currentValue = parseInt(valueSpan.textContent);
+                valueSpan.textContent = Math.max(0, currentValue - 1);
+                logEvent(`Counter decremented to ${Math.max(0, currentValue - 1)}`);
+            }
+
+            // Form validation
+            function setupFormValidation() {
+                const form = document.getElementById('validation-form');
+                const fields = {
+                    name: { required: true, minLength: 3 },
+                    email: { required: true, email: true },
+                    phone: { pattern: /^\d{10}$/, message: 'Must be 10 digits' }
+                };
+
+                // Real-time validation
+                Object.keys(fields).forEach(fieldName => {
+                    const field = document.getElementById(fieldName);
+                    field.addEventListener('input', () => validateField(fieldName, fields[fieldName]));
+                    field.addEventListener('blur', () => validateField(fieldName, fields[fieldName]));
+                });
+
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const isValid = validateForm(fields);
+                    if (isValid) {
+                        alert('Form is valid! (This is just a demo)');
+                        logEvent('Form submitted successfully');
+                    } else {
+                        logEvent('Form submission failed - validation errors');
+                    }
+                });
+            }
+
+            function validateField(fieldName, rules) {
+                const field = document.getElementById(fieldName);
+                const errorDiv = document.getElementById(`${fieldName}-error`);
+                const value = field.value.trim();
+                const errors = [];
+
+                if (rules.required && !value) {
+                    errors.push('This field is required');
+                }
+
+                if (value && rules.minLength && value.length < rules.minLength) {
+                    errors.push(`Must be at least ${rules.minLength} characters`);
+                }
+
+                if (value && rules.email && !isValidEmail(value)) {
+                    errors.push('Please enter a valid email address');
+                }
+
+                if (value && rules.pattern && !rules.pattern.test(value)) {
+                    errors.push(rules.message || 'Invalid format');
+                }
+
+                if (errors.length > 0) {
+                    field.classList.add('error');
+                    errorDiv.textContent = errors[0];
+                } else {
+                    field.classList.remove('error');
+                    errorDiv.textContent = '';
+                }
+
+                updateValidationStatus();
+                return errors.length === 0;
+            }
+
+            function validateForm(fields) {
+                let isValid = true;
+                Object.keys(fields).forEach(fieldName => {
+                    if (!validateField(fieldName, fields[fieldName])) {
+                        isValid = false;
+                    }
+                });
+                return isValid;
+            }
+
+            function updateValidationStatus() {
+                const status = document.getElementById('validation-status');
+                const nameValid = !document.getElementById('name').classList.contains('error');
+                const emailValid = !document.getElementById('email').classList.contains('error');
+                const phoneValid = !document.getElementById('phone').classList.contains('error');
+
+                status.innerHTML = `
+                <p><strong>Validation Status:</strong></p>
+                <p>Name: ${nameValid ? '✅ Valid' : '❌ Invalid'}</p>
+                <p>Email: ${emailValid ? '✅ Valid' : '❌ Invalid'}</p>
+                <p>Phone: ${phoneValid ? '✅ Valid' : '❌ Invalid'}</p>
+                <p><strong>Form: ${nameValid && emailValid && phoneValid ? '✅ Ready to submit' : '❌ Has errors'}</strong></p>
+            `;
+            }
+
+            function isValidEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+
+            // Modal functions
+            function showModal() {
+                const modal = document.getElementById('demo-modal');
+                modal.style.display = 'block';
+                logEvent('Modal opened');
+
+                // Close modal when clicking outside
+                modal.addEventListener('click', function (e) {
+                    if (e.target === modal) {
+                        hideModal();
+                    }
+                });
+            }
+
+            function hideModal() {
+                const modal = document.getElementById('demo-modal');
+                modal.style.display = 'none';
+                logEvent('Modal closed');
+            }
+
+            // Animation function
+            function animateElement() {
+                const target = document.getElementById('animation-target');
+                const colors = ['#007bff', '#28a745', '#ffc107', '#dc3545', '#6f42c1'];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+                target.style.background = randomColor;
+                target.style.transform = `rotate(${Math.random() * 360}deg) scale(${0.5 + Math.random()})`;
+
+                setTimeout(() => {
+                    target.style.transform = 'rotate(0deg) scale(1)';
+                }, 300);
+
+                logEvent(`Element animated with color ${randomColor}`);
+            }
+
+            // Toast notification
+            function createToast() {
+                const toast = document.createElement('div');
+                toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #28a745;
+                color: white;
+                padding: 1rem;
+                border-radius: 5px;
+                z-index: 1001;
+                animation: fadeIn 0.3s ease-in-out;
+            `;
+                toast.textContent = 'This is a toast notification!';
+
+                document.body.appendChild(toast);
+                logEvent('Toast notification created');
+
+                setTimeout(() => {
+                    toast.style.animation = 'fadeOut 0.3s ease-in-out';
+                    setTimeout(() => {
+                        document.body.removeChild(toast);
+                    }, 300);
+                }, 3000);
+            }
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function (e) {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    addTask();
+                    e.preventDefault();
+                } else if (e.key === 'Escape') {
+                    hideModal();
+                }
+            });
+
+            // Add task on Enter key in input
+            document.addEventListener('DOMContentLoaded', function () {
+                const taskInput = document.getElementById('task-input');
+                taskInput.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        addTask();
+                    }
+                });
+            });
+        </script>
+</body>
+
+</html>

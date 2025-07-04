@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Asynchronous Programming - JavaScript Advanced</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #ff9800;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-align: center;
+        }
+
+        h2 {
+            color: #f57c00;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #fff3e0;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #ef6c00;
+            margin: 20px 0 10px 0;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .demo-card {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffcc80 100%);
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #ff9800;
+        }
+
+        .demo-area {
+            background: #f8f9fa;
+            border: 2px dashed #ff9800;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .code-block {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .async-button {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
+        }
+
+        .async-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4);
+        }
+
+        .async-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .status-display {
+            background: #2196f3;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            font-family: monospace;
+            min-height: 60px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #4caf50, #388e3c);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .log-area {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin: 15px 0;
+        }
+
+        .error-display {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef5350;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .success-display {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #4caf50;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .performance-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid #2196f3;
+        }
+
+        .metric-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #1976d2;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #ff9800;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>⚡ Advanced Asynchronous Programming</h1>
+            <p><strong>Master Promises, Async/Await, and Concurrent Programming</strong></p>
+            <p>Learn advanced patterns for handling asynchronous operations, error handling, and performance
+                optimization in modern JavaScript.</p>
+        </header>
+
+        <section class="section">
+            <h2>🔄 Promise Patterns & Advanced Techniques</h2>
+            <p>Master sophisticated Promise patterns for complex asynchronous workflows.</p>
+
+            <div class="demo-area">
+                <h3>Promise Patterns Demo</h3>
+                <button class="async-button" onclick="demoPromiseAll()">Promise.all()</button>
+                <button class="async-button" onclick="demoPromiseAllSettled()">Promise.allSettled()</button>
+                <button class="async-button" onclick="demoPromiseRace()">Promise.race()</button>
+                <button class="async-button" onclick="demoPromiseAny()">Promise.any()</button>
+                <button class="async-button" onclick="demoChaining()">Promise Chaining</button>
+                <div id="promiseStatus" class="status-display">Ready to test Promise patterns...</div>
+                <div id="promiseProgress" class="progress-bar" style="display: none;">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+
+            <h3>Advanced Promise Patterns:</h3>
+            <div class="code-block">
+                // Promise.all() - Wait for all promises to resolve
+                async function fetchMultipleResources() {
+                try {
+                const [users, posts, comments] = await Promise.all([
+                fetch('/api/users').then(r => r.json()),
+                fetch('/api/posts').then(r => r.json()),
+                fetch('/api/comments').then(r => r.json())
+                ]);
+
+                return { users, posts, comments };
+                } catch (error) {
+                // If any promise fails, this catch block executes
+                console.error('One or more requests failed:', error);
+                }
+                }
+
+                // Promise.allSettled() - Get results of all promises (success or failure)
+                async function fetchWithFallbacks() {
+                const results = await Promise.allSettled([
+                fetch('/api/primary'),
+                fetch('/api/secondary'),
+                fetch('/api/tertiary')
+                ]);
+
+                const successful = results
+                .filter(result => result.status === 'fulfilled')
+                .map(result => result.value);
+
+                return successful[0] || null; // Return first successful result
+                }
+
+                // Promise.race() - First promise to settle wins
+                async function fetchWithTimeout(url, timeoutMs = 5000) {
+                return Promise.race([
+                fetch(url),
+                new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('Timeout')), timeoutMs)
+                )
+                ]);
+                }
+
+                // Promise.any() - First promise to resolve wins
+                async function fetchFromMultipleSources() {
+                try {
+                return await Promise.any([
+                fetch('/api/source1'),
+                fetch('/api/source2'),
+                fetch('/api/source3')
+                ]);
+                } catch (error) {
+                // All promises rejected
+                console.error('All sources failed:', error);
+                }
+                }
+
+                // Advanced Promise Chaining with Error Recovery
+                function robustDataFetch(id) {
+                return fetch(`/api/data/${id}`)
+                .then(response => {
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return response.json();
+                })
+                .catch(error => {
+                console.warn('Primary fetch failed, trying backup:', error.message);
+                return fetch(`/api/backup/data/${id}`);
+                })
+                .then(response => response.json())
+                .catch(error => {
+                console.error('All data sources failed:', error);
+                return { id, error: 'Data unavailable', fallback: true };
+                });
+                }
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎯 Async/Await Best Practices</h2>
+            <p>Modern asynchronous programming with proper error handling and performance optimization.</p>
+
+            <div class="demo-area">
+                <h3>Async/Await Demo</h3>
+                <button class="async-button" onclick="demoAsyncAwait()">Sequential Processing</button>
+                <button class="async-button" onclick="demoConcurrentAsync()">Concurrent Processing</button>
+                <button class="async-button" onclick="demoAsyncIterators()">Async Iterators</button>
+                <button class="async-button" onclick="demoAsyncGenerators()">Async Generators</button>
+                <div id="asyncStatus" class="status-display">Ready for async demos...</div>
+                <div id="asyncLog" class="log-area"></div>
+            </div>
+
+            <h3>Async/Await Patterns:</h3>
+            <div class="code-block">
+                // Sequential vs Concurrent Execution
+                async function sequentialProcessing(urls) {
+                const results = [];
+
+                // Sequential - processes one at a time
+                for (const url of urls) {
+                try {
+                const response = await fetch(url);
+                const data = await response.json();
+                results.push(data);
+                } catch (error) {
+                console.error(`Failed to fetch ${url}:`, error);
+                results.push(null);
+                }
+                }
+
+                return results;
+                }
+
+                async function concurrentProcessing(urls) {
+                // Concurrent - all requests start immediately
+                const promises = urls.map(async (url) => {
+                try {
+                const response = await fetch(url);
+                return await response.json();
+                } catch (error) {
+                console.error(`Failed to fetch ${url}:`, error);
+                return null;
+                }
+                });
+
+                return await Promise.all(promises);
+                }
+
+                // Async Iterators - Process streams of data
+                async function* fetchDataStream(urls) {
+                for (const url of urls) {
+                try {
+                const response = await fetch(url);
+                const data = await response.json();
+                yield data;
+                } catch (error) {
+                yield { error: error.message, url };
+                }
+                }
+                }
+
+                // Using async iterator
+                async function processDataStream() {
+                const urls = ['/api/data1', '/api/data2', '/api/data3'];
+
+                for await (const data of fetchDataStream(urls)) {
+                if (data.error) {
+                console.error('Error:', data.error);
+                } else {
+                console.log('Processed:', data);
+                // Process data immediately as it arrives
+                await processItem(data);
+                }
+                }
+                }
+
+                // Async Generators - Infinite data streams
+                async function* infiniteDataGenerator() {
+                let page = 1;
+                while (true) {
+                try {
+                const response = await fetch(`/api/data?page=${page}`);
+                const data = await response.json();
+
+                if (data.items.length === 0) break;
+
+                yield* data.items; // Yield each item
+                page++;
+                } catch (error) {
+                console.error('Generator error:', error);
+                break;
+                }
+                }
+                }
+
+                // Error Handling Patterns
+                async function robustAsyncFunction() {
+                try {
+                const result = await riskyOperation();
+                return { success: true, data: result };
+                } catch (error) {
+                // Structured error handling
+                if (error instanceof TypeError) {
+                return { success: false, error: 'Invalid data format' };
+                } else if (error.status === 404) {
+                return { success: false, error: 'Resource not found' };
+                } else {
+                // Re-throw unexpected errors
+                throw error;
+                }
+                }
+                }
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔄 Concurrent & Parallel Processing</h2>
+            <p>Optimize performance through concurrent execution and Web Workers.</p>
+
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>🎛️ Concurrency Control</h3>
+                    <button class="async-button" onclick="demoRateLimiting()">Rate Limiting</button>
+                    <button class="async-button" onclick="demoBatchProcessing()">Batch Processing</button>
+                    <div id="concurrencyStatus" class="status-display">Ready...</div>
+                </div>
+
+                <div class="demo-card">
+                    <h3>👷 Web Workers</h3>
+                    <button class="async-button" onclick="demoWebWorker()">Heavy Computation</button>
+                    <button class="async-button" onclick="demoSharedWorker()">Shared Worker</button>
+                    <div id="workerStatus" class="status-display">Ready...</div>
+                </div>
+            </div>
+
+            <h3>Concurrency Patterns:</h3>
+            <div class="code-block">
+                // Rate Limiting - Control concurrent operations
+                class RateLimiter {
+                constructor(maxConcurrent = 3) {
+                this.maxConcurrent = maxConcurrent;
+                this.running = 0;
+                this.queue = [];
+                }
+
+                async execute(asyncFunction) {
+                return new Promise((resolve, reject) => {
+                this.queue.push({ asyncFunction, resolve, reject });
+                this.process();
+                });
+                }
+
+                async process() {
+                if (this.running >= this.maxConcurrent || this.queue.length === 0) {
+                return;
+                }
+
+                this.running++;
+                const { asyncFunction, resolve, reject } = this.queue.shift();
+
+                try {
+                const result = await asyncFunction();
+                resolve(result);
+                } catch (error) {
+                reject(error);
+                } finally {
+                this.running--;
+                this.process(); // Process next item
+                }
+                }
+                }
+
+                // Usage
+                const limiter = new RateLimiter(3);
+                const urls = ['url1', 'url2', 'url3', 'url4', 'url5'];
+
+                Promise.all(
+                urls.map(url => limiter.execute(() => fetch(url)))
+                ).then(responses => {
+                console.log('All requests completed');
+                });
+
+                // Batch Processing
+                async function processBatches(items, batchSize = 10) {
+                const results = [];
+
+                for (let i = 0; i < items.length; i +=batchSize) { const batch=items.slice(i, i + batchSize); // Process
+                    batch concurrently const batchResults=await Promise.all( batch.map(item=> processItem(item))
+                    );
+
+                    results.push(...batchResults);
+
+                    // Optional: Add delay between batches
+                    if (i + batchSize < items.length) { await delay(100); } } return results; } // Retry Pattern with
+                        Exponential Backoff async function retryWithBackoff(asyncFn, maxRetries=3) { for (let attempt=1;
+                        attempt <=maxRetries; attempt++) { try { return await asyncFn(); } catch (error) { if
+                        (attempt===maxRetries) throw error; const delay=Math.pow(2, attempt) * 1000; // Exponential
+                        backoff console.warn(`Attempt ${attempt} failed, retrying in ${delay}ms...`); await new
+                        Promise(resolve=> setTimeout(resolve, delay));
+                        }
+                        }
+                        }
+
+                        // Circuit Breaker Pattern
+                        class CircuitBreaker {
+                        constructor(threshold = 5, resetTime = 60000) {
+                        this.threshold = threshold;
+                        this.resetTime = resetTime;
+                        this.failures = 0;
+                        this.state = 'CLOSED'; // CLOSED, OPEN, HALF_OPEN
+                        this.nextAttempt = Date.now();
+                        }
+
+                        async execute(asyncFn) {
+                        if (this.state === 'OPEN') {
+                        if (Date.now() < this.nextAttempt) { throw new Error('Circuit breaker is OPEN'); }
+                            this.state='HALF_OPEN' ; } try { const result=await asyncFn(); this.onSuccess(); return
+                            result; } catch (error) { this.onFailure(); throw error; } } onSuccess() { this.failures=0;
+                            this.state='CLOSED' ; } onFailure() { this.failures++; if (this.failures>= this.threshold) {
+                            this.state = 'OPEN';
+                            this.nextAttempt = Date.now() + this.resetTime;
+                            }
+                            }
+                            }
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>📊 Performance Monitoring & Optimization</h2>
+            <div class="performance-metrics" id="performanceMetrics">
+                <div class="metric-card">
+                    <div class="metric-value" id="asyncOperations">0</div>
+                    <div>Async Operations</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="averageTime">--</div>
+                    <div>Avg Time (ms)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="successRate">--</div>
+                    <div>Success Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="concurrentOps">0</div>
+                    <div>Concurrent Ops</div>
+                </div>
+            </div>
+
+            <div class="demo-area">
+                <button class="async-button" onclick="runPerformanceTest()">Run Performance Test</button>
+                <button class="async-button" onclick="clearMetrics()">Clear Metrics</button>
+            </div>
+
+            <h3>Performance Optimization Techniques:</h3>
+            <div class="code-block">
+                // Performance Monitoring
+                class AsyncPerformanceMonitor {
+                constructor() {
+                this.operations = [];
+                this.activeOperations = new Set();
+                }
+
+                async measureOperation(name, asyncFn) {
+                const startTime = performance.now();
+                this.activeOperations.add(name);
+
+                try {
+                const result = await asyncFn();
+                const endTime = performance.now();
+
+                this.operations.push({
+                name,
+                duration: endTime - startTime,
+                success: true,
+                timestamp: Date.now()
+                });
+
+                return result;
+                } catch (error) {
+                const endTime = performance.now();
+
+                this.operations.push({
+                name,
+                duration: endTime - startTime,
+                success: false,
+                error: error.message,
+                timestamp: Date.now()
+                });
+
+                throw error;
+                } finally {
+                this.activeOperations.delete(name);
+                }
+                }
+
+                getMetrics() {
+                const total = this.operations.length;
+                const successful = this.operations.filter(op => op.success).length;
+                const avgDuration = total > 0
+                ? this.operations.reduce((sum, op) => sum + op.duration, 0) / total
+                : 0;
+
+                return {
+                totalOperations: total,
+                successRate: total > 0 ? (successful / total * 100).toFixed(1) : 0,
+                averageDuration: avgDuration.toFixed(2),
+                activeOperations: this.activeOperations.size
+                };
+                }
+                }
+
+                // Memory-efficient async operations
+                async function processLargeDataset(data) {
+                // Process in chunks to avoid memory issues
+                const chunkSize = 1000;
+                const results = [];
+
+                for (let i = 0; i < data.length; i +=chunkSize) { const chunk=data.slice(i, i + chunkSize); // Process
+                    chunk and clean up const chunkResults=await processChunk(chunk); results.push(...chunkResults); //
+                    Allow garbage collection if (i % (chunkSize * 10)===0) { await new Promise(resolve=>
+                    setTimeout(resolve, 0));
+                    }
+                    }
+
+                    return results;
+                    }
+
+                    // Debounced async operations
+                    function debounceAsync(asyncFn, delay) {
+                    let timeoutId;
+                    let currentPromise;
+
+                    return function(...args) {
+                    clearTimeout(timeoutId);
+
+                    if (currentPromise) {
+                    currentPromise.cancel?.();
+                    }
+
+                    return new Promise((resolve, reject) => {
+                    timeoutId = setTimeout(async () => {
+                    try {
+                    const result = await asyncFn.apply(this, args);
+                    resolve(result);
+                    } catch (error) {
+                    reject(error);
+                    }
+                    }, delay);
+                    });
+                    };
+                    }
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔧 Senior Engineer Best Practices</h2>
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>🚀 Performance</h3>
+                    <ul>
+                        <li>Use concurrent processing for I/O operations</li>
+                        <li>Implement proper error boundaries</li>
+                        <li>Monitor and measure async performance</li>
+                        <li>Use Web Workers for CPU-intensive tasks</li>
+                        <li>Implement request cancellation</li>
+                    </ul>
+                </div>
+
+                <div class="demo-card">
+                    <h3>🛡️ Error Handling</h3>
+                    <ul>
+                        <li>Always handle promise rejections</li>
+                        <li>Use structured error objects</li>
+                        <li>Implement circuit breaker patterns</li>
+                        <li>Log errors with context</li>
+                        <li>Provide meaningful fallbacks</li>
+                    </ul>
+                </div>
+
+                <div class="demo-card">
+                    <h3>🏗️ Architecture</h3>
+                    <ul>
+                        <li>Separate concerns with proper abstraction</li>
+                        <li>Use dependency injection for testability</li>
+                        <li>Implement retry and backoff strategies</li>
+                        <li>Design for cancellation and cleanup</li>
+                        <li>Consider memory management</li>
+                    </ul>
+                </div>
+
+                <div class="demo-card">
+                    <h3>🧪 Testing</h3>
+                    <ul>
+                        <li>Mock async dependencies</li>
+                        <li>Test error scenarios</li>
+                        <li>Use fake timers for timing tests</li>
+                        <li>Test concurrent scenarios</li>
+                        <li>Verify cleanup and cancellation</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Global performance monitor
+        const monitor = {
+            operations: [],
+            activeOperations: new Set(),
+
+            async measureOperation(name, asyncFn) {
+                const startTime = performance.now();
+                this.activeOperations.add(name);
+
+                try {
+                    const result = await asyncFn();
+                    const endTime = performance.now();
+
+                    this.operations.push({
+                        name,
+                        duration: endTime - startTime,
+                        success: true,
+                        timestamp: Date.now()
+                    });
+
+                    this.updateMetrics();
+                    return result;
+                } catch (error) {
+                    const endTime = performance.now();
+
+                    this.operations.push({
+                        name,
+                        duration: endTime - startTime,
+                        success: false,
+                        error: error.message,
+                        timestamp: Date.now()
+                    });
+
+                    this.updateMetrics();
+                    throw error;
+                } finally {
+                    this.activeOperations.delete(name);
+                    this.updateMetrics();
+                }
+            },
+
+            updateMetrics() {
+                const total = this.operations.length;
+                const successful = this.operations.filter(op => op.success).length;
+                const avgDuration = total > 0
+                    ? this.operations.reduce((sum, op) => sum + op.duration, 0) / total
+                    : 0;
+
+                document.getElementById('asyncOperations').textContent = total;
+                document.getElementById('averageTime').textContent = avgDuration.toFixed(2);
+                document.getElementById('successRate').textContent = total > 0 ? (successful / total * 100).toFixed(1) + '%' : '--';
+                document.getElementById('concurrentOps').textContent = this.activeOperations.size;
+            }
+        };
+
+        // Demo functions
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function mockFetch(url, shouldFail = false, delayMs = 1000) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    if (shouldFail) {
+                        reject(new Error(`Failed to fetch ${url}`));
+                    } else {
+                        resolve({
+                            ok: true,
+                            json: () => Promise.resolve({ url, data: `Mock data from ${url}`, timestamp: Date.now() })
+                        });
+                    }
+                }, delayMs);
+            });
+        }
+
+        function logToConsole(message, element = 'asyncLog') {
+            const logArea = document.getElementById(element);
+            if (logArea) {
+                const timestamp = new Date().toLocaleTimeString();
+                logArea.textContent += `[${timestamp}] ${message}\n`;
+                logArea.scrollTop = logArea.scrollHeight;
+            }
+            console.log(message);
+        }
+
+        // Promise pattern demos
+        async function demoPromiseAll() {
+            const status = document.getElementById('promiseStatus');
+            status.textContent = 'Running Promise.all() demo...';
+
+            try {
+                const startTime = performance.now();
+                const results = await Promise.all([
+                    mockFetch('/api/users'),
+                    mockFetch('/api/posts'),
+                    mockFetch('/api/comments')
+                ]);
+
+                const endTime = performance.now();
+                const allData = await Promise.all(results.map(r => r.json()));
+
+                status.textContent = `Promise.all() completed in ${(endTime - startTime).toFixed(2)}ms. All ${allData.length} requests succeeded.`;
+            } catch (error) {
+                status.textContent = `Promise.all() failed: ${error.message}`;
+            }
+        }
+
+        async function demoPromiseAllSettled() {
+            const status = document.getElementById('promiseStatus');
+            status.textContent = 'Running Promise.allSettled() demo...';
+
+            const startTime = performance.now();
+            const results = await Promise.allSettled([
+                mockFetch('/api/users'),
+                mockFetch('/api/posts', true), // This will fail
+                mockFetch('/api/comments')
+            ]);
+
+            const endTime = performance.now();
+            const fulfilled = results.filter(r => r.status === 'fulfilled').length;
+            const rejected = results.filter(r => r.status === 'rejected').length;
+
+            status.textContent = `Promise.allSettled() completed in ${(endTime - startTime).toFixed(2)}ms. ${fulfilled} succeeded, ${rejected} failed.`;
+        }
+
+        async function demoPromiseRace() {
+            const status = document.getElementById('promiseStatus');
+            status.textContent = 'Running Promise.race() demo...';
+
+            try {
+                const startTime = performance.now();
+                const winner = await Promise.race([
+                    mockFetch('/api/slow', false, 2000),
+                    mockFetch('/api/fast', false, 500),
+                    mockFetch('/api/medium', false, 1000)
+                ]);
+
+                const endTime = performance.now();
+                const data = await winner.json();
+
+                status.textContent = `Promise.race() completed in ${(endTime - startTime).toFixed(2)}ms. Winner: ${data.url}`;
+            } catch (error) {
+                status.textContent = `Promise.race() failed: ${error.message}`;
+            }
+        }
+
+        async function demoPromiseAny() {
+            const status = document.getElementById('promiseStatus');
+            status.textContent = 'Running Promise.any() demo...';
+
+            try {
+                const startTime = performance.now();
+                const result = await Promise.any([
+                    mockFetch('/api/source1', true, 500), // Will fail
+                    mockFetch('/api/source2', false, 1000), // Will succeed
+                    mockFetch('/api/source3', true, 800) // Will fail
+                ]);
+
+                const endTime = performance.now();
+                const data = await result.json();
+
+                status.textContent = `Promise.any() completed in ${(endTime - startTime).toFixed(2)}ms. First success: ${data.url}`;
+            } catch (error) {
+                status.textContent = `Promise.any() failed: All promises rejected`;
+            }
+        }
+
+        async function demoChaining() {
+            const status = document.getElementById('promiseStatus');
+            status.textContent = 'Running Promise chaining demo...';
+
+            try {
+                const result = await mockFetch('/api/user/1')
+                    .then(response => response.json())
+                    .then(user => {
+                        logToConsole(`Fetched user: ${user.url}`);
+                        return mockFetch(`/api/posts/user/${user.url}`);
+                    })
+                    .then(response => response.json())
+                    .then(posts => {
+                        logToConsole(`Fetched posts: ${posts.url}`);
+                        return mockFetch(`/api/comments/post/${posts.url}`);
+                    })
+                    .then(response => response.json());
+
+                status.textContent = `Promise chaining completed successfully. Final result: ${result.url}`;
+            } catch (error) {
+                status.textContent = `Promise chaining failed: ${error.message}`;
+            }
+        }
+
+        // Async/await demos
+        async function demoAsyncAwait() {
+            const status = document.getElementById('asyncStatus');
+            const log = document.getElementById('asyncLog');
+            log.textContent = '';
+
+            status.textContent = 'Running sequential async/await demo...';
+
+            try {
+                await monitor.measureOperation('sequential-processing', async () => {
+                    logToConsole('Starting sequential processing...');
+
+                    const result1 = await mockFetch('/api/step1', false, 500);
+                    const data1 = await result1.json();
+                    logToConsole(`Step 1 completed: ${data1.url}`);
+
+                    const result2 = await mockFetch('/api/step2', false, 500);
+                    const data2 = await result2.json();
+                    logToConsole(`Step 2 completed: ${data2.url}`);
+
+                    const result3 = await mockFetch('/api/step3', false, 500);
+                    const data3 = await result3.json();
+                    logToConsole(`Step 3 completed: ${data3.url}`);
+
+                    return [data1, data2, data3];
+                });
+
+                status.textContent = 'Sequential processing completed successfully!';
+            } catch (error) {
+                status.textContent = `Sequential processing failed: ${error.message}`;
+            }
+        }
+
+        async function demoConcurrentAsync() {
+            const status = document.getElementById('asyncStatus');
+            const log = document.getElementById('asyncLog');
+            log.textContent = '';
+
+            status.textContent = 'Running concurrent async/await demo...';
+
+            try {
+                await monitor.measureOperation('concurrent-processing', async () => {
+                    logToConsole('Starting concurrent processing...');
+
+                    // Start all operations concurrently
+                    const [result1, result2, result3] = await Promise.all([
+                        (async () => {
+                            const response = await mockFetch('/api/concurrent1', false, 500);
+                            const data = await response.json();
+                            logToConsole(`Concurrent 1 completed: ${data.url}`);
+                            return data;
+                        })(),
+                        (async () => {
+                            const response = await mockFetch('/api/concurrent2', false, 800);
+                            const data = await response.json();
+                            logToConsole(`Concurrent 2 completed: ${data.url}`);
+                            return data;
+                        })(),
+                        (async () => {
+                            const response = await mockFetch('/api/concurrent3', false, 300);
+                            const data = await response.json();
+                            logToConsole(`Concurrent 3 completed: ${data.url}`);
+                            return data;
+                        })()
+                    ]);
+
+                    return [result1, result2, result3];
+                });
+
+                status.textContent = 'Concurrent processing completed successfully!';
+            } catch (error) {
+                status.textContent = `Concurrent processing failed: ${error.message}`;
+            }
+        }
+
+        async function demoAsyncIterators() {
+            const status = document.getElementById('asyncStatus');
+            const log = document.getElementById('asyncLog');
+            log.textContent = '';
+
+            status.textContent = 'Running async iterator demo...';
+
+            async function* dataGenerator() {
+                const urls = ['/api/data1', '/api/data2', '/api/data3'];
+                for (const url of urls) {
+                    try {
+                        const response = await mockFetch(url, false, 300);
+                        const data = await response.json();
+                        yield data;
+                    } catch (error) {
+                        yield { error: error.message, url };
+                    }
+                }
+            }
+
+            try {
+                logToConsole('Processing async iterator...');
+                for await (const item of dataGenerator()) {
+                    if (item.error) {
+                        logToConsole(`Error: ${item.error} for ${item.url}`);
+                    } else {
+                        logToConsole(`Received: ${item.url}`);
+                    }
+                }
+                status.textContent = 'Async iterator demo completed!';
+            } catch (error) {
+                status.textContent = `Async iterator failed: ${error.message}`;
+            }
+        }
+
+        async function demoAsyncGenerators() {
+            const status = document.getElementById('asyncStatus');
+            const log = document.getElementById('asyncLog');
+            log.textContent = '';
+
+            status.textContent = 'Running async generator demo...';
+
+            async function* pageGenerator() {
+                let page = 1;
+                while (page <= 3) {
+                    try {
+                        const response = await mockFetch(`/api/page/${page}`, false, 400);
+                        const data = await response.json();
+                        yield { page, data };
+                        page++;
+                    } catch (error) {
+                        break;
+                    }
+                }
+            }
+
+            try {
+                logToConsole('Processing paginated data...');
+                for await (const { page, data } of pageGenerator()) {
+                    logToConsole(`Page ${page}: ${data.url}`);
+                }
+                status.textContent = 'Async generator demo completed!';
+            } catch (error) {
+                status.textContent = `Async generator failed: ${error.message}`;
+            }
+        }
+
+        // Concurrency demos
+        async function demoRateLimiting() {
+            const status = document.getElementById('concurrencyStatus');
+            status.textContent = 'Testing rate limiting...';
+
+            class RateLimiter {
+                constructor(maxConcurrent = 2) {
+                    this.maxConcurrent = maxConcurrent;
+                    this.running = 0;
+                    this.queue = [];
+                }
+
+                async execute(asyncFunction) {
+                    return new Promise((resolve, reject) => {
+                        this.queue.push({ asyncFunction, resolve, reject });
+                        this.process();
+                    });
+                }
+
+                async process() {
+                    if (this.running >= this.maxConcurrent || this.queue.length === 0) {
+                        return;
+                    }
+
+                    this.running++;
+                    const { asyncFunction, resolve, reject } = this.queue.shift();
+
+                    try {
+                        const result = await asyncFunction();
+                        resolve(result);
+                    } catch (error) {
+                        reject(error);
+                    } finally {
+                        this.running--;
+                        this.process();
+                    }
+                }
+            }
+
+            const limiter = new RateLimiter(2);
+            const urls = ['/api/1', '/api/2', '/api/3', '/api/4', '/api/5'];
+
+            const startTime = performance.now();
+            await Promise.all(
+                urls.map((url, index) =>
+                    limiter.execute(() => {
+                        logToConsole(`Starting request ${index + 1}`, 'concurrencyStatus');
+                        return mockFetch(url, false, 800);
+                    })
+                )
+            );
+            const endTime = performance.now();
+
+            status.textContent = `Rate limiting completed in ${(endTime - startTime).toFixed(2)}ms (max 2 concurrent)`;
+        }
+
+        async function demoBatchProcessing() {
+            const status = document.getElementById('concurrencyStatus');
+            status.textContent = 'Testing batch processing...';
+
+            const items = Array.from({ length: 10 }, (_, i) => `/api/item${i + 1}`);
+            const batchSize = 3;
+
+            const startTime = performance.now();
+            for (let i = 0; i < items.length; i += batchSize) {
+                const batch = items.slice(i, i + batchSize);
+
+                await Promise.all(
+                    batch.map(item => mockFetch(item, false, 300))
+                );
+
+                logToConsole(`Batch ${Math.floor(i / batchSize) + 1} completed`, 'concurrencyStatus');
+
+                if (i + batchSize < items.length) {
+                    await delay(200); // Delay between batches
+                }
+            }
+            const endTime = performance.now();
+
+            status.textContent = `Batch processing completed in ${(endTime - startTime).toFixed(2)}ms`;
+        }
+
+        // Worker demos
+        async function demoWebWorker() {
+            const status = document.getElementById('workerStatus');
+            status.textContent = 'Creating Web Worker for heavy computation...';
+
+            const workerScript = `
+                self.onmessage = function(e) {
+                    const { numbers } = e.data;
+                    let result = 0;
+                    
+                    // Simulate heavy computation
+                    for (let i = 0; i < numbers.length; i++) {
+                        for (let j = 0; j < 1000000; j++) {
+                            result += numbers[i] * Math.sqrt(j);
+                        }
+                        
+                        // Report progress
+                        if (i % 10 === 0) {
+                            self.postMessage({ type: 'progress', progress: i / numbers.length });
+                        }
+                    }
+                    
+                    self.postMessage({ type: 'result', result });
+                };
+            `;
+
+            const blob = new Blob([workerScript], { type: 'application/javascript' });
+            const worker = new Worker(URL.createObjectURL(blob));
+
+            worker.onmessage = function (e) {
+                if (e.data.type === 'progress') {
+                    const percent = (e.data.progress * 100).toFixed(0);
+                    status.textContent = `Computing... ${percent}%`;
+                } else if (e.data.type === 'result') {
+                    status.textContent = `Computation completed! Result: ${e.data.result.toExponential(2)}`;
+                    worker.terminate();
+                }
+            };
+
+            worker.onerror = function (error) {
+                status.textContent = `Worker error: ${error.message}`;
+            };
+
+            // Send data to worker
+            worker.postMessage({ numbers: Array.from({ length: 100 }, (_, i) => i + 1) });
+        }
+
+        async function demoSharedWorker() {
+            const status = document.getElementById('workerStatus');
+
+            try {
+                const worker = new SharedWorker('data:application/javascript,self.port.onmessage=function(e){self.port.postMessage("Shared worker response: " + e.data)}');
+
+                worker.port.onmessage = function (e) {
+                    status.textContent = e.data;
+                };
+
+                worker.port.start();
+                worker.port.postMessage('Hello from main thread!');
+            } catch (error) {
+                status.textContent = 'Shared Workers not supported or blocked';
+            }
+        }
+
+        // Performance testing
+        async function runPerformanceTest() {
+            const operations = [
+                () => mockFetch('/api/test1', false, Math.random() * 1000),
+                () => mockFetch('/api/test2', Math.random() > 0.8, Math.random() * 1000),
+                () => mockFetch('/api/test3', false, Math.random() * 1000),
+                () => mockFetch('/api/test4', Math.random() > 0.9, Math.random() * 1000),
+                () => mockFetch('/api/test5', false, Math.random() * 1000)
+            ];
+
+            // Run operations concurrently
+            await Promise.allSettled(
+                operations.map((op, index) =>
+                    monitor.measureOperation(`test-${index}`, op)
+                )
+            );
+        }
+
+        function clearMetrics() {
+            monitor.operations = [];
+            monitor.activeOperations.clear();
+            monitor.updateMetrics();
+
+            document.getElementById('asyncLog').textContent = '';
+            document.getElementById('promiseStatus').textContent = 'Ready to test Promise patterns...';
+            document.getElementById('asyncStatus').textContent = 'Ready for async demos...';
+            document.getElementById('concurrencyStatus').textContent = 'Ready...';
+            document.getElementById('workerStatus').textContent = 'Ready...';
+        }
+    </script>
+</body>
+
+</html>

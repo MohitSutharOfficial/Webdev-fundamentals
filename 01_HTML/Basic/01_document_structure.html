@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- 
+    Meta tags provide information about the HTML document
+    These are crucial for SEO and accessibility
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn HTML document structure - the foundation of web development">
+    <meta name="keywords" content="HTML, web development, document structure, basics">
+    <meta name="author" content="WebDev Learning Path">
+
+    <!-- 
+    The title tag is displayed in the browser tab
+    It's also used by search engines as the clickable headline
+    -->
+    <title>HTML Document Structure - WebDev Learning</title>
+
+    <!-- 
+    You can add CSS and JavaScript here later
+    For now, we'll focus on HTML structure
+    -->
+    <style>
+        /* Basic styling for better readability */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .highlight {
+            background-color: #e7f3ff;
+            padding: 15px;
+            border-left: 4px solid #2196F3;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 
+    The body contains all the visible content of the web page
+    Everything users see and interact with goes here
+    -->
+
+    <!-- 
+    Header section - typically contains navigation and site branding
+    Using semantic HTML5 elements improves accessibility and SEO
+    -->
+    <header>
+        <div class="container">
+            <h1>🏗️ HTML Document Structure</h1>
+            <p><strong>Foundation Lesson:</strong> Understanding the anatomy of an HTML document</p>
+        </div>
+    </header>
+
+    <!-- 
+    Main content area - this is where the primary content lives
+    -->
+    <main>
+        <div class="container">
+            <!-- 
+            Section 1: Document Structure Explanation
+            -->
+            <section>
+                <h2>📋 What is HTML Document Structure?</h2>
+                <p>
+                    Every HTML document follows a specific structure, like a house blueprint.
+                    This structure tells the browser how to interpret and display your content.
+                </p>
+
+                <div class="highlight">
+                    <h3>🔍 Key Components:</h3>
+                    <ul>
+                        <li><strong>&lt;!DOCTYPE html&gt;</strong> - Tells the browser this is HTML5</li>
+                        <li><strong>&lt;html&gt;</strong> - The root element that wraps all content</li>
+                        <li><strong>&lt;head&gt;</strong> - Contains metadata (not visible to users)</li>
+                        <li><strong>&lt;body&gt;</strong> - Contains all visible content</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 
+            Section 2: Head Section Deep Dive
+            -->
+            <section>
+                <h2>🧠 The HEAD Section</h2>
+                <p>The head section is like the "behind-the-scenes" area of your webpage:</p>
+
+                <h3>Essential Meta Tags:</h3>
+                <ul>
+                    <li><strong>charset="UTF-8"</strong> - Ensures proper character encoding</li>
+                    <li><strong>viewport</strong> - Makes your site mobile-friendly</li>
+                    <li><strong>description</strong> - Appears in search engine results</li>
+                    <li><strong>keywords</strong> - Helps with SEO (less important now)</li>
+                </ul>
+
+                <div class="highlight">
+                    <h4>💡 Senior Engineer Tip:</h4>
+                    <p>Always include the viewport meta tag for responsive design. It's crucial for mobile users!</p>
+                </div>
+            </section>
+
+            <!-- 
+            Section 3: Body Section
+            -->
+            <section>
+                <h2>👥 The BODY Section</h2>
+                <p>This is where all your visible content lives. Think of it as the stage where your content performs.
+                </p>
+
+                <h3>Semantic HTML5 Elements:</h3>
+                <ul>
+                    <li><strong>&lt;header&gt;</strong> - Top section with navigation/branding</li>
+                    <li><strong>&lt;main&gt;</strong> - Primary content area</li>
+                    <li><strong>&lt;section&gt;</strong> - Thematic grouping of content</li>
+                    <li><strong>&lt;article&gt;</strong> - Independent, self-contained content</li>
+                    <li><strong>&lt;aside&gt;</strong> - Sidebar content</li>
+                    <li><strong>&lt;footer&gt;</strong> - Bottom section with contact info, etc.</li>
+                </ul>
+            </section>
+
+            <!-- 
+            Section 4: Best Practices
+            -->
+            <section>
+                <h2>✅ Best Practices</h2>
+                <div class="highlight">
+                    <h3>🎯 Senior Engineer Rules:</h3>
+                    <ol>
+                        <li><strong>Always use semantic HTML</strong> - Screen readers and search engines will thank you
+                        </li>
+                        <li><strong>Validate your HTML</strong> - Use W3C validator to check for errors</li>
+                        <li><strong>Proper indentation</strong> - Makes code readable and maintainable</li>
+                        <li><strong>Comment your code</strong> - Future you will appreciate the explanations</li>
+                        <li><strong>Think mobile-first</strong> - Include viewport meta tag always</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- 
+            Section 5: Practice Exercise
+            -->
+            <section>
+                <h2>🏋️ Practice Exercise</h2>
+                <p>Create your own HTML document with:</p>
+                <ul>
+                    <li>Proper DOCTYPE and structure</li>
+                    <li>All essential meta tags</li>
+                    <li>Semantic HTML5 elements</li>
+                    <li>Content about your favorite hobby</li>
+                </ul>
+
+                <div class="highlight">
+                    <p><strong>Challenge:</strong> Try to build this structure from memory without looking at this file!
+                    </p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 
+    Footer section - typically contains copyright, links, contact info
+    -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 WebDev Learning Path. Built with ❤️ for aspiring developers.</p>
+            <p><strong>Next:</strong> Move to <code>02_text_elements.html</code> to learn about text formatting!</p>
+        </div>
+    </footer>
+</body>
+
+</html>
+
+<!-- 
+SENIOR ENGINEER NOTES:
+1. This document demonstrates proper HTML5 structure
+2. Comments explain the "why" behind each element
+3. Semantic elements improve accessibility and SEO
+4. The structure is scalable and maintainable
+5. Mobile-first approach with viewport meta tag
+
+NEXT STEPS:
+- Practice creating similar structures
+- Validate your HTML using W3C validator
+- Experiment with different semantic elements
+- Always think about accessibility from the start
+-->

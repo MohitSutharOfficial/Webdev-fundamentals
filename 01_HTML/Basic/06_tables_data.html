@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Tables and Data Representation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+            border-bottom: 2px solid #007bff;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .numeric {
+            text-align: right;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .status-inactive {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .responsive-table {
+            overflow-x: auto;
+        }
+
+        .compact-table {
+            font-size: 14px;
+        }
+
+        .compact-table th,
+        .compact-table td {
+            padding: 8px;
+        }
+
+        .table-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .code-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+
+        caption {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .table-footer {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+
+        .sortable th {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .sortable th:hover {
+            background: #e9ecef;
+        }
+
+        .sort-indicator {
+            margin-left: 5px;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .responsive-table table {
+                font-size: 12px;
+            }
+
+            .responsive-table th,
+            .responsive-table td {
+                padding: 6px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>HTML Tables and Data Representation</h1>
+
+    <p>
+        Tables are perfect for displaying structured data in rows and columns.
+        Learn proper table structure, accessibility, and responsive design techniques.
+    </p>
+
+    <!-- Basic Table Structure -->
+    <section class="table-section">
+        <h2>1. Basic Table Structure</h2>
+        <p>Every table needs proper structure with thead, tbody, and tfoot elements.</p>
+
+        <div class="code-example">
+            &lt;table&gt;
+            &lt;caption&gt;Table Caption&lt;/caption&gt;
+            &lt;thead&gt;
+            &lt;tr&gt;
+            &lt;th&gt;Header 1&lt;/th&gt;
+            &lt;th&gt;Header 2&lt;/th&gt;
+            &lt;/tr&gt;
+            &lt;/thead&gt;
+            &lt;tbody&gt;
+            &lt;tr&gt;
+            &lt;td&gt;Data 1&lt;/td&gt;
+            &lt;td&gt;Data 2&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;/tbody&gt;
+            &lt;/table&gt;
+        </div>
+
+        <table>
+            <caption>Sample Employee Data</caption>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Salary</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>001</td>
+                    <td>John Doe</td>
+                    <td>Engineering</td>
+                    <td class="numeric">$75,000</td>
+                </tr>
+                <tr>
+                    <td>002</td>
+                    <td>Jane Smith</td>
+                    <td>Marketing</td>
+                    <td class="numeric">$65,000</td>
+                </tr>
+                <tr>
+                    <td>003</td>
+                    <td>Bob Johnson</td>
+                    <td>Sales</td>
+                    <td class="numeric">$55,000</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Table Headers and Scope -->
+    <section class="table-section">
+        <h2>2. Table Headers and Scope</h2>
+        <p>Use scope attributes to improve accessibility and screen reader support.</p>
+
+        <table>
+            <caption>Quarterly Sales Report</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Q1 2024</th>
+                    <th scope="col">Q2 2024</th>
+                    <th scope="col">Q3 2024</th>
+                    <th scope="col">Q4 2024</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">Laptops</th>
+                    <td class="numeric">$125,000</td>
+                    <td class="numeric">$150,000</td>
+                    <td class="numeric">$175,000</td>
+                    <td class="numeric">$200,000</td>
+                    <td class="numeric"><strong>$650,000</strong></td>
+                </tr>
+                <tr>
+                    <th scope="row">Phones</th>
+                    <td class="numeric">$85,000</td>
+                    <td class="numeric">$95,000</td>
+                    <td class="numeric">$110,000</td>
+                    <td class="numeric">$120,000</td>
+                    <td class="numeric"><strong>$410,000</strong></td>
+                </tr>
+                <tr>
+                    <th scope="row">Tablets</th>
+                    <td class="numeric">$45,000</td>
+                    <td class="numeric">$50,000</td>
+                    <td class="numeric">$55,000</td>
+                    <td class="numeric">$60,000</td>
+                    <td class="numeric"><strong>$210,000</strong></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="table-footer">
+                    <th scope="row">Total</th>
+                    <td class="numeric">$255,000</td>
+                    <td class="numeric">$295,000</td>
+                    <td class="numeric">$340,000</td>
+                    <td class="numeric">$380,000</td>
+                    <td class="numeric"><strong>$1,270,000</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+    </section>
+
+    <!-- Colspan and Rowspan -->
+    <section class="table-section">
+        <h2>3. Colspan and Rowspan</h2>
+        <p>Merge cells using colspan (horizontal) and rowspan (vertical) attributes.</p>
+
+        <table>
+            <caption>Project Timeline</caption>
+            <thead>
+                <tr>
+                    <th rowspan="2">Phase</th>
+                    <th colspan="3">2024</th>
+                    <th rowspan="2">Status</th>
+                </tr>
+                <tr>
+                    <th>Q1</th>
+                    <th>Q2</th>
+                    <th>Q3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Planning</td>
+                    <td class="center">✓</td>
+                    <td class="center">-</td>
+                    <td class="center">-</td>
+                    <td><span class="status-active">Complete</span></td>
+                </tr>
+                <tr>
+                    <td>Development</td>
+                    <td class="center">✓</td>
+                    <td class="center">✓</td>
+                    <td class="center">-</td>
+                    <td><span class="status-active">In Progress</span></td>
+                </tr>
+                <tr>
+                    <td>Testing</td>
+                    <td class="center">-</td>
+                    <td class="center">✓</td>
+                    <td class="center">✓</td>
+                    <td><span class="status-inactive">Pending</span></td>
+                </tr>
+                <tr>
+                    <td>Deployment</td>
+                    <td class="center">-</td>
+                    <td class="center">-</td>
+                    <td class="center">✓</td>
+                    <td><span class="status-inactive">Pending</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Responsive Table -->
+    <section class="table-section">
+        <h2>4. Responsive Table Design</h2>
+        <p>Make tables work well on all screen sizes with horizontal scrolling.</p>
+
+        <div class="responsive-table">
+            <table>
+                <caption>Website Analytics Dashboard</caption>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Page Views</th>
+                        <th>Unique Visitors</th>
+                        <th>Bounce Rate</th>
+                        <th>Avg. Session</th>
+                        <th>Conversion Rate</th>
+                        <th>Revenue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2024-01-01</td>
+                        <td class="numeric">1,234</td>
+                        <td class="numeric">956</td>
+                        <td class="numeric">45.2%</td>
+                        <td class="numeric">2:34</td>
+                        <td class="numeric">3.2%</td>
+                        <td class="numeric">$4,567</td>
+                    </tr>
+                    <tr>
+                        <td>2024-01-02</td>
+                        <td class="numeric">1,456</td>
+                        <td class="numeric">1,123</td>
+                        <td class="numeric">42.1%</td>
+                        <td class="numeric">2:45</td>
+                        <td class="numeric">3.8%</td>
+                        <td class="numeric">$5,234</td>
+                    </tr>
+                    <tr>
+                        <td>2024-01-03</td>
+                        <td class="numeric">1,678</td>
+                        <td class="numeric">1,289</td>
+                        <td class="numeric">38.9%</td>
+                        <td class="numeric">3:12</td>
+                        <td class="numeric">4.1%</td>
+                        <td class="numeric">$6,789</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Sortable Table -->
+    <section class="table-section">
+        <h2>5. Interactive Sortable Table</h2>
+        <p>Click on column headers to sort the data (JavaScript enhanced).</p>
+
+        <table class="sortable" id="sortable-table">
+            <caption>Employee Performance Metrics</caption>
+            <thead>
+                <tr>
+                    <th data-sort="string">Name<span class="sort-indicator">↕</span></th>
+                    <th data-sort="string">Department<span class="sort-indicator">↕</span></th>
+                    <th data-sort="number">Projects<span class="sort-indicator">↕</span></th>
+                    <th data-sort="number">Score<span class="sort-indicator">↕</span></th>
+                    <th data-sort="date">Last Review<span class="sort-indicator">↕</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Alice Johnson</td>
+                    <td>Engineering</td>
+                    <td class="numeric">8</td>
+                    <td class="numeric">94</td>
+                    <td>2024-01-15</td>
+                </tr>
+                <tr>
+                    <td>Bob Wilson</td>
+                    <td>Marketing</td>
+                    <td class="numeric">5</td>
+                    <td class="numeric">87</td>
+                    <td>2024-01-10</td>
+                </tr>
+                <tr>
+                    <td>Carol Davis</td>
+                    <td>Sales</td>
+                    <td class="numeric">12</td>
+                    <td class="numeric">91</td>
+                    <td>2024-01-20</td>
+                </tr>
+                <tr>
+                    <td>David Brown</td>
+                    <td>Engineering</td>
+                    <td class="numeric">6</td>
+                    <td class="numeric">89</td>
+                    <td>2024-01-05</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Compact Table -->
+    <section class="table-section">
+        <h2>6. Compact Table for Large Datasets</h2>
+        <p>Use compact styling for tables with many rows or columns.</p>
+
+        <table class="compact-table">
+            <caption>Server Status Monitor</caption>
+            <thead>
+                <tr>
+                    <th>Server</th>
+                    <th>Status</th>
+                    <th>CPU</th>
+                    <th>Memory</th>
+                    <th>Disk</th>
+                    <th>Network</th>
+                    <th>Last Check</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>web-01</td>
+                    <td><span class="status-active">Online</span></td>
+                    <td class="numeric">23%</td>
+                    <td class="numeric">67%</td>
+                    <td class="numeric">45%</td>
+                    <td class="numeric">12 MB/s</td>
+                    <td>10:30 AM</td>
+                </tr>
+                <tr>
+                    <td>web-02</td>
+                    <td><span class="status-active">Online</span></td>
+                    <td class="numeric">45%</td>
+                    <td class="numeric">78%</td>
+                    <td class="numeric">34%</td>
+                    <td class="numeric">8 MB/s</td>
+                    <td>10:29 AM</td>
+                </tr>
+                <tr>
+                    <td>db-01</td>
+                    <td><span class="status-inactive">Offline</span></td>
+                    <td class="numeric">0%</td>
+                    <td class="numeric">0%</td>
+                    <td class="numeric">0%</td>
+                    <td class="numeric">0 MB/s</td>
+                    <td>09:15 AM</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Accessibility Best Practices -->
+    <section class="table-section" style="background: #e8f5e8; border: 1px solid #28a745;">
+        <h2>♿ Accessibility Best Practices</h2>
+        <ul>
+            <li><strong>Caption:</strong> Always provide a descriptive caption</li>
+            <li><strong>Headers:</strong> Use proper th elements with scope attributes</li>
+            <li><strong>Summary:</strong> Use aria-describedby for complex tables</li>
+            <li><strong>Keyboard Navigation:</strong> Ensure tables are keyboard accessible</li>
+            <li><strong>Screen Readers:</strong> Test with screen reader software</li>
+        </ul>
+
+        <table aria-describedby="accessible-table-summary">
+            <caption>Accessible Table Example</caption>
+            <thead>
+                <tr>
+                    <th scope="col" id="product">Product</th>
+                    <th scope="col" id="price">Price</th>
+                    <th scope="col" id="stock">Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td headers="product">Laptop</td>
+                    <td headers="price" class="numeric">$999</td>
+                    <td headers="stock" class="numeric">15</td>
+                </tr>
+                <tr>
+                    <td headers="product">Mouse</td>
+                    <td headers="price" class="numeric">$29</td>
+                    <td headers="stock" class="numeric">45</td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="accessible-table-summary">
+            This table shows product information including name, price, and stock levels.
+        </div>
+    </section>
+
+    <!-- Senior Engineer Tips -->
+    <section class="table-section" style="background: #e8f5e8; border: 1px solid #28a745;">
+        <h2>🎯 Senior Engineer Tips</h2>
+        <ul>
+            <li><strong>Semantic HTML:</strong> Use tables for tabular data only, not layout</li>
+            <li><strong>Performance:</strong> Consider virtual scrolling for large datasets</li>
+            <li><strong>Progressive Enhancement:</strong> Start with basic HTML, enhance with JavaScript</li>
+            <li><strong>Data Attributes:</strong> Use data-* attributes for JavaScript hooks</li>
+            <li><strong>Server-Side Rendering:</strong> Render initial table state on server</li>
+            <li><strong>Pagination:</strong> Implement pagination for large datasets</li>
+            <li><strong>Filtering:</strong> Add search and filter capabilities</li>
+            <li><strong>Export Features:</strong> Allow users to export data (CSV, PDF)</li>
+            <li><strong>Responsive Design:</strong> Consider card layouts for mobile</li>
+        </ul>
+    </section>
+
+    <!-- Practice Exercises -->
+    <section class="table-section" style="background: #fff3cd; border: 1px solid #ffc107;">
+        <h2>📝 Practice Exercises</h2>
+        <ol>
+            <li>Create a product catalog table with sorting functionality</li>
+            <li>Build a responsive data table for mobile devices</li>
+            <li>Design a financial report table with proper number formatting</li>
+            <li>Create an accessible table for screen readers</li>
+            <li>Build a table with inline editing capabilities</li>
+            <li>Design a comparison table for different products/services</li>
+        </ol>
+    </section>
+
+    <script>
+        // Simple table sorting functionality
+        function sortTable(table, columnIndex, sortType) {
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+
+            rows.sort((a, b) => {
+                const aText = a.cells[columnIndex].textContent.trim();
+                const bText = b.cells[columnIndex].textContent.trim();
+
+                if (sortType === 'number') {
+                    return parseFloat(aText) - parseFloat(bText);
+                } else if (sortType === 'date') {
+                    return new Date(aText) - new Date(bText);
+                } else {
+                    return aText.localeCompare(bText);
+                }
+            });
+
+            // Re-append sorted rows
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Add click handlers to sortable table headers
+        document.querySelectorAll('.sortable th[data-sort]').forEach((th, index) => {
+            th.addEventListener('click', () => {
+                const table = th.closest('table');
+                const sortType = th.dataset.sort;
+                sortTable(table, index, sortType);
+
+                // Update sort indicators
+                table.querySelectorAll('th .sort-indicator').forEach(indicator => {
+                    indicator.textContent = '↕';
+                });
+                th.querySelector('.sort-indicator').textContent = '↓';
+            });
+        });
+    </script>
+</body>
+
+</html>

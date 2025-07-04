@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Intermediate - Modern HTML Features</title>
+    <style>
+        /* Basic styling for demonstration */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+
+        .demo-section {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .good-example {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .bad-example {
+            background-color: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .senior-tip {
+            background-color: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .feature-support {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        /* Modern HTML feature demos */
+        .details-demo {
+            margin: 20px 0;
+        }
+
+        .details-demo details {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .details-demo summary {
+            cursor: pointer;
+            font-weight: bold;
+            padding: 5px;
+            background: #f8f9fa;
+            border-radius: 3px;
+        }
+
+        .details-demo summary:hover {
+            background: #e9ecef;
+        }
+
+        .dialog-demo {
+            margin: 20px 0;
+        }
+
+        .dialog-demo dialog {
+            padding: 20px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            width: 300px;
+        }
+
+        .dialog-demo dialog::backdrop {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .dialog-demo button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .dialog-demo button:hover {
+            background: #2980b9;
+        }
+
+        .progress-demo {
+            margin: 20px 0;
+        }
+
+        .progress-demo progress {
+            width: 100%;
+            height: 20px;
+            margin: 10px 0;
+        }
+
+        .meter-demo {
+            margin: 20px 0;
+        }
+
+        .meter-demo meter {
+            width: 100%;
+            height: 20px;
+            margin: 10px 0;
+        }
+
+        .input-demo {
+            margin: 20px 0;
+        }
+
+        .input-demo input,
+        .input-demo textarea {
+            width: 100%;
+            max-width: 300px;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        .input-demo input:valid {
+            border-color: #28a745;
+        }
+
+        .input-demo input:invalid {
+            border-color: #dc3545;
+        }
+
+        .custom-elements-demo {
+            margin: 20px 0;
+        }
+
+        .web-component {
+            display: block;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 10px 0;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+        }
+
+        .lazy-loading-demo {
+            margin: 20px 0;
+        }
+
+        .lazy-loading-demo img {
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+            object-fit: cover;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .dialog-demo dialog {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🚀 Modern HTML Features</h1>
+
+        <p>Explore cutting-edge HTML5 features, web APIs, and modern browser capabilities. These features enhance user
+            experience and provide powerful new possibilities for web development.</p>
+
+        <h2>📋 Native HTML Elements</h2>
+
+        <h3>1. Details and Summary</h3>
+        <div class="code-block">
+            &lt;!-- Native collapsible content --&gt;
+            &lt;details&gt;
+            &lt;summary&gt;Click to expand&lt;/summary&gt;
+            &lt;p&gt;This content is hidden by default and can be toggled open/closed.&lt;/p&gt;
+            &lt;ul&gt;
+            &lt;li&gt;No JavaScript required&lt;/li&gt;
+            &lt;li&gt;Semantic and accessible&lt;/li&gt;
+            &lt;li&gt;Styleable with CSS&lt;/li&gt;
+            &lt;/ul&gt;
+            &lt;/details&gt;
+
+            &lt;!-- Open by default --&gt;
+            &lt;details open&gt;
+            &lt;summary&gt;Expanded by default&lt;/summary&gt;
+            &lt;p&gt;This starts in the open state.&lt;/p&gt;
+            &lt;/details&gt;
+        </div>
+
+        <div class="demo-section details-demo">
+            <h4>🎯 Demo: Details/Summary Elements</h4>
+            <details>
+                <summary>What is semantic HTML?</summary>
+                <p>Semantic HTML refers to using HTML markup to reinforce the semantics, or meaning, of the information
+                    in webpages and web applications rather than merely to define its presentation or look.</p>
+            </details>
+
+            <details>
+                <summary>Why use modern HTML features?</summary>
+                <p>Modern HTML features provide:</p>
+                <ul>
+                    <li>Better accessibility out of the box</li>
+                    <li>Reduced need for JavaScript</li>
+                    <li>Improved performance</li>
+                    <li>Better SEO and semantic meaning</li>
+                </ul>
+            </details>
+
+            <details open>
+                <summary>Browser support considerations</summary>
+                <p>Always check browser support for new features and provide fallbacks when necessary. Use progressive
+                    enhancement to ensure your site works for all users.</p>
+            </details>
+        </div>
+
+        <h3>2. Dialog Element</h3>
+        <div class="code-block">
+            &lt;!-- Native modal dialog --&gt;
+            &lt;dialog id="my-dialog"&gt;
+            &lt;form method="dialog"&gt;
+            &lt;h3&gt;Dialog Title&lt;/h3&gt;
+            &lt;p&gt;This is a native HTML dialog.&lt;/p&gt;
+            &lt;button type="submit"&gt;Close&lt;/button&gt;
+            &lt;button type="button" onclick="document.getElementById('my-dialog').close()"&gt;
+            Cancel
+            &lt;/button&gt;
+            &lt;/form&gt;
+            &lt;/dialog&gt;
+
+            &lt;button onclick="document.getElementById('my-dialog').showModal()"&gt;
+            Open Modal
+            &lt;/button&gt;
+
+            &lt;!-- Non-modal dialog --&gt;
+            &lt;button onclick="document.getElementById('my-dialog').show()"&gt;
+            Open Non-Modal
+            &lt;/button&gt;
+        </div>
+
+        <div class="demo-section dialog-demo">
+            <h4>🎯 Demo: Dialog Element</h4>
+            <button onclick="openDialog('modal')">Open Modal Dialog</button>
+            <button onclick="openDialog('nonmodal')">Open Non-Modal Dialog</button>
+
+            <dialog id="demo-dialog">
+                <form method="dialog">
+                    <h3>Native HTML Dialog</h3>
+                    <p>This is a native HTML5 dialog element with built-in accessibility features.</p>
+                    <button type="submit">Close with Form</button>
+                    <button type="button" onclick="closeDialog()">Cancel</button>
+                </form>
+            </dialog>
+        </div>
+
+        <h3>3. Progress and Meter Elements</h3>
+        <div class="code-block">
+            &lt;!-- Progress bar for loading/completion --&gt;
+            &lt;label for="file-progress"&gt;File upload progress:&lt;/label&gt;
+            &lt;progress id="file-progress" value="32" max="100"&gt;32%&lt;/progress&gt;
+
+            &lt;!-- Indeterminate progress --&gt;
+            &lt;progress&gt;Loading...&lt;/progress&gt;
+
+            &lt;!-- Meter for measurements within a range --&gt;
+            &lt;label for="disk-usage"&gt;Disk usage:&lt;/label&gt;
+            &lt;meter id="disk-usage" value="6" min="0" max="10"&gt;6 out of 10&lt;/meter&gt;
+
+            &lt;!-- Meter with optimal range --&gt;
+            &lt;label for="temperature"&gt;Temperature:&lt;/label&gt;
+            &lt;meter id="temperature"
+            value="75"
+            min="32"
+            max="100"
+            low="60"
+            high="80"
+            optimum="70"&gt;
+            75°F
+            &lt;/meter&gt;
+        </div>
+
+        <div class="demo-section">
+            <div class="progress-demo">
+                <h4>📊 Progress Element Demo:</h4>
+                <label for="demo-progress">Download progress:</label>
+                <progress id="demo-progress" value="75" max="100">75%</progress>
+                <button onclick="updateProgress()">Update Progress</button>
+
+                <p>Indeterminate progress:</p>
+                <progress>Loading...</progress>
+            </div>
+
+            <div class="meter-demo">
+                <h4>📏 Meter Element Demo:</h4>
+                <label for="demo-meter">Storage usage:</label>
+                <meter id="demo-meter" value="6" min="0" max="10" high="8">6 out of 10 GB</meter>
+
+                <p>Temperature (with optimal range):</p>
+                <meter value="75" min="32" max="100" low="60" high="80" optimum="70">75°F</meter>
+
+                <p>Battery level:</p>
+                <meter value="85" min="0" max="100" low="20" optimum="100">85%</meter>
+            </div>
+        </div>
+
+        <h2>🆕 Modern Input Types</h2>
+
+        <div class="code-block">
+            &lt;!-- Modern input types with built-in validation --&gt;
+            &lt;form&gt;
+            &lt;!-- Email with validation --&gt;
+            &lt;label for="email"&gt;Email:&lt;/label&gt;
+            &lt;input type="email" id="email" required&gt;
+
+            &lt;!-- URL with validation --&gt;
+            &lt;label for="website"&gt;Website:&lt;/label&gt;
+            &lt;input type="url" id="website" placeholder="https://example.com"&gt;
+
+            &lt;!-- Number with constraints --&gt;
+            &lt;label for="age"&gt;Age:&lt;/label&gt;
+            &lt;input type="number" id="age" min="18" max="120" step="1"&gt;
+
+            &lt;!-- Date picker --&gt;
+            &lt;label for="birthdate"&gt;Birth date:&lt;/label&gt;
+            &lt;input type="date" id="birthdate"&gt;
+
+            &lt;!-- Time picker --&gt;
+            &lt;label for="appointment"&gt;Appointment time:&lt;/label&gt;
+            &lt;input type="time" id="appointment"&gt;
+
+            &lt;!-- Color picker --&gt;
+            &lt;label for="theme-color"&gt;Theme color:&lt;/label&gt;
+            &lt;input type="color" id="theme-color" value="#3498db"&gt;
+
+            &lt;!-- Range slider --&gt;
+            &lt;label for="volume"&gt;Volume:&lt;/label&gt;
+            &lt;input type="range" id="volume" min="0" max="100" value="50"&gt;
+
+            &lt;!-- Search with enhanced styling --&gt;
+            &lt;label for="search"&gt;Search:&lt;/label&gt;
+            &lt;input type="search" id="search" placeholder="Search..."&gt;
+
+            &lt;!-- Telephone --&gt;
+            &lt;label for="phone"&gt;Phone:&lt;/label&gt;
+            &lt;input type="tel" id="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"&gt;
+            &lt;/form&gt;
+        </div>
+
+        <div class="demo-section input-demo">
+            <h4>📝 Modern Input Types Demo:</h4>
+            <form>
+                <label for="demo-email">Email:</label>
+                <input type="email" id="demo-email" required placeholder="user@example.com">
+
+                <label for="demo-url">Website:</label>
+                <input type="url" id="demo-url" placeholder="https://example.com">
+
+                <label for="demo-number">Age:</label>
+                <input type="number" id="demo-number" min="18" max="120" step="1">
+
+                <label for="demo-date">Birth date:</label>
+                <input type="date" id="demo-date">
+
+                <label for="demo-time">Appointment time:</label>
+                <input type="time" id="demo-time">
+
+                <label for="demo-color">Theme color:</label>
+                <input type="color" id="demo-color" value="#3498db">
+
+                <label for="demo-range">Volume: <span id="volume-value">50</span></label>
+                <input type="range" id="demo-range" min="0" max="100" value="50"
+                    oninput="updateVolumeValue(this.value)">
+
+                <label for="demo-search">Search:</label>
+                <input type="search" id="demo-search" placeholder="Search...">
+            </form>
+        </div>
+
+        <h2>🖼️ Lazy Loading</h2>
+
+        <div class="code-block">
+            &lt;!-- Native lazy loading for images --&gt;
+            &lt;img src="hero-image.jpg"
+            alt="Hero image"
+            loading="eager"&gt; &lt;!-- Load immediately --&gt;
+
+            &lt;img src="below-fold-image.jpg"
+            alt="Content image"
+            loading="lazy"&gt; &lt;!-- Load when needed --&gt;
+
+            &lt;!-- Lazy loading for iframes --&gt;
+            &lt;iframe src="https://example.com/embed"
+            title="Embedded content"
+            loading="lazy"&gt;&lt;/iframe&gt;
+
+            &lt;!-- With responsive images --&gt;
+            &lt;img src="small.jpg"
+            srcset="small.jpg 300w, medium.jpg 600w, large.jpg 1200w"
+            sizes="(max-width: 600px) 300px, (max-width: 1000px) 600px, 1200px"
+            alt="Responsive lazy image"
+            loading="lazy"&gt;
+        </div>
+
+        <div class="demo-section lazy-loading-demo">
+            <h4>🖼️ Lazy Loading Demo:</h4>
+            <p>Scroll down to see lazy loading in action (check Network tab in DevTools):</p>
+
+            <img src="https://via.placeholder.com/300x200/3498db/ffffff?text=Eager+Load" alt="Eager loaded image"
+                loading="eager">
+
+            <p>This image loads immediately ↑</p>
+            <p>Scroll down for lazy loaded images...</p>
+
+            <div style="height: 50px;"></div>
+
+            <img src="https://via.placeholder.com/300x200/e74c3c/ffffff?text=Lazy+Load+1" alt="Lazy loaded image 1"
+                loading="lazy">
+
+            <img src="https://via.placeholder.com/300x200/27ae60/ffffff?text=Lazy+Load+2" alt="Lazy loaded image 2"
+                loading="lazy">
+        </div>
+
+        <h2>📱 Web Components (Custom Elements)</h2>
+
+        <div class="code-block">
+            &lt;!-- Define a custom element --&gt;
+            &lt;script&gt;
+            class MyCustomElement extends HTMLElement {
+            constructor() {
+            super();
+            this.attachShadow({ mode: 'open' });
+            this.shadowRoot.innerHTML = `
+            &lt;style&gt;
+            :host {
+            display: block;
+            padding: 20px;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            }
+            .content {
+            font-family: Arial, sans-serif;
+            }
+            .title {
+            color: #2c3e50;
+            margin: 0 0 10px 0;
+            }
+            &lt;/style&gt;
+            &lt;div class="content"&gt;
+            &lt;h3 class="title"&gt;${this.getAttribute('title') || 'Custom Element'}&lt;/h3&gt;
+            &lt;slot&gt;&lt;/slot&gt;
+            &lt;/div&gt;
+            `;
+            }
+
+            static get observedAttributes() {
+            return ['title'];
+            }
+
+            attributeChangedCallback(name, oldValue, newValue) {
+            if (name === 'title') {
+            const titleElement = this.shadowRoot.querySelector('.title');
+            if (titleElement) {
+            titleElement.textContent = newValue || 'Custom Element';
+            }
+            }
+            }
+            }
+
+            customElements.define('my-custom-element', MyCustomElement);
+            &lt;/script&gt;
+
+            &lt;!-- Use the custom element --&gt;
+            &lt;my-custom-element title="Hello Web Components"&gt;
+            &lt;p&gt;This content is projected into the slot.&lt;/p&gt;
+            &lt;button&gt;Custom Button&lt;/button&gt;
+            &lt;/my-custom-element&gt;
+        </div>
+
+        <div class="demo-section custom-elements-demo">
+            <h4>🧩 Web Components Demo:</h4>
+            <div class="web-component">
+                <h3>Custom Element Example</h3>
+                <p>This simulates a custom web component with encapsulated styling.</p>
+                <button onclick="alert('Custom element interaction!')">Click Me</button>
+            </div>
+        </div>
+
+        <h2>🎨 CSS Custom Properties in HTML</h2>
+
+        <div class="code-block">
+            &lt;!-- Define CSS custom properties in HTML --&gt;
+            &lt;div style="--primary-color: #3498db; --font-size: 18px;"&gt;
+            &lt;p style="color: var(--primary-color); font-size: var(--font-size);"&gt;
+            Text using custom properties
+            &lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;!-- Dynamic theming --&gt;
+            &lt;style&gt;
+            :root {
+            --theme-primary: #3498db;
+            --theme-secondary: #2ecc71;
+            --theme-text: #2c3e50;
+            }
+
+            [data-theme="dark"] {
+            --theme-primary: #5dade2;
+            --theme-secondary: #58d68d;
+            --theme-text: #ecf0f1;
+            }
+
+            .themed-element {
+            color: var(--theme-text);
+            background-color: var(--theme-primary);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            }
+            &lt;/style&gt;
+
+            &lt;div data-theme="light"&gt;
+            &lt;div class="themed-element"&gt;Light theme&lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div data-theme="dark"&gt;
+            &lt;div class="themed-element"&gt;Dark theme&lt;/div&gt;
+            &lt;/div&gt;
+        </div>
+
+        <h2>📋 Input Validation Attributes</h2>
+
+        <div class="code-block">
+            &lt;!-- Advanced form validation --&gt;
+            &lt;form novalidate&gt;
+            &lt;!-- Pattern matching --&gt;
+            &lt;label for="username"&gt;Username (alphanumeric, 3-16 chars):&lt;/label&gt;
+            &lt;input type="text"
+            id="username"
+            pattern="[a-zA-Z0-9]{3,16}"
+            title="Username must be 3-16 characters, alphanumeric only"
+            required&gt;
+
+            &lt;!-- Multiple constraints --&gt;
+            &lt;label for="password"&gt;Password:&lt;/label&gt;
+            &lt;input type="password"
+            id="password"
+            minlength="8"
+            maxlength="128"
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+            title="Must contain at least one number, lowercase and uppercase letter, and at least 8 characters"
+            required&gt;
+
+            &lt;!-- Custom validation message --&gt;
+            &lt;label for="confirm-password"&gt;Confirm Password:&lt;/label&gt;
+            &lt;input type="password"
+            id="confirm-password"
+            oninput="checkPasswordMatch(this)"
+            required&gt;
+
+            &lt;!-- File input with restrictions --&gt;
+            &lt;label for="avatar"&gt;Avatar (max 2MB, images only):&lt;/label&gt;
+            &lt;input type="file"
+            id="avatar"
+            accept="image/*"
+            onchange="validateFileSize(this, 2097152)"&gt;
+
+            &lt;button type="submit"&gt;Submit&lt;/button&gt;
+            &lt;/form&gt;
+        </div>
+
+        <div class="feature-support">
+            <h3>🌐 Browser Support Notes:</h3>
+            <ul>
+                <li><strong>Dialog Element:</strong> Modern browsers (Chrome 37+, Firefox 98+, Safari 15.4+)</li>
+                <li><strong>Details/Summary:</strong> Excellent support across all modern browsers</li>
+                <li><strong>Lazy Loading:</strong> Chrome 76+, Firefox 75+, Safari 15.4+</li>
+                <li><strong>Custom Elements:</strong> Good support in modern browsers with polyfills available</li>
+                <li><strong>Input Types:</strong> Graceful degradation to text inputs in older browsers</li>
+            </ul>
+        </div>
+
+        <div class="senior-tip">
+            <h3>🚀 Senior Engineer Tips:</h3>
+            <ul>
+                <li><strong>Progressive Enhancement:</strong> Use modern features as enhancements, not dependencies</li>
+                <li><strong>Feature Detection:</strong> Use `if ('showModal' in document.createElement('dialog'))` to
+                    detect support</li>
+                <li><strong>Polyfills:</strong> Provide fallbacks for critical functionality in older browsers</li>
+                <li><strong>Accessibility:</strong> Modern elements often have better built-in accessibility</li>
+                <li><strong>Performance:</strong> Native implementations are typically faster than JavaScript
+                    alternatives</li>
+                <li><strong>Web Standards:</strong> Stay updated with new specifications and browser implementations
+                </li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            <h3>⚠️ Implementation Considerations:</h3>
+            <ul>
+                <li>Always check browser support before using new features</li>
+                <li>Provide fallbacks for critical functionality</li>
+                <li>Test across different devices and browsers</li>
+                <li>Consider using progressive enhancement strategies</li>
+                <li>Be aware of differences in implementation across browsers</li>
+                <li>Keep accessibility in mind when using new features</li>
+            </ul>
+        </div>
+
+        <h2>🛠️ Practical Exercises</h2>
+
+        <div class="demo-section">
+            <h3>Exercise 1: Modern Form</h3>
+            <p>Create a registration form using:</p>
+            <ul>
+                <li>Modern input types (email, date, tel, etc.)</li>
+                <li>Built-in validation with custom messages</li>
+                <li>Progress indicator for form completion</li>
+                <li>Dialog for confirmation</li>
+            </ul>
+
+            <h3>Exercise 2: Interactive FAQ</h3>
+            <p>Build an FAQ section with:</p>
+            <ul>
+                <li>Details/summary elements</li>
+                <li>Search functionality</li>
+                <li>Lazy-loaded images in answers</li>
+                <li>Custom styling and animations</li>
+            </ul>
+
+            <h3>Exercise 3: Custom Dashboard Widget</h3>
+            <p>Create a dashboard component with:</p>
+            <ul>
+                <li>Web Components for modularity</li>
+                <li>Progress and meter elements for data</li>
+                <li>CSS custom properties for theming</li>
+                <li>Modern JavaScript APIs</li>
+            </ul>
+        </div>
+
+        <h2>📚 Resources & Future Learning</h2>
+
+        <ul>
+            <li><a href="https://html.spec.whatwg.org/" target="_blank">WHATWG HTML Living Standard</a></li>
+            <li><a href="https://caniuse.com/" target="_blank">Can I Use - Browser Support Tables</a></li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/Web_Components" target="_blank">MDN: Web
+                    Components</a></li>
+            <li><a href="https://web.dev/learn/" target="_blank">Web.dev Learn</a></li>
+            <li><a href="https://www.w3.org/TR/" target="_blank">W3C Technical Reports</a></li>
+        </ul>
+
+        <p><strong>Congratulations!</strong> You've completed the HTML Intermediate course. Continue to <a
+                href="../../02_CSS/Advanced/README.md">CSS Advanced</a> or explore the <a
+                href="../../03_JavaScript/Intermediate/README.md">JavaScript Intermediate</a> section to further enhance
+            your web development skills.</p>
+    </div>
+
+    <script>
+        // Dialog functionality
+        function openDialog(type) {
+            const dialog = document.getElementById('demo-dialog');
+            if (type === 'modal') {
+                dialog.showModal();
+            } else {
+                dialog.show();
+            }
+        }
+
+        function closeDialog() {
+            const dialog = document.getElementById('demo-dialog');
+            dialog.close();
+        }
+
+        // Progress bar update
+        function updateProgress() {
+            const progress = document.getElementById('demo-progress');
+            const newValue = Math.floor(Math.random() * 100);
+            progress.value = newValue;
+        }
+
+        // Volume slider
+        function updateVolumeValue(value) {
+            document.getElementById('volume-value').textContent = value;
+        }
+
+        // Form validation examples
+        function checkPasswordMatch(confirmField) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = confirmField.value;
+
+            if (password !== confirmPassword) {
+                confirmField.setCustomValidity('Passwords do not match');
+            } else {
+                confirmField.setCustomValidity('');
+            }
+        }
+
+        function validateFileSize(input, maxSize) {
+            const file = input.files[0];
+            if (file && file.size > maxSize) {
+                alert('File size must be less than 2MB');
+                input.value = '';
+            }
+        }
+
+        // Custom Element (simplified demo)
+        class SimpleCustomElement extends HTMLElement {
+            constructor() {
+                super();
+                this.innerHTML = `
+                    <div style="border: 2px solid #3498db; padding: 20px; border-radius: 5px; background: linear-gradient(45deg, #f8f9fa, #e9ecef);">
+                        <h3 style="color: #2c3e50; margin-top: 0;">Custom Element</h3>
+                        <p>This is a simple custom element demonstration.</p>
+                        <button onclick="alert('Custom element clicked!')">Interact</button>
+                    </div>
+                `;
+            }
+        }
+
+        // Check if custom elements are supported
+        if ('customElements' in window) {
+            customElements.define('simple-custom-element', SimpleCustomElement);
+        }
+
+        // Initialize demo interactions
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add any initialization code here
+            console.log('Modern HTML features demo loaded');
+        });
+    </script>
+</body>
+
+</html>

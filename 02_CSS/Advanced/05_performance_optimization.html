@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Performance & Optimization</title>
+    <style>
+        /* Critical CSS - Above the fold styles */
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #f59e0b;
+            --text-color: #1f2937;
+            --bg-color: #f9fafb;
+            --border-color: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: var(--bg-color);
+        }
+
+        /* Performance-optimized header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), #1d4ed8);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Critical CSS Demonstration */
+        .critical-css-demo {
+            background: white;
+            margin: 2rem auto;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .demo-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .demo-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        /* Performance metrics display */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .metric-card {
+            background: linear-gradient(45deg, #f0f9ff, #e0f2fe);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.2);
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-top: 0.5rem;
+        }
+
+        /* CSS Optimization techniques */
+        .optimization-techniques {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .technique-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .technique-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow);
+        }
+
+        .technique-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Performance-optimized animations */
+        .performance-animation {
+            width: 50px;
+            height: 50px;
+            background: var(--secondary-color);
+            border-radius: 50%;
+            margin: 1rem auto;
+            animation: optimizedBounce 2s infinite;
+            /* Use transform instead of changing layout properties */
+        }
+
+        @keyframes optimizedBounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Efficient selector patterns */
+        .efficient-selectors .item {
+            padding: 0.5rem;
+            margin: 0.25rem 0;
+            background: #f3f4f6;
+            border-radius: 4px;
+        }
+
+        /* Avoid inefficient selectors like: */
+        /* body div p span {} - too specific */
+        /* [attribute*="value"] {} - expensive */
+
+        /* Critical CSS loading strategy demo */
+        .above-fold {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 2rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .below-fold {
+            /* This would be loaded asynchronously */
+            background: #fef3c7;
+            padding: 2rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border: 2px dashed var(--secondary-color);
+        }
+
+        /* CSS Containment for performance */
+        .contained-component {
+            contain: layout style paint;
+            background: white;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Will-change for animation optimization */
+        .will-change-demo {
+            will-change: transform;
+            transition: transform 0.3s ease;
+        }
+
+        .will-change-demo:hover {
+            transform: scale(1.05);
+        }
+
+        /* Resource hints demonstration */
+        .resource-hints {
+            background: #f0f9ff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        /* Performance budget indicators */
+        .budget-indicator {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0.5rem 0;
+        }
+
+        .budget-bar {
+            flex: 1;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .budget-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .budget-good {
+            background: #10b981;
+        }
+
+        .budget-warning {
+            background: #f59e0b;
+        }
+
+        .budget-danger {
+            background: #ef4444;
+        }
+
+        /* Code examples */
+        .code-example {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .code-highlight {
+            background: #374151;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+        }
+
+        /* Responsive performance optimizations */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .optimization-techniques {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Print optimizations */
+        @media print {
+            .header {
+                background: white !important;
+                color: black !important;
+            }
+
+            .demo-section {
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="title">CSS Performance & Optimization</h1>
+            <p class="subtitle">Critical CSS, Performance Budgets, and Advanced Optimization Techniques</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Critical CSS Demo -->
+        <section class="critical-css-demo">
+            <h2 class="demo-title">Critical CSS Strategy</h2>
+            <p>Critical CSS includes styles needed for above-the-fold content. This improves perceived performance by
+                rendering visible content immediately.</p>
+
+            <div class="above-fold">
+                <h3>Above the Fold Content</h3>
+                <p>This content uses critical CSS and loads immediately</p>
+                <div class="performance-animation"></div>
+            </div>
+
+            <div class="below-fold">
+                <h3>Below the Fold Content</h3>
+                <p>This content's CSS can be loaded asynchronously</p>
+            </div>
+        </section>
+
+        <!-- Performance Metrics -->
+        <section class="demo-section">
+            <h2 class="demo-title">Performance Metrics</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">2.1s</div>
+                    <div class="metric-label">First Contentful Paint</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">3.2s</div>
+                    <div class="metric-label">Largest Contentful Paint</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">120ms</div>
+                    <div class="metric-label">First Input Delay</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">0.15</div>
+                    <div class="metric-label">Cumulative Layout Shift</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Optimization Techniques -->
+        <section class="demo-section">
+            <h2 class="demo-title">CSS Optimization Techniques</h2>
+            <div class="optimization-techniques">
+                <div class="technique-card">
+                    <h3 class="technique-title">CSS Minification</h3>
+                    <p>Remove whitespace, comments, and unnecessary characters to reduce file size.</p>
+                    <div class="code-example">
+                        /* Before: 1.2KB */
+                        .button {
+                        background-color: #3b82f6;
+                        padding: 8px 16px;
+                        border-radius: 4px;
+                        }
+
+                        /* After: 0.8KB */
+                        .button{background-color:#3b82f6;padding:8px 16px;border-radius:4px}
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <h3 class="technique-title">CSS Tree Shaking</h3>
+                    <p>Remove unused CSS rules to reduce bundle size.</p>
+                    <div class="code-example">
+                        // Using PurgeCSS or similar tools
+                        module.exports = {
+                        content: ['./src/**/*.html'],
+                        css: ['./src/**/*.css'],
+                        output: './dist/purged.css'
+                        }
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <h3 class="technique-title">CSS Containment</h3>
+                    <p>Use CSS containment to isolate layout recalculations.</p>
+                    <div class="contained-component will-change-demo">
+                        <h4>Contained Component</h4>
+                        <p>This component uses layout, style, and paint containment.</p>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <h3 class="technique-title">Efficient Selectors</h3>
+                    <p>Use efficient selector patterns for better performance.</p>
+                    <div class="efficient-selectors">
+                        <div class="item">✅ .component .item (good)</div>
+                        <div class="item">❌ body div p span (too specific)</div>
+                        <div class="item">✅ .btn-primary (single class)</div>
+                        <div class="item">❌ [data-*="value"] (expensive)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance Budgets -->
+        <section class="demo-section">
+            <h2 class="demo-title">Performance Budgets</h2>
+            <p>Set and monitor performance budgets to maintain optimal loading times.</p>
+
+            <div class="budget-indicator">
+                <span>CSS Size:</span>
+                <div class="budget-bar">
+                    <div class="budget-fill budget-good" style="width: 65%"></div>
+                </div>
+                <span>65KB / 100KB</span>
+            </div>
+
+            <div class="budget-indicator">
+                <span>JavaScript Size:</span>
+                <div class="budget-bar">
+                    <div class="budget-fill budget-warning" style="width: 85%"></div>
+                </div>
+                <span>170KB / 200KB</span>
+            </div>
+
+            <div class="budget-indicator">
+                <span>Images Size:</span>
+                <div class="budget-bar">
+                    <div class="budget-fill budget-danger" style="width: 95%"></div>
+                </div>
+                <span>950KB / 1MB</span>
+            </div>
+        </section>
+
+        <!-- Resource Hints -->
+        <section class="demo-section">
+            <h2 class="demo-title">Resource Hints & Loading Strategies</h2>
+            <div class="resource-hints">
+                <h3>HTML Resource Hints</h3>
+                <div class="code-example">
+                    &lt;!-- Preload critical CSS --&gt;
+                    &lt;link rel="preload" href="critical.css" as="style"&gt;
+
+                    &lt;!-- Prefetch non-critical resources --&gt;
+                    &lt;link rel="prefetch" href="non-critical.css"&gt;
+
+                    &lt;!-- Preconnect to external domains --&gt;
+                    &lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+
+                    &lt;!-- Load non-critical CSS asynchronously --&gt;
+                    &lt;link rel="stylesheet" href="non-critical.css" media="print"
+                    onload="this.media='all'"&gt;
+                </div>
+            </div>
+        </section>
+
+        <!-- Critical CSS Extraction -->
+        <section class="demo-section">
+            <h2 class="demo-title">Critical CSS Extraction</h2>
+            <div class="code-example">
+                // Using critical CSS tools
+                const critical = require('critical');
+
+                critical.generate({
+                base: 'dist/',
+                src: 'index.html',
+                css: ['dist/styles.css'],
+                dimensions: [
+                { width: 1300, height: 900 },
+                { width: 500, height: 900 }
+                ],
+                extract: true,
+                inline: true
+                });
+            </div>
+            { width: 500, height: 900 }
+            ],
+            extract: true,
+            inline: true
+            });
+    </div>
+    </section>
+
+    <!-- CSS Loading Performance -->
+    <section class="demo-section">
+        <h2 class="demo-title">CSS Loading Performance Tips</h2>
+        <div class="optimization-techniques">
+            <div class="technique-card">
+                <h3 class="technique-title">Minimize Render Blocking</h3>
+                <ul>
+                    <li>Inline critical CSS in &lt;style&gt; tags</li>
+                    <li>Load non-critical CSS asynchronously</li>
+                    <li>Use media queries for conditional loading</li>
+                </ul>
+            </div>
+
+            <div class="technique-card">
+                <h3 class="technique-title">Optimize CSS Delivery</h3>
+                <ul>
+                    <li>Use HTTP/2 server push for critical CSS</li>
+                    <li>Implement CSS code splitting</li>
+                    <li>Consider CSS-in-JS for component-based apps</li>
+                </ul>
+            </div>
+
+            <div class="technique-card">
+                <h3 class="technique-title">Reduce CSS Complexity</h3>
+                <ul>
+                    <li>Avoid deep nesting (max 3-4 levels)</li>
+                    <li>Use CSS custom properties efficiently</li>
+                    <li>Minimize expensive properties (box-shadow, gradients)</li>
+                </ul>
+            </div>
+
+            <div class="technique-card">
+                <h3 class="technique-title">Animation Performance</h3>
+                <ul>
+                    <li>Animate only transform and opacity</li>
+                    <li>Use will-change property sparingly</li>
+                    <li>Prefer CSS animations over JavaScript</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    </div>
+
+    <script>
+        // Performance monitoring
+        function measureCSSPerformance() {
+            const perfEntries = performance.getEntriesByType('navigation')[0];
+            const metrics = {
+                domContentLoaded: perfEntries.domContentLoadedEventEnd - perfEntries.domContentLoadedEventStart,
+                loadComplete: perfEntries.loadEventEnd - perfEntries.loadEventStart,
+                firstPaint: performance.getEntriesByType('paint')[0]?.startTime || 0,
+                firstContentfulPaint: performance.getEntriesByType('paint')[1]?.startTime || 0
+            };
+
+            console.log('CSS Performance Metrics:', metrics);
+        }
+
+        // Critical CSS detection
+        function detectCriticalCSS() {
+            const stylesheets = document.querySelectorAll('link[rel="stylesheet"]');
+            const criticalRules = [];
+
+            stylesheets.forEach(sheet => {
+                try {
+                    const rules = sheet.sheet.cssRules;
+                    for (let rule of rules) {
+                        if (rule.selectorText && document.querySelector(rule.selectorText)) {
+                            criticalRules.push(rule.cssText);
+                        }
+                    }
+                } catch (e) {
+                    console.log('Cannot access stylesheet:', sheet.href);
+                }
+            });
+
+            console.log('Critical CSS Rules:', criticalRules.length);
+        }
+
+        // Animation performance monitoring
+        function monitorAnimationPerformance() {
+            const observer = new PerformanceObserver((list) => {
+                for (const entry of list.getEntries()) {
+                    if (entry.entryType === 'measure') {
+                        console.log('Animation performance:', entry.duration);
+                    }
+                }
+            });
+
+            observer.observe({ entryTypes: ['measure'] });
+        }
+
+        // CSS loading optimization
+        function loadNonCriticalCSS() {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'non-critical.css';
+            link.media = 'print';
+            link.onload = function () {
+                this.media = 'all';
+            };
+            document.head.appendChild(link);
+        }
+
+        // Initialize performance monitoring
+        window.addEventListener('load', () => {
+            measureCSSPerformance();
+            detectCriticalCSS();
+            monitorAnimationPerformance();
+        });
+
+        // Budget monitoring simulation
+        function updateBudgetIndicators() {
+            const indicators = document.querySelectorAll('.budget-fill');
+            indicators.forEach((indicator, index) => {
+                const widths = ['65%', '85%', '95%'];
+                indicator.style.width = widths[index];
+            });
+        }
+
+        updateBudgetIndicators();
+    </script>
+</body>
+
+</html>

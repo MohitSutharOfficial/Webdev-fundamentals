@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object-Oriented Programming Patterns - JavaScript Advanced</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #7c3aed;
+            --accent-color: #059669;
+            --error-color: #dc2626;
+            --warning-color: #d97706;
+            --success-color: #16a34a;
+
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+
+            --border-radius: 8px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+            --space-2: 0.5rem;
+            --space-4: 1rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+
+            --font-mono: 'Fira Code', 'Courier New', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-8);
+        }
+
+        .header {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            padding: var(--space-8);
+            margin-bottom: var(--space-6);
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+        }
+
+        .section {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            padding: var(--space-6);
+            margin-bottom: var(--space-6);
+            box-shadow: var(--shadow-md);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: var(--space-4);
+            font-weight: 700;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 1.875rem;
+            margin-bottom: var(--space-4);
+            border-bottom: 2px solid var(--bg-tertiary);
+            padding-bottom: var(--space-2);
+        }
+
+        h3 {
+            color: var(--accent-color);
+            font-size: 1.25rem;
+            margin: var(--space-6) 0 var(--space-4) 0;
+            font-weight: 600;
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: var(--border-radius);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .demo-container {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: var(--space-6);
+            margin: var(--space-4) 0;
+            border: 1px solid var(--bg-tertiary);
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-4);
+            margin: var(--space-4) 0;
+        }
+
+        .demo-card {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            padding: var(--space-4);
+            border-left: 4px solid var(--accent-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: var(--space-2) var(--space-4);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: var(--space-2);
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+        }
+
+        .btn-secondary:hover {
+            background: #6d28d9;
+        }
+
+        .output {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: var(--border-radius);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+
+        .warning {
+            background: #fffbeb;
+            border-left: 4px solid var(--warning-color);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .tip {
+            background: #f0fdf4;
+            border-left: 4px solid var(--success-color);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .pattern-demo {
+            border: 2px dashed var(--bg-tertiary);
+            border-radius: var(--border-radius);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            position: relative;
+        }
+
+        .pattern-demo::before {
+            content: attr(data-pattern);
+            position: absolute;
+            top: -12px;
+            left: var(--space-4);
+            background: var(--bg-primary);
+            padding: 0 var(--space-2);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: var(--space-4);
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏗️ Object-Oriented Programming Patterns</h1>
+            <p>Master advanced OOP concepts, design patterns, and modern JavaScript class features for building
+                scalable and maintainable applications.</p>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Advanced Class Features</h2>
+
+            <h3>1. Modern Class Syntax & Private Fields</h3>
+            <div class="code-block">
+                class BankAccount {
+                // Private fields (ES2022)
+                #balance = 0;
+                #accountNumber;
+
+                // Static field
+                static #nextAccountNumber = 1000;
+
+                constructor(initialBalance = 0) {
+                this.#balance = initialBalance;
+                this.#accountNumber = BankAccount.#nextAccountNumber++;
+                }
+
+                // Public methods
+                deposit(amount) {
+                if (amount <= 0) { throw new Error('Amount must be positive'); } this.#balance +=amount;
+                    this.#logTransaction('deposit', amount); return this; } withdraw(amount) { if (amount <=0) { throw
+                    new Error('Amount must be positive'); } if (amount> this.#balance) {
+                    throw new Error('Insufficient funds');
+                    }
+                    this.#balance -= amount;
+                    this.#logTransaction('withdraw', amount);
+                    return this;
+                    }
+
+                    // Getter for balance
+                    get balance() {
+                    return this.#balance;
+                    }
+
+                    get accountNumber() {
+                    return this.#accountNumber;
+                    }
+
+                    // Private method
+                    #logTransaction(type, amount) {
+                    console.log(`${type.toUpperCase()}: $${amount}, Balance: $${this.#balance}`);
+                    }
+
+                    // Static method
+                    static createSavingsAccount(initialBalance) {
+                    return new SavingsAccount(initialBalance);
+                    }
+                    }
+
+                    // Inheritance with super
+                    class SavingsAccount extends BankAccount {
+                    #interestRate;
+
+                    constructor(initialBalance = 0, interestRate = 0.02) {
+                    super(initialBalance);
+                    this.#interestRate = interestRate;
+                    }
+
+                    addInterest() {
+                    const interest = this.balance * this.#interestRate;
+                    this.deposit(interest);
+                    return interest;
+                    }
+
+                    get interestRate() {
+                    return this.#interestRate;
+                    }
+                    }
+            </div>
+
+            <div class="demo-container">
+                <h4>🎯 Class Demo:</h4>
+                <button class="btn" onclick="demoModernClasses()">Test Modern Classes</button>
+                <div id="classOutput" class="output"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎨 Creational Design Patterns</h2>
+
+            <h3>1. Singleton Pattern</h3>
+            <div class="code-block">
+                class DatabaseConnection {
+                static #instance = null;
+                #isConnected = false;
+
+                constructor() {
+                if (DatabaseConnection.#instance) {
+                return DatabaseConnection.#instance;
+                }
+
+                this.host = 'localhost';
+                this.port = 5432;
+                DatabaseConnection.#instance = this;
+                }
+
+                connect() {
+                if (!this.#isConnected) {
+                console.log(`Connecting to ${this.host}:${this.port}`);
+                this.#isConnected = true;
+                }
+                return this;
+                }
+
+                disconnect() {
+                if (this.#isConnected) {
+                console.log('Disconnecting from database');
+                this.#isConnected = false;
+                }
+                return this;
+                }
+
+                query(sql) {
+                if (!this.#isConnected) {
+                throw new Error('Database not connected');
+                }
+                console.log(`Executing: ${sql}`);
+                return { results: [], rowCount: 0 };
+                }
+
+                get isConnected() {
+                return this.#isConnected;
+                }
+
+                // Alternative factory method
+                static getInstance() {
+                if (!DatabaseConnection.#instance) {
+                DatabaseConnection.#instance = new DatabaseConnection();
+                }
+                return DatabaseConnection.#instance;
+                }
+                }
+
+                // Modern Singleton with Module
+                const ConfigManager = (() => {
+                let instance;
+                let config = {};
+
+                function createInstance() {
+                return {
+                set(key, value) {
+                config[key] = value;
+                },
+
+                get(key) {
+                return config[key];
+                },
+
+                getAll() {
+                return { ...config };
+                },
+
+                clear() {
+                config = {};
+                }
+                };
+                }
+
+                return {
+                getInstance() {
+                if (!instance) {
+                instance = createInstance();
+                }
+                return instance;
+                }
+                };
+                })();
+            </div>
+
+            <h3>2. Factory Pattern</h3>
+            <div class="code-block">
+                // Abstract Product
+                class Animal {
+                constructor(name) {
+                this.name = name;
+                }
+
+                speak() {
+                throw new Error('speak() method must be implemented');
+                }
+                }
+
+                // Concrete Products
+                class Dog extends Animal {
+                speak() {
+                return `${this.name} says Woof!`;
+                }
+
+                fetch() {
+                return `${this.name} fetches the ball`;
+                }
+                }
+
+                class Cat extends Animal {
+                speak() {
+                return `${this.name} says Meow!`;
+                }
+
+                climb() {
+                return `${this.name} climbs the tree`;
+                }
+                }
+
+                class Bird extends Animal {
+                speak() {
+                return `${this.name} says Tweet!`;
+                }
+
+                fly() {
+                return `${this.name} flies in the sky`;
+                }
+                }
+
+                // Factory
+                class AnimalFactory {
+                static animalTypes = {
+                dog: Dog,
+                cat: Cat,
+                bird: Bird
+                };
+
+                static createAnimal(type, name) {
+                const AnimalClass = this.animalTypes[type.toLowerCase()];
+
+                if (!AnimalClass) {
+                throw new Error(`Unknown animal type: ${type}`);
+                }
+
+                return new AnimalClass(name);
+                }
+
+                static registerAnimalType(type, AnimalClass) {
+                this.animalTypes[type.toLowerCase()] = AnimalClass;
+                }
+
+                static getAvailableTypes() {
+                return Object.keys(this.animalTypes);
+                }
+                }
+
+                // Advanced Factory with Builder Pattern
+                class VehicleBuilder {
+                constructor() {
+                this.reset();
+                }
+
+                reset() {
+                this.vehicle = {
+                type: null,
+                engine: null,
+                wheels: 0,
+                features: []
+                };
+                return this;
+                }
+
+                setType(type) {
+                this.vehicle.type = type;
+                return this;
+                }
+
+                setEngine(engine) {
+                this.vehicle.engine = engine;
+                return this;
+                }
+
+                setWheels(count) {
+                this.vehicle.wheels = count;
+                return this;
+                }
+
+                addFeature(feature) {
+                this.vehicle.features.push(feature);
+                return this;
+                }
+
+                build() {
+                const result = { ...this.vehicle };
+                this.reset();
+                return result;
+                }
+                }
+
+                class VehicleFactory {
+                static createCar(model) {
+                return new VehicleBuilder()
+                .setType('car')
+                .setEngine('V6')
+                .setWheels(4)
+                .addFeature('Air Conditioning')
+                .addFeature('GPS')
+                .build();
+                }
+
+                static createMotorcycle(model) {
+                return new VehicleBuilder()
+                .setType('motorcycle')
+                .setEngine('V2')
+                .setWheels(2)
+                .addFeature('Leather Seat')
+                .build();
+                }
+                }
+            </div>
+
+            <div class="demo-container">
+                <h4>🏭 Factory Pattern Demo:</h4>
+                <div class="demo-grid">
+                    <div class="demo-card">
+                        <button class="btn" onclick="demoSingleton()">Test Singleton</button>
+                        <div id="singletonOutput" class="output"></div>
+                    </div>
+                    <div class="demo-card">
+                        <button class="btn" onclick="demoFactory()">Test Factory</button>
+                        <div id="factoryOutput" class="output"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔄 Behavioral Design Patterns</h2>
+
+            <h3>1. Observer Pattern</h3>
+            <div class="code-block">
+                class EventEmitter {
+                constructor() {
+                this.events = new Map();
+                }
+
+                on(event, listener) {
+                if (!this.events.has(event)) {
+                this.events.set(event, new Set());
+                }
+                this.events.get(event).add(listener);
+                return this;
+                }
+
+                off(event, listener) {
+                if (this.events.has(event)) {
+                this.events.get(event).delete(listener);
+                }
+                return this;
+                }
+
+                emit(event, ...args) {
+                if (this.events.has(event)) {
+                this.events.get(event).forEach(listener => {
+                try {
+                listener(...args);
+                } catch (error) {
+                console.error('Error in event listener:', error);
+                }
+                });
+                }
+                return this;
+                }
+
+                once(event, listener) {
+                const onceWrapper = (...args) => {
+                this.off(event, onceWrapper);
+                listener(...args);
+                };
+                this.on(event, onceWrapper);
+                return this;
+                }
+
+                removeAllListeners(event) {
+                if (event) {
+                this.events.delete(event);
+                } else {
+                this.events.clear();
+                }
+                return this;
+                }
+
+                listenerCount(event) {
+                return this.events.has(event) ? this.events.get(event).size : 0;
+                }
+                }
+
+                // Observable State Management
+                class Store extends EventEmitter {
+                constructor(initialState = {}) {
+                super();
+                this.state = { ...initialState };
+                this.middleware = [];
+                }
+
+                getState() {
+                return { ...this.state };
+                }
+
+                setState(newState) {
+                const prevState = { ...this.state };
+                this.state = { ...this.state, ...newState };
+
+                // Apply middleware
+                this.middleware.forEach(middleware => {
+                middleware(prevState, this.state);
+                });
+
+                this.emit('stateChange', this.state, prevState);
+                return this;
+                }
+
+                subscribe(listener) {
+                this.on('stateChange', listener);
+                return () => this.off('stateChange', listener);
+                }
+
+                use(middleware) {
+                this.middleware.push(middleware);
+                return this;
+                }
+                }
+
+                // Smart Component with Observer
+                class Component extends EventEmitter {
+                constructor(store, element) {
+                super();
+                this.store = store;
+                this.element = element;
+                this.unsubscribe = this.store.subscribe(this.onStateChange.bind(this));
+                }
+
+                onStateChange(newState, prevState) {
+                this.render(newState);
+                this.emit('updated', newState);
+                }
+
+                render(state) {
+                // Override in subclass
+                console.log('Rendering component with state:', state);
+                }
+
+                destroy() {
+                this.unsubscribe();
+                this.removeAllListeners();
+                }
+                }
+            </div>
+
+            <h3>2. Strategy Pattern</h3>
+            <div class="code-block">
+                // Strategy Interface
+                class PaymentStrategy {
+                pay(amount) {
+                throw new Error('pay() method must be implemented');
+                }
+
+                validate() {
+                throw new Error('validate() method must be implemented');
+                }
+                }
+
+                // Concrete Strategies
+                class CreditCardPayment extends PaymentStrategy {
+                constructor(cardNumber, cvv, expiryDate) {
+                super();
+                this.cardNumber = cardNumber;
+                this.cvv = cvv;
+                this.expiryDate = expiryDate;
+                }
+
+                validate() {
+                // Credit card validation logic
+                return this.cardNumber.length === 16 &&
+                this.cvv.length === 3 &&
+                new Date(this.expiryDate) > new Date();
+                }
+
+                pay(amount) {
+                if (!this.validate()) {
+                throw new Error('Invalid credit card details');
+                }
+                console.log(`Paid $${amount} using Credit Card ending in ${this.cardNumber.slice(-4)}`);
+                return { success: true, transactionId: `cc_${Date.now()}` };
+                }
+                }
+
+                class PayPalPayment extends PaymentStrategy {
+                constructor(email, password) {
+                super();
+                this.email = email;
+                this.password = password;
+                }
+
+                validate() {
+                return this.email.includes('@') && this.password.length >= 6;
+                }
+
+                pay(amount) {
+                if (!this.validate()) {
+                throw new Error('Invalid PayPal credentials');
+                }
+                console.log(`Paid $${amount} using PayPal account ${this.email}`);
+                return { success: true, transactionId: `pp_${Date.now()}` };
+                }
+                }
+
+                class CryptoPayment extends PaymentStrategy {
+                constructor(walletAddress, privateKey) {
+                super();
+                this.walletAddress = walletAddress;
+                this.privateKey = privateKey;
+                }
+
+                validate() {
+                return this.walletAddress.length === 42 && this.privateKey.length === 64;
+                }
+
+                pay(amount) {
+                if (!this.validate()) {
+                throw new Error('Invalid crypto wallet details');
+                }
+                console.log(`Paid $${amount} using Crypto wallet ${this.walletAddress.slice(0, 6)}...`);
+                return { success: true, transactionId: `crypto_${Date.now()}` };
+                }
+                }
+
+                // Context
+                class PaymentProcessor {
+                constructor() {
+                this.strategy = null;
+                this.paymentHistory = [];
+                }
+
+                setPaymentStrategy(strategy) {
+                if (!(strategy instanceof PaymentStrategy)) {
+                throw new Error('Strategy must be instance of PaymentStrategy');
+                }
+                this.strategy = strategy;
+                return this;
+                }
+
+                processPayment(amount) {
+                if (!this.strategy) {
+                throw new Error('Payment strategy not set');
+                }
+
+                try {
+                const result = this.strategy.pay(amount);
+                this.paymentHistory.push({
+                amount,
+                strategy: this.strategy.constructor.name,
+                timestamp: new Date(),
+                ...result
+                });
+                return result;
+                } catch (error) {
+                console.error('Payment failed:', error.message);
+                throw error;
+                }
+                }
+
+                getPaymentHistory() {
+                return [...this.paymentHistory];
+                }
+                }
+            </div>
+
+            <div class="demo-container">
+                <h4>🎭 Behavioral Patterns Demo:</h4>
+                <div class="demo-grid">
+                    <div class="demo-card">
+                        <button class="btn" onclick="demoObserver()">Test Observer</button>
+                        <div id="observerOutput" class="output"></div>
+                    </div>
+                    <div class="demo-card">
+                        <button class="btn" onclick="demoStrategy()">Test Strategy</button>
+                        <div id="strategyOutput" class="output"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔗 Structural Design Patterns</h2>
+
+            <h3>1. Decorator Pattern</h3>
+            <div class="code-block">
+                // Base Component
+                class Coffee {
+                constructor() {
+                this.description = 'Simple coffee';
+                this.cost = 2.00;
+                }
+
+                getDescription() {
+                return this.description;
+                }
+
+                getCost() {
+                return this.cost;
+                }
+                }
+
+                // Decorator Base Class
+                class CoffeeDecorator {
+                constructor(coffee) {
+                this.coffee = coffee;
+                }
+
+                getDescription() {
+                return this.coffee.getDescription();
+                }
+
+                getCost() {
+                return this.coffee.getCost();
+                }
+                }
+
+                // Concrete Decorators
+                class MilkDecorator extends CoffeeDecorator {
+                constructor(coffee) {
+                super(coffee);
+                }
+
+                getDescription() {
+                return this.coffee.getDescription() + ', Milk';
+                }
+
+                getCost() {
+                return this.coffee.getCost() + 0.50;
+                }
+                }
+
+                class SugarDecorator extends CoffeeDecorator {
+                constructor(coffee) {
+                super(coffee);
+                }
+
+                getDescription() {
+                return this.coffee.getDescription() + ', Sugar';
+                }
+
+                getCost() {
+                return this.coffee.getCost() + 0.25;
+                }
+                }
+
+                class VanillaDecorator extends CoffeeDecorator {
+                constructor(coffee) {
+                super(coffee);
+                }
+
+                getDescription() {
+                return this.coffee.getDescription() + ', Vanilla';
+                }
+
+                getCost() {
+                return this.coffee.getCost() + 0.75;
+                }
+                }
+
+                // Modern Decorator with Functions
+                function withRetry(attempts = 3) {
+                return function decorator(target, propertyKey, descriptor) {
+                const originalMethod = descriptor.value;
+
+                descriptor.value = async function(...args) {
+                let lastError;
+
+                for (let i = 0; i < attempts; i++) { try { return await originalMethod.apply(this, args); } catch
+                    (error) { lastError=error; console.log(`Attempt ${i + 1} failed:`, error.message); if (i===attempts
+                    - 1) { throw lastError; } // Wait before retry await new Promise(resolve=> setTimeout(resolve, 1000
+                    * (i + 1)));
+                    }
+                    }
+                    };
+
+                    return descriptor;
+                    };
+                    }
+
+                    function withLogging(target, propertyKey, descriptor) {
+                    const originalMethod = descriptor.value;
+
+                    descriptor.value = function(...args) {
+                    console.log(`Calling ${propertyKey} with args:`, args);
+                    const start = performance.now();
+
+                    try {
+                    const result = originalMethod.apply(this, args);
+                    const end = performance.now();
+                    console.log(`${propertyKey} completed in ${end - start}ms`);
+                    return result;
+                    } catch (error) {
+                    console.error(`${propertyKey} failed:`, error);
+                    throw error;
+                    }
+                    };
+
+                    return descriptor;
+                    }
+
+                    class APIService {
+                    @withLogging
+                    @withRetry(3)
+                    async fetchData(url) {
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    return response.json();
+                    }
+                    }
+            </div>
+
+            <h3>2. Adapter Pattern</h3>
+            <div class="code-block">
+                // Old API (Legacy System)
+                class OldUserService {
+                getUserInfo(userId) {
+                return {
+                user_id: userId,
+                user_name: 'john_doe',
+                email_address: 'john@example.com',
+                phone_number: '123-456-7890',
+                created_at: '2020-01-01T00:00:00Z'
+                };
+                }
+
+                updateUserInfo(userId, data) {
+                console.log('Updating user with old API:', { userId, data });
+                return { success: true, user_id: userId };
+                }
+                }
+
+                // New API (Target Interface)
+                class NewUserService {
+                getUser(id) {
+                return {
+                id: id,
+                name: 'jane_doe',
+                email: 'jane@example.com',
+                phone: '+1-555-123-4567',
+                createdAt: new Date('2021-01-01').toISOString()
+                };
+                }
+
+                updateUser(id, userData) {
+                console.log('Updating user with new API:', { id, userData });
+                return { success: true, id };
+                }
+                }
+
+                // Adapter
+                class UserServiceAdapter {
+                constructor(oldService) {
+                this.oldService = oldService;
+                }
+
+                getUser(id) {
+                const oldFormat = this.oldService.getUserInfo(id);
+
+                // Convert old format to new format
+                return {
+                id: oldFormat.user_id,
+                name: oldFormat.user_name,
+                email: oldFormat.email_address,
+                phone: oldFormat.phone_number,
+                createdAt: oldFormat.created_at
+                };
+                }
+
+                updateUser(id, userData) {
+                // Convert new format to old format
+                const oldFormat = {
+                user_name: userData.name,
+                email_address: userData.email,
+                phone_number: userData.phone
+                };
+
+                return this.oldService.updateUserInfo(id, oldFormat);
+                }
+                }
+
+                // Multiple Service Adapter
+                class UnifiedUserService {
+                constructor() {
+                this.services = new Map();
+                this.defaultService = null;
+                }
+
+                addService(name, service, isDefault = false) {
+                this.services.set(name, service);
+                if (isDefault || !this.defaultService) {
+                this.defaultService = name;
+                }
+                return this;
+                }
+
+                async getUser(id, serviceName = null) {
+                const service = this.services.get(serviceName || this.defaultService);
+                if (!service) {
+                throw new Error(`Service not found: ${serviceName}`);
+                }
+
+                return service.getUser(id);
+                }
+
+                async updateUser(id, userData, serviceName = null) {
+                const service = this.services.get(serviceName || this.defaultService);
+                if (!service) {
+                throw new Error(`Service not found: ${serviceName}`);
+                }
+
+                return service.updateUser(id, userData);
+                }
+
+                listServices() {
+                return Array.from(this.services.keys());
+                }
+                }
+            </div>
+
+            <div class="demo-container">
+                <h4>🏗️ Structural Patterns Demo:</h4>
+                <div class="demo-grid">
+                    <div class="demo-card">
+                        <button class="btn" onclick="demoDecorator()">Test Decorator</button>
+                        <div id="decoratorOutput" class="output"></div>
+                    </div>
+                    <div class="demo-card">
+                        <button class="btn" onclick="demoAdapter()">Test Adapter</button>
+                        <div id="adapterOutput" class="output"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🧬 Advanced Inheritance Patterns</h2>
+
+            <h3>1. Mixins and Composition</h3>
+            <div class="code-block">
+                // Mixin Functions
+                const Flyable = {
+                fly() {
+                return `${this.name} is flying at ${this.altitude || 1000} feet`;
+                },
+
+                land() {
+                this.altitude = 0;
+                return `${this.name} has landed`;
+                },
+
+                setAltitude(altitude) {
+                this.altitude = altitude;
+                return this;
+                }
+                };
+
+                const Swimmable = {
+                swim() {
+                return `${this.name} is swimming at ${this.depth || 5} feet deep`;
+                },
+
+                dive(depth) {
+                this.depth = depth;
+                return `${this.name} dives to ${depth} feet`;
+                },
+
+                surface() {
+                this.depth = 0;
+                return `${this.name} surfaces`;
+                }
+                };
+
+                const Walkable = {
+                walk() {
+                return `${this.name} is walking at ${this.speed || 3} mph`;
+                },
+
+                run() {
+                this.speed = (this.speed || 3) * 3;
+                return `${this.name} is running at ${this.speed} mph`;
+                },
+
+                stop() {
+                this.speed = 0;
+                return `${this.name} stops`;
+                }
+                };
+
+                // Mixin Helper Function
+                function mixin(target, ...sources) {
+                sources.forEach(source => {
+                Object.getOwnPropertyNames(source).forEach(name => {
+                if (name !== 'constructor') {
+                Object.defineProperty(target.prototype, name,
+                Object.getOwnPropertyDescriptor(source, name));
+                }
+                });
+                });
+                return target;
+                }
+
+                // Base Classes
+                class Animal {
+                constructor(name) {
+                this.name = name;
+                this.energy = 100;
+                }
+
+                rest() {
+                this.energy = Math.min(100, this.energy + 20);
+                return `${this.name} rests and gains energy (${this.energy})`;
+                }
+
+                toString() {
+                return `${this.constructor.name}: ${this.name}`;
+                }
+                }
+
+                // Composed Classes
+                class Duck extends Animal {
+                constructor(name) {
+                super(name);
+                this.altitude = 0;
+                this.depth = 0;
+                this.speed = 0;
+                }
+                }
+
+                class Penguin extends Animal {
+                constructor(name) {
+                super(name);
+                this.depth = 0;
+                this.speed = 0;
+                }
+                }
+
+                class Horse extends Animal {
+                constructor(name) {
+                super(name);
+                this.speed = 0;
+                }
+                }
+
+                // Apply mixins
+                mixin(Duck, Flyable, Swimmable, Walkable);
+                mixin(Penguin, Swimmable, Walkable);
+                mixin(Horse, Walkable);
+
+                // Modern Composition with Factory
+                class AnimalFactory {
+                static create(type, name, abilities = []) {
+                const animal = new Animal(name);
+                animal.type = type;
+
+                abilities.forEach(ability => {
+                Object.assign(animal, ability);
+                });
+
+                return animal;
+                }
+                }
+            </div>
+
+            <h3>2. Prototype Chain Manipulation</h3>
+            <div class="code-block">
+                // Advanced Prototype Patterns
+                class Shape {
+                constructor(x = 0, y = 0) {
+                this.x = x;
+                this.y = y;
+                }
+
+                move(dx, dy) {
+                this.x += dx;
+                this.y += dy;
+                return this;
+                }
+
+                getPosition() {
+                return { x: this.x, y: this.y };
+                }
+
+                area() {
+                throw new Error('area() must be implemented by subclass');
+                }
+
+                // Static method for creating from JSON
+                static fromJSON(json) {
+                const data = typeof json === 'string' ? JSON.parse(json) : json;
+                return new this(data.x, data.y);
+                }
+                }
+
+                // Dynamic Prototype Extension
+                Shape.prototype.scale = function(factor) {
+                // This will be overridden by subclasses
+                return this;
+                };
+
+                class Circle extends Shape {
+                constructor(x, y, radius) {
+                super(x, y);
+                this.radius = radius;
+                }
+
+                area() {
+                return Math.PI * this.radius ** 2;
+                }
+
+                scale(factor) {
+                this.radius *= factor;
+                return this;
+                }
+
+                static fromJSON(json) {
+                const data = typeof json === 'string' ? JSON.parse(json) : json;
+                return new Circle(data.x, data.y, data.radius);
+                }
+                }
+
+                class Rectangle extends Shape {
+                constructor(x, y, width, height) {
+                super(x, y);
+                this.width = width;
+                this.height = height;
+                }
+
+                area() {
+                return this.width * this.height;
+                }
+
+                scale(factor) {
+                this.width *= factor;
+                this.height *= factor;
+                return this;
+                }
+
+                static fromJSON(json) {
+                const data = typeof json === 'string' ? JSON.parse(json) : json;
+                return new Rectangle(data.x, data.y, data.width, data.height);
+                }
+                }
+
+                // Prototype Chain Inspector
+                class PrototypeInspector {
+                static getPrototypeChain(obj) {
+                const chain = [];
+                let current = obj;
+
+                while (current && current !== Object.prototype) {
+                chain.push({
+                constructor: current.constructor?.name || 'Unknown',
+                methods: Object.getOwnPropertyNames(current)
+                .filter(name => typeof current[name] === 'function')
+                });
+                current = Object.getPrototypeOf(current);
+                }
+
+                return chain;
+                }
+
+                static hasMethod(obj, methodName) {
+                return methodName in obj && typeof obj[methodName] === 'function';
+                }
+
+                static listMethods(obj) {
+                const methods = new Set();
+                let current = obj;
+
+                while (current && current !== Object.prototype) {
+                Object.getOwnPropertyNames(current)
+                .filter(name => typeof current[name] === 'function')
+                .forEach(method => methods.add(method));
+                current = Object.getPrototypeOf(current);
+                }
+
+                return Array.from(methods);
+                }
+                }
+            </div>
+
+            <div class="demo-container">
+                <h4>🧬 Inheritance Patterns Demo:</h4>
+                <div class="demo-grid">
+                    <div class="demo-card">
+                        <button class="btn" onclick="demoMixins()">Test Mixins</button>
+                        <div id="mixinsOutput" class="output"></div>
+                    </div>
+                    <div class="demo-card">
+                        <button class="btn" onclick="demoPrototype()">Test Prototype</button>
+                        <div id="prototypeOutput" class="output"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Advanced Techniques</h2>
+
+            <div class="tip">
+                <h3>💡 Senior Engineer Tips:</h3>
+                <ul>
+                    <li><strong>Composition over Inheritance:</strong> Prefer composition and mixins for flexible
+                        designs</li>
+                    <li><strong>SOLID Principles:</strong> Apply Single Responsibility, Open/Closed, Liskov
+                        Substitution, Interface Segregation, and Dependency Inversion</li>
+                    <li><strong>Design Pattern Selection:</strong> Choose patterns based on specific problems, not for
+                        their own sake</li>
+                    <li><strong>Performance Considerations:</strong> Be aware of memory usage and prototype chain depth
+                    </li>
+                    <li><strong>Testing:</strong> Design patterns should make code more testable, not more complex</li>
+                    <li><strong>Documentation:</strong> Clearly document pattern usage and design decisions</li>
+                </ul>
+            </div>
+
+            <div class="warning">
+                <h3>⚠️ Common Pitfalls:</h3>
+                <ul>
+                    <li>Overusing patterns where simple solutions would suffice</li>
+                    <li>Creating overly complex inheritance hierarchies</li>
+                    <li>Ignoring JavaScript's prototypal nature in favor of classical patterns</li>
+                    <li>Not considering modern alternatives like composition and hooks</li>
+                    <li>Tight coupling between classes and concrete implementations</li>
+                    <li>Poor error handling in pattern implementations</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📚 Resources & Next Steps</h2>
+            <ul>
+                <li><a href="https://addyosmani.com/resources/essentialjsdesignpatterns/book/" target="_blank">Learning
+                        JavaScript Design Patterns</a></li>
+                <li><a href="https://refactoring.guru/design-patterns" target="_blank">Refactoring.Guru: Design
+                        Patterns</a></li>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes"
+                        target="_blank">MDN: Classes</a></li>
+                <li><a href="https://javascript.info/class" target="_blank">JavaScript.info: Classes</a></li>
+            </ul>
+
+            <p><strong>Next:</strong> Continue to <a href="05_data_structures_algorithms.html">Data Structures &
+                    Algorithms</a> to master efficient data handling and algorithmic thinking.</p>
+        </div>
+    </div>
+
+    <script>
+        // Demo Functions
+        function demoModernClasses() {
+            const output = document.getElementById('classOutput');
+            let result = '';
+
+            try {
+                // Create accounts
+                const savings = new SavingsAccount(1000, 0.05);
+                const checking = new BankAccount(500);
+
+                result += `Created savings account #${savings.accountNumber} with $${savings.balance}\n`;
+                result += `Created checking account #${checking.accountNumber} with $${checking.balance}\n\n`;
+
+                // Test transactions
+                savings.deposit(200).withdraw(50);
+                const interest = savings.addInterest();
+                result += `Interest added: $${interest.toFixed(2)}\n`;
+                result += `Final savings balance: $${savings.balance.toFixed(2)}\n\n`;
+
+                // Test chaining
+                checking.deposit(100).deposit(200).withdraw(150);
+                result += `Final checking balance: $${checking.balance}\n`;
+
+            } catch (error) {
+                result += `Error: ${error.message}\n`;
+            }
+
+            output.textContent = result;
+        }
+
+        function demoSingleton() {
+            const output = document.getElementById('singletonOutput');
+            let result = '';
+
+            // Database Connection Singleton
+            const db1 = new DatabaseConnection();
+            const db2 = new DatabaseConnection();
+            const db3 = DatabaseConnection.getInstance();
+
+            result += `db1 === db2: ${db1 === db2}\n`;
+            result += `db2 === db3: ${db2 === db3}\n\n`;
+
+            db1.connect();
+            result += `DB1 connected: ${db1.isConnected}\n`;
+            result += `DB2 connected: ${db2.isConnected}\n\n`;
+
+            // Config Manager Singleton
+            const config1 = ConfigManager.getInstance();
+            const config2 = ConfigManager.getInstance();
+
+            config1.set('theme', 'dark');
+            config1.set('language', 'en');
+
+            result += `config1 === config2: ${config1 === config2}\n`;
+            result += `Config from config2: ${JSON.stringify(config2.getAll())}\n`;
+
+            output.textContent = result;
+        }
+
+        function demoFactory() {
+            const output = document.getElementById('factoryOutput');
+            let result = '';
+
+            try {
+                // Animal Factory
+                const dog = AnimalFactory.createAnimal('dog', 'Buddy');
+                const cat = AnimalFactory.createAnimal('cat', 'Whiskers');
+                const bird = AnimalFactory.createAnimal('bird', 'Tweety');
+
+                result += `${dog.speak()}\n`;
+                result += `${cat.speak()}\n`;
+                result += `${bird.speak()}\n\n`;
+
+                // Vehicle Factory
+                const car = VehicleFactory.createCar('Sedan');
+                const motorcycle = VehicleFactory.createMotorcycle('Cruiser');
+
+                result += `Car: ${JSON.stringify(car, null, 2)}\n\n`;
+                result += `Motorcycle: ${JSON.stringify(motorcycle, null, 2)}\n`;
+
+            } catch (error) {
+                result += `Error: ${error.message}\n`;
+            }
+
+            output.textContent = result;
+        }
+
+        function demoObserver() {
+            const output = document.getElementById('observerOutput');
+            let result = '';
+
+            // Create store
+            const store = new Store({ count: 0, user: null });
+
+            // Add middleware
+            store.use((prevState, newState) => {
+                result += `Middleware: State changed from ${JSON.stringify(prevState)} to ${JSON.stringify(newState)}\n`;
+            });
+
+            // Subscribe to changes
+            const unsubscribe = store.subscribe((newState, prevState) => {
+                result += `Observer: Count is now ${newState.count}\n`;
+            });
+
+            // Update state
+            store.setState({ count: 1 });
+            store.setState({ count: 2, user: 'John' });
+            store.setState({ count: 3 });
+
+            output.textContent = result;
+        }
+
+        function demoStrategy() {
+            const output = document.getElementById('strategyOutput');
+            let result = '';
+
+            try {
+                const processor = new PaymentProcessor();
+
+                // Credit Card Payment
+                const creditCard = new CreditCardPayment('1234567890123456', '123', '2025-12');
+                processor.setPaymentStrategy(creditCard);
+                const cc_result = processor.processPayment(100);
+                result += `Credit Card: ${JSON.stringify(cc_result)}\n\n`;
+
+                // PayPal Payment
+                const paypal = new PayPalPayment('user@example.com', 'password123');
+                processor.setPaymentStrategy(paypal);
+                const pp_result = processor.processPayment(50);
+                result += `PayPal: ${JSON.stringify(pp_result)}\n\n`;
+
+                // Crypto Payment
+                const crypto = new CryptoPayment('0x1234567890123456789012345678901234567890', '1234567890123456789012345678901234567890123456789012345678901234');
+                processor.setPaymentStrategy(crypto);
+                const crypto_result = processor.processPayment(75);
+                result += `Crypto: ${JSON.stringify(crypto_result)}\n\n`;
+
+                // Payment History
+                result += `Payment History:\n${JSON.stringify(processor.getPaymentHistory(), null, 2)}`;
+
+            } catch (error) {
+                result += `Error: ${error.message}\n`;
+            }
+
+            output.textContent = result;
+        }
+
+        function demoDecorator() {
+            const output = document.getElementById('decoratorOutput');
+            let result = '';
+
+            // Coffee Decorators
+            let coffee = new Coffee();
+            result += `${coffee.getDescription()}: $${coffee.getCost()}\n`;
+
+            coffee = new MilkDecorator(coffee);
+            result += `${coffee.getDescription()}: $${coffee.getCost()}\n`;
+
+            coffee = new SugarDecorator(coffee);
+            result += `${coffee.getDescription()}: $${coffee.getCost()}\n`;
+
+            coffee = new VanillaDecorator(coffee);
+            result += `${coffee.getDescription()}: $${coffee.getCost()}\n\n`;
+
+            // Complex order
+            let complexCoffee = new VanillaDecorator(
+                new MilkDecorator(
+                    new SugarDecorator(
+                        new MilkDecorator(new Coffee())
+                    )
+                )
+            );
+
+            result += `Complex Order:\n${complexCoffee.getDescription()}: $${complexCoffee.getCost()}`;
+
+            output.textContent = result;
+        }
+
+        function demoAdapter() {
+            const output = document.getElementById('adapterOutput');
+            let result = '';
+
+            // Old service
+            const oldService = new OldUserService();
+            const adapter = new UserServiceAdapter(oldService);
+
+            // Test adapted service
+            const user = adapter.getUser(123);
+            result += `Adapted User Data:\n${JSON.stringify(user, null, 2)}\n\n`;
+
+            // Update user
+            const updateResult = adapter.updateUser(123, {
+                name: 'john_updated',
+                email: 'john.updated@example.com',
+                phone: '+1-555-999-8888'
+            });
+            result += `Update Result: ${JSON.stringify(updateResult)}\n\n`;
+
+            // Unified service
+            const unified = new UnifiedUserService();
+            const newService = new NewUserService();
+
+            unified.addService('old', adapter);
+            unified.addService('new', newService, true);
+
+            result += `Available Services: ${unified.listServices().join(', ')}`;
+
+            output.textContent = result;
+        }
+
+        function demoMixins() {
+            const output = document.getElementById('mixinsOutput');
+            let result = '';
+
+            // Create animals with different abilities
+            const duck = new Duck('Donald');
+            const penguin = new Penguin('Pingu');
+            const horse = new Horse('Thunder');
+
+            // Test duck abilities
+            result += `${duck}\n`;
+            result += `${duck.walk()}\n`;
+            result += `${duck.fly()}\n`;
+            result += `${duck.swim()}\n\n`;
+
+            // Test penguin abilities
+            result += `${penguin}\n`;
+            result += `${penguin.walk()}\n`;
+            result += `${penguin.dive(10)}\n`;
+            // Note: penguin.fly() would cause an error
+
+            // Test horse abilities
+            result += `\n${horse}\n`;
+            result += `${horse.walk()}\n`;
+            result += `${horse.run()}\n`;
+
+            // Factory-created animal
+            const eagle = AnimalFactory.create('eagle', 'Eddie', [Flyable]);
+            result += `\n${eagle.name}: ${eagle.fly()}`;
+
+            output.textContent = result;
+        }
+
+        function demoPrototype() {
+            const output = document.getElementById('prototypeOutput');
+            let result = '';
+
+            // Create shapes
+            const circle = new Circle(10, 20, 5);
+            const rectangle = new Rectangle(0, 0, 10, 15);
+
+            result += `Circle: position ${JSON.stringify(circle.getPosition())}, area ${circle.area().toFixed(2)}\n`;
+            result += `Rectangle: position ${JSON.stringify(rectangle.getPosition())}, area ${rectangle.area()}\n\n`;
+
+            // Scale shapes
+            circle.scale(2);
+            rectangle.scale(1.5);
+
+            result += `After scaling:\n`;
+            result += `Circle: area ${circle.area().toFixed(2)}\n`;
+            result += `Rectangle: area ${rectangle.area()}\n\n`;
+
+            // Prototype inspection
+            const circleChain = PrototypeInspector.getPrototypeChain(circle);
+            result += `Circle Prototype Chain:\n`;
+            circleChain.forEach((level, index) => {
+                result += `  ${index}: ${level.constructor} (${level.methods.length} methods)\n`;
+            });
+
+            result += `\nCircle Methods: ${PrototypeInspector.listMethods(circle).join(', ')}`;
+
+            output.textContent = result;
+        }
+
+        // Initialize demos on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('OOP Patterns demo loaded');
+        });
+    </script>
+</body>
+
+</html>

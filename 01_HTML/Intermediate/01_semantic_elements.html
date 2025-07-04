@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML5 Semantic Elements - Modern Web Structure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        /* Layout containers */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header styles */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Navigation styles */
+        nav {
+            background: #fff;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            background: #007bff;
+            color: white;
+        }
+
+        /* Main content area */
+        main {
+            background: white;
+            padding: 2rem 0;
+            min-height: 70vh;
+        }
+
+        /* Article styles */
+        article {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        article header {
+            background: none;
+            color: #333;
+            padding: 0 0 1rem 0;
+            box-shadow: none;
+            border-bottom: 3px solid #007bff;
+            margin-bottom: 1.5rem;
+        }
+
+        article header h2 {
+            font-size: 1.8rem;
+            color: #2c3e50;
+        }
+
+        article time {
+            color: #666;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+
+        /* Section styles */
+        section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border-left: 4px solid #17a2b8;
+            background: #f8f9fa;
+            border-radius: 0 8px 8px 0;
+        }
+
+        section h3 {
+            color: #17a2b8;
+            margin-bottom: 1rem;
+        }
+
+        /* Aside styles */
+        aside {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 5px solid #e17055;
+        }
+
+        aside h3 {
+            color: #2d3436;
+            margin-bottom: 1rem;
+        }
+
+        /* Figure styles */
+        figure {
+            margin: 2rem 0;
+            text-align: center;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        figure img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        figcaption {
+            margin-top: 1rem;
+            font-style: italic;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Footer styles */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 3rem 0 1rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: #3498db;
+        }
+
+        .footer-section a {
+            color: #bdc3c7;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #34495e;
+            color: #95a5a6;
+        }
+
+        /* Code examples */
+        .code-example {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
+        .code-example pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+        /* Highlight boxes */
+        .highlight {
+            background: #e8f5e9;
+            border: 1px solid #4caf50;
+            border-radius: 5px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 5px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            article {
+                padding: 1rem;
+            }
+        }
+
+        /* Skip link for accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: #000;
+            color: #fff;
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 0 0 4px 4px;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Skip link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Page header with site branding -->
+    <header role="banner">
+        <div class="container">
+            <h1>HTML5 Semantic Elements</h1>
+            <p>Building meaningful, accessible, and SEO-friendly web structure</p>
+        </div>
+    </header>
+
+    <!-- Main navigation -->
+    <nav role="navigation" aria-label="Main navigation">
+        <div class="container">
+            <ul>
+                <li><a href="#semantic-intro">Introduction</a></li>
+                <li><a href="#document-structure">Document Structure</a></li>
+                <li><a href="#content-sectioning">Content Sectioning</a></li>
+                <li><a href="#text-semantics">Text Semantics</a></li>
+                <li><a href="#best-practices">Best Practices</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main content area -->
+    <main id="main-content" role="main">
+        <div class="container">
+
+            <!-- Introduction Article -->
+            <article id="semantic-intro">
+                <header>
+                    <h2>What Are Semantic Elements?</h2>
+                    <time datetime="2024-01-15">Published on January 15, 2024</time>
+                </header>
+
+                <p>
+                    Semantic elements are HTML tags that clearly describe their meaning to both
+                    the browser and the developer. Unlike generic &lt;div&gt; and &lt;span&gt;
+                    elements, semantic elements like &lt;header&gt;, &lt;nav&gt;, and &lt;article&gt;
+                    convey the purpose and structure of content.
+                </p>
+
+                <section id="benefits">
+                    <h3>Benefits of Semantic HTML</h3>
+                    <ul>
+                        <li><strong>Accessibility:</strong> Screen readers can better navigate content</li>
+                        <li><strong>SEO:</strong> Search engines understand content structure better</li>
+                        <li><strong>Maintainability:</strong> Code is more readable and self-documenting</li>
+                        <li><strong>Future-proof:</strong> Content is more portable across different platforms</li>
+                    </ul>
+                </section>
+
+                <aside>
+                    <h3>💡 Pro Tip</h3>
+                    <p>
+                        Think of semantic elements as giving your HTML a "table of contents"
+                        that both humans and machines can understand. This makes your website
+                        more accessible and helps search engines index your content more effectively.
+                    </p>
+                </aside>
+            </article>
+
+            <!-- Document Structure -->
+            <article id="document-structure">
+                <header>
+                    <h2>Document Structure Elements</h2>
+                </header>
+
+                <section>
+                    <h3>&lt;header&gt; - Page and Section Headers</h3>
+                    <p>
+                        The &lt;header&gt; element represents introductory content for a page
+                        or section. It can contain headings, logos, navigation, or other
+                        introductory elements.
+                    </p>
+
+                    <div class="code-example">
+                        <pre>&lt;header&gt;
+    &lt;h1&gt;My Website&lt;/h1&gt;
+    &lt;nav&gt;
+        &lt;ul&gt;
+            &lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="/about"&gt;About&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/nav&gt;
+&lt;/header&gt;</pre>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>&lt;nav&gt; - Navigation Links</h3>
+                    <p>
+                        The &lt;nav&gt; element defines a set of navigation links.
+                        Use it for major navigation blocks, not every group of links.
+                    </p>
+
+                    <div class="code-example">
+                        <pre>&lt;nav aria-label="Main navigation"&gt;
+    &lt;ul&gt;
+        &lt;li&gt;&lt;a href="/" aria-current="page"&gt;Home&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/products"&gt;Products&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/contact"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/nav&gt;</pre>
+                    </div>
+
+                    <div class="highlight">
+                        <strong>Accessibility Note:</strong> Use aria-label or aria-labelledby
+                        to distinguish between multiple navigation sections on the same page.
+                    </div>
+                </section>
+
+                <section>
+                    <h3>&lt;main&gt; - Primary Content</h3>
+                    <p>
+                        The &lt;main&gt; element represents the main content of the page.
+                        There should only be one &lt;main&gt; element per page, and it
+                        should not be nested inside other semantic elements.
+                    </p>
+
+                    <div class="code-example">
+                        <pre>&lt;main role="main"&gt;
+    &lt;h1&gt;Welcome to Our Blog&lt;/h1&gt;
+    &lt;article&gt;
+        &lt;!-- Article content --&gt;
+    &lt;/article&gt;
+&lt;/main&gt;</pre>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>&lt;footer&gt; - Page and Section Footers</h3>
+                    <p>
+                        The &lt;footer&gt; element contains information about its containing
+                        element, such as copyright, contact information, or related links.
+                    </p>
+
+                    <div class="code-example">
+                        <pre>&lt;footer&gt;
+    &lt;p&gt;&copy; 2024 My Website. All rights reserved.&lt;/p&gt;
+    &lt;nav aria-label="Footer navigation"&gt;
+        &lt;a href="/privacy"&gt;Privacy Policy&lt;/a&gt;
+        &lt;a href="/terms"&gt;Terms of Service&lt;/a&gt;
+    &lt;/nav&gt;
+&lt;/footer&gt;</pre>
+                    </div>
+                </section>
+            </article>
+
+            <!-- Content Sectioning -->
+            <article id="content-sectioning">
+                <header>
+                    <h2>Content Sectioning Elements</h2>
+                </header>
+
+                <section>
+                    <h3>&lt;article&gt; - Standalone Content</h3>
+                    <p>
+                        The &lt;article&gt; element represents a complete, self-contained
+                        piece of content that could be distributed independently.
+                    </p>
+
+                    <div class="code-example">
+                        <pre>&lt;article&gt;
+    &lt;header&gt;
+        &lt;h2&gt;Blog Post Title&lt;/h2&gt;
+        &lt;time datetime="2024-01-15"&gt;January 15, 2024&lt;/time&gt;
+        &lt;address&gt;By &lt;a href="/author/john"&gt;John Doe&lt;/a&gt;&lt;/address&gt;
+    &lt;/header&gt;
+    
+    &lt;p&gt;Article content goes here...&lt;/p&gt;
+    
+    &lt;footer&gt;
+        &lt;p&gt;Tags: &lt;a href="/tag/html"&gt;HTML&lt;/a&gt;, &lt;a href="/tag/semantics"&gt;Semantics&lt;/a&gt;&lt;/p&gt;
+    &lt;/footer&gt;
+&lt;/article&gt;</pre>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>&lt;section&gt; - Thematic Grouping</h3>
+                    <p>
+                        The &lt;section&gt; element represents a thematic grouping of content
+                        with a heading. Use it to break up content into logical sections.
+                    </p>
+
+                    <div class="code-example">
+                        <pre>&lt;section&gt;
+    &lt;h3&gt;Introduction&lt;/h3&gt;
+    &lt;p&gt;This section introduces the topic...&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;section&gt;
+    &lt;h3&gt;Method&lt;/h3&gt;
+    &lt;p&gt;Here's how we approached the problem...&lt;/p&gt;
+&lt;/section&gt;</pre>
+                    </div>
+
+                    <div class="warning">
+                        <strong>Warning:</strong> Don't use &lt;section&gt; as a generic wrapper.
+                        If you just need styling hooks, use &lt;div&gt; instead.
+                    </div>
+                </section>
+
+                <section>
+                    <h3>&lt;aside&gt; - Tangentially Related Content</h3>
+                    <p>
+                        The &lt;aside&gt; element represents content that is tangentially
+                        related to the main content, like sidebars, callouts, or advertisements.
+                    </p>
+
+                    <div class="code-example">
+                        <pre>&lt;aside&gt;
+    &lt;h4&gt;Related Articles&lt;/h4&gt;
+    &lt;ul&gt;
+        &lt;li&gt;&lt;a href="/html-basics"&gt;HTML Basics&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/css-fundamentals"&gt;CSS Fundamentals&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/aside&gt;</pre>
+                    </div>
+                </section>
+            </article>
+
+            <!-- Text Semantics -->
+            <article id="text-semantics">
+                <header>
+                    <h2>Text-Level Semantic Elements</h2>
+                </header>
+
+                <section>
+                    <h3>&lt;time&gt; - Dates and Times</h3>
+                    <p>
+                        The &lt;time&gt; element represents a specific period in time
+                        or a date, with an optional machine-readable datetime attribute.
+                    </p>
+
+                    <div class="code-example">
+                        <pre>&lt;time datetime="2024-01-15T10:30:00Z"&gt;
+    January 15, 2024 at 10:30 AM UTC
+&lt;/time&gt;
+
+&lt;p&gt;The meeting is scheduled for &lt;time datetime="2024-02-01"&gt;next month&lt;/time&gt;.&lt;/p&gt;</pre>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>&lt;mark&gt; - Highlighted Text</h3>
+                    <p>
+                        The &lt;mark&gt; element represents text that is highlighted
+                        for reference or notation purposes.
+                    </p>
+
+                    <div class="code-example">
+                        <pre>&lt;p&gt;
+    Search results for "semantic HTML":
+    The &lt;mark&gt;semantic HTML&lt;/mark&gt; elements provide meaning to content structure.
+&lt;/p&gt;</pre>
+                    </div>
+
+                    <p>Example: The <mark>mark element</mark> highlights important text.</p>
+                </section>
+
+                <section>
+                    <h3>&lt;figure&gt; and &lt;figcaption&gt; - Media with Captions</h3>
+                    <p>
+                        The &lt;figure&gt; element represents self-contained content
+                        like images, diagrams, or code snippets, often with a caption.
+                    </p>
+
+                    <div class="code-example">
+                        <pre>&lt;figure&gt;
+    &lt;img src="semantic-structure.png" alt="HTML5 semantic structure diagram"&gt;
+    &lt;figcaption&gt;
+        Figure 1: HTML5 semantic elements create a clear document structure
+    &lt;/figcaption&gt;
+&lt;/figure&gt;</pre>
+                    </div>
+
+                    <figure>
+                        <svg width="400" height="200" style="background: #f0f0f0; border: 1px solid #ccc;">
+                            <rect x="50" y="20" width="300" height="30" fill="#3498db" />
+                            <text x="200" y="40" text-anchor="middle" fill="white" font-family="Arial"
+                                font-size="14">Header</text>
+
+                            <rect x="50" y="60" width="300" height="30" fill="#2ecc71" />
+                            <text x="200" y="80" text-anchor="middle" fill="white" font-family="Arial"
+                                font-size="14">Navigation</text>
+
+                            <rect x="50" y="100" width="200" height="60" fill="#e74c3c" />
+                            <text x="150" y="135" text-anchor="middle" fill="white" font-family="Arial"
+                                font-size="14">Main Content</text>
+
+                            <rect x="260" y="100" width="90" height="60" fill="#f39c12" />
+                            <text x="305" y="135" text-anchor="middle" fill="white" font-family="Arial"
+                                font-size="12">Aside</text>
+
+                            <rect x="50" y="170" width="300" height="20" fill="#9b59b6" />
+                            <text x="200" y="182" text-anchor="middle" fill="white" font-family="Arial"
+                                font-size="12">Footer</text>
+                        </svg>
+                        <figcaption>HTML5 semantic layout structure visualization</figcaption>
+                    </figure>
+                </section>
+            </article>
+
+            <!-- Best Practices -->
+            <article id="best-practices">
+                <header>
+                    <h2>Semantic HTML Best Practices</h2>
+                </header>
+
+                <section>
+                    <h3>1. Choose Elements by Meaning, Not Appearance</h3>
+                    <div class="code-example">
+                        <pre>&lt;!-- Bad: Using elements for styling --&gt;
+&lt;h1&gt;Main Title&lt;/h1&gt;
+&lt;h3&gt;Subtitle&lt;/h3&gt; &lt;!-- Skipping h2 for styling --&gt;
+
+&lt;!-- Good: Proper heading hierarchy --&gt;
+&lt;h1&gt;Main Title&lt;/h1&gt;
+&lt;h2&gt;Subtitle&lt;/h2&gt; &lt;!-- Use CSS to adjust size --&gt;</pre>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>2. Use Proper Nesting and Hierarchy</h3>
+                    <div class="code-example">
+                        <pre>&lt;!-- Bad: Semantic elements in wrong places --&gt;
+&lt;main&gt;
+    &lt;header&gt;...&lt;/header&gt; &lt;!-- Header inside main --&gt;
+&lt;/main&gt;
+
+&lt;!-- Good: Proper document structure --&gt;
+&lt;header&gt;...&lt;/header&gt;
+&lt;main&gt;
+    &lt;article&gt;...&lt;/article&gt;
+&lt;/main&gt;</pre>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>3. Enhance with ARIA When Needed</h3>
+                    <div class="code-example">
+                        <pre>&lt;nav aria-label="Breadcrumb"&gt;
+    &lt;ol&gt;
+        &lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/category"&gt;Category&lt;/a&gt;&lt;/li&gt;
+        &lt;li aria-current="page"&gt;Current Page&lt;/li&gt;
+    &lt;/ol&gt;
+&lt;/nav&gt;</pre>
+                    </div>
+                </section>
+
+                <aside>
+                    <h3>🎯 Senior Engineer Tips</h3>
+                    <ul>
+                        <li><strong>Semantic First:</strong> Start with semantic HTML before adding ARIA</li>
+                        <li><strong>Test Early:</strong> Use screen readers and accessibility tools regularly</li>
+                        <li><strong>Document Structure:</strong> Create an outline of your page structure</li>
+                        <li><strong>Progressive Enhancement:</strong> Ensure content works without CSS/JS</li>
+                        <li><strong>SEO Benefits:</strong> Semantic HTML improves search engine understanding</li>
+                    </ul>
+                </aside>
+            </article>
+
+        </div>
+    </main>
+
+    <!-- Page footer -->
+    <footer role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Learning Resources</h4>
+                    <a href="#semantic-intro">Semantic Elements</a>
+                    <a href="#document-structure">Document Structure</a>
+                    <a href="#content-sectioning">Content Sectioning</a>
+                    <a href="#best-practices">Best Practices</a>
+                </div>
+
+                <div class="footer-section">
+                    <h4>External Resources</h4>
+                    <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element" target="_blank">MDN HTML
+                        Elements</a>
+                    <a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank">WCAG Guidelines</a>
+                    <a href="https://validator.w3.org/" target="_blank">HTML Validator</a>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Tools</h4>
+                    <a href="https://wave.webaim.org/" target="_blank">WAVE Accessibility</a>
+                    <a href="https://developers.google.com/web/tools/lighthouse" target="_blank">Lighthouse</a>
+                    <a href="https://www.nvaccess.org/download/" target="_blank">NVDA Screen Reader</a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 HTML Learning Hub. Educational content for web developers.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

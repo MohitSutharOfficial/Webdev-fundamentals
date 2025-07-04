@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Advanced - CSS Grid Mastery</title>
+    <style>
+        /* Basic styling for demonstration */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+
+        .demo-section {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .senior-tip {
+            background-color: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        /* Grid Demo Styles */
+        .grid-demo {
+            margin: 20px 0;
+            border: 2px dashed #ddd;
+            padding: 10px;
+        }
+
+        .grid-item {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 60px;
+        }
+
+        .grid-item:nth-child(even) {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+        }
+
+        .grid-item:nth-child(3n) {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+        }
+
+        /* Basic Grid Layout */
+        .basic-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        /* Complex Grid Layout */
+        .complex-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            grid-template-rows: auto 200px auto;
+            grid-template-areas:
+                "header header header"
+                "sidebar main aside"
+                "footer footer footer";
+            gap: 15px;
+            min-height: 400px;
+        }
+
+        .header {
+            grid-area: header;
+        }
+
+        .sidebar {
+            grid-area: sidebar;
+        }
+
+        .main {
+            grid-area: main;
+        }
+
+        .aside {
+            grid-area: aside;
+        }
+
+        .footer {
+            grid-area: footer;
+        }
+
+        /* Advanced Grid Patterns */
+        .masonry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .masonry-item {
+            background: linear-gradient(45deg, #9b59b6, #8e44ad);
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .masonry-item:nth-child(1) {
+            grid-row: span 2;
+        }
+
+        .masonry-item:nth-child(3) {
+            grid-row: span 3;
+        }
+
+        .masonry-item:nth-child(5) {
+            grid-row: span 2;
+        }
+
+        /* Responsive Grid */
+        .responsive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        /* Subgrid Demo */
+        .subgrid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .subgrid-item {
+            display: grid;
+            grid-template-rows: subgrid;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        /* CSS Grid with Flexbox */
+        .hybrid-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+            min-height: 300px;
+        }
+
+        .sidebar-nav {
+            background: #34495e;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .content-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Advanced Grid Functions */
+        .advanced-functions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(clamp(200px, 30vw, 300px), 1fr));
+            gap: clamp(10px, 2vw, 20px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .complex-grid {
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "header"
+                    "main"
+                    "sidebar"
+                    "aside"
+                    "footer";
+            }
+
+            .hybrid-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🎯 CSS Grid Mastery</h1>
+
+        <p>Master advanced CSS Grid techniques for creating complex, responsive layouts. This comprehensive guide covers
+            everything from basic grid concepts to advanced patterns used in modern web development.</p>
+
+        <h2>🏗️ Basic Grid Concepts</h2>
+
+        <h3>1. Grid Container and Items</h3>
+        <div class="code-block">
+            /* Basic Grid Setup */
+            .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: 100px 200px 100px;
+            gap: 20px;
+
+            /* Alternative gap syntax */
+            /* row-gap: 20px;
+            column-gap: 15px; */
+            }
+
+            .grid-item {
+            background: #3498db;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            }
+
+            /* Explicit grid placement */
+            .item-1 {
+            grid-column: 1 / 3; /* span from column 1 to 3 */
+            grid-row: 1; /* place in row 1 */
+            }
+
+            .item-2 {
+            grid-column: 3; /* place in column 3 */
+            grid-row: 1 / 3; /* span from row 1 to 3 */
+            }
+        </div>
+
+        <div class="demo-section">
+            <h4>🎯 Basic Grid Demo:</h4>
+            <div class="grid-demo basic-grid">
+                <div class="grid-item">Item 1</div>
+                <div class="grid-item">Item 2</div>
+                <div class="grid-item">Item 3</div>
+                <div class="grid-item">Item 4</div>
+                <div class="grid-item">Item 5</div>
+                <div class="grid-item">Item 6</div>
+            </div>
+        </div>
+
+        <h2>🎨 Grid Template Areas</h2>
+
+        <div class="code-block">
+            /* Named Grid Areas */
+            .layout-grid {
+            display: grid;
+            grid-template-columns: 200px 1fr 150px;
+            grid-template-rows: auto 1fr auto;
+            grid-template-areas:
+            "header header header"
+            "sidebar main aside"
+            "footer footer footer";
+            gap: 20px;
+            min-height: 100vh;
+            }
+
+            /* Assign areas to grid items */
+            .header { grid-area: header; }
+            .sidebar { grid-area: sidebar; }
+            .main { grid-area: main; }
+            .aside { grid-area: aside; }
+            .footer { grid-area: footer; }
+
+            /* Responsive layout changes */
+            @media (max-width: 768px) {
+            .layout-grid {
+            grid-template-columns: 1fr;
+            grid-template-areas:
+            "header"
+            "main"
+            "sidebar"
+            "aside"
+            "footer";
+            }
+            }
+        </div>
+
+        <div class="demo-section">
+            <h4>🎨 Grid Template Areas Demo:</h4>
+            <div class="grid-demo complex-grid">
+                <div class="grid-item header">Header</div>
+                <div class="grid-item sidebar">Sidebar</div>
+                <div class="grid-item main">Main Content</div>
+                <div class="grid-item aside">Aside</div>
+                <div class="grid-item footer">Footer</div>
+            </div>
+        </div>
+
+        <h2>🔧 Advanced Grid Functions</h2>
+
+        <h3>1. Repeat Function and Auto-fit/Auto-fill</h3>
+        <div class="code-block">
+            /* Auto-responsive columns */
+            .auto-grid {
+            display: grid;
+
+            /* Creates as many columns as can fit, minimum 250px wide */
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            /* Alternative with auto-fill (creates empty columns) */
+            /* grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); */
+
+            gap: 20px;
+            }
+
+            /* Advanced repeat patterns */
+            .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 100px 200px); /* 100px 200px 100px 200px 100px 200px */
+            gap: 15px;
+            }
+
+            /* Fractional units with fixed sizes */
+            .mixed-grid {
+            display: grid;
+            grid-template-columns: 250px repeat(3, 1fr) 150px;
+            gap: 20px;
+            }
+        </div>
+
+        <div class="demo-section">
+            <h4>🔧 Responsive Auto-fit Demo:</h4>
+            <div class="grid-demo responsive-grid">
+                <div class="grid-item">Auto 1</div>
+                <div class="grid-item">Auto 2</div>
+                <div class="grid-item">Auto 3</div>
+                <div class="grid-item">Auto 4</div>
+                <div class="grid-item">Auto 5</div>
+            </div>
+        </div>
+
+        <h3>2. CSS Grid with Modern Functions</h3>
+        <div class="code-block">
+            /* Modern CSS functions in Grid */
+            .modern-grid {
+            display: grid;
+
+            /* Clamp for responsive sizing */
+            grid-template-columns: repeat(auto-fit, minmax(clamp(200px, 30vw, 400px), 1fr));
+
+            /* Dynamic gap based on viewport */
+            gap: clamp(10px, 2vw, 30px);
+
+            /* Min/max for track sizing */
+            grid-template-rows: minmax(100px, auto) 1fr minmax(50px, auto);
+            }
+
+            /* CSS custom properties for dynamic grids */
+            .custom-grid {
+            --columns: 3;
+            --gap: 20px;
+            --min-width: 250px;
+
+            display: grid;
+            grid-template-columns: repeat(var(--columns), minmax(var(--min-width), 1fr));
+            gap: var(--gap);
+            }
+
+            /* Container query integration */
+            @container (min-width: 600px) {
+            .custom-grid {
+            --columns: 4;
+            --gap: 25px;
+            }
+            }
+        </div>
+
+        <div class="demo-section">
+            <h4>🔧 Advanced Functions Demo:</h4>
+            <div class="grid-demo advanced-functions">
+                <div class="grid-item">Clamp 1</div>
+                <div class="grid-item">Clamp 2</div>
+                <div class="grid-item">Clamp 3</div>
+                <div class="grid-item">Clamp 4</div>
+            </div>
+        </div>
+
+        <h2>🎭 Complex Grid Patterns</h2>
+
+        <h3>1. Masonry-style Layout</h3>
+        <div class="code-block">
+            /* Masonry-style grid (pseudo-masonry) */
+            .masonry {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            align-items: start; /* Prevent stretching */
+            }
+
+            /* Individual item spanning */
+            .masonry-item:nth-child(1) { grid-row: span 2; }
+            .masonry-item:nth-child(3) { grid-row: span 3; }
+            .masonry-item:nth-child(5) { grid-row: span 2; }
+
+            /* True masonry with CSS Grid Level 3 (future) */
+            .true-masonry {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-rows: masonry; /* Not yet supported */
+            }
+        </div>
+
+        <div class="demo-section">
+            <h4>🎭 Masonry Pattern Demo:</h4>
+            <div class="grid-demo masonry-grid">
+                <div class="masonry-item">
+                    <h4>Tall Item 1</h4>
+                    <p>This item spans multiple rows to create a masonry effect.</p>
+                </div>
+                <div class="masonry-item">
+                    <h4>Item 2</h4>
+                    <p>Short content.</p>
+                </div>
+                <div class="masonry-item">
+                    <h4>Very Tall Item 3</h4>
+                    <p>This item has even more content to demonstrate the masonry layout pattern.</p>
+                    <p>Additional paragraph for height.</p>
+                </div>
+                <div class="masonry-item">
+                    <h4>Item 4</h4>
+                    <p>Medium content length.</p>
+                </div>
+                <div class="masonry-item">
+                    <h4>Tall Item 5</h4>
+                    <p>Another tall item with more content to show the staggered layout effect.</p>
+                </div>
+            </div>
+        </div>
+
+        <h3>2. Hybrid Grid + Flexbox Layout</h3>
+        <div class="code-block">
+            /* Combining Grid and Flexbox */
+            .hybrid-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+            }
+
+            .sidebar {
+            /* Grid item that uses flexbox internally */
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            }
+
+            .main-content {
+            /* Grid item with flex layout for cards */
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            }
+
+            .card-container {
+            /* Flexbox for card layout within grid */
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            }
+
+            .card {
+            flex: 1 1 300px; /* grow, shrink, basis */
+            min-width: 0; /* Allow shrinking below content size */
+            }
+        </div>
+
+        <div class="demo-section">
+            <h4>🔄 Hybrid Layout Demo:</h4>
+            <div class="grid-demo hybrid-layout">
+                <div class="sidebar-nav">
+                    <h4>Navigation</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="padding: 8px 0; border-bottom: 1px solid #555;"><a href="#"
+                                style="color: white; text-decoration: none;">Dashboard</a></li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid #555;"><a href="#"
+                                style="color: white; text-decoration: none;">Projects</a></li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid #555;"><a href="#"
+                                style="color: white; text-decoration: none;">Settings</a></li>
+                    </ul>
+                </div>
+                <div class="content-area">
+                    <div class="content-card">
+                        <h4>Card 1</h4>
+                        <p>This demonstrates how Grid and Flexbox work together for complex layouts.</p>
+                    </div>
+                    <div class="content-card">
+                        <h4>Card 2</h4>
+                        <p>Grid handles the overall layout structure, while Flexbox manages component-level layouts.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2>📱 Responsive Grid Strategies</h2>
+
+        <div class="code-block">
+            /* Mobile-first responsive grid */
+            .responsive-layout {
+            display: grid;
+            gap: 1rem;
+
+            /* Mobile: single column */
+            grid-template-columns: 1fr;
+            grid-template-areas:
+            "header"
+            "main"
+            "sidebar"
+            "footer";
+            }
+
+            /* Tablet: 2-column layout */
+            @media (min-width: 768px) {
+            .responsive-layout {
+            grid-template-columns: 200px 1fr;
+            grid-template-areas:
+            "header header"
+            "sidebar main"
+            "footer footer";
+            }
+            }
+
+            /* Desktop: 3-column layout */
+            @media (min-width: 1024px) {
+            .responsive-layout {
+            grid-template-columns: 200px 1fr 150px;
+            grid-template-areas:
+            "header header header"
+            "sidebar main aside"
+            "footer footer footer";
+            }
+            }
+
+            /* Container queries (future/experimental) */
+            @container (min-width: 600px) {
+            .card-grid {
+            grid-template-columns: repeat(2, 1fr);
+            }
+            }
+
+            @container (min-width: 900px) {
+            .card-grid {
+            grid-template-columns: repeat(3, 1fr);
+            }
+            }
+        </div>
+
+        <div class="senior-tip">
+            <h3>🚀 Senior Engineer Tips:</h3>
+            <ul>
+                <li><strong>Grid vs Flexbox:</strong> Use Grid for 2D layouts, Flexbox for 1D layouts and
+                    component-level design</li>
+                <li><strong>Performance:</strong> Avoid complex calc() functions in grid definitions; prefer simpler
+                    fractional units</li>
+                <li><strong>Accessibility:</strong> Maintain logical tab order even when visually reordering with grid
+                </li>
+                <li><strong>Browser Support:</strong> Use @supports for fallbacks when using cutting-edge features</li>
+                <li><strong>Debugging:</strong> Use Firefox Grid Inspector for visualizing grid lines and areas</li>
+                <li><strong>Naming:</strong> Use meaningful grid area names for better maintainability</li>
+                <li><strong>Container Queries:</strong> Prepare for container queries by thinking component-first</li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            <h3>⚠️ Common Grid Pitfalls:</h3>
+            <ul>
+                <li>Overusing grid for simple layouts where flexbox would suffice</li>
+                <li>Not considering accessibility when reordering content visually</li>
+                <li>Creating overly complex grid definitions that are hard to maintain</li>
+                <li>Forgetting to test responsive behavior across different screen sizes</li>
+                <li>Not providing fallbacks for older browsers when needed</li>
+                <li>Using CSS Grid for layouts that need to support IE11 without proper fallbacks</li>
+            </ul>
+        </div>
+
+        <h2>🛠️ Practical Exercises</h2>
+
+        <div class="demo-section">
+            <h3>Exercise 1: Dashboard Layout</h3>
+            <p>Create a complex dashboard layout with:</p>
+            <ul>
+                <li>Header spanning full width</li>
+                <li>Sidebar navigation</li>
+                <li>Main content area with card grid</li>
+                <li>Widget area on the right</li>
+                <li>Footer spanning full width</li>
+            </ul>
+
+            <h3>Exercise 2: Magazine Layout</h3>
+            <p>Build a magazine-style layout featuring:</p>
+            <ul>
+                <li>Hero article spanning multiple columns</li>
+                <li>Sidebar with smaller articles</li>
+                <li>Advertisement placements</li>
+                <li>Responsive breakpoints for mobile</li>
+            </ul>
+
+            <h3>Exercise 3: E-commerce Product Grid</h3>
+            <p>Develop a product grid that:</p>
+            <ul>
+                <li>Adapts to different screen sizes</li>
+                <li>Uses auto-fit for responsive columns</li>
+                <li>Handles images of varying aspect ratios</li>
+                <li>Includes filter sidebar integration</li>
+            </ul>
+        </div>
+
+        <h2>📚 Resources & Next Steps</h2>
+
+        <ul>
+            <li><a href="https://css-tricks.com/snippets/css/complete-guide-grid/" target="_blank">CSS Tricks: Complete
+                    Guide to Grid</a></li>
+            <li><a href="https://gridbyexample.com/" target="_blank">Grid by Example</a></li>
+            <li><a href="https://cssgridgarden.com/" target="_blank">CSS Grid Garden (Interactive Game)</a></li>
+            <li><a href="https://firefox-source-docs.mozilla.org/devtools-user/page_inspector/how_to/examine_grid_layouts/index.html"
+                    target="_blank">Firefox Grid Inspector</a></li>
+        </ul>
+
+        <p><strong>Next:</strong> Continue to <a href="02_animations_transforms.html">Advanced Animations &
+                Transforms</a> to master CSS animations and 3D effects.</p>
+    </div>
+</body>
+
+</html>

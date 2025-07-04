@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Architecture & Methodologies - CSS Advanced</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Design System Tokens */
+            --color-primary-100: #e3f2fd;
+            --color-primary-500: #2196f3;
+            --color-primary-700: #1976d2;
+            --color-primary-900: #0d47a1;
+
+            --color-secondary-100: #fff3e0;
+            --color-secondary-500: #ff9800;
+            --color-secondary-700: #f57c00;
+            --color-secondary-900: #e65100;
+
+            --color-success-500: #4caf50;
+            --color-warning-500: #ff9800;
+            --color-error-500: #f44336;
+
+            --color-neutral-100: #f5f5f5;
+            --color-neutral-300: #e0e0e0;
+            --color-neutral-500: #9e9e9e;
+            --color-neutral-700: #616161;
+            --color-neutral-900: #212121;
+
+            /* Spacing Scale */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+
+            /* Typography Scale */
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 1.875rem;
+            --font-size-4xl: 2.25rem;
+
+            /* Border Radius */
+            --radius-sm: 0.25rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+
+            /* Breakpoints (for reference) */
+            --breakpoint-sm: 640px;
+            --breakpoint-md: 768px;
+            --breakpoint-lg: 1024px;
+            --breakpoint-xl: 1280px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--color-neutral-900);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-size: var(--font-size-base);
+        }
+
+        /* OOCSS Example - Separate Structure from Skin */
+
+        /* Structure (OOCSS) */
+        .media {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .media__figure {
+            flex-shrink: 0;
+            margin-right: var(--space-4);
+        }
+
+        .media__body {
+            flex: 1;
+        }
+
+        /* Skin (OOCSS) */
+        .media--large .media__figure {
+            margin-right: var(--space-6);
+        }
+
+        .media--small .media__figure {
+            margin-right: var(--space-2);
+        }
+
+        /* BEM Methodology Examples */
+
+        /* Block */
+        .card {
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Elements */
+        .card__header {
+            padding: var(--space-6);
+            background: var(--color-primary-500);
+            color: white;
+        }
+
+        .card__title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+        }
+
+        .card__subtitle {
+            font-size: var(--font-size-sm);
+            opacity: 0.9;
+        }
+
+        .card__body {
+            padding: var(--space-6);
+        }
+
+        .card__content {
+            color: var(--color-neutral-700);
+            line-height: 1.6;
+        }
+
+        .card__footer {
+            padding: var(--space-4) var(--space-6);
+            background: var(--color-neutral-100);
+            border-top: 1px solid var(--color-neutral-300);
+        }
+
+        .card__actions {
+            display: flex;
+            gap: var(--space-3);
+            justify-content: flex-end;
+        }
+
+        /* Modifiers */
+        .card--featured {
+            border: 2px solid var(--color-secondary-500);
+            transform: scale(1.05);
+        }
+
+        .card--compact .card__header,
+        .card--compact .card__body,
+        .card--compact .card__footer {
+            padding: var(--space-3);
+        }
+
+        .card--large {
+            max-width: 800px;
+        }
+
+        .card--small {
+            max-width: 300px;
+        }
+
+        /* SMACSS - Scalable and Modular Architecture */
+
+        /* Base Rules */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            line-height: 1.2;
+            margin-bottom: var(--space-4);
+        }
+
+        p {
+            margin-bottom: var(--space-4);
+        }
+
+        /* Layout Rules (l-prefix) */
+        .l-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-4);
+        }
+
+        .l-grid {
+            display: grid;
+            gap: var(--space-6);
+        }
+
+        .l-grid--2-col {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .l-grid--3-col {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .l-sidebar {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: var(--space-6);
+        }
+
+        /* Module Rules */
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-3) var(--space-6);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 44px;
+            /* Accessibility - touch target */
+        }
+
+        .button--primary {
+            background: var(--color-primary-500);
+            color: white;
+        }
+
+        .button--primary:hover {
+            background: var(--color-primary-700);
+            transform: translateY(-1px);
+        }
+
+        .button--secondary {
+            background: var(--color-secondary-500);
+            color: white;
+        }
+
+        .button--outline {
+            background: transparent;
+            color: var(--color-primary-500);
+            border: 2px solid var(--color-primary-500);
+        }
+
+        .button--small {
+            padding: var(--space-2) var(--space-4);
+            font-size: var(--font-size-xs);
+            min-height: 36px;
+        }
+
+        .button--large {
+            padding: var(--space-4) var(--space-8);
+            font-size: var(--font-size-lg);
+            min-height: 52px;
+        }
+
+        /* State Rules (is-prefix) */
+        .is-active {
+            background: var(--color-primary-500) !important;
+            color: white !important;
+        }
+
+        .is-disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .is-loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .is-loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 16px;
+            height: 16px;
+            margin: -8px 0 0 -8px;
+            border: 2px solid currentColor;
+            border-right-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Theme Rules (theme-prefix) */
+        .theme-dark {
+            --color-neutral-100: #2d3748;
+            --color-neutral-300: #4a5568;
+            --color-neutral-500: #718096;
+            --color-neutral-700: #e2e8f0;
+            --color-neutral-900: #f7fafc;
+            background: #1a202c;
+        }
+
+        /* Atomic Design Principles */
+
+        /* Atoms */
+        .atom-input {
+            padding: var(--space-3);
+            border: 1px solid var(--color-neutral-300);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-base);
+            width: 100%;
+            transition: border-color 0.2s ease;
+        }
+
+        .atom-input:focus {
+            outline: none;
+            border-color: var(--color-primary-500);
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+
+        .atom-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+            color: var(--color-neutral-700);
+        }
+
+        /* Molecules */
+        .molecule-form-field {
+            margin-bottom: var(--space-6);
+        }
+
+        .molecule-search {
+            position: relative;
+            display: inline-block;
+        }
+
+        .molecule-search__input {
+            padding-left: var(--space-12);
+        }
+
+        .molecule-search__icon {
+            position: absolute;
+            left: var(--space-3);
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-neutral-500);
+        }
+
+        /* Organisms */
+        .organism-navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-4) var(--space-6);
+            background: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .organism-form {
+            background: white;
+            padding: var(--space-8);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            max-width: 500px;
+        }
+
+        /* Utility Classes (Functional CSS) */
+
+        /* Spacing */
+        .u-margin-0 {
+            margin: 0 !important;
+        }
+
+        .u-margin-1 {
+            margin: var(--space-1) !important;
+        }
+
+        .u-margin-2 {
+            margin: var(--space-2) !important;
+        }
+
+        .u-margin-3 {
+            margin: var(--space-3) !important;
+        }
+
+        .u-margin-4 {
+            margin: var(--space-4) !important;
+        }
+
+        .u-margin-6 {
+            margin: var(--space-6) !important;
+        }
+
+        .u-margin-8 {
+            margin: var(--space-8) !important;
+        }
+
+        .u-margin-top-0 {
+            margin-top: 0 !important;
+        }
+
+        .u-margin-top-4 {
+            margin-top: var(--space-4) !important;
+        }
+
+        .u-margin-bottom-0 {
+            margin-bottom: 0 !important;
+        }
+
+        .u-margin-bottom-4 {
+            margin-bottom: var(--space-4) !important;
+        }
+
+        .u-padding-0 {
+            padding: 0 !important;
+        }
+
+        .u-padding-4 {
+            padding: var(--space-4) !important;
+        }
+
+        .u-padding-6 {
+            padding: var(--space-6) !important;
+        }
+
+        .u-padding-8 {
+            padding: var(--space-8) !important;
+        }
+
+        /* Display */
+        .u-block {
+            display: block !important;
+        }
+
+        .u-inline-block {
+            display: inline-block !important;
+        }
+
+        .u-inline {
+            display: inline !important;
+        }
+
+        .u-flex {
+            display: flex !important;
+        }
+
+        .u-grid {
+            display: grid !important;
+        }
+
+        .u-hidden {
+            display: none !important;
+        }
+
+        /* Text */
+        .u-text-left {
+            text-align: left !important;
+        }
+
+        .u-text-center {
+            text-align: center !important;
+        }
+
+        .u-text-right {
+            text-align: right !important;
+        }
+
+        .u-text-uppercase {
+            text-transform: uppercase !important;
+        }
+
+        .u-text-lowercase {
+            text-transform: lowercase !important;
+        }
+
+        /* Colors */
+        .u-color-primary {
+            color: var(--color-primary-500) !important;
+        }
+
+        .u-color-secondary {
+            color: var(--color-secondary-500) !important;
+        }
+
+        .u-color-success {
+            color: var(--color-success-500) !important;
+        }
+
+        .u-color-error {
+            color: var(--color-error-500) !important;
+        }
+
+        .u-bg-primary {
+            background-color: var(--color-primary-500) !important;
+        }
+
+        .u-bg-secondary {
+            background-color: var(--color-secondary-500) !important;
+        }
+
+        .u-bg-white {
+            background-color: white !important;
+        }
+
+        /* Component Composition Examples */
+        .composition-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-6);
+            margin: var(--space-8) 0;
+        }
+
+        /* CSS-in-JS Style Objects (for demonstration) */
+        .css-in-js-example {
+            /* This would typically be generated by a CSS-in-JS library */
+            background: var(--color-primary-100);
+            padding: var(--space-6);
+            border-radius: var(--radius-lg);
+            border-left: 4px solid var(--color-primary-500);
+        }
+
+        /* Architecture Showcase */
+        .architecture-demo {
+            background: rgba(255, 255, 255, 0.95);
+            padding: var(--space-8);
+            margin: var(--space-6) 0;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+
+            .l-grid--2-col,
+            .l-grid--3-col {
+                grid-template-columns: 1fr;
+            }
+
+            .l-sidebar {
+                grid-template-columns: 1fr;
+            }
+
+            .composition-showcase {
+                grid-template-columns: 1fr;
+            }
+
+            .organism-navbar {
+                flex-direction: column;
+                gap: var(--space-4);
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .u-print-hidden {
+                display: none !important;
+            }
+
+            .card {
+                box-shadow: none;
+                border: 1px solid var(--color-neutral-300);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="l-container">
+        <header class="architecture-demo">
+            <h1>🏗️ CSS Architecture & Methodologies</h1>
+            <p>Explore scalable CSS architectures including BEM, OOCSS, SMACSS, Atomic Design, and modern
+                component-based approaches.</p>
+        </header>
+
+        <!-- BEM Methodology -->
+        <section class="architecture-demo">
+            <h2>BEM (Block Element Modifier)</h2>
+            <p>BEM provides a structured approach to CSS with clear naming conventions that prevent specificity issues.
+            </p>
+
+            <div class="composition-showcase">
+                <div class="card">
+                    <div class="card__header">
+                        <h3 class="card__title">Standard Card</h3>
+                        <p class="card__subtitle">Regular card component</p>
+                    </div>
+                    <div class="card__body">
+                        <p class="card__content">This is a standard card using BEM methodology. Notice the clear
+                            block__element--modifier structure.</p>
+                    </div>
+                    <div class="card__footer">
+                        <div class="card__actions">
+                            <button class="button button--outline button--small">Cancel</button>
+                            <button class="button button--primary button--small">Action</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card--featured">
+                    <div class="card__header">
+                        <h3 class="card__title">Featured Card</h3>
+                        <p class="card__subtitle">With modifier applied</p>
+                    </div>
+                    <div class="card__body">
+                        <p class="card__content">This card uses the --featured modifier to highlight important content.
+                        </p>
+                    </div>
+                    <div class="card__footer">
+                        <div class="card__actions">
+                            <button class="button button--secondary button--small">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card--compact">
+                    <div class="card__header">
+                        <h3 class="card__title">Compact Card</h3>
+                        <p class="card__subtitle">Space-efficient variant</p>
+                    </div>
+                    <div class="card__body">
+                        <p class="card__content">The --compact modifier reduces padding for tighter layouts.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="css-in-js-example">
+                <h4>BEM Structure</h4>
+                <pre><code>/* Block */
+.card { ... }
+
+/* Elements */
+.card__header { ... }
+.card__title { ... }
+.card__body { ... }
+
+/* Modifiers */
+.card--featured { ... }
+.card--compact { ... }</code></pre>
+            </div>
+        </section>
+
+        <!-- OOCSS Methodology -->
+        <section class="architecture-demo">
+            <h2>OOCSS (Object-Oriented CSS)</h2>
+            <p>OOCSS separates structure from skin and container from content for maximum reusability.</p>
+
+            <div class="media">
+                <div class="media__figure">
+                    <div style="width: 60px; height: 60px; background: var(--color-primary-500); border-radius: 50%;">
+                    </div>
+                </div>
+                <div class="media__body">
+                    <h4>Standard Media Object</h4>
+                    <p>The media object is a classic OOCSS pattern. It separates the layout structure from the visual
+                        appearance.</p>
+                </div>
+            </div>
+
+            <div class="media media--large u-margin-top-4">
+                <div class="media__figure">
+                    <div
+                        style="width: 80px; height: 80px; background: var(--color-secondary-500); border-radius: var(--radius-lg);">
+                    </div>
+                </div>
+                <div class="media__body">
+                    <h4>Large Media Object</h4>
+                    <p>Same structure, different skin. The --large modifier changes spacing without affecting the core
+                        layout.</p>
+                </div>
+            </div>
+
+            <div class="css-in-js-example u-margin-top-6">
+                <h4>OOCSS Principles</h4>
+                <ul>
+                    <li><strong>Separate Structure from Skin:</strong> .media (structure) + .media--large (skin)</li>
+                    <li><strong>Separate Container from Content:</strong> Content adapts to any container</li>
+                    <li><strong>Minimize Selectors:</strong> Use classes instead of descendant selectors</li>
+                    <li><strong>Extend Objects:</strong> Build complex interfaces from simple objects</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- SMACSS Methodology -->
+        <section class="architecture-demo">
+            <h2>SMACSS (Scalable and Modular Architecture)</h2>
+            <p>SMACSS categorizes CSS rules into Base, Layout, Module, State, and Theme categories.</p>
+
+            <div class="l-grid l-grid--2-col">
+                <div>
+                    <h4>Layout (l-prefix)</h4>
+                    <div class="l-grid l-grid--2-col u-margin-top-4">
+                        <div class="u-bg-primary u-color-white u-padding-4 u-text-center">Grid Item 1</div>
+                        <div class="u-bg-secondary u-color-white u-padding-4 u-text-center">Grid Item 2</div>
+                    </div>
+                </div>
+
+                <div>
+                    <h4>Modules & States</h4>
+                    <div class="u-margin-top-4">
+                        <button class="button button--primary u-margin-2">Normal</button>
+                        <button class="button button--primary is-active u-margin-2">Active</button>
+                        <button class="button button--primary is-disabled u-margin-2">Disabled</button>
+                        <button class="button button--primary is-loading u-margin-2">Loading</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="css-in-js-example u-margin-top-6">
+                <h4>SMACSS Categories</h4>
+                <ul>
+                    <li><strong>Base:</strong> Default styles (h1, p, body)</li>
+                    <li><strong>Layout:</strong> Major sections (.l-container, .l-sidebar)</li>
+                    <li><strong>Module:</strong> Reusable components (.button, .card)</li>
+                    <li><strong>State:</strong> State changes (.is-active, .is-hidden)</li>
+                    <li><strong>Theme:</strong> Look and feel (.theme-dark)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Atomic Design -->
+        <section class="architecture-demo">
+            <h2>Atomic Design</h2>
+            <p>Atomic Design breaks interfaces down into fundamental building blocks.</p>
+
+            <div class="l-grid l-grid--3-col">
+                <div>
+                    <h4>Atoms</h4>
+                    <div class="molecule-form-field">
+                        <label class="atom-label">Input Atom</label>
+                        <input type="text" class="atom-input" placeholder="Enter text">
+                    </div>
+                    <button class="button button--primary">Button Atom</button>
+                </div>
+
+                <div>
+                    <h4>Molecules</h4>
+                    <div class="molecule-search">
+                        <span class="molecule-search__icon">🔍</span>
+                        <input type="search" class="atom-input molecule-search__input" placeholder="Search...">
+                    </div>
+                </div>
+
+                <div>
+                    <h4>Organisms</h4>
+                    <div class="organism-navbar"
+                        style="background: var(--color-neutral-100); border-radius: var(--radius-md);">
+                        <div>Logo</div>
+                        <div class="molecule-search">
+                            <span class="molecule-search__icon">🔍</span>
+                            <input type="search" class="atom-input molecule-search__input" placeholder="Search..."
+                                style="width: 200px;">
+                        </div>
+                        <button class="button button--primary button--small">Sign In</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="css-in-js-example u-margin-top-6">
+                <h4>Atomic Design Hierarchy</h4>
+                <ul>
+                    <li><strong>Atoms:</strong> Basic HTML elements (.atom-input, .atom-label)</li>
+                    <li><strong>Molecules:</strong> Groups of atoms (.molecule-form-field)</li>
+                    <li><strong>Organisms:</strong> Groups of molecules (.organism-navbar)</li>
+                    <li><strong>Templates:</strong> Page-level components</li>
+                    <li><strong>Pages:</strong> Specific instances of templates</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Utility-First CSS -->
+        <section class="architecture-demo">
+            <h2>Utility-First CSS</h2>
+            <p>Utility classes provide low-level styling flexibility with functional CSS patterns.</p>
+
+            <div class="u-flex" style="gap: var(--space-4); flex-wrap: wrap;">
+                <div class="u-bg-primary u-color-white u-padding-4 u-text-center"
+                    style="border-radius: var(--radius-md); flex: 1; min-width: 150px;">
+                    <h5 class="u-margin-bottom-2">Spacing</h5>
+                    <p class="u-margin-0">u-padding-4</p>
+                </div>
+                <div class="u-bg-secondary u-color-white u-padding-6 u-text-center"
+                    style="border-radius: var(--radius-md); flex: 1; min-width: 150px;">
+                    <h5 class="u-margin-bottom-2">More Spacing</h5>
+                    <p class="u-margin-0">u-padding-6</p>
+                </div>
+                <div class="u-bg-success u-color-white u-padding-8 u-text-center"
+                    style="border-radius: var(--radius-md); flex: 1; min-width: 150px;">
+                    <h5 class="u-margin-bottom-2">Max Spacing</h5>
+                    <p class="u-margin-0">u-padding-8</p>
+                </div>
+            </div>
+
+            <div class="u-margin-top-6">
+                <h4>Text Utilities</h4>
+                <p class="u-text-left">Left aligned text</p>
+                <p class="u-text-center">Center aligned text</p>
+                <p class="u-text-right">Right aligned text</p>
+                <p class="u-text-uppercase u-color-primary">Uppercase primary text</p>
+            </div>
+        </section>
+
+        <!-- Component Composition -->
+        <section class="architecture-demo">
+            <h2>Component Composition</h2>
+            <p>Modern CSS architectures emphasize composing complex interfaces from simple, reusable components.</p>
+
+            <div class="organism-form">
+                <h3 class="u-margin-bottom-6">Contact Form</h3>
+
+                <div class="molecule-form-field">
+                    <label class="atom-label" for="name">Name</label>
+                    <input type="text" id="name" class="atom-input" placeholder="Your name">
+                </div>
+
+                <div class="molecule-form-field">
+                    <label class="atom-label" for="email">Email</label>
+                    <input type="email" id="email" class="atom-input" placeholder="your@email.com">
+                </div>
+
+                <div class="molecule-form-field">
+                    <label class="atom-label" for="message">Message</label>
+                    <textarea id="message" class="atom-input" rows="4" placeholder="Your message"></textarea>
+                </div>
+
+                <div class="u-flex" style="gap: var(--space-3); justify-content: flex-end;">
+                    <button type="button" class="button button--outline">Cancel</button>
+                    <button type="submit" class="button button--primary">Send Message</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architecture Comparison -->
+        <section class="architecture-demo">
+            <h2>Architecture Comparison</h2>
+            <p>Each methodology has strengths for different project types and team sizes.</p>
+
+            <div class="l-grid l-grid--2-col">
+                <div>
+                    <h4>When to Use BEM</h4>
+                    <ul>
+                        <li>Large teams needing clear conventions</li>
+                        <li>Long-term maintenance projects</li>
+                        <li>Complex component hierarchies</li>
+                        <li>When avoiding specificity issues is crucial</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4>When to Use Utility-First</h4>
+                    <ul>
+                        <li>Rapid prototyping and development</li>
+                        <li>Consistent design systems</li>
+                        <li>Small to medium teams</li>
+                        <li>When bundle size optimization matters</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4>When to Use OOCSS</h4>
+                    <ul>
+                        <li>High reusability requirements</li>
+                        <li>Consistent UI patterns</li>
+                        <li>Performance-critical applications</li>
+                        <li>When CSS size matters</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4>When to Use Atomic Design</h4>
+                    <ul>
+                        <li>Design system development</li>
+                        <li>Component library creation</li>
+                        <li>Cross-platform consistency</li>
+                        <li>Documentation-heavy projects</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Demo Controls -->
+        <section class="architecture-demo">
+            <h2>Interactive Methodology Demo</h2>
+            <p>Switch between different architectural approaches to see the differences.</p>
+
+            <div class="u-flex u-margin-bottom-6" style="gap: var(--space-3); flex-wrap: wrap;">
+                <button onclick="showMethodology('bem')" class="button button--primary">Show BEM</button>
+                <button onclick="showMethodology('oocss')" class="button button--secondary">Show OOCSS</button>
+                <button onclick="showMethodology('smacss')" class="button button--outline">Show SMACSS</button>
+                <button onclick="showMethodology('atomic')" class="button button--outline">Show Atomic</button>
+                <button onclick="showMethodology('utility')" class="button button--outline">Show Utility</button>
+            </div>
+
+            <div id="methodology-demo" class="css-in-js-example">
+                <h4>CSS Architecture Showcase</h4>
+                <p>Click the buttons above to see different architectural patterns applied to the same component.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Methodology showcase
+        function showMethodology(type) {
+            const demo = document.getElementById('methodology-demo');
+
+            const examples = {
+                bem: {
+                    title: 'BEM Methodology',
+                    description: 'Block Element Modifier provides clear naming conventions',
+                    code: `/* BEM Structure */
+.product-card { /* Block */ }
+.product-card__image { /* Element */ }
+.product-card__title { /* Element */ }
+.product-card__price { /* Element */ }
+.product-card--featured { /* Modifier */ }
+.product-card--large { /* Modifier */ }
+
+/* Clear hierarchy and no specificity issues */
+.product-card__title--highlighted {
+    color: red;
+}`
+                },
+                oocss: {
+                    title: 'OOCSS Methodology',
+                    description: 'Object-Oriented CSS separates structure from skin',
+                    code: `/* OOCSS Structure */
+.media { /* Structure object */ }
+.media__figure { /* Structure */ }
+.media__body { /* Structure */ }
+
+.skin-primary { /* Skin object */ }
+.skin-large { /* Skin object */ }
+
+/* Composition */
+<div class="media skin-primary skin-large">
+    <div class="media__figure">...</div>
+    <div class="media__body">...</div>
+</div>`
+                },
+                smacss: {
+                    title: 'SMACSS Methodology',
+                    description: 'Scalable and Modular Architecture with categorization',
+                    code: `/* SMACSS Categories */
+
+/* Base */
+body, h1, p { ... }
+
+/* Layout (l-prefix) */
+.l-container { ... }
+.l-sidebar { ... }
+
+/* Module */
+.button { ... }
+.card { ... }
+
+/* State (is-prefix) */
+.is-active { ... }
+.is-hidden { ... }
+
+/* Theme */
+.theme-dark { ... }`
+                },
+                atomic: {
+                    title: 'Atomic Design',
+                    description: 'Building interfaces from atoms to organisms',
+                    code: `/* Atomic Design Hierarchy */
+
+/* Atoms */
+.atom-button { ... }
+.atom-input { ... }
+.atom-label { ... }
+
+/* Molecules */
+.molecule-form-field {
+    /* Contains: atom-label + atom-input */
+}
+
+/* Organisms */
+.organism-header {
+    /* Contains: multiple molecules */
+}
+
+/* Templates & Pages */
+.template-homepage { ... }`
+                },
+                utility: {
+                    title: 'Utility-First CSS',
+                    description: 'Functional CSS with utility classes',
+                    code: `/* Utility Classes */
+.u-margin-4 { margin: 1rem; }
+.u-padding-6 { padding: 1.5rem; }
+.u-text-center { text-align: center; }
+.u-bg-primary { background: blue; }
+.u-color-white { color: white; }
+
+/* Composition in HTML */
+<div class="u-bg-primary u-color-white u-padding-6 u-text-center">
+    Utility-styled component
+</div>`
+                }
+            };
+
+            const example = examples[type];
+            demo.innerHTML = `
+                <h4>${example.title}</h4>
+                <p>${example.description}</p>
+                <pre style="background: #2c3e50; color: #ecf0f1; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin-top: 1rem;"><code>${example.code}</code></pre>
+            `;
+
+            // Update button states
+            document.querySelectorAll('button[onclick^="showMethodology"]').forEach(btn => {
+                btn.className = 'button button--outline';
+            });
+            event.target.className = 'button button--primary';
+        }
+
+        // Theme switcher
+        function toggleTheme() {
+            document.body.classList.toggle('theme-dark');
+            console.log('Theme toggled');
+        }
+
+        // Component state demo
+        function toggleState(element, state) {
+            element.classList.toggle(state);
+        }
+
+        // Architecture analysis
+        function analyzeArchitecture() {
+            const analysis = {
+                totalClasses: document.querySelectorAll('[class]').length,
+                uniqueClasses: new Set([...document.querySelectorAll('[class]')].map(el => el.className.split(' ')).flat()).size,
+                bemClasses: [...document.querySelectorAll('[class]')].filter(el =>
+                    el.className.includes('__') || el.className.includes('--')
+                ).length,
+                utilityClasses: [...document.querySelectorAll('[class]')].filter(el =>
+                    el.className.includes('u-')
+                ).length,
+                layoutClasses: [...document.querySelectorAll('[class]')].filter(el =>
+                    el.className.includes('l-')
+                ).length
+            };
+
+            console.log('CSS Architecture Analysis:', analysis);
+            return analysis;
+        }
+
+        // Performance monitoring
+        function measureCSSPerformance() {
+            const start = performance.now();
+
+            // Force style recalculation
+            document.body.style.display = 'none';
+            document.body.offsetHeight; // Trigger reflow
+            document.body.style.display = '';
+
+            const end = performance.now();
+
+            console.log(`CSS Recalculation took ${end - start} milliseconds`);
+            return end - start;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('CSS Architecture Demo Loaded');
+            analyzeArchitecture();
+
+            // Show BEM by default
+            showMethodology('bem');
+        });
+
+        // Accessibility enhancements
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                // Ensure focus is visible
+                document.body.classList.add('keyboard-navigation');
+            }
+        });
+
+        document.addEventListener('mousedown', () => {
+            document.body.classList.remove('keyboard-navigation');
+        });
+    </script>
+
+    <style>
+        /* Enhanced accessibility styles */
+        .keyboard-navigation *:focus {
+            outline: 2px solid var(--color-primary-500);
+            outline-offset: 2px;
+        }
+
+        /* Skip link for accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: var(--color-primary-500);
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 4px;
+            z-index: 1000;
+        }
+
+        .skip-link:focus {
+            top: 6px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .button {
+                border: 2px solid;
+            }
+
+            .card {
+                border: 1px solid;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+    </head>
+
+    <body>
+        <!-- Content should be here but seems to be missing -->
+        <div class="l-container">
+            <header class="architecture-demo">
+                <h1>🏗️ CSS Architecture & Methodologies</h1>
+                <p>Explore scalable CSS architectures including BEM, OOCSS, SMACSS, Atomic Design, and modern
+                    component-based approaches.</p>
+            </header>
+
+            <!-- Additional sections will be added -->
+        </div>
+
+        <script>
+            // Architecture demonstration scripts
+            console.log('CSS Architecture & Methodologies loaded');
+
+            // Demo functions would go here
+            function toggleMethodology(methodology) {
+                console.log(`Demonstrating ${methodology} methodology`);
+            }
+        </script>
+    </body>
+
+</html>
