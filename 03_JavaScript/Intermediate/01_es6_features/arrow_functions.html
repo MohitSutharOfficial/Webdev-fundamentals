@@ -1035,15 +1035,15 @@
                         console.log('Editing user:', user.id);
                         };
 
-                        if (loading) return <div>Loading...</div>;
-                        if (!user) return <div>User not found</div>;
+                        if (loading) return &lt;div&gt;Loading...&lt;/div&gt;;
+                        if (!user) return &lt;div&gt;User not found&lt;/div&gt;;
 
                         return (
-                        <div className="user-profile">
-                            <h1>{user.name}</h1>
-                            <p>{user.email}</p>
-                            <button onClick={handleEdit}>Edit Profile</button>
-                        </div>
+                        &lt;div className="user-profile"&gt;
+                        &lt;h1&gt;{user.name}&lt;/h1&gt;
+                        &lt;p&gt;{user.email}&lt;/p&gt;
+                        &lt;button onClick={handleEdit}&gt;Edit Profile&lt;/button&gt;
+                        &lt;/div&gt;
                         );
                         };
 
@@ -1081,11 +1081,12 @@
                         }, []);
 
                         if (loading) {
-                        return <div>Loading...</div>;
+                        return &lt;div&gt;Loading...&lt;/div&gt;;
                         }
 
-                        return
-                        <Component {...props} />;
+                        return (
+                        &lt;Component {...props} /&gt;
+                        );
                         };
 
                         // Event handlers
@@ -1115,25 +1116,29 @@
                         };
 
                         return (
-                        <div>
-                            <input value={inputValue} onChange={(e)=> setInputValue(e.target.value)}
-                            onKeyPress={(e) => e.key === 'Enter' && addTodo()}
-                            />
-                            <button onClick={addTodo}>Add Todo</button>
+                        /* JSX Code */
+                        &lt;div&gt;
+                        &lt;input
+                        value={inputValue}
+                        onChange={(e) =&gt; setInputValue(e.target.value)}
+                        onKeyPress={(e) =&gt; e.key === 'Enter' &amp;&amp; addTodo()}
+                        /&gt;
+                        &lt;button onClick={addTodo}&gt;Add Todo&lt;/button&gt;
 
-                            <ul>
-                                {todos.map(todo => (
-                                <li key={todo.id}>
-                                    <span style={todo.completed ? {textDecoration: 'line-through' } : {}} onClick={()=>
-                                        toggleTodo(todo.id)}
-                                        >
-                                        {todo.text}
-                                    </span>
-                                    <button onClick={()=> deleteTodo(todo.id)}>Delete</button>
-                                </li>
-                                ))}
-                            </ul>
-                        </div>
+                        &lt;ul&gt;
+                        {todos.map(todo =&gt; (
+                        &lt;li key={todo.id}&gt;
+                        &lt;span
+                        style={todo.completed ? {textDecoration: 'line-through'} : {}}
+                        onClick={() =&gt; toggleTodo(todo.id)}
+                        &gt;
+                        {todo.text}
+                        &lt;/span&gt;
+                        &lt;button onClick={() =&gt; deleteTodo(todo.id)}&gt;Delete&lt;/button&gt;
+                        &lt;/li&gt;
+                        ))}
+                        &lt;/ul&gt;
+                        &lt;/div&gt;
                         );
                         };
                     </div>
