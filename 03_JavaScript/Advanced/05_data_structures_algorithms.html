@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Structures & Algorithms - JavaScript Advanced</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #7c3aed;
+            --accent-color: #059669;
+            --error-color: #dc2626;
+            --warning-color: #d97706;
+            --success-color: #16a34a;
+
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+
+            --border-radius: 8px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+            --space-2: 0.5rem;
+            --space-4: 1rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+
+            --font-mono: 'Fira Code', 'Courier New', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-8);
+        }
+
+        .header {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            padding: var(--space-8);
+            margin-bottom: var(--space-6);
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+        }
+
+        .section {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            padding: var(--space-6);
+            margin-bottom: var(--space-6);
+            box-shadow: var(--shadow-md);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: var(--space-4);
+            font-weight: 700;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 1.875rem;
+            margin-bottom: var(--space-4);
+            border-bottom: 2px solid var(--bg-tertiary);
+            padding-bottom: var(--space-2);
+        }
+
+        h3 {
+            color: var(--accent-color);
+            font-size: 1.25rem;
+            margin: var(--space-6) 0 var(--space-4) 0;
+            font-weight: 600;
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: var(--border-radius);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .demo-container {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: var(--space-6);
+            margin: var(--space-4) 0;
+            border: 1px solid var(--bg-tertiary);
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-4);
+            margin: var(--space-4) 0;
+        }
+
+        .demo-card {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            padding: var(--space-4);
+            border-left: 4px solid var(--accent-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: var(--space-2) var(--space-4);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: var(--space-2);
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+        }
+
+        .btn-secondary:hover {
+            background: #6d28d9;
+        }
+
+        .output {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: var(--border-radius);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .complexity-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-4) 0;
+        }
+
+        .complexity-table th,
+        .complexity-table td {
+            border: 1px solid var(--bg-tertiary);
+            padding: var(--space-2);
+            text-align: left;
+        }
+
+        .complexity-table th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        .complexity-table tr:nth-child(even) {
+            background: var(--bg-secondary);
+        }
+
+        .warning {
+            background: #fffbeb;
+            border-left: 4px solid var(--warning-color);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .tip {
+            background: #f0fdf4;
+            border-left: 4px solid var(--success-color);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .visualization {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            text-align: center;
+        }
+
+        .array-visual {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin: var(--space-2) 0;
+        }
+
+        .array-item {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .array-item.highlight {
+            background: var(--warning-color);
+            transform: scale(1.1);
+        }
+
+        .array-item.sorted {
+            background: var(--success-color);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: var(--space-4);
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .array-visual {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Data Structures & Algorithms</h1>
+            <p>Master fundamental data structures and algorithms essential for efficient programming and technical
+                interviews.</p>
+        </div>
+
+        <div class="section">
+            <h2>🏗️ Arrays & Dynamic Arrays</h2>
+
+            <h3>1. Array Operations & Complexity</h3>
+            <div class="code-block">
+                class DynamicArray {
+                constructor(capacity = 4) {
+                this.capacity = capacity;
+                this.length = 0;
+                this.data = new Array(capacity);
+                }
+
+                // O(1) - Access by index
+                get(index) {
+                if (index < 0 || index>= this.length) {
+                    throw new Error('Index out of bounds');
+                    }
+                    return this.data[index];
+                    }
+
+                    // O(1) - Set value at index
+                    set(index, value) {
+                    if (index < 0 || index>= this.length) {
+                        throw new Error('Index out of bounds');
+                        }
+                        this.data[index] = value;
+                        }
+
+                        // O(1) amortized - Add to end
+                        push(value) {
+                        if (this.length === this.capacity) {
+                        this.resize();
+                        }
+                        this.data[this.length] = value;
+                        this.length++;
+                        }
+
+                        // O(1) - Remove from end
+                        pop() {
+                        if (this.length === 0) {
+                        throw new Error('Array is empty');
+                        }
+                        const value = this.data[this.length - 1];
+                        this.length--;
+                        return value;
+                        }
+
+                        // O(n) - Insert at index
+                        insert(index, value) {
+                        if (index < 0 || index> this.length) {
+                            throw new Error('Index out of bounds');
+                            }
+                            if (this.length === this.capacity) {
+                            this.resize();
+                            }
+
+                            // Shift elements to the right
+                            for (let i = this.length; i > index; i--) {
+                            this.data[i] = this.data[i - 1];
+                            }
+
+                            this.data[index] = value;
+                            this.length++;
+                            }
+
+                            // O(n) - Remove at index
+                            remove(index) {
+                            if (index < 0 || index>= this.length) {
+                                throw new Error('Index out of bounds');
+                                }
+
+                                const value = this.data[index];
+
+                                // Shift elements to the left
+                                for (let i = index; i < this.length - 1; i++) { this.data[i]=this.data[i + 1]; }
+                                    this.length--; return value; } // O(n) - Double capacity resize() { const
+                                    newCapacity=this.capacity * 2; const newData=new Array(newCapacity); for (let i=0; i
+                                    < this.length; i++) { newData[i]=this.data[i]; } this.data=newData;
+                                    this.capacity=newCapacity; } // O(n) - Find element indexOf(value) { for (let i=0; i
+                                    < this.length; i++) { if (this.data[i]===value) { return i; } } return -1; } // O(n)
+                                    - Convert to regular array toArray() { return this.data.slice(0, this.length); } }
+                                    // Advanced Array Algorithms class ArrayAlgorithms { // O(n log n) - Merge Sort
+                                    static mergeSort(arr) { if (arr.length <=1) return arr; const
+                                    mid=Math.floor(arr.length / 2); const left=this.mergeSort(arr.slice(0, mid)); const
+                                    right=this.mergeSort(arr.slice(mid)); return this.merge(left, right); } static
+                                    merge(left, right) { const result=[]; let leftIndex=0; let rightIndex=0; while
+                                    (leftIndex < left.length && rightIndex < right.length) { if (left[leftIndex]
+                                    <=right[rightIndex]) { result.push(left[leftIndex]); leftIndex++; } else {
+                                    result.push(right[rightIndex]); rightIndex++; } } return
+                                    result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex)); } // O(n log
+                                    n) - Quick Sort static quickSort(arr, low=0, high=arr.length - 1) { if (low < high)
+                                    { const pivotIndex=this.partition(arr, low, high); this.quickSort(arr, low,
+                                    pivotIndex - 1); this.quickSort(arr, pivotIndex + 1, high); } return arr; } static
+                                    partition(arr, low, high) { const pivot=arr[high]; let i=low - 1; for (let j=low; j
+                                    < high; j++) { if (arr[j] <=pivot) { i++; [arr[i], arr[j]]=[arr[j], arr[i]]; } }
+                                    [arr[i + 1], arr[high]]=[arr[high], arr[i + 1]]; return i + 1; } // O(log n) -
+                                    Binary Search static binarySearch(arr, target) { let left=0; let right=arr.length -
+                                    1; while (left <=right) { const mid=Math.floor((left + right) / 2); if
+                                    (arr[mid]===target) { return mid; } else if (arr[mid] < target) { left=mid + 1; }
+                                    else { right=mid - 1; } } return -1; } // O(n) - Two Pointers Technique static
+                                    twoSum(arr, target) { const map=new Map(); for (let i=0; i < arr.length; i++) {
+                                    const complement=target - arr[i]; if (map.has(complement)) { return
+                                    [map.get(complement), i]; } map.set(arr[i], i); } return []; } // O(n) - Sliding
+                                    Window Maximum static maxSlidingWindow(arr, k) { const result=[]; const deque=[];
+                                    for (let i=0; i < arr.length; i++) { // Remove elements outside window while
+                                    (deque.length> 0 && deque[0] <= i - k) { deque.shift(); } // Remove smaller elements
+                                        from back while (deque.length> 0 && arr[deque[deque.length - 1]] <= arr[i]) {
+                                            deque.pop(); } deque.push(i); // Add to result when window is complete if
+                                            (i>= k - 1) {
+                                            result.push(arr[deque[0]]);
+                                            }
+                                            }
+
+                                            return result;
+                                            }
+                                            }
+            </div>
+
+            <table class="complexity-table">
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Time Complexity</th>
+                        <th>Space Complexity</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Access</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>Direct index access</td>
+                    </tr>
+                    <tr>
+                        <td>Search</td>
+                        <td>O(n)</td>
+                        <td>O(1)</td>
+                        <td>Linear search unsorted</td>
+                    </tr>
+                    <tr>
+                        <td>Insert (end)</td>
+                        <td>O(1) amortized</td>
+                        <td>O(1)</td>
+                        <td>May need to resize</td>
+                    </tr>
+                    <tr>
+                        <td>Insert (middle)</td>
+                        <td>O(n)</td>
+                        <td>O(1)</td>
+                        <td>Requires shifting elements</td>
+                    </tr>
+                    <tr>
+                        <td>Delete</td>
+                        <td>O(n)</td>
+                        <td>O(1)</td>
+                        <td>Requires shifting elements</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="demo-container">
+                <h4>🎯 Array Operations Demo:</h4>
+                <div class="demo-grid">
+                    <div class="demo-card">
+                        <button class="btn" onclick="demoArrayOperations()">Test Array Operations</button>
+                        <div id="arrayOutput" class="output"></div>
+                    </div>
+                    <div class="demo-card">
+                        <button class="btn" onclick="demoSortingAlgorithms()">Test Sorting</button>
+                        <div id="sortOutput" class="output"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔗 Linked Lists</h2>
+
+            <h3>1. Singly Linked List</h3>
+            <div class="code-block">
+                class ListNode {
+                constructor(value) {
+                this.value = value;
+                this.next = null;
+                }
+                }
+
+                class LinkedList {
+                constructor() {
+                this.head = null;
+                this.tail = null;
+                this.length = 0;
+                }
+
+                // O(1) - Add to beginning
+                prepend(value) {
+                const newNode = new ListNode(value);
+
+                if (!this.head) {
+                this.head = newNode;
+                this.tail = newNode;
+                } else {
+                newNode.next = this.head;
+                this.head = newNode;
+                }
+
+                this.length++;
+                return this;
+                }
+
+                // O(1) - Add to end
+                append(value) {
+                const newNode = new ListNode(value);
+
+                if (!this.head) {
+                this.head = newNode;
+                this.tail = newNode;
+                } else {
+                this.tail.next = newNode;
+                this.tail = newNode;
+                }
+
+                this.length++;
+                return this;
+                }
+
+                // O(n) - Insert at index
+                insert(index, value) {
+                if (index < 0 || index> this.length) {
+                    throw new Error('Index out of bounds');
+                    }
+
+                    if (index === 0) {
+                    return this.prepend(value);
+                    }
+
+                    if (index === this.length) {
+                    return this.append(value);
+                    }
+
+                    const newNode = new ListNode(value);
+                    let current = this.head;
+
+                    for (let i = 0; i < index - 1; i++) { current=current.next; } newNode.next=current.next;
+                        current.next=newNode; this.length++; return this; } // O(n) - Remove by value remove(value) { if
+                        (!this.head) return null; if (this.head.value===value) { this.head=this.head.next; if
+                        (!this.head) { this.tail=null; } this.length--; return value; } let current=this.head; while
+                        (current.next && current.next.value !==value) { current=current.next; } if (current.next) { if
+                        (current.next===this.tail) { this.tail=current; } current.next=current.next.next; this.length--;
+                        return value; } return null; } // O(n) - Find element find(value) { let current=this.head; let
+                        index=0; while (current) { if (current.value===value) { return { node: current, index }; }
+                        current=current.next; index++; } return null; } // O(n) - Reverse list reverse() { let
+                        prev=null; let current=this.head; this.tail=this.head; while (current) { const
+                        next=current.next; current.next=prev; prev=current; current=next; } this.head=prev; return this;
+                        } // O(n) - Convert to array toArray() { const result=[]; let current=this.head; while (current)
+                        { result.push(current.value); current=current.next; } return result; } // O(1) - Get size size()
+                        { return this.length; } // O(1) - Check if empty isEmpty() { return this.length===0; } } //
+                        Advanced Linked List Algorithms class LinkedListAlgorithms { // O(n) - Detect cycle (Floyd's
+                        Algorithm) static hasCycle(head) { if (!head || !head.next) return false; let slow=head; let
+                        fast=head.next; while (fast && fast.next) { if (slow===fast) return true; slow=slow.next;
+                        fast=fast.next.next; } return false; } // O(n) - Find middle node static findMiddle(head) { if
+                        (!head) return null; let slow=head; let fast=head; while (fast.next && fast.next.next) {
+                        slow=slow.next; fast=fast.next.next; } return slow; } // O(n) - Merge two sorted lists static
+                        mergeSorted(list1, list2) { const dummy=new ListNode(0); let current=dummy; while (list1 &&
+                        list2) { if (list1.value <=list2.value) { current.next=list1; list1=list1.next; } else {
+                        current.next=list2; list2=list2.next; } current=current.next; } current.next=list1 || list2;
+                        return dummy.next; } // O(n) - Remove nth node from end static removeNthFromEnd(head, n) { const
+                        dummy=new ListNode(0); dummy.next=head; let first=dummy; let second=dummy; // Move first pointer
+                        n+1 steps ahead for (let i=0; i <=n; i++) { first=first.next; } // Move both pointers until
+                        first reaches end while (first) { first=first.next; second=second.next; } // Remove the nth node
+                        from end second.next=second.next.next; return dummy.next; } } </div>
+
+                        <div class="demo-container">
+                            <h4>🔗 Linked List Demo:</h4>
+                            <div class="demo-grid">
+                                <div class="demo-card">
+                                    <button class="btn" onclick="demoLinkedList()">Test Linked List</button>
+                                    <div id="linkedListOutput" class="output"></div>
+                                </div>
+                                <div class="demo-card">
+                                    <button class="btn" onclick="demoLinkedListAlgorithms()">Test Algorithms</button>
+                                    <div id="linkedListAlgoOutput" class="output"></div>
+                                </div>
+                            </div>
+                        </div>
+            </div>
+
+            <div class="section">
+                <h2>📚 Stacks & Queues</h2>
+
+                <h3>1. Stack Implementation</h3>
+                <div class="code-block">
+                    class Stack {
+                    constructor() {
+                    this.items = [];
+                    }
+
+                    // O(1) - Add to top
+                    push(element) {
+                    this.items.push(element);
+                    }
+
+                    // O(1) - Remove from top
+                    pop() {
+                    if (this.isEmpty()) {
+                    throw new Error('Stack is empty');
+                    }
+                    return this.items.pop();
+                    }
+
+                    // O(1) - View top element
+                    peek() {
+                    if (this.isEmpty()) {
+                    throw new Error('Stack is empty');
+                    }
+                    return this.items[this.items.length - 1];
+                    }
+
+                    // O(1) - Check if empty
+                    isEmpty() {
+                    return this.items.length === 0;
+                    }
+
+                    // O(1) - Get size
+                    size() {
+                    return this.items.length;
+                    }
+
+                    // O(1) - Clear all elements
+                    clear() {
+                    this.items = [];
+                    }
+
+                    // O(n) - Convert to array
+                    toArray() {
+                    return [...this.items];
+                    }
+                    }
+
+                    // Stack Applications
+                    class StackApplications {
+                    // O(n) - Check balanced parentheses
+                    static isBalanced(str) {
+                    const stack = new Stack();
+                    const pairs = { '(': ')', '{': '}', '[': ']' };
+
+                    for (let char of str) {
+                    if (pairs[char]) {
+                    stack.push(char);
+                    } else if (Object.values(pairs).includes(char)) {
+                    if (stack.isEmpty() || pairs[stack.pop()] !== char) {
+                    return false;
+                    }
+                    }
+                    }
+
+                    return stack.isEmpty();
+                    }
+
+                    // O(n) - Evaluate postfix expression
+                    static evaluatePostfix(expression) {
+                    const stack = new Stack();
+                    const operators = ['+', '-', '*', '/'];
+
+                    for (let token of expression.split(' ')) {
+                    if (operators.includes(token)) {
+                    const b = stack.pop();
+                    const a = stack.pop();
+
+                    switch (token) {
+                    case '+': stack.push(a + b); break;
+                    case '-': stack.push(a - b); break;
+                    case '*': stack.push(a * b); break;
+                    case '/': stack.push(a / b); break;
+                    }
+                    } else {
+                    stack.push(parseFloat(token));
+                    }
+                    }
+
+                    return stack.pop();
+                    }
+
+                    // O(n) - Convert infix to postfix
+                    static infixToPostfix(expression) {
+                    const stack = new Stack();
+                    const precedence = { '+': 1, '-': 1, '*': 2, '/': 2 };
+                    let result = '';
+
+                    for (let char of expression) {
+                    if (char.match(/[a-zA-Z0-9]/)) {
+                    result += char;
+                    } else if (char === '(') {
+                    stack.push(char);
+                    } else if (char === ')') {
+                    while (!stack.isEmpty() && stack.peek() !== '(') {
+                    result += stack.pop();
+                    }
+                    stack.pop(); // Remove '('
+                    } else if (precedence[char]) {
+                    while (!stack.isEmpty() &&
+                    precedence[stack.peek()] >= precedence[char]) {
+                    result += stack.pop();
+                    }
+                    stack.push(char);
+                    }
+                    }
+
+                    while (!stack.isEmpty()) {
+                    result += stack.pop();
+                    }
+
+                    return result;
+                    }
+                    }
+                </div>
+
+                <h3>2. Queue Implementation</h3>
+                <div class="code-block">
+                    class Queue {
+                    constructor() {
+                    this.items = [];
+                    }
+
+                    // O(1) - Add to rear
+                    enqueue(element) {
+                    this.items.push(element);
+                    }
+
+                    // O(n) - Remove from front (inefficient with array)
+                    dequeue() {
+                    if (this.isEmpty()) {
+                    throw new Error('Queue is empty');
+                    }
+                    return this.items.shift();
+                    }
+
+                    // O(1) - View front element
+                    front() {
+                    if (this.isEmpty()) {
+                    throw new Error('Queue is empty');
+                    }
+                    return this.items[0];
+                    }
+
+                    // O(1) - Check if empty
+                    isEmpty() {
+                    return this.items.length === 0;
+                    }
+
+                    // O(1) - Get size
+                    size() {
+                    return this.items.length;
+                    }
+
+                    // O(n) - Convert to array
+                    toArray() {
+                    return [...this.items];
+                    }
+                    }
+
+                    // Efficient Queue using Linked List
+                    class EfficientQueue {
+                    constructor() {
+                    this.front = null;
+                    this.rear = null;
+                    this.length = 0;
+                    }
+
+                    // O(1) - Add to rear
+                    enqueue(value) {
+                    const newNode = new ListNode(value);
+
+                    if (!this.rear) {
+                    this.front = newNode;
+                    this.rear = newNode;
+                    } else {
+                    this.rear.next = newNode;
+                    this.rear = newNode;
+                    }
+
+                    this.length++;
+                    }
+
+                    // O(1) - Remove from front
+                    dequeue() {
+                    if (!this.front) {
+                    throw new Error('Queue is empty');
+                    }
+
+                    const value = this.front.value;
+                    this.front = this.front.next;
+
+                    if (!this.front) {
+                    this.rear = null;
+                    }
+
+                    this.length--;
+                    return value;
+                    }
+
+                    // O(1) - View front element
+                    peek() {
+                    if (!this.front) {
+                    throw new Error('Queue is empty');
+                    }
+                    return this.front.value;
+                    }
+
+                    // O(1) - Check if empty
+                    isEmpty() {
+                    return this.length === 0;
+                    }
+
+                    // O(1) - Get size
+                    size() {
+                    return this.length;
+                    }
+                    }
+
+                    // Priority Queue (Min Heap)
+                    class PriorityQueue {
+                    constructor() {
+                    this.heap = [];
+                    }
+
+                    // O(log n) - Insert element
+                    enqueue(value, priority) {
+                    const node = { value, priority };
+                    this.heap.push(node);
+                    this.bubbleUp(this.heap.length - 1);
+                    }
+
+                    // O(log n) - Remove highest priority element
+                    dequeue() {
+                    if (this.heap.length === 0) {
+                    throw new Error('Priority queue is empty');
+                    }
+
+                    const min = this.heap[0];
+                    const end = this.heap.pop();
+
+                    if (this.heap.length > 0) {
+                    this.heap[0] = end;
+                    this.bubbleDown(0);
+                    }
+
+                    return min.value;
+                    }
+
+                    bubbleUp(index) {
+                    const element = this.heap[index];
+
+                    while (index > 0) {
+                    const parentIndex = Math.floor((index - 1) / 2);
+                    const parent = this.heap[parentIndex];
+
+                    if (element.priority >= parent.priority) break;
+
+                    this.heap[index] = parent;
+                    index = parentIndex;
+                    }
+
+                    this.heap[index] = element;
+                    }
+
+                    bubbleDown(index) {
+                    const length = this.heap.length;
+                    const element = this.heap[index];
+
+                    while (true) {
+                    const leftChildIndex = 2 * index + 1;
+                    const rightChildIndex = 2 * index + 2;
+                    let smallest = index;
+
+                    if (leftChildIndex < length && this.heap[leftChildIndex].priority < this.heap[smallest].priority) {
+                        smallest=leftChildIndex; } if (rightChildIndex < length && this.heap[rightChildIndex].priority <
+                        this.heap[smallest].priority) { smallest=rightChildIndex; } if (smallest===index) break;
+                        this.heap[index]=this.heap[smallest]; index=smallest; } this.heap[index]=element; } // O(1) -
+                        View highest priority element peek() { if (this.heap.length===0) { throw new Error('Priority
+                        queue is empty'); } return this.heap[0].value; } // O(1) - Check if empty isEmpty() { return
+                        this.heap.length===0; } // O(1) - Get size size() { return this.heap.length; } } </div>
+
+                        <div class="demo-container">
+                            <h4>📚 Stack & Queue Demo:</h4>
+                            <div class="demo-grid">
+                                <div class="demo-card">
+                                    <button class="btn" onclick="demoStack()">Test Stack</button>
+                                    <div id="stackOutput" class="output"></div>
+                                </div>
+                                <div class="demo-card">
+                                    <button class="btn" onclick="demoQueue()">Test Queue</button>
+                                    <div id="queueOutput" class="output"></div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
+                <div class="section">
+                    <h2>🌳 Trees & Graphs</h2>
+
+                    <h3>1. Binary Tree Implementation</h3>
+                    <div class="code-block">
+                        class TreeNode {
+                        constructor(value) {
+                        this.value = value;
+                        this.left = null;
+                        this.right = null;
+                        }
+                        }
+
+                        class BinaryTree {
+                        constructor() {
+                        this.root = null;
+                        }
+
+                        // O(log n) average, O(n) worst - Insert
+                        insert(value) {
+                        if (!this.root) {
+                        this.root = new TreeNode(value);
+                        return;
+                        }
+
+                        this.insertNode(this.root, value);
+                        }
+
+                        insertNode(node, value) {
+                        if (value < node.value) { if (!node.left) { node.left=new TreeNode(value); } else {
+                            this.insertNode(node.left, value); } } else { if (!node.right) { node.right=new
+                            TreeNode(value); } else { this.insertNode(node.right, value); } } } // O(log n) average,
+                            O(n) worst - Search search(value) { return this.searchNode(this.root, value); }
+                            searchNode(node, value) { if (!node) return false; if (value===node.value) return true; if
+                            (value < node.value) { return this.searchNode(node.left, value); } else { return
+                            this.searchNode(node.right, value); } } // O(n) - Inorder traversal (sorted order)
+                            inorder(node=this.root, result=[]) { if (node) { this.inorder(node.left, result);
+                            result.push(node.value); this.inorder(node.right, result); } return result; } // O(n) -
+                            Preorder traversal preorder(node=this.root, result=[]) { if (node) {
+                            result.push(node.value); this.preorder(node.left, result); this.preorder(node.right,
+                            result); } return result; } // O(n) - Postorder traversal postorder(node=this.root,
+                            result=[]) { if (node) { this.postorder(node.left, result); this.postorder(node.right,
+                            result); result.push(node.value); } return result; } // O(n) - Level order traversal (BFS)
+                            levelOrder() { if (!this.root) return []; const result=[]; const queue=[this.root]; while
+                            (queue.length> 0) {
+                            const node = queue.shift();
+                            result.push(node.value);
+
+                            if (node.left) queue.push(node.left);
+                            if (node.right) queue.push(node.right);
+                            }
+
+                            return result;
+                            }
+
+                            // O(n) - Find height
+                            height(node = this.root) {
+                            if (!node) return -1;
+
+                            return 1 + Math.max(this.height(node.left), this.height(node.right));
+                            }
+
+                            // O(n) - Check if balanced
+                            isBalanced(node = this.root) {
+                            if (!node) return true;
+
+                            const leftHeight = this.height(node.left);
+                            const rightHeight = this.height(node.right);
+
+                            return Math.abs(leftHeight - rightHeight) <= 1 && this.isBalanced(node.left) &&
+                                this.isBalanced(node.right); } } </div>
+
+                                <h3>2. Graph Implementation</h3>
+                                <div class="code-block">
+                                    class Graph {
+                                    constructor() {
+                                    this.adjacencyList = new Map();
+                                    }
+
+                                    // O(1) - Add vertex
+                                    addVertex(vertex) {
+                                    if (!this.adjacencyList.has(vertex)) {
+                                    this.adjacencyList.set(vertex, []);
+                                    }
+                                    }
+
+                                    // O(1) - Add edge
+                                    addEdge(vertex1, vertex2) {
+                                    if (!this.adjacencyList.has(vertex1)) {
+                                    this.addVertex(vertex1);
+                                    }
+                                    if (!this.adjacencyList.has(vertex2)) {
+                                    this.addVertex(vertex2);
+                                    }
+
+                                    this.adjacencyList.get(vertex1).push(vertex2);
+                                    this.adjacencyList.get(vertex2).push(vertex1); // For undirected graph
+                                    }
+
+                                    // O(V + E) - Breadth-First Search
+                                    bfs(startVertex) {
+                                    const visited = new Set();
+                                    const queue = [startVertex];
+                                    const result = [];
+
+                                    visited.add(startVertex);
+
+                                    while (queue.length > 0) {
+                                    const vertex = queue.shift();
+                                    result.push(vertex);
+
+                                    const neighbors = this.adjacencyList.get(vertex);
+                                    for (let neighbor of neighbors) {
+                                    if (!visited.has(neighbor)) {
+                                    visited.add(neighbor);
+                                    queue.push(neighbor);
+                                    }
+                                    }
+                                    }
+
+                                    return result;
+                                    }
+
+                                    // O(V + E) - Depth-First Search
+                                    dfs(startVertex, visited = new Set(), result = []) {
+                                    visited.add(startVertex);
+                                    result.push(startVertex);
+
+                                    const neighbors = this.adjacencyList.get(startVertex);
+                                    for (let neighbor of neighbors) {
+                                    if (!visited.has(neighbor)) {
+                                    this.dfs(neighbor, visited, result);
+                                    }
+                                    }
+
+                                    return result;
+                                    }
+
+                                    // O(V + E) - Find path between two vertices
+                                    findPath(startVertex, endVertex) {
+                                    const visited = new Set();
+                                    const queue = [[startVertex, [startVertex]]];
+
+                                    visited.add(startVertex);
+
+                                    while (queue.length > 0) {
+                                    const [vertex, path] = queue.shift();
+
+                                    if (vertex === endVertex) {
+                                    return path;
+                                    }
+
+                                    const neighbors = this.adjacencyList.get(vertex);
+                                    for (let neighbor of neighbors) {
+                                    if (!visited.has(neighbor)) {
+                                    visited.add(neighbor);
+                                    queue.push([neighbor, [...path, neighbor]]);
+                                    }
+                                    }
+                                    }
+
+                                    return null; // No path found
+                                    }
+
+                                    // O(V + E) - Detect cycle
+                                    hasCycle() {
+                                    const visited = new Set();
+                                    const vertices = Array.from(this.adjacencyList.keys());
+
+                                    for (let vertex of vertices) {
+                                    if (!visited.has(vertex)) {
+                                    if (this.hasCycleUtil(vertex, visited, null)) {
+                                    return true;
+                                    }
+                                    }
+                                    }
+
+                                    return false;
+                                    }
+
+                                    hasCycleUtil(vertex, visited, parent) {
+                                    visited.add(vertex);
+
+                                    const neighbors = this.adjacencyList.get(vertex);
+                                    for (let neighbor of neighbors) {
+                                    if (!visited.has(neighbor)) {
+                                    if (this.hasCycleUtil(neighbor, visited, vertex)) {
+                                    return true;
+                                    }
+                                    } else if (neighbor !== parent) {
+                                    return true;
+                                    }
+                                    }
+
+                                    return false;
+                                    }
+
+                                    // O(1) - Get vertices
+                                    getVertices() {
+                                    return Array.from(this.adjacencyList.keys());
+                                    }
+
+                                    // O(1) - Get edges for vertex
+                                    getEdges(vertex) {
+                                    return this.adjacencyList.get(vertex) || [];
+                                    }
+                                    }
+                                </div>
+
+                                <div class="demo-container">
+                                    <h4>🌳 Tree & Graph Demo:</h4>
+                                    <div class="demo-grid">
+                                        <div class="demo-card">
+                                            <button class="btn" onclick="demoTree()">Test Binary Tree</button>
+                                            <div id="treeOutput" class="output"></div>
+                                        </div>
+                                        <div class="demo-card">
+                                            <button class="btn" onclick="demoGraph()">Test Graph</button>
+                                            <div id="graphOutput" class="output"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                    </div>
+
+                    <div class="section">
+                        <h2>📈 Algorithm Complexity Analysis</h2>
+
+                        <div class="tip">
+                            <h3>💡 Big O Notation Guide:</h3>
+                            <ul>
+                                <li><strong>O(1)</strong> - Constant time: Best possible performance</li>
+                                <li><strong>O(log n)</strong> - Logarithmic: Binary search, balanced trees</li>
+                                <li><strong>O(n)</strong> - Linear: Single loop through data</li>
+                                <li><strong>O(n log n)</strong> - Linearithmic: Efficient sorting algorithms</li>
+                                <li><strong>O(n²)</strong> - Quadratic: Nested loops, inefficient algorithms</li>
+                                <li><strong>O(2^n)</strong> - Exponential: Recursive algorithms, avoid if possible</li>
+                            </ul>
+                        </div>
+
+                        <div class="warning">
+                            <h3>⚠️ Performance Considerations:</h3>
+                            <ul>
+                                <li>Always consider both time and space complexity</li>
+                                <li>Real-world performance depends on input size and data characteristics</li>
+                                <li>Cache performance and memory access patterns matter</li>
+                                <li>Choose algorithms based on expected input sizes</li>
+                                <li>Consider average vs worst-case scenarios</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2>📚 Resources & Next Steps</h2>
+                        <ul>
+                            <li><a href="https://visualgo.net/" target="_blank">VisuAlgo - Algorithm Visualizations</a>
+                            </li>
+                            <li><a href="https://www.bigocheatsheet.com/" target="_blank">Big O Cheat Sheet</a></li>
+                            <li><a href="https://leetcode.com/" target="_blank">LeetCode - Practice Problems</a></li>
+                            <li><a href="https://www.geeksforgeeks.org/data-structures/" target="_blank">GeeksforGeeks -
+                                    Data Structures</a></li>
+                        </ul>
+
+                        <p><strong>Next:</strong> Continue to <a href="06_advanced_browser_apis.html">Advanced Browser
+                                APIs</a> to explore modern web capabilities.</p>
+                    </div>
+                </div>
+
+                <script>
+                    // Demo Functions
+                    function demoArrayOperations() {
+                        const output = document.getElementById('arrayOutput');
+                        let result = '';
+
+                        try {
+                            // Dynamic Array Demo
+                            const arr = new DynamicArray();
+                            result += '=== Dynamic Array Demo ===\n';
+
+                            // Add elements
+                            arr.push(1);
+                            arr.push(2);
+                            arr.push(3);
+                            result += `After pushing 1,2,3: [${arr.toArray()}]\n`;
+
+                            // Insert element
+                            arr.insert(1, 10);
+                            result += `After inserting 10 at index 1: [${arr.toArray()}]\n`;
+
+                            // Remove element
+                            const removed = arr.remove(2);
+                            result += `After removing element at index 2: [${arr.toArray()}], removed: ${removed}\n`;
+
+                            // Search
+                            result += `Index of 10: ${arr.indexOf(10)}\n`;
+                            result += `Index of 99: ${arr.indexOf(99)}\n`;
+
+                            result += '\n=== Algorithm Demo ===\n';
+
+                            // Two Sum
+                            const nums = [2, 7, 11, 15];
+                            const target = 9;
+                            const twoSumResult = ArrayAlgorithms.twoSum(nums, target);
+                            result += `Two Sum [${nums}], target ${target}: [${twoSumResult}]\n`;
+
+                            // Sliding Window Maximum
+                            const windowNums = [1, 3, -1, -3, 5, 3, 6, 7];
+                            const k = 3;
+                            const maxWindow = ArrayAlgorithms.maxSlidingWindow(windowNums, k);
+                            result += `Sliding Window Maximum [${windowNums}], k=${k}: [${maxWindow}]\n`;
+
+                        } catch (error) {
+                            result += `Error: ${error.message}\n`;
+                        }
+
+                        output.textContent = result;
+                    }
+
+                    function demoSortingAlgorithms() {
+                        const output = document.getElementById('sortOutput');
+                        let result = '';
+
+                        try {
+                            const originalArray = [64, 34, 25, 12, 22, 11, 90];
+                            result += `Original Array: [${originalArray}]\n\n`;
+
+                            // Merge Sort
+                            const mergeArray = [...originalArray];
+                            const sortedMerge = ArrayAlgorithms.mergeSort(mergeArray);
+                            result += `Merge Sort: [${sortedMerge}]\n`;
+
+                            // Quick Sort
+                            const quickArray = [...originalArray];
+                            ArrayAlgorithms.quickSort(quickArray);
+                            result += `Quick Sort: [${quickArray}]\n`;
+
+                            // Binary Search
+                            const searchArray = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
+                            const searchTarget = 7;
+                            const searchResult = ArrayAlgorithms.binarySearch(searchArray, searchTarget);
+                            result += `\nBinary Search in [${searchArray}] for ${searchTarget}: index ${searchResult}\n`;
+
+                            // Performance test
+                            const largeArray = Array.from({ length: 1000 }, () => Math.floor(Math.random() * 1000));
+
+                            const start = performance.now();
+                            ArrayAlgorithms.mergeSort([...largeArray]);
+                            const end = performance.now();
+
+                            result += `\nPerformance Test: Merge Sort 1000 elements took ${(end - start).toFixed(2)}ms\n`;
+
+                        } catch (error) {
+                            result += `Error: ${error.message}\n`;
+                        }
+
+                        output.textContent = result;
+                    }
+
+                    function demoLinkedList() {
+                        const output = document.getElementById('linkedListOutput');
+                        let result = '';
+
+                        try {
+                            const list = new LinkedList();
+                            result += '=== Linked List Demo ===\n';
+
+                            // Add elements
+                            list.append(1);
+                            list.append(2);
+                            list.append(3);
+                            result += `After appending 1,2,3: [${list.toArray()}]\n`;
+
+                            // Prepend
+                            list.prepend(0);
+                            result += `After prepending 0: [${list.toArray()}]\n`;
+
+                            // Insert
+                            list.insert(2, 10);
+                            result += `After inserting 10 at index 2: [${list.toArray()}]\n`;
+
+                            // Find
+                            const found = list.find(10);
+                            result += `Find 10: ${found ? `found at index ${found.index}` : 'not found'}\n`;
+
+                            // Remove
+                            list.remove(10);
+                            result += `After removing 10: [${list.toArray()}]\n`;
+
+                            // Reverse
+                            list.reverse();
+                            result += `After reversing: [${list.toArray()}]\n`;
+
+                            result += `List size: ${list.size()}\n`;
+                            result += `Is empty: ${list.isEmpty()}\n`;
+
+                        } catch (error) {
+                            result += `Error: ${error.message}\n`;
+                        }
+
+                        output.textContent = result;
+                    }
+
+                    function demoLinkedListAlgorithms() {
+                        const output = document.getElementById('linkedListAlgoOutput');
+                        let result = '';
+
+                        try {
+                            // Create test lists
+                            const list1 = new LinkedList();
+                            list1.append(1).append(3).append(5);
+
+                            const list2 = new LinkedList();
+                            list2.append(2).append(4).append(6);
+
+                            result += '=== Linked List Algorithms ===\n';
+                            result += `List 1: [${list1.toArray()}]\n`;
+                            result += `List 2: [${list2.toArray()}]\n`;
+
+                            // Find middle
+                            const middle = LinkedListAlgorithms.findMiddle(list1.head);
+                            result += `Middle of List 1: ${middle ? middle.value : 'none'}\n`;
+
+                            // Merge sorted lists
+                            const merged = LinkedListAlgorithms.mergeSorted(list1.head, list2.head);
+                            const mergedArray = [];
+                            let current = merged;
+                            while (current) {
+                                mergedArray.push(current.value);
+                                current = current.next;
+                            }
+                            result += `Merged sorted lists: [${mergedArray}]\n`;
+
+                            // Create a list for cycle detection
+                            const cycleList = new LinkedList();
+                            cycleList.append(1).append(2).append(3);
+
+                            // No cycle
+                            const hasCycle1 = LinkedListAlgorithms.hasCycle(cycleList.head);
+                            result += `Has cycle (no cycle): ${hasCycle1}\n`;
+
+                            // Create cycle manually
+                            if (cycleList.tail) {
+                                cycleList.tail.next = cycleList.head.next; // Creates cycle
+                            }
+                            const hasCycle2 = LinkedListAlgorithms.hasCycle(cycleList.head);
+                            result += `Has cycle (with cycle): ${hasCycle2}\n`;
+
+                        } catch (error) {
+                            result += `Error: ${error.message}\n`;
+                        }
+
+                        output.textContent = result;
+                    }
+
+                    function demoStack() {
+                        const output = document.getElementById('stackOutput');
+                        let result = '';
+
+                        try {
+                            const stack = new Stack();
+                            result += '=== Stack Demo ===\n';
+
+                            // Push elements
+                            stack.push(1);
+                            stack.push(2);
+                            stack.push(3);
+                            result += `After pushing 1,2,3: [${stack.toArray()}]\n`;
+
+                            // Peek
+                            result += `Peek: ${stack.peek()}\n`;
+
+                            // Pop
+                            result += `Pop: ${stack.pop()}\n`;
+                            result += `After popping: [${stack.toArray()}]\n`;
+
+                            result += `Size: ${stack.size()}\n`;
+                            result += `Is empty: ${stack.isEmpty()}\n`;
+
+                            result += '\n=== Stack Applications ===\n';
+
+                            // Balanced parentheses
+                            const expr1 = '({[]})';
+                            const expr2 = '({[}])';
+                            result += `"${expr1}" is balanced: ${StackApplications.isBalanced(expr1)}\n`;
+                            result += `"${expr2}" is balanced: ${StackApplications.isBalanced(expr2)}\n`;
+
+                            // Postfix evaluation
+                            const postfix = '3 4 + 2 * 7 /';
+                            result += `Evaluate "${postfix}": ${StackApplications.evaluatePostfix(postfix)}\n`;
+
+                            // Infix to postfix
+                            const infix = 'a+b*c';
+                            result += `Convert "${infix}" to postfix: ${StackApplications.infixToPostfix(infix)}\n`;
+
+                        } catch (error) {
+                            result += `Error: ${error.message}\n`;
+                        }
+
+                        output.textContent = result;
+                    }
+
+                    function demoQueue() {
+                        const output = document.getElementById('queueOutput');
+                        let result = '';
+
+                        try {
+                            const queue = new EfficientQueue();
+                            result += '=== Queue Demo ===\n';
+
+                            // Enqueue elements
+                            queue.enqueue(1);
+                            queue.enqueue(2);
+                            queue.enqueue(3);
+                            result += `After enqueuing 1,2,3: size = ${queue.size()}\n`;
+
+                            // Peek
+                            result += `Peek: ${queue.peek()}\n`;
+
+                            // Dequeue
+                            result += `Dequeue: ${queue.dequeue()}\n`;
+                            result += `After dequeuing: size = ${queue.size()}\n`;
+
+                            result += `Is empty: ${queue.isEmpty()}\n`;
+
+                            result += '\n=== Priority Queue Demo ===\n';
+
+                            const pq = new PriorityQueue();
+                            pq.enqueue('Task A', 3);
+                            pq.enqueue('Task B', 1);
+                            pq.enqueue('Task C', 2);
+
+                            result += `Priority Queue (min-heap):\n`;
+                            while (!pq.isEmpty()) {
+                                result += `  Dequeue: ${pq.dequeue()}\n`;
+                            }
+
+                        } catch (error) {
+                            result += `Error: ${error.message}\n`;
+                        }
+
+                        output.textContent = result;
+                    }
+
+                    function demoTree() {
+                        const output = document.getElementById('treeOutput');
+                        let result = '';
+
+                        try {
+                            const tree = new BinaryTree();
+                            result += '=== Binary Tree Demo ===\n';
+
+                            // Insert elements
+                            const values = [50, 30, 70, 20, 40, 60, 80];
+                            values.forEach(val => tree.insert(val));
+                            result += `Inserted values: [${values}]\n`;
+
+                            // Traversals
+                            result += `Inorder (sorted): [${tree.inorder()}]\n`;
+                            result += `Preorder: [${tree.preorder()}]\n`;
+                            result += `Postorder: [${tree.postorder()}]\n`;
+                            result += `Level order: [${tree.levelOrder()}]\n`;
+
+                            // Properties
+                            result += `Height: ${tree.height()}\n`;
+                            result += `Is balanced: ${tree.isBalanced()}\n`;
+
+                            // Search
+                            result += `Search 40: ${tree.search(40)}\n`;
+                            result += `Search 100: ${tree.search(100)}\n`;
+
+                            // Create unbalanced tree
+                            const unbalancedTree = new BinaryTree();
+                            [1, 2, 3, 4, 5].forEach(val => unbalancedTree.insert(val));
+                            result += `\nUnbalanced tree height: ${unbalancedTree.height()}\n`;
+                            result += `Unbalanced tree is balanced: ${unbalancedTree.isBalanced()}\n`;
+
+                        } catch (error) {
+                            result += `Error: ${error.message}\n`;
+                        }
+
+                        output.textContent = result;
+                    }
+
+                    function demoGraph() {
+                        const output = document.getElementById('graphOutput');
+                        let result = '';
+
+                        try {
+                            const graph = new Graph();
+                            result += '=== Graph Demo ===\n';
+
+                            // Add vertices and edges
+                            graph.addVertex('A');
+                            graph.addVertex('B');
+                            graph.addVertex('C');
+                            graph.addVertex('D');
+
+                            graph.addEdge('A', 'B');
+                            graph.addEdge('A', 'C');
+                            graph.addEdge('B', 'D');
+                            graph.addEdge('C', 'D');
+
+                            result += `Vertices: [${graph.getVertices()}]\n`;
+                            result += `Edges from A: [${graph.getEdges('A')}]\n`;
+
+                            // Traversals
+                            result += `BFS from A: [${graph.bfs('A')}]\n`;
+                            result += `DFS from A: [${graph.dfs('A')}]\n`;
+
+                            // Path finding
+                            const path = graph.findPath('A', 'D');
+                            result += `Path from A to D: [${path}]\n`;
+
+                            // Cycle detection
+                            result += `Has cycle: ${graph.hasCycle()}\n`;
+
+                            // Create graph with cycle
+                            const cyclicGraph = new Graph();
+                            cyclicGraph.addEdge('X', 'Y');
+                            cyclicGraph.addEdge('Y', 'Z');
+                            cyclicGraph.addEdge('Z', 'X');
+
+                            result += `Cyclic graph has cycle: ${cyclicGraph.hasCycle()}\n`;
+
+                        } catch (error) {
+                            result += `Error: ${error.message}\n`;
+                        }
+
+                        output.textContent = result;
+                    }
+
+                    // Initialize demos on page load
+                    document.addEventListener('DOMContentLoaded', () => {
+                        console.log('Data Structures & Algorithms demo loaded');
+                    });
+                </script>
+</body>
+
+</html>

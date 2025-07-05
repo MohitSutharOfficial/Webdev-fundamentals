@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Browser APIs - JavaScript Advanced</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #7c3aed;
+            --accent-color: #059669;
+            --error-color: #dc2626;
+            --warning-color: #d97706;
+            --success-color: #16a34a;
+
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+
+            --border-radius: 8px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+            --space-2: 0.5rem;
+            --space-4: 1rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+
+            --font-mono: 'Fira Code', 'Courier New', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-8);
+        }
+
+        .header {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            padding: var(--space-8);
+            margin-bottom: var(--space-6);
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+        }
+
+        .section {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            padding: var(--space-6);
+            margin-bottom: var(--space-6);
+            box-shadow: var(--shadow-md);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: var(--space-4);
+            font-weight: 700;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 1.875rem;
+            margin-bottom: var(--space-4);
+            border-bottom: 2px solid var(--bg-tertiary);
+            padding-bottom: var(--space-2);
+        }
+
+        h3 {
+            color: var(--accent-color);
+            font-size: 1.25rem;
+            margin: var(--space-6) 0 var(--space-4) 0;
+            font-weight: 600;
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: var(--border-radius);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .demo-container {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: var(--space-6);
+            margin: var(--space-4) 0;
+            border: 1px solid var(--bg-tertiary);
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-4);
+            margin: var(--space-4) 0;
+        }
+
+        .demo-card {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            padding: var(--space-4);
+            border-left: 4px solid var(--accent-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: var(--space-2) var(--space-4);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: var(--space-2);
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+        }
+
+        .btn-secondary:hover {
+            background: #6d28d9;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+        }
+
+        .btn-success:hover {
+            background: #15803d;
+        }
+
+        .btn-warning {
+            background: var(--warning-color);
+        }
+
+        .btn-warning:hover {
+            background: #c2410c;
+        }
+
+        .output {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: var(--border-radius);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .warning {
+            background: #fffbeb;
+            border-left: 4px solid var(--warning-color);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .tip {
+            background: #f0fdf4;
+            border-left: 4px solid var(--success-color);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .api-status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: var(--space-2);
+        }
+
+        .api-supported {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .api-limited {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .api-experimental {
+            background: #fce7f3;
+            color: #be185d;
+        }
+
+        .canvas-demo {
+            border: 2px solid var(--bg-tertiary);
+            border-radius: var(--border-radius);
+            margin: var(--space-4) 0;
+        }
+
+        .video-demo {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: var(--border-radius);
+        }
+
+        .notification-demo {
+            background: var(--bg-secondary);
+            border: 1px solid var(--bg-tertiary);
+            border-radius: var(--border-radius);
+            padding: var(--space-4);
+            margin: var(--space-2) 0;
+        }
+
+        .storage-info {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: var(--space-2) 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: var(--space-4);
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌐 Advanced Browser APIs</h1>
+            <p>Explore cutting-edge web APIs that enable rich, interactive experiences in modern browsers.</p>
+        </div>
+
+        <div class="section">
+            <h2>📍 Geolocation & Device APIs</h2>
+
+            <h3>1. Geolocation API <span class="api-status api-supported">Supported</span></h3>
+            <div class="code-block">
+                class LocationManager {
+                constructor() {
+                this.watchId = null;
+                this.currentPosition = null;
+                this.options = {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 300000 // 5 minutes
+                };
+                }
+
+                // Get current position
+                async getCurrentPosition() {
+                return new Promise((resolve, reject) => {
+                if (!navigator.geolocation) {
+                reject(new Error('Geolocation is not supported'));
+                return;
+                }
+
+                navigator.geolocation.getCurrentPosition(
+                (position) => {
+                this.currentPosition = position;
+                resolve(this.formatPosition(position));
+                },
+                (error) => reject(this.handleLocationError(error)),
+                this.options
+                );
+                });
+                }
+
+                // Watch position changes
+                startWatching(callback) {
+                if (!navigator.geolocation) {
+                throw new Error('Geolocation is not supported');
+                }
+
+                this.watchId = navigator.geolocation.watchPosition(
+                (position) => {
+                this.currentPosition = position;
+                callback(this.formatPosition(position));
+                },
+                (error) => callback(null, this.handleLocationError(error)),
+                this.options
+                );
+
+                return this.watchId;
+                }
+
+                // Stop watching
+                stopWatching() {
+                if (this.watchId !== null) {
+                navigator.geolocation.clearWatch(this.watchId);
+                this.watchId = null;
+                }
+                }
+
+                // Calculate distance between two points
+                calculateDistance(lat1, lon1, lat2, lon2) {
+                const R = 6371; // Earth's radius in kilometers
+                const dLat = this.toRadians(lat2 - lat1);
+                const dLon = this.toRadians(lon2 - lon1);
+
+                const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(this.toRadians(lat1)) * Math.cos(this.toRadians(lat2)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                return R * c;
+                }
+
+                toRadians(degrees) {
+                return degrees * (Math.PI / 180);
+                }
+
+                formatPosition(position) {
+                const { latitude, longitude, accuracy, altitude, heading, speed } = position.coords;
+
+                return {
+                latitude: latitude.toFixed(6),
+                longitude: longitude.toFixed(6),
+                accuracy: `${accuracy.toFixed(0)}m`,
+                altitude: altitude ? `${altitude.toFixed(0)}m` : 'Unknown',
+                heading: heading ? `${heading.toFixed(0)}°` : 'Unknown',
+                speed: speed ? `${speed.toFixed(2)} m/s` : 'Unknown',
+                timestamp: new Date(position.timestamp).toLocaleString()
+                };
+                }
+
+                handleLocationError(error) {
+                const errors = {
+                1: 'Permission denied by user',
+                2: 'Position unavailable',
+                3: 'Request timeout'
+                };
+                return new Error(errors[error.code] || 'Unknown location error');
+                }
+                }
+
+                // Device Orientation API
+                class DeviceOrientationManager {
+                constructor() {
+                this.isSupported = 'DeviceOrientationEvent' in window;
+                this.isListening = false;
+                this.callbacks = [];
+                }
+
+                async requestPermission() {
+                if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                const permission = await DeviceOrientationEvent.requestPermission();
+                return permission === 'granted';
+                }
+                return true; // Auto-granted on non-iOS devices
+                }
+
+                startListening(callback) {
+                if (!this.isSupported) {
+                throw new Error('Device orientation is not supported');
+                }
+
+                this.callbacks.push(callback);
+
+                if (!this.isListening) {
+                window.addEventListener('deviceorientation', this.handleOrientation.bind(this));
+                this.isListening = true;
+                }
+                }
+
+                stopListening(callback) {
+                const index = this.callbacks.indexOf(callback);
+                if (index > -1) {
+                this.callbacks.splice(index, 1);
+                }
+
+                if (this.callbacks.length === 0 && this.isListening) {
+                window.removeEventListener('deviceorientation', this.handleOrientation.bind(this));
+                this.isListening = false;
+                }
+                }
+
+                handleOrientation(event) {
+                const orientation = {
+                alpha: event.alpha ? event.alpha.toFixed(1) : 0, // Z-axis rotation
+                beta: event.beta ? event.beta.toFixed(1) : 0, // X-axis rotation
+                gamma: event.gamma ? event.gamma.toFixed(1) : 0, // Y-axis rotation
+                absolute: event.absolute
+                };
+
+                this.callbacks.forEach(callback => callback(orientation));
+                }
+                }
+            </div>
+
+            <div class="demo-container">
+                <h4>📍 Location & Orientation Demo:</h4>
+                <div class="demo-grid">
+                    <div class="demo-card">
+                        <button class="btn" onclick="demoGeolocation()">Get Location</button>
+                        <button class="btn btn-secondary" onclick="watchLocation()">Watch Location</button>
+                        <button class="btn btn-warning" onclick="stopWatchingLocation()">Stop Watching</button>
+                        <div id="locationOutput" class="output"></div>
+                    </div>
+                    <div class="demo-card">
+                        <button class="btn" onclick="demoDeviceOrientation()">Monitor Orientation</button>
+                        <button class="btn btn-warning" onclick="stopOrientationDemo()">Stop Monitoring</button>
+                        <div id="orientationOutput" class="output"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📱 Media & Hardware APIs</h2>
+
+            <h3>1. Camera & Microphone Access <span class="api-status api-supported">Supported</span></h3>
+            <div class="code-block">
+                class MediaManager {
+                constructor() {
+                this.stream = null;
+                this.mediaRecorder = null;
+                this.recordedChunks = [];
+                }
+
+                // Access user camera and microphone
+                async getUserMedia(constraints = { video: true, audio: true }) {
+                try {
+                this.stream = await navigator.mediaDevices.getUserMedia(constraints);
+                return this.stream;
+                } catch (error) {
+                throw new Error(`Media access denied: ${error.message}`);
+                }
+                }
+
+                // Get available devices
+                async getDevices() {
+                try {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                return {
+                videoInputs: devices.filter(device => device.kind === 'videoinput'),
+                audioInputs: devices.filter(device => device.kind === 'audioinput'),
+                audioOutputs: devices.filter(device => device.kind === 'audiooutput')
+                };
+                } catch (error) {
+                throw new Error(`Failed to enumerate devices: ${error.message}`);
+                }
+                }
+
+                // Take a screenshot from video stream
+                captureFrame(videoElement) {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+
+                canvas.width = videoElement.videoWidth;
+                canvas.height = videoElement.videoHeight;
+
+                context.drawImage(videoElement, 0, 0);
+
+                return canvas.toDataURL('image/png');
+                }
+
+                // Start recording
+                startRecording(options = { mimeType: 'video/webm' }) {
+                if (!this.stream) {
+                throw new Error('No media stream available');
+                }
+
+                this.recordedChunks = [];
+                this.mediaRecorder = new MediaRecorder(this.stream, options);
+
+                this.mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                this.recordedChunks.push(event.data);
+                }
+                };
+
+                this.mediaRecorder.start();
+                }
+
+                // Stop recording
+                stopRecording() {
+                return new Promise((resolve) => {
+                if (!this.mediaRecorder) {
+                resolve(null);
+                return;
+                }
+
+                this.mediaRecorder.onstop = () => {
+                const blob = new Blob(this.recordedChunks, { type: 'video/webm' });
+                resolve(blob);
+                };
+
+                this.mediaRecorder.stop();
+                });
+                }
+
+                // Stop all tracks
+                stopStream() {
+                if (this.stream) {
+                this.stream.getTracks().forEach(track => track.stop());
+                this.stream = null;
+                }
+                }
+
+                // Apply constraints to existing stream
+                async applyConstraints(constraints) {
+                if (!this.stream) {
+                throw new Error('No media stream available');
+                }
+
+                const videoTrack = this.stream.getVideoTracks()[0];
+                const audioTrack = this.stream.getAudioTracks()[0];
+
+                if (constraints.video && videoTrack) {
+                await videoTrack.applyConstraints(constraints.video);
+                }
+
+                if (constraints.audio && audioTrack) {
+                await audioTrack.applyConstraints(constraints.audio);
+                }
+                }
+                }
+
+                // Screen Capture API
+                class ScreenCaptureManager {
+                constructor() {
+                this.screenStream = null;
+                }
+
+                async startScreenCapture(options = { video: true, audio: true }) {
+                try {
+                this.screenStream = await navigator.mediaDevices.getDisplayMedia(options);
+
+                // Handle stream ending
+                this.screenStream.getVideoTracks()[0].addEventListener('ended', () => {
+                this.stopScreenCapture();
+                });
+
+                return this.screenStream;
+                } catch (error) {
+                throw new Error(`Screen capture failed: ${error.message}`);
+                }
+                }
+
+                stopScreenCapture() {
+                if (this.screenStream) {
+                this.screenStream.getTracks().forEach(track => track.stop());
+                this.screenStream = null;
+                }
+                }
+
+                async recordScreen(duration = 10000) {
+                const stream = await this.startScreenCapture();
+                const mediaRecorder = new MediaRecorder(stream);
+                const chunks = [];
+
+                return new Promise((resolve, reject) => {
+                mediaRecorder.ondataavailable = (event) => {
+                chunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                const blob = new Blob(chunks, { type: 'video/webm' });
+                resolve(blob);
+                };
+
+                mediaRecorder.onerror = reject;
+
+                mediaRecorder.start();
+
+                setTimeout(() => {
+                mediaRecorder.stop();
+                this.stopScreenCapture();
+                }, duration);
+                });
+                }
+                }
+            </div>
+
+            <h3>2. Web Audio API <span class="api-status api-supported">Supported</span></h3>
+            <div class="code-block">
+                class AudioManager {
+                constructor() {
+                this.audioContext = null;
+                this.analyser = null;
+                this.microphone = null;
+                this.isInitialized = false;
+                }
+
+                async initialize() {
+                if (this.isInitialized) return;
+
+                try {
+                this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                this.analyser = this.audioContext.createAnalyser();
+                this.analyser.fftSize = 256;
+                this.isInitialized = true;
+                } catch (error) {
+                throw new Error(`Audio initialization failed: ${error.message}`);
+                }
+                }
+
+                async setupMicrophone() {
+                await this.initialize();
+
+                try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                this.microphone = this.audioContext.createMediaStreamSource(stream);
+                this.microphone.connect(this.analyser);
+                } catch (error) {
+                throw new Error(`Microphone setup failed: ${error.message}`);
+                }
+                }
+
+                // Generate tone
+                playTone(frequency, duration, type = 'sine') {
+                if (!this.isInitialized) return;
+
+                const oscillator = this.audioContext.createOscillator();
+                const gainNode = this.audioContext.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(this.audioContext.destination);
+
+                oscillator.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
+                oscillator.type = type;
+
+                gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+
+                oscillator.start(this.audioContext.currentTime);
+                oscillator.stop(this.audioContext.currentTime + duration);
+                }
+
+                // Get audio frequency data
+                getFrequencyData() {
+                if (!this.analyser) return null;
+
+                const bufferLength = this.analyser.frequencyBinCount;
+                const dataArray = new Uint8Array(bufferLength);
+                this.analyser.getByteFrequencyData(dataArray);
+
+                return dataArray;
+                }
+
+                // Get audio time domain data
+                getTimeDomainData() {
+                if (!this.analyser) return null;
+
+                const bufferLength = this.analyser.frequencyBinCount;
+                const dataArray = new Uint8Array(bufferLength);
+                this.analyser.getByteTimeDomainData(dataArray);
+
+                return dataArray;
+                }
+
+                // Calculate volume level
+                getVolumeLevel() {
+                const dataArray = this.getTimeDomainData();
+                if (!dataArray) return 0;
+
+                let sum = 0;
+                for (let i = 0; i < dataArray.length; i++) { sum +=Math.abs(dataArray[i] - 128); } return sum /
+                    dataArray.length; } // Load and play audio file async loadAudioFile(url) { await this.initialize();
+                    try { const response=await fetch(url); const arrayBuffer=await response.arrayBuffer(); const
+                    audioBuffer=await this.audioContext.decodeAudioData(arrayBuffer); const
+                    source=this.audioContext.createBufferSource(); source.buffer=audioBuffer;
+                    source.connect(this.audioContext.destination); return source; } catch (error) { throw new
+                    Error(`Audio loading failed: ${error.message}`); } } } </div>
+
+                    <div class="demo-container">
+                        <h4>📱 Media & Audio Demo:</h4>
+                        <div class="demo-grid">
+                            <div class="demo-card">
+                                <button class="btn" onclick="demoCamera()">Access Camera</button>
+                                <button class="btn btn-secondary" onclick="capturePhoto()">Take Photo</button>
+                                <button class="btn btn-warning" onclick="stopCamera()">Stop Camera</button>
+                                <video id="cameraVideo" class="video-demo" autoplay muted></video>
+                                <canvas id="photoCanvas" class="canvas-demo" style="display: none;"></canvas>
+                                <div id="mediaOutput" class="output"></div>
+                            </div>
+                            <div class="demo-card">
+                                <button class="btn" onclick="demoAudio()">Setup Audio</button>
+                                <button class="btn btn-secondary" onclick="playTone()">Play Tone</button>
+                                <button class="btn btn-success" onclick="startVolumeMonitor()">Monitor Volume</button>
+                                <div class="progress-bar">
+                                    <div id="volumeBar" class="progress-fill" style="width: 0%;"></div>
+                                </div>
+                                <div id="audioOutput" class="output"></div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+            <div class="section">
+                <h2>💾 Storage & File APIs</h2>
+
+                <h3>1. File System Access API <span class="api-status api-experimental">Experimental</span></h3>
+                <div class="code-block">
+                    class FileSystemManager {
+                    constructor() {
+                    this.isSupported = 'showOpenFilePicker' in window;
+                    }
+
+                    // Open file picker
+                    async openFile(options = {}) {
+                    if (!this.isSupported) {
+                    throw new Error('File System Access API is not supported');
+                    }
+
+                    try {
+                    const [fileHandle] = await window.showOpenFilePicker({
+                    types: [{
+                    description: 'Text files',
+                    accept: { 'text/plain': ['.txt'] }
+                    }],
+                    ...options
+                    });
+
+                    const file = await fileHandle.getFile();
+                    return {
+                    handle: fileHandle,
+                    file,
+                    content: await file.text()
+                    };
+                    } catch (error) {
+                    if (error.name === 'AbortError') {
+                    throw new Error('File selection was cancelled');
+                    }
+                    throw error;
+                    }
+                    }
+
+                    // Save file
+                    async saveFile(content, filename = 'document.txt') {
+                    if (!this.isSupported) {
+                    // Fallback to download
+                    this.downloadFile(content, filename);
+                    return;
+                    }
+
+                    try {
+                    const fileHandle = await window.showSaveFilePicker({
+                    suggestedName: filename,
+                    types: [{
+                    description: 'Text files',
+                    accept: { 'text/plain': ['.txt'] }
+                    }]
+                    });
+
+                    const writable = await fileHandle.createWritable();
+                    await writable.write(content);
+                    await writable.close();
+
+                    return fileHandle;
+                    } catch (error) {
+                    if (error.name === 'AbortError') {
+                    throw new Error('File save was cancelled');
+                    }
+                    throw error;
+                    }
+                    }
+
+                    // Fallback download method
+                    downloadFile(content, filename) {
+                    const blob = new Blob([content], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+
+                    URL.revokeObjectURL(url);
+                    }
+
+                    // Open directory
+                    async openDirectory() {
+                    if (!('showDirectoryPicker' in window)) {
+                    throw new Error('Directory picker is not supported');
+                    }
+
+                    try {
+                    const directoryHandle = await window.showDirectoryPicker();
+                    const files = [];
+
+                    for await (const [name, handle] of directoryHandle.entries()) {
+                    if (handle.kind === 'file') {
+                    const file = await handle.getFile();
+                    files.push({ name, file, handle });
+                    }
+                    }
+
+                    return { directoryHandle, files };
+                    } catch (error) {
+                    if (error.name === 'AbortError') {
+                    throw new Error('Directory selection was cancelled');
+                    }
+                    throw error;
+                    }
+                    }
+                    }
+
+                    // IndexedDB Manager
+                    class IndexedDBManager {
+                    constructor(dbName = 'AppDatabase', version = 1) {
+                    this.dbName = dbName;
+                    this.version = version;
+                    this.db = null;
+                    }
+
+                    async openDatabase(stores = [{ name: 'data', keyPath: 'id' }]) {
+                    return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(this.dbName, this.version);
+
+                    request.onerror = () => reject(request.error);
+                    request.onsuccess = () => {
+                    this.db = request.result;
+                    resolve(this.db);
+                    };
+
+                    request.onupgradeneeded = (event) => {
+                    const db = event.target.result;
+
+                    stores.forEach(store => {
+                    if (!db.objectStoreNames.contains(store.name)) {
+                    const objectStore = db.createObjectStore(store.name, {
+                    keyPath: store.keyPath || 'id',
+                    autoIncrement: store.autoIncrement || false
+                    });
+
+                    if (store.indexes) {
+                    store.indexes.forEach(index => {
+                    objectStore.createIndex(index.name, index.keyPath, index.options);
+                    });
+                    }
+                    }
+                    });
+                    };
+                    });
+                    }
+
+                    async add(storeName, data) {
+                    if (!this.db) await this.openDatabase();
+
+                    return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([storeName], 'readwrite');
+                    const store = transaction.objectStore(storeName);
+                    const request = store.add(data);
+
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                    });
+                    }
+
+                    async get(storeName, key) {
+                    if (!this.db) await this.openDatabase();
+
+                    return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([storeName], 'readonly');
+                    const store = transaction.objectStore(storeName);
+                    const request = store.get(key);
+
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                    });
+                    }
+
+                    async getAll(storeName) {
+                    if (!this.db) await this.openDatabase();
+
+                    return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([storeName], 'readonly');
+                    const store = transaction.objectStore(storeName);
+                    const request = store.getAll();
+
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                    });
+                    }
+
+                    async update(storeName, data) {
+                    if (!this.db) await this.openDatabase();
+
+                    return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([storeName], 'readwrite');
+                    const store = transaction.objectStore(storeName);
+                    const request = store.put(data);
+
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                    });
+                    }
+
+                    async delete(storeName, key) {
+                    if (!this.db) await this.openDatabase();
+
+                    return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([storeName], 'readwrite');
+                    const store = transaction.objectStore(storeName);
+                    const request = store.delete(key);
+
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                    });
+                    }
+
+                    async clear(storeName) {
+                    if (!this.db) await this.openDatabase();
+
+                    return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([storeName], 'readwrite');
+                    const store = transaction.objectStore(storeName);
+                    const request = store.clear();
+
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                    });
+                    }
+                    }
+                </div>
+
+                <div class="demo-container">
+                    <h4>💾 File & Storage Demo:</h4>
+                    <div class="demo-grid">
+                        <div class="demo-card">
+                            <button class="btn" onclick="demoFileOpen()">Open File</button>
+                            <button class="btn btn-secondary" onclick="demoFileSave()">Save File</button>
+                            <textarea id="fileContent" rows="4" style="width: 100%; margin: 10px 0;"
+                                placeholder="File content will appear here..."></textarea>
+                            <div id="fileOutput" class="output"></div>
+                        </div>
+                        <div class="demo-card">
+                            <button class="btn" onclick="demoIndexedDB()">Test IndexedDB</button>
+                            <button class="btn btn-secondary" onclick="clearIndexedDB()">Clear Database</button>
+                            <div id="storageOutput" class="output"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔔 Notifications & Background APIs</h2>
+
+                <h3>1. Notifications API <span class="api-status api-supported">Supported</span></h3>
+                <div class="code-block">
+                    class NotificationManager {
+                    constructor() {
+                    this.permission = Notification.permission;
+                    this.isSupported = 'Notification' in window;
+                    }
+
+                    async requestPermission() {
+                    if (!this.isSupported) {
+                    throw new Error('Notifications are not supported');
+                    }
+
+                    if (this.permission === 'default') {
+                    this.permission = await Notification.requestPermission();
+                    }
+
+                    return this.permission === 'granted';
+                    }
+
+                    async showNotification(title, options = {}) {
+                    const hasPermission = await this.requestPermission();
+
+                    if (!hasPermission) {
+                    throw new Error('Notification permission denied');
+                    }
+
+                    const defaultOptions = {
+                    icon: '/favicon.ico',
+                    badge: '/favicon.ico',
+                    image: null,
+                    body: '',
+                    tag: 'default',
+                    renotify: false,
+                    requireInteraction: false,
+                    silent: false,
+                    vibrate: [200, 100, 200],
+                    actions: [],
+                    data: null
+                    };
+
+                    const notification = new Notification(title, { ...defaultOptions, ...options });
+
+                    // Handle notification events
+                    notification.onclick = (event) => {
+                    console.log('Notification clicked:', event);
+                    notification.close();
+                    };
+
+                    notification.onshow = () => {
+                    console.log('Notification shown');
+                    };
+
+                    notification.onclose = () => {
+                    console.log('Notification closed');
+                    };
+
+                    notification.onerror = (error) => {
+                    console.error('Notification error:', error);
+                    };
+
+                    return notification;
+                    }
+
+                    // Show notification with actions
+                    async showActionNotification(title, message, actions = []) {
+                    const options = {
+                    body: message,
+                    actions: actions,
+                    requireInteraction: true,
+                    tag: 'action-notification'
+                    };
+
+                    return this.showNotification(title, options);
+                    }
+
+                    // Schedule notification (using setTimeout)
+                    scheduleNotification(title, options, delay) {
+                    return setTimeout(() => {
+                    this.showNotification(title, options);
+                    }, delay);
+                    }
+
+                    // Show progress notification
+                    async showProgressNotification(title, progress, total) {
+                    const percentage = Math.round((progress / total) * 100);
+                    const options = {
+                    body: `Progress: ${percentage}% (${progress}/${total})`,
+                    tag: 'progress',
+                    renotify: true,
+                    silent: true
+                    };
+
+                    return this.showNotification(title, options);
+                    }
+                    }
+
+                    // Service Worker Registration (for background features)
+                    class ServiceWorkerManager {
+                    constructor() {
+                    this.isSupported = 'serviceWorker' in navigator;
+                    this.registration = null;
+                    }
+
+                    async register(scriptUrl = '/sw.js') {
+                    if (!this.isSupported) {
+                    throw new Error('Service Workers are not supported');
+                    }
+
+                    try {
+                    this.registration = await navigator.serviceWorker.register(scriptUrl);
+                    console.log('Service Worker registered:', this.registration);
+
+                    // Handle updates
+                    this.registration.addEventListener('updatefound', () => {
+                    const newWorker = this.registration.installing;
+                    newWorker.addEventListener('statechange', () => {
+                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    console.log('New service worker available');
+                    // Notify user about update
+                    }
+                    });
+                    });
+
+                    return this.registration;
+                    } catch (error) {
+                    throw new Error(`Service Worker registration failed: ${error.message}`);
+                    }
+                    }
+
+                    async unregister() {
+                    if (this.registration) {
+                    const result = await this.registration.unregister();
+                    console.log('Service Worker unregistered:', result);
+                    return result;
+                    }
+                    return false;
+                    }
+
+                    async update() {
+                    if (this.registration) {
+                    await this.registration.update();
+                    console.log('Service Worker update checked');
+                    }
+                    }
+
+                    // Send message to service worker
+                    postMessage(message) {
+                    if (navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.controller.postMessage(message);
+                    }
+                    }
+
+                    // Listen for messages from service worker
+                    onMessage(callback) {
+                    navigator.serviceWorker.addEventListener('message', callback);
+                    }
+                    }
+                </div>
+
+                <h3>2. Background Sync & Push API <span class="api-status api-limited">Limited Support</span></h3>
+                <div class="code-block">
+                    // Background Sync (requires Service Worker)
+                    class BackgroundSyncManager {
+                    constructor(registration) {
+                    this.registration = registration;
+                    this.isSupported = 'sync' in window.ServiceWorkerRegistration.prototype;
+                    }
+
+                    async registerSync(tag) {
+                    if (!this.isSupported) {
+                    throw new Error('Background Sync is not supported');
+                    }
+
+                    try {
+                    await this.registration.sync.register(tag);
+                    console.log(`Background sync registered: ${tag}`);
+                    } catch (error) {
+                    throw new Error(`Background sync registration failed: ${error.message}`);
+                    }
+                    }
+
+                    // Store data for background sync
+                    storeForSync(data, storeName = 'syncQueue') {
+                    const syncData = {
+                    id: Date.now(),
+                    data,
+                    timestamp: new Date(),
+                    synced: false
+                    };
+
+                    // Store in IndexedDB or localStorage
+                    const stored = JSON.parse(localStorage.getItem(storeName) || '[]');
+                    stored.push(syncData);
+                    localStorage.setItem(storeName, JSON.stringify(stored));
+
+                    return syncData.id;
+                    }
+
+                    // Get pending sync data
+                    getPendingSync(storeName = 'syncQueue') {
+                    const stored = JSON.parse(localStorage.getItem(storeName) || '[]');
+                    return stored.filter(item => !item.synced);
+                    }
+
+                    // Mark as synced
+                    markAsSynced(id, storeName = 'syncQueue') {
+                    const stored = JSON.parse(localStorage.getItem(storeName) || '[]');
+                    const item = stored.find(item => item.id === id);
+                    if (item) {
+                    item.synced = true;
+                    localStorage.setItem(storeName, JSON.stringify(stored));
+                    }
+                    }
+                    }
+
+                    // Push Notifications Manager
+                    class PushManager {
+                    constructor(registration) {
+                    this.registration = registration;
+                    this.isSupported = 'pushManager' in registration;
+                    }
+
+                    async subscribe(vapidPublicKey) {
+                    if (!this.isSupported) {
+                    throw new Error('Push notifications are not supported');
+                    }
+
+                    try {
+                    const subscription = await this.registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: this.urlBase64ToUint8Array(vapidPublicKey)
+                    });
+
+                    console.log('Push subscription:', subscription);
+                    return subscription;
+                    } catch (error) {
+                    throw new Error(`Push subscription failed: ${error.message}`);
+                    }
+                    }
+
+                    async unsubscribe() {
+                    const subscription = await this.registration.pushManager.getSubscription();
+                    if (subscription) {
+                    await subscription.unsubscribe();
+                    console.log('Push subscription cancelled');
+                    return true;
+                    }
+                    return false;
+                    }
+
+                    async getSubscription() {
+                    return await this.registration.pushManager.getSubscription();
+                    }
+
+                    urlBase64ToUint8Array(base64String) {
+                    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+                    const base64 = (base64String + padding)
+                    .replace(/-/g, '+')
+                    .replace(/_/g, '/');
+
+                    const rawData = window.atob(base64);
+                    const outputArray = new Uint8Array(rawData.length);
+
+                    for (let i = 0; i < rawData.length; ++i) { outputArray[i]=rawData.charCodeAt(i); } return
+                        outputArray; } } </div>
+
+                        <div class="demo-container">
+                            <h4>🔔 Notifications Demo:</h4>
+                            <div class="demo-grid">
+                                <div class="demo-card">
+                                    <button class="btn" onclick="demoNotifications()">Request Permission</button>
+                                    <button class="btn btn-secondary" onclick="showSimpleNotification()">Simple
+                                        Notification</button>
+                                    <button class="btn btn-success" onclick="showActionNotification()">Action
+                                        Notification</button>
+                                    <div id="notificationOutput" class="output"></div>
+                                </div>
+                                <div class="demo-card">
+                                    <button class="btn" onclick="demoServiceWorker()">Register Service Worker</button>
+                                    <button class="btn btn-warning"
+                                        onclick="unregisterServiceWorker()">Unregister</button>
+                                    <div id="serviceWorkerOutput" class="output"></div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
+                <div class="section">
+                    <h2>🚀 Performance & Advanced APIs</h2>
+
+                    <div class="tip">
+                        <h3>💡 Senior Developer Tips:</h3>
+                        <ul>
+                            <li><strong>Progressive Enhancement:</strong> Always provide fallbacks for unsupported APIs
+                            </li>
+                            <li><strong>Permission Management:</strong> Request permissions only when needed</li>
+                            <li><strong>Resource Cleanup:</strong> Always stop streams and remove event listeners</li>
+                            <li><strong>Error Handling:</strong> Implement comprehensive error handling for all APIs
+                            </li>
+                            <li><strong>Privacy Compliance:</strong> Be transparent about data collection and usage</li>
+                            <li><strong>Performance Impact:</strong> Monitor the performance impact of heavy APIs</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning">
+                        <h3>⚠️ Browser Compatibility:</h3>
+                        <ul>
+                            <li>File System Access API is Chrome-only (experimental)</li>
+                            <li>Push API requires HTTPS and service worker</li>
+                            <li>Some APIs may require user gestures to work</li>
+                            <li>iOS Safari has limitations with PWA features</li>
+                            <li>Always check <code>caniuse.com</code> for current support</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>📚 Resources & Next Steps</h2>
+                    <ul>
+                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/API" target="_blank">MDN Web APIs</a>
+                        </li>
+                        <li><a href="https://web.dev/articles" target="_blank">Web.dev Articles</a></li>
+                        <li><a href="https://caniuse.com/" target="_blank">Can I Use - Browser Support</a></li>
+                        <li><a href="https://whatwebcando.today/" target="_blank">What Web Can Do Today</a></li>
+                    </ul>
+
+                    <p><strong>Next:</strong> Continue to <a href="07_error_handling_debugging.html">Error Handling &
+                            Debugging</a> to master production-ready code practices.</p>
+                </div>
+            </div>
+
+            <script>
+                // Global instances
+                let locationManager = new LocationManager();
+                let orientationManager = new DeviceOrientationManager();
+                let mediaManager = new MediaManager();
+                let audioManager = new AudioManager();
+                let fileSystemManager = new FileSystemManager();
+                let indexedDBManager = new IndexedDBManager();
+                let notificationManager = new NotificationManager();
+                let serviceWorkerManager = new ServiceWorkerManager();
+
+                // Demo Functions
+                async function demoGeolocation() {
+                    const output = document.getElementById('locationOutput');
+
+                    try {
+                        output.textContent = 'Getting location...';
+                        const position = await locationManager.getCurrentPosition();
+                        output.textContent = `Location Data:\n${JSON.stringify(position, null, 2)}`;
+                    } catch (error) {
+                        output.textContent = `Error: ${error.message}`;
+                    }
+                }
+
+                function watchLocation() {
+                    const output = document.getElementById('locationOutput');
+
+                    try {
+                        locationManager.startWatching((position, error) => {
+                            if (error) {
+                                output.textContent = `Watch Error: ${error.message}`;
+                            } else {
+                                output.textContent = `Watching Location:\n${JSON.stringify(position, null, 2)}`;
+                            }
+                        });
+                    } catch (error) {
+                        output.textContent = `Error: ${error.message}`;
+                    }
+                }
+
+                function stopWatchingLocation() {
+                    locationManager.stopWatching();
+                    document.getElementById('locationOutput').textContent = 'Location watching stopped';
+                }
+
+                async function demoDeviceOrientation() {
+                    const output = document.getElementById('orientationOutput');
+
+                    try {
+                        const permission = await orientationManager.requestPermission();
+                        if (!permission) {
+                            output.textContent = 'Device orientation permission denied';
+                            return;
+                        }
+
+                        orientationManager.startListening((orientation) => {
+                            output.textContent = `Device Orientation:\nAlpha: ${orientation.alpha}°\nBeta: ${orientation.beta}°\nGamma: ${orientation.gamma}°`;
+                        });
+                    } catch (error) {
+                        output.textContent = `Error: ${error.message}`;
+                    }
+                }
+
+                function stopOrientationDemo() {
+                    orientationManager.stopListening(() => { });
+                    document.getElementById('orientationOutput').textContent = 'Orientation monitoring stopped';
+                }
+
+                async function demoCamera() {
+                    const output = document.getElementById('mediaOutput');
+                    const video = document.getElementById('cameraVideo');
+
+                    try {
+                        const stream = await mediaManager.getUserMedia({ video: true, audio: false });
+                        video.srcObject = stream;
+                        output.textContent = 'Camera access granted';
+                    } catch (error) {
+                        output.textContent = `Error: ${error.message}`;
+                    }
+                }
+
+                function capturePhoto() {
+                    const output = document.getElementById('mediaOutput');
+                    const video = document.getElementById('cameraVideo');
+                    const canvas = document.getElementById('photoCanvas');
+
+                    try {
+                        const dataURL = mediaManager.captureFrame(video);
+                        canvas.style.display = 'block';
+                        const ctx = canvas.getContext('2d');
+                        const img = new Image();
+                        img.onload = () => {
+                            canvas.width = img.width;
+                            canvas.height = img.height;
+                            ctx.drawImage(img, 0, 0);
+                        };
+                        img.src = dataURL;
+                        output.textContent = 'Photo captured';
+                    } catch (error) {
+                        output.textContent = `Error: ${error.message}`;
+                    }
+                }
+
+                function stopCamera() {
+                    mediaManager.stopStream();
+                    const video = document.getElementById('cameraVideo');
+                    video.srcObject = null;
+                    document.getElementById('mediaOutput').textContent = 'Camera stopped';
+                }
+
+                async function demoAudio() {
+                    const output = document.getElementById('audioOutput');
+
+                    try {
+                        await audioManager.setupMicrophone();
+                        output.textContent = 'Audio setup complete - microphone access granted';
+                    } catch (error) {
+                        output.textContent = `Error: ${error.message}`;
+                    }
+                }
+
+                function playTone() {
+                    audioManager.playTone(440, 0.5); // A4 note for 0.5 seconds
+                    document.getElementById('audioOutput').textContent = 'Playing 440Hz tone';
+                }
+
+                function startVolumeMonitor() {
+                    const volumeBar = document.getElementById('volumeBar');
+
+                    const updateVolume = () => {
+                        const volume = audioManager.getVolumeLevel();
+                        const percentage = Math.min(100, (volume / 50) * 100);
+                        volumeBar.style.width = `${percentage}%`;
+                    };
+
+                    setInterval(updateVolume, 100);
+                    document.getElementById('audioOutput').textContent = 'Volume monitoring started';
+                }
+
+                async function demoFileOpen() {
+                    const output = document.getElementById('fileOutput');
+                    const textarea = document.getElementById('fileContent');
+
+                    try {
+                        const result = await fileSystemManager.openFile();
+                        textarea.value = result.content;
+                        output.textContent = `File opened: ${result.file.name}`;
+                    } catch (error) {
+                        output.textContent = `Error: ${error.message}`;
+                    }
+                }
+
+                async function demoFileSave() {
+                    const output = document.getElementById('fileOutput');
+                    const textarea = document.getElementById('fileContent');
+
+                    try {
+                        await fileSystemManager.saveFile(textarea.value);
+                        output.textContent = 'File saved successfully';
+                    } catch (error) {
+                        output.textContent = `Error: ${error.message}`;
+                    }
+                }
+
+                async function demoIndexedDB() {
+                    const output = document.getElementById('storageOutput');
+
+                    try {
+                        await indexedDBManager.openDatabase();
+
+                        // Add data
+                        await indexedDBManager.add('data', { id: 1, name: 'Test Item', value: 100 });
+                        await indexedDBManager.add('data', { id: 2, name: 'Another Item', value: 200 });
+
+                        // Get all data
+                        const allData = await indexedDBManager.getAll('data');
+                        output.textContent = `IndexedDB Data:\n${JSON.stringify(allData, null, 2)}`;
+                    } catch (error) {
+                        output.textContent = `Error: ${error.message}`;
+                    }
+                }
+
+                async function clearIndexedDB() {
+                    const output = document.getElementById('storageOutput');
+
+                    try {
+                        await indexedDBManager.clear('data');
+                        output.textContent = 'IndexedDB cleared';
+                    } catch (error) {
+                        output.textContent = `Error: ${error.message}`;
+                    }
+                }
+
+                async function demoNotifications() {
+                    const output = document.getElementById('notificationOutput');
+
+                    try {
+                        const granted = await notificationManager.requestPermission();
+                        output.textContent = granted ? 'Notification permission granted' : 'Notification permission denied';
+                    } catch (error) {
+                        output.textContent = `Error: ${error.message}`;
+                    }
+                }
+
+                async function showSimpleNotification() {
+                    const output = document.getElementById('notificationOutput');
+
+                    try {
+                        await notificationManager.showNotification('Hello!', {
+                            body: 'This is a simple notification',
+                            icon: '/favicon.ico'
+                        });
+                        output.textContent = 'Simple notification sent';
+                    } catch (error) {
+                        output.textContent = `Error: ${error.message}`;
+                    }
+                }
+
+                async function showActionNotification() {
+                    const output = document.getElementById('notificationOutput');
+
+                    try {
+                        await notificationManager.showActionNotification(
+                            'Action Required',
+                            'Please choose an action',
+                            [
+                                { action: 'approve', title: 'Approve' },
+                                { action: 'reject', title: 'Reject' }
+                            ]
+                        );
+                        output.textContent = 'Action notification sent';
+                    } catch (error) {
+                        output.textContent = `Error: ${error.message}`;
+                    }
+                }
+
+                async function demoServiceWorker() {
+                    const output = document.getElementById('serviceWorkerOutput');
+
+                    try {
+                        // Note: This will fail unless you have an actual service worker file
+                        await serviceWorkerManager.register();
+                        output.textContent = 'Service Worker registered successfully';
+                    } catch (error) {
+                        output.textContent = `Service Worker registration failed: ${error.message}`;
+                    }
+                }
+
+                async function unregisterServiceWorker() {
+                    const output = document.getElementById('serviceWorkerOutput');
+
+                    try {
+                        const result = await serviceWorkerManager.unregister();
+                        output.textContent = result ? 'Service Worker unregistered' : 'No Service Worker to unregister';
+                    } catch (error) {
+                        output.textContent = `Error: ${error.message}`;
+                    }
+                }
+
+                // Initialize demos on page load
+                document.addEventListener('DOMContentLoaded', () => {
+                    console.log('Advanced Browser APIs demo loaded');
+
+                    // Check API support
+                    const support = {
+                        geolocation: 'geolocation' in navigator,
+                        notifications: 'Notification' in window,
+                        mediaDevices: 'mediaDevices' in navigator,
+                        serviceWorker: 'serviceWorker' in navigator,
+                        fileSystem: 'showOpenFilePicker' in window,
+                        webAudio: 'AudioContext' in window
+                    };
+
+                    console.log('API Support:', support);
+                });
+            </script>
+</body>
+
+</html>

@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Selectors & Specificity - Complete Guide</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            background: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .example {
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            background: #ecf0f1;
+        }
+
+        /* Selector Demonstrations */
+        .demo-area {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        /* Element Selectors */
+        .demo-area p {
+            color: #3498db;
+            margin: 10px 0;
+        }
+
+        .demo-area h3 {
+            color: #e74c3c;
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 5px;
+        }
+
+        /* Class Selectors */
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .important {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .box {
+            background: #3498db;
+            color: white;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        /* ID Selectors */
+        #unique-element {
+            background: #e74c3c;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        #header-main {
+            background: #2c3e50;
+            color: white;
+            padding: 25px;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        /* Attribute Selectors */
+        .demo-area input[type="text"] {
+            border: 2px solid #3498db;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px;
+        }
+
+        .demo-area input[type="email"] {
+            border: 2px solid #27ae60;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px;
+        }
+
+        .demo-area a[href^="https"] {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .demo-area a[href$=".pdf"] {
+            color: #e74c3c;
+            text-decoration: none;
+        }
+
+        .demo-area a[href*="github"] {
+            color: #333;
+            background: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 3px;
+            text-decoration: none;
+        }
+
+        /* Pseudo-class Selectors */
+        .demo-area a:hover {
+            text-decoration: underline;
+            transform: scale(1.05);
+            transition: all 0.3s ease;
+        }
+
+        .demo-area button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .demo-area li:first-child {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .demo-area li:last-child {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .demo-area li:nth-child(even) {
+            background: #ecf0f1;
+            padding: 5px;
+            border-radius: 3px;
+        }
+
+        /* Pseudo-element Selectors */
+        .demo-area .quote::before {
+            content: "\201C";
+            font-size: 2em;
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        .demo-area .quote::after {
+            content: "\201D";
+            font-size: 2em;
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        .demo-area .first-letter::first-letter {
+            font-size: 3em;
+            color: #e74c3c;
+            font-weight: bold;
+            float: left;
+            line-height: 1;
+            margin-right: 5px;
+        }
+
+        /* Combinator Selectors */
+        .demo-area .parent>.direct-child {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .demo-area .container .descendant {
+            color: #3498db;
+            font-style: italic;
+        }
+
+        .demo-area .sibling+.adjacent {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .demo-area .sibling~.general {
+            color: #f39c12;
+            text-decoration: underline;
+        }
+
+        /* Specificity Demonstrations */
+        .specificity-demo {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        /* Low specificity */
+        .specificity-demo p {
+            color: #333;
+        }
+
+        /* Medium specificity */
+        .specificity-demo .class-selector {
+            color: #3498db;
+        }
+
+        /* High specificity */
+        .specificity-demo #id-selector {
+            color: #e74c3c;
+        }
+
+        /* Very high specificity */
+        .specificity-demo #id-selector.class-selector {
+            color: #27ae60;
+        }
+
+        /* Inline styles would override all of these */
+
+        /* Utilities */
+        .tips {
+            background: #d5f4e6;
+            border-left: 4px solid #27ae60;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .warning {
+            background: #ffeaa7;
+            border-left: 4px solid #fdcb6e;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .exercise {
+            background: #74b9ff;
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+
+        .exercise h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .specificity-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .specificity-table th,
+        .specificity-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .specificity-table th {
+            background: #3498db;
+            color: white;
+        }
+
+        .specificity-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .demo-button {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .specificity-table {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🎯 CSS Selectors & Specificity Mastery</h1>
+
+        <div class="section">
+            <h2>📚 What Are CSS Selectors?</h2>
+            <p>CSS selectors are patterns used to select and style HTML elements. They tell the browser which elements
+                to apply styles to.</p>
+
+            <div class="highlight">
+                <h3>🎯 Why Selectors Matter:</h3>
+                <ul>
+                    <li><strong>Precision</strong> - Target exactly what you want to style</li>
+                    <li><strong>Efficiency</strong> - Write less code, achieve more</li>
+                    <li><strong>Maintainability</strong> - Easier to update and debug</li>
+                    <li><strong>Performance</strong> - Faster rendering with efficient selectors</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🏷️ Basic Selectors</h2>
+
+            <h3>1. Element/Type Selectors</h3>
+            <div class="code-block">
+                /* Selects all paragraph elements */
+                p {
+                color: blue;
+                margin: 10px 0;
+                }
+
+                /* Selects all heading elements */
+                h1, h2, h3 {
+                color: #2c3e50;
+                font-weight: bold;
+                }
+            </div>
+
+            <h3>2. Class Selectors</h3>
+            <div class="code-block">
+                /* Selects elements with class="highlight" */
+                .highlight {
+                background: yellow;
+                padding: 10px;
+                }
+
+                /* Multiple classes */
+                .box.important {
+                border: 2px solid red;
+                }
+            </div>
+
+            <h3>3. ID Selectors</h3>
+            <div class="code-block">
+                /* Selects element with id="header" */
+                #header {
+                background: #333;
+                color: white;
+                padding: 20px;
+                }
+
+                /* IDs should be unique per page */
+                #unique-element {
+                text-align: center;
+                }
+            </div>
+
+            <h3>4. Universal Selector</h3>
+            <div class="code-block">
+                /* Selects all elements */
+                * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                }
+            </div>
+
+            <div class="example">
+                <h3>Basic Selectors Demo</h3>
+                <div class="demo-area">
+                    <h3>This heading is styled by element selector</h3>
+                    <p>This paragraph is styled by element selector</p>
+                    <p class="important">This paragraph has the "important" class</p>
+                    <div class="box">Box 1</div>
+                    <div class="box important">Box 2 (important)</div>
+                    <div id="unique-element">This has a unique ID</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Attribute Selectors</h2>
+
+            <div class="code-block">
+                /* Exact match */
+                input[type="text"] {
+                border: 2px solid blue;
+                }
+
+                /* Starts with */
+                a[href^="https"] {
+                color: green;
+                }
+
+                /* Ends with */
+                a[href$=".pdf"] {
+                color: red;
+                }
+
+                /* Contains */
+                a[href*="github"] {
+                background: #f0f0f0;
+                }
+
+                /* Word match */
+                div[class~="special"] {
+                font-weight: bold;
+                }
+
+                /* Language match */
+                p[lang|="en"] {
+                font-style: italic;
+                }
+            </div>
+
+            <div class="example">
+                <h3>Attribute Selectors Demo</h3>
+                <div class="demo-area">
+                    <input type="text" placeholder="Text input (blue border)">
+                    <input type="email" placeholder="Email input (green border)">
+                    <br><br>
+                    <a href="https://example.com">HTTPS link (green)</a><br>
+                    <a href="document.pdf">PDF link (red)</a><br>
+                    <a href="https://github.com/user">GitHub link (special styling)</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>✨ Pseudo-class Selectors</h2>
+
+            <div class="code-block">
+                /* User interaction */
+                a:hover { color: red; }
+                button:active { background: darkblue; }
+                input:focus { border: 2px solid orange; }
+
+                /* Structural */
+                li:first-child { color: red; }
+                li:last-child { color: green; }
+                li:nth-child(2) { color: blue; }
+                li:nth-child(even) { background: #f0f0f0; }
+                li:nth-child(odd) { background: white; }
+
+                /* Form states */
+                input:valid { border: 2px solid green; }
+                input:invalid { border: 2px solid red; }
+                input:disabled { opacity: 0.5; }
+
+                /* Others */
+                p:empty { display: none; }
+                a:visited { color: purple; }
+            </div>
+
+            <div class="example">
+                <h3>Pseudo-class Selectors Demo</h3>
+                <div class="demo-area">
+                    <button class="demo-button">Hover over me!</button>
+                    <ul>
+                        <li>First item (red)</li>
+                        <li>Second item</li>
+                        <li>Third item (even - gray background)</li>
+                        <li>Fourth item (even - gray background)</li>
+                        <li>Last item (green)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎨 Pseudo-element Selectors</h2>
+
+            <div class="code-block">
+                /* Generated content */
+                p::before {
+                content: "→ ";
+                color: blue;
+                }
+
+                p::after {
+                content: " ←";
+                color: red;
+                }
+
+                /* Text styling */
+                p::first-letter {
+                font-size: 2em;
+                font-weight: bold;
+                color: red;
+                }
+
+                p::first-line {
+                font-weight: bold;
+                }
+
+                /* Selection styling */
+                p::selection {
+                background: yellow;
+                color: black;
+                }
+            </div>
+
+            <div class="example">
+                <h3>Pseudo-element Selectors Demo</h3>
+                <div class="demo-area">
+                    <p class="quote">This text has custom quotes added via pseudo-elements</p>
+                    <p class="first-letter">This paragraph has a stylized first letter (drop cap effect)</p>
+                    <p>Try selecting this text to see custom selection styling!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔗 Combinator Selectors</h2>
+
+            <div class="code-block">
+                /* Descendant selector (space) */
+                div p {
+                color: blue;
+                }
+
+                /* Direct child selector (>) */
+                div > p {
+                color: red;
+                }
+
+                /* Adjacent sibling selector (+) */
+                h2 + p {
+                margin-top: 0;
+                }
+
+                /* General sibling selector (~) */
+                h2 ~ p {
+                color: gray;
+                }
+            </div>
+
+            <div class="example">
+                <h3>Combinator Selectors Demo</h3>
+                <div class="demo-area">
+                    <div class="parent">
+                        <p class="direct-child">Direct child (green)</p>
+                        <div>
+                            <p class="descendant">Descendant (blue italic)</p>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <p class="descendant">Another descendant (blue italic)</p>
+                    </div>
+                    <br>
+                    <div class="sibling">Sibling element</div>
+                    <div class="adjacent">Adjacent sibling (red)</div>
+                    <div class="general">General sibling (orange underline)</div>
+                    <div class="general">Another general sibling (orange underline)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⚖️ CSS Specificity</h2>
+
+            <div class="highlight">
+                <h3>🎯 What is Specificity?</h3>
+                <p>Specificity determines which CSS rule is applied when multiple rules could apply to the same element.
+                    Higher specificity wins!</p>
+            </div>
+
+            <h3>Specificity Calculation</h3>
+            <table class="specificity-table">
+                <thead>
+                    <tr>
+                        <th>Selector Type</th>
+                        <th>Specificity Value</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Inline styles</td>
+                        <td>1000</td>
+                        <td>style="color: red;"</td>
+                    </tr>
+                    <tr>
+                        <td>IDs</td>
+                        <td>100</td>
+                        <td>#header</td>
+                    </tr>
+                    <tr>
+                        <td>Classes, attributes, pseudo-classes</td>
+                        <td>10</td>
+                        <td>.class, [type="text"], :hover</td>
+                    </tr>
+                    <tr>
+                        <td>Elements and pseudo-elements</td>
+                        <td>1</td>
+                        <td>div, p, ::before</td>
+                    </tr>
+                    <tr>
+                        <td>Universal selector</td>
+                        <td>0</td>
+                        <td>*</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Specificity Examples</h3>
+            <div class="code-block">
+                /* Specificity: 1 (one element) */
+                p { color: black; }
+
+                /* Specificity: 10 (one class) */
+                .text { color: blue; }
+
+                /* Specificity: 100 (one ID) */
+                #content { color: red; }
+
+                /* Specificity: 111 (1 ID + 1 class + 1 element) */
+                #content .text p { color: green; }
+
+                /* Specificity: 1000 (inline style) */
+                <p style="color: purple;">Inline style</p>
+
+                /* !important overrides specificity */
+                p { color: orange !important; }
+            </div>
+
+            <div class="example">
+                <h3>Specificity Demo</h3>
+                <div class="specificity-demo">
+                    <p>This paragraph uses element selector (black)</p>
+                    <p class="class-selector">This paragraph uses class selector (blue)</p>
+                    <p id="id-selector">This paragraph uses ID selector (red)</p>
+                    <p id="id-selector" class="class-selector">This paragraph uses ID + class (green)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🛠️ Advanced Selector Techniques</h2>
+
+            <h3>1. Grouping Selectors</h3>
+            <div class="code-block">
+                /* Apply same styles to multiple elements */
+                h1, h2, h3, h4, h5, h6 {
+                font-family: Arial, sans-serif;
+                color: #333;
+                }
+
+                .button, .btn, .cta {
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+                }
+            </div>
+
+            <h3>2. Chaining Selectors</h3>
+            <div class="code-block">
+                /* Element must have both classes */
+                .button.primary {
+                background: blue;
+                color: white;
+                }
+
+                /* Element must have class and be in certain state */
+                .button.primary:hover {
+                background: darkblue;
+                }
+            </div>
+
+            <h3>3. Complex Selectors</h3>
+            <div class="code-block">
+                /* Very specific targeting */
+                .sidebar ul li:first-child a:hover {
+                color: red;
+                }
+
+                /* Form validation styling */
+                input[type="email"]:valid + .success-message {
+                display: block;
+                color: green;
+                }
+
+                /* Responsive design helper */
+                .container > .row:nth-child(odd) .col:last-child {
+                background: #f0f0f0;
+                }
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Best Practices</h2>
+
+            <div class="tips">
+                <h3>✅ DO:</h3>
+                <ul>
+                    <li>Use classes for styling, IDs for JavaScript</li>
+                    <li>Keep specificity low and consistent</li>
+                    <li>Use meaningful class names</li>
+                    <li>Prefer classes over element selectors</li>
+                    <li>Use attribute selectors for form elements</li>
+                    <li>Group related selectors together</li>
+                </ul>
+            </div>
+
+            <div class="warning">
+                <h3>❌ DON'T:</h3>
+                <ul>
+                    <li>Use overly specific selectors</li>
+                    <li>Rely on !important (use sparingly)</li>
+                    <li>Use inline styles for layout</li>
+                    <li>Chain too many selectors</li>
+                    <li>Use IDs for styling (save for JS)</li>
+                    <li>Forget about specificity conflicts</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚨 Common Pitfalls</h2>
+
+            <div class="warning">
+                <h3>⚠️ Specificity Wars</h3>
+                <p>When selectors become too specific, it becomes hard to override them later.</p>
+                <div class="code-block">
+                    /* Bad: Too specific */
+                    .header .nav ul li a.active {
+                    color: red;
+                    }
+
+                    /* Good: Simple and flexible */
+                    .nav-link.active {
+                    color: red;
+                    }
+                </div>
+            </div>
+
+            <div class="warning">
+                <h3>⚠️ Overusing !important</h3>
+                <p>!important should be used only when absolutely necessary, as it makes CSS hard to maintain.</p>
+                <div class="code-block">
+                    /* Bad: Overusing !important */
+                    .text { color: blue !important; }
+                    .small { font-size: 12px !important; }
+
+                    /* Good: Proper specificity */
+                    .sidebar .text { color: blue; }
+                    .content .small { font-size: 12px; }
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔬 CSS Specificity Calculator</h2>
+
+            <div class="highlight">
+                <h3>Manual Calculation:</h3>
+                <p>Count the number of each selector type and calculate:</p>
+                <div class="code-block">
+                    /* Example: #header .nav ul li a:hover */
+                    /* 1 ID + 1 class + 3 elements + 1 pseudo-class */
+                    /* = 100 + 10 + 3 + 10 = 123 */
+
+                    /* Example: .button.primary */
+                    /* 2 classes */
+                    /* = 10 + 10 = 20 */
+
+                    /* Example: div p */
+                    /* 2 elements */
+                    /* = 1 + 1 = 2 */
+                </div>
+            </div>
+
+            <div class="tips">
+                <h3>🎯 Tools to Help:</h3>
+                <ul>
+                    <li><a href="https://specificity.keegan.st/" target="_blank">Specificity Calculator</a></li>
+                    <li><a href="https://polypane.app/css-specificity-calculator/" target="_blank">Polypane
+                            Calculator</a></li>
+                    <li>Browser DevTools (shows computed specificity)</li>
+                    <li>CSS Linting tools</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="exercise">
+            <h2>💪 Practice Exercises</h2>
+
+            <h3>Exercise 1: Selector Practice</h3>
+            <p>Write selectors to target: all paragraphs, elements with class 'highlight', the element with ID 'main',
+                and links that start with 'https'.</p>
+
+            <h3>Exercise 2: Specificity Challenge</h3>
+            <p>Calculate the specificity of these selectors: `.nav ul li a:hover`, `#sidebar .widget h3`,
+                `.btn.primary.large`</p>
+
+            <h3>Exercise 3: Pseudo-selector Magic</h3>
+            <p>Style the first and last items in a list, make buttons change color on hover, and add content
+                before/after elements.</p>
+
+            <h3>Exercise 4: Form Styling</h3>
+            <p>Use attribute selectors to style different input types, and pseudo-classes for validation states.</p>
+
+            <h3>Exercise 5: Complex Targeting</h3>
+            <p>Create a navigation menu where the current page link is highlighted and hover effects work properly.</p>
+        </div>
+
+        <div class="section">
+            <h2>🔗 Resources & Next Steps</h2>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors" target="_blank">MDN CSS
+                        Selectors</a></li>
+                <li><a href="https://css-tricks.com/almanac/" target="_blank">CSS-Tricks Almanac</a></li>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity" target="_blank">MDN
+                        Specificity</a></li>
+                <li><a href="https://flukeout.github.io/" target="_blank">CSS Diner (Selector Game)</a></li>
+            </ul>
+
+            <div class="tips">
+                <h3>🎯 Next Steps:</h3>
+                <ol>
+                    <li>Practice with different selector types</li>
+                    <li>Master specificity calculations</li>
+                    <li>Learn advanced pseudo-selectors</li>
+                    <li>Study CSS methodologies (BEM, SMACSS)</li>
+                    <li>Explore CSS preprocessing (Sass, Less)</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Advanced - Modern ES6+ Features</title>
+    <style>
+        /* Basic styling for demonstration */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+
+        .demo-section {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .senior-tip {
+            background-color: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .output {
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            border-radius: 3px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+
+        .interactive-demo {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .demo-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+
+        .demo-button:hover {
+            background-color: #2980b9;
+        }
+
+        .demo-input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 5px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🚀 Modern JavaScript ES6+ Features</h1>
+
+        <p>Master the latest JavaScript features that have revolutionized modern web development. This comprehensive
+            guide covers ES6+ syntax, patterns, and best practices used in production applications.</p>
+
+        <h2>🎯 Arrow Functions & Function Enhancements</h2>
+
+        <h3>1. Arrow Function Syntax and Behavior</h3>
+        <div class="code-block">
+            // Traditional function declaration
+            function traditionalFunction(a, b) {
+            return a + b;
+            }
+
+            // Arrow function equivalents
+            const arrowFunction = (a, b) => a + b;
+            const singleParam = x => x * 2;
+            const noParams = () => Math.random();
+            const multiLine = (x, y) => {
+            const result = x * y;
+            return result + 1;
+            };
+
+            // Arrow functions and 'this' binding
+            class Timer {
+            constructor() {
+            this.seconds = 0;
+
+            // Arrow function preserves 'this' context
+            setInterval(() => {
+            this.seconds++;
+            console.log(`Timer: ${this.seconds}s`);
+            }, 1000);
+
+            // Traditional function would lose 'this' context
+            // setInterval(function() {
+            // this.seconds++; // 'this' would be undefined or window
+            // }, 1000);
+            }
+            }
+
+            // Higher-order functions with arrows
+            const numbers = [1, 2, 3, 4, 5];
+            const doubled = numbers.map(n => n * 2);
+            const evenNumbers = numbers.filter(n => n % 2 === 0);
+            const sum = numbers.reduce((acc, n) => acc + n, 0);
+        </div>
+
+        <div class="demo-section">
+            <h4>🎯 Arrow Function Demo:</h4>
+            <div class="interactive-demo">
+                <button class="demo-button" onclick="demoArrowFunctions()">Test Arrow Functions</button>
+                <button class="demo-button" onclick="demoThisBinding()">Test 'this' Binding</button>
+                <div id="arrow-output" class="output"></div>
+            </div>
+        </div>
+
+        <h2>📦 Destructuring Assignment</h2>
+
+        <h3>1. Array and Object Destructuring</h3>
+        <div class="code-block">
+            // Array destructuring
+            const colors = ['red', 'green', 'blue', 'yellow'];
+            const [primary, secondary, ...others] = colors;
+            console.log(primary); // 'red'
+            console.log(secondary); // 'green'
+            console.log(others); // ['blue', 'yellow']
+
+            // Skipping elements
+            const [first, , third] = colors;
+            console.log(first); // 'red'
+            console.log(third); // 'blue'
+
+            // Default values
+            const [a, b, c, d, e = 'purple'] = colors;
+            console.log(e); // 'yellow' (not 'purple' because colors[4] doesn't exist)
+
+            // Object destructuring
+            const person = {
+            name: 'Alice',
+            age: 30,
+            job: 'Developer',
+            location: 'San Francisco'
+            };
+
+            const { name, age, ...details } = person;
+            console.log(name); // 'Alice'
+            console.log(details); // { job: 'Developer', location: 'San Francisco' }
+
+            // Renaming variables
+            const { name: fullName, job: occupation } = person;
+            console.log(fullName); // 'Alice'
+            console.log(occupation); // 'Developer'
+
+            // Nested destructuring
+            const company = {
+            name: 'TechCorp',
+            address: {
+            street: '123 Main St',
+            city: 'New York',
+            coordinates: { lat: 40.7128, lng: -74.0060 }
+            }
+            };
+
+            const {
+            name: companyName,
+            address: {
+            city,
+            coordinates: { lat, lng }
+            }
+            } = company;
+
+            console.log(companyName); // 'TechCorp'
+            console.log(city); // 'New York'
+            console.log(lat, lng); // 40.7128 -74.0060
+        </div>
+
+        <div class="demo-section">
+            <h4>📦 Destructuring Demo:</h4>
+            <div class="interactive-demo">
+                <button class="demo-button" onclick="demoArrayDestructuring()">Array Destructuring</button>
+                <button class="demo-button" onclick="demoObjectDestructuring()">Object Destructuring</button>
+                <button class="demo-button" onclick="demoNestedDestructuring()">Nested Destructuring</button>
+                <div id="destructuring-output" class="output"></div>
+            </div>
+        </div>
+
+        <h3>2. Function Parameter Destructuring</h3>
+        <div class="code-block">
+            // Function parameter destructuring
+            function createUser({ name, email, age = 18, role = 'user' }) {
+            return {
+            id: Math.random().toString(36),
+            name,
+            email,
+            age,
+            role,
+            createdAt: new Date()
+            };
+            }
+
+            // Usage
+            const newUser = createUser({
+            name: 'John Doe',
+            email: 'john@example.com',
+            role: 'admin'
+            });
+
+            // Array parameter destructuring
+            function calculateDistance([x1, y1], [x2, y2]) {
+            return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+            }
+
+            const distance = calculateDistance([0, 0], [3, 4]); // 5
+
+            // Mixed destructuring in functions
+            function processOrder({
+            items,
+            customer: { name, email },
+            shipping: { address, method = 'standard' }
+            }) {
+            return {
+            customerName: name,
+            customerEmail: email,
+            itemCount: items.length,
+            shippingAddress: address,
+            shippingMethod: method
+            };
+            }
+        </div>
+
+        <h2>🔄 Spread and Rest Operators</h2>
+
+        <div class="code-block">
+            // Spread operator (...) - expands iterables
+            const arr1 = [1, 2, 3];
+            const arr2 = [4, 5, 6];
+            const combined = [...arr1, ...arr2]; // [1, 2, 3, 4, 5, 6]
+
+            // Object spread
+            const defaults = { theme: 'light', language: 'en' };
+            const userPrefs = { theme: 'dark', fontSize: 14 };
+            const config = { ...defaults, ...userPrefs }; // { theme: 'dark', language: 'en', fontSize: 14 }
+
+            // Function arguments spread
+            function sum(a, b, c) {
+            return a + b + c;
+            }
+            const numbers = [1, 2, 3];
+            const result = sum(...numbers); // equivalent to sum(1, 2, 3)
+
+            // Rest operator (...) - collects remaining elements
+            function multiply(factor, ...numbers) {
+            return numbers.map(num => num * factor);
+            }
+            const multiplied = multiply(2, 1, 2, 3, 4); // [2, 4, 6, 8]
+
+            // Rest in destructuring
+            const [head, ...tail] = [1, 2, 3, 4, 5];
+            console.log(head); // 1
+            console.log(tail); // [2, 3, 4, 5]
+
+            const { name, ...otherProps } = { name: 'Alice', age: 30, job: 'Dev' };
+            console.log(name); // 'Alice'
+            console.log(otherProps); // { age: 30, job: 'Dev' }
+        </div>
+
+        <div class="demo-section">
+            <h4>🔄 Spread/Rest Demo:</h4>
+            <div class="interactive-demo">
+                <button class="demo-button" onclick="demoSpreadOperator()">Spread Operator</button>
+                <button class="demo-button" onclick="demoRestOperator()">Rest Operator</button>
+                <div id="spread-rest-output" class="output"></div>
+            </div>
+        </div>
+
+        <h2>📝 Template Literals & String Methods</h2>
+
+        <div class="code-block">
+            // Template literals with interpolation
+            const name = 'Alice';
+            const age = 30;
+            const greeting = `Hello, my name is ${name} and I'm ${age} years old.`;
+
+            // Multi-line strings
+            const multiLine = `
+            This is a
+            multi-line string
+            with preserved formatting
+            `;
+
+            // Expression evaluation in templates
+            const price = 29.99;
+            const tax = 0.08;
+            const total = `Total: $${(price * (1 + tax)).toFixed(2)}`;
+
+            // Tagged template literals
+            function highlight(strings, ...values) {
+            return strings.reduce((result, string, i) => {
+            const value = values[i] ? `<mark>${values[i]}</mark>` : '';
+            return result + string + value;
+            }, '');
+            }
+
+            const searchTerm = 'JavaScript';
+            const highlightedText = highlight`Learning ${searchTerm} is fun!`;
+            // Result: "Learning <mark>JavaScript</mark> is fun!"
+
+            // Advanced string methods
+            const text = ' JavaScript ES6+ ';
+            console.log(text.trim()); // 'JavaScript ES6+'
+            console.log(text.padStart(20, '*')); // '*** JavaScript ES6+ '
+            console.log(text.padEnd(20, '*')); // ' JavaScript ES6+ ***'
+            console.log('hello'.repeat(3)); // 'hellohellohello'
+            console.log('JavaScript'.startsWith('Java')); // true
+            console.log('JavaScript'.endsWith('Script')); // true
+            console.log('JavaScript'.includes('Script')); // true
+        </div>
+
+        <div class="demo-section">
+            <h4>📝 Template Literals Demo:</h4>
+            <div class="interactive-demo">
+                <input type="text" class="demo-input" id="name-input" placeholder="Enter your name" value="Alice">
+                <input type="number" class="demo-input" id="age-input" placeholder="Enter your age" value="25">
+                <button class="demo-button" onclick="demoTemplateLiterals()">Generate Template</button>
+                <button class="demo-button" onclick="demoStringMethods()">String Methods</button>
+                <div id="template-output" class="output"></div>
+            </div>
+        </div>
+
+        <h2>🏗️ Modern Class Syntax</h2>
+
+        <div class="code-block">
+            // ES6 Class syntax
+            class Vehicle {
+            // Public fields (modern)
+            wheels = 4;
+
+            // Private fields (modern)
+            #engineNumber = Math.random().toString(36);
+
+            constructor(make, model, year) {
+            this.make = make;
+            this.model = model;
+            this.year = year;
+            }
+
+            // Instance methods
+            start() {
+            console.log(`${this.make} ${this.model} is starting...`);
+            }
+
+            // Getter
+            get info() {
+            return `${this.year} ${this.make} ${this.model}`;
+            }
+
+            // Setter
+            set year(value) {
+            if (value > 1900 && value <= new Date().getFullYear()) { this._year=value; } } get year() { return
+                this._year; } // Static methods static compare(vehicle1, vehicle2) { return vehicle1.year -
+                vehicle2.year; } // Private method #generateId() { return Math.random().toString(36).substr(2, 9); } }
+                // Inheritance class Car extends Vehicle { constructor(make, model, year, doors) { super(make, model,
+                year); // Call parent constructor this.doors=doors; } // Method override start() { super.start(); //
+                Call parent method console.log('Car engine purring...'); } // Additional methods honk() {
+                console.log('Beep beep!'); } } // Usage const myCar=new Car('Toyota', 'Camry' , 2022, 4); myCar.start();
+                console.log(myCar.info); // Mixins pattern const Flyable={ fly() { console.log('Flying high!'); } };
+                class FlyingCar extends Car { constructor(...args) { super(...args); Object.assign(this, Flyable); } }
+                </div>
+
+                <div class="demo-section">
+                    <h4>🏗️ Class Demo:</h4>
+                    <div class="interactive-demo">
+                        <button class="demo-button" onclick="demoClassBasics()">Basic Class</button>
+                        <button class="demo-button" onclick="demoInheritance()">Inheritance</button>
+                        <button class="demo-button" onclick="demoStaticMethods()">Static Methods</button>
+                        <div id="class-output" class="output"></div>
+                    </div>
+                </div>
+
+                <h2>📦 Modules (Import/Export)</h2>
+
+                <div class="code-block">
+                    // math.js - Named exports
+                    export const PI = 3.14159;
+
+                    export function add(a, b) {
+                    return a + b;
+                    }
+
+                    export function multiply(a, b) {
+                    return a * b;
+                    }
+
+                    // Default export
+                    export default function subtract(a, b) {
+                    return a - b;
+                    }
+
+                    // utils.js - Mixed exports
+                    const API_URL = 'https://api.example.com';
+
+                    class Logger {
+                    static log(message) {
+                    console.log(`[${new Date().toISOString()}] ${message}`);
+                    }
+                    }
+
+                    export { API_URL, Logger };
+                    export default Logger;
+
+                    // main.js - Importing
+                    import subtract, { PI, add, multiply } from './math.js';
+                    import Logger, { API_URL } from './utils.js';
+
+                    // Import all as namespace
+                    import * as Math from './math.js';
+
+                    // Dynamic imports (ES2020)
+                    async function loadModule() {
+                    const mathModule = await import('./math.js');
+                    return mathModule.add(5, 3);
+                    }
+
+                    // Re-exports
+                    // index.js
+                    export { add, multiply } from './math.js';
+                    export { default as subtract } from './math.js';
+                    export * from './utils.js';
+                </div>
+
+                <h2>🔄 Promises and Async/Await</h2>
+
+                <div class="code-block">
+                    // Promise creation and chaining
+                    function fetchUserData(userId) {
+                    return new Promise((resolve, reject) => {
+                    // Simulate API call
+                    setTimeout(() => {
+                    if (userId > 0) {
+                    resolve({
+                    id: userId,
+                    name: `User ${userId}`,
+                    email: `user${userId}@example.com`
+                    });
+                    } else {
+                    reject(new Error('Invalid user ID'));
+                    }
+                    }, 1000);
+                    });
+                    }
+
+                    // Promise chaining
+                    fetchUserData(1)
+                    .then(user => {
+                    console.log('User:', user);
+                    return fetchUserPosts(user.id);
+                    })
+                    .then(posts => {
+                    console.log('Posts:', posts);
+                    })
+                    .catch(error => {
+                    console.error('Error:', error.message);
+                    })
+                    .finally(() => {
+                    console.log('Operation completed');
+                    });
+
+                    // Async/await syntax
+                    async function getUserWithPosts(userId) {
+                    try {
+                    const user = await fetchUserData(userId);
+                    const posts = await fetchUserPosts(user.id);
+
+                    return {
+                    user,
+                    posts,
+                    summary: `${user.name} has ${posts.length} posts`
+                    };
+                    } catch (error) {
+                    console.error('Failed to fetch user data:', error);
+                    throw error;
+                    }
+                    }
+
+                    // Parallel execution
+                    async function fetchMultipleUsers(userIds) {
+                    try {
+                    // All promises run in parallel
+                    const users = await Promise.all(
+                    userIds.map(id => fetchUserData(id))
+                    );
+                    return users;
+                    } catch (error) {
+                    console.error('One or more requests failed:', error);
+                    throw error;
+                    }
+                    }
+
+                    // Promise.allSettled for handling partial failures
+                    async function fetchUsersWithFallback(userIds) {
+                    const results = await Promise.allSettled(
+                    userIds.map(id => fetchUserData(id))
+                    );
+
+                    const successful = results
+                    .filter(result => result.status === 'fulfilled')
+                    .map(result => result.value);
+
+                    const failed = results
+                    .filter(result => result.status === 'rejected')
+                    .map(result => result.reason);
+
+                    return { successful, failed };
+                    }
+                </div>
+
+                <div class="demo-section">
+                    <h4>🔄 Async Demo:</h4>
+                    <div class="interactive-demo">
+                        <button class="demo-button" onclick="demoPromises()">Promise Chain</button>
+                        <button class="demo-button" onclick="demoAsyncAwait()">Async/Await</button>
+                        <button class="demo-button" onclick="demoParallelExecution()">Parallel Execution</button>
+                        <div id="async-output" class="output"></div>
+                    </div>
+                </div>
+
+                <div class="senior-tip">
+                    <h3>🚀 Senior Engineer Tips:</h3>
+                    <ul>
+                        <li><strong>Arrow Functions:</strong> Use for short functions and callbacks, but be mindful of
+                            'this' binding</li>
+                        <li><strong>Destructuring:</strong> Improves code readability but don't over-destructure complex
+                            objects</li>
+                        <li><strong>Async/Await:</strong> Prefer over Promise chains for better error handling and
+                            readability</li>
+                        <li><strong>Modules:</strong> Use named exports for utilities, default exports for main
+                            functionality</li>
+                        <li><strong>Classes:</strong> Modern class syntax is cleaner but understand prototypal
+                            inheritance</li>
+                        <li><strong>Performance:</strong> Be aware of the performance implications of spread operators
+                            with large objects</li>
+                    </ul>
+                </div>
+
+                <div class="warning">
+                    <h3>⚠️ Common Pitfalls:</h3>
+                    <ul>
+                        <li>Forgetting 'this' binding differences in arrow functions</li>
+                        <li>Over-destructuring leading to unclear code</li>
+                        <li>Not handling Promise rejections properly</li>
+                        <li>Mixing async/await with .then() chains</li>
+                        <li>Circular dependencies in modules</li>
+                        <li>Overusing spread operator causing performance issues</li>
+                    </ul>
+                </div>
+
+                <h2>🛠️ Practical Exercises</h2>
+
+                <div class="demo-section">
+                    <h3>Exercise 1: User Management System</h3>
+                    <p>Build a user management system using:</p>
+                    <ul>
+                        <li>ES6 classes with private fields</li>
+                        <li>Async methods for API calls</li>
+                        <li>Destructuring for data processing</li>
+                        <li>Template literals for formatting</li>
+                    </ul>
+
+                    <h3>Exercise 2: Data Processing Pipeline</h3>
+                    <p>Create a data processing pipeline featuring:</p>
+                    <ul>
+                        <li>Higher-order functions with arrow syntax</li>
+                        <li>Promise chains for sequential processing</li>
+                        <li>Error handling at each stage</li>
+                        <li>Modular design with imports/exports</li>
+                    </ul>
+
+                    <h3>Exercise 3: Configuration Manager</h3>
+                    <p>Develop a configuration manager with:</p>
+                    <ul>
+                        <li>Object spread for merging configs</li>
+                        <li>Destructuring for extracting settings</li>
+                        <li>Static class methods for utilities</li>
+                        <li>Template literals for dynamic messages</li>
+                    </ul>
+                </div>
+
+                <h2>📚 Resources & Next Steps</h2>
+
+                <ul>
+                    <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">MDN JavaScript
+                            Reference</a></li>
+                    <li><a href="https://javascript.info/" target="_blank">JavaScript.info</a></li>
+                    <li><a href="https://tc39.es/ecma262/" target="_blank">ECMAScript Specification</a></li>
+                    <li><a href="https://github.com/tc39/proposals" target="_blank">TC39 Proposals</a></li>
+                </ul>
+
+                <p><strong>Next:</strong> Continue to <a href="02_async_programming.html">Advanced Asynchronous
+                        Programming</a> to master complex async patterns and performance optimization.</p>
+        </div>
+
+        <script>
+            // Demo functions for the interactive examples
+
+            function demoArrowFunctions() {
+                const output = document.getElementById('arrow-output');
+
+                const traditional = function (x) { return x * 2; };
+                const arrow = x => x * 2;
+
+                const numbers = [1, 2, 3, 4, 5];
+                const doubled = numbers.map(n => n * 2);
+                const filtered = numbers.filter(n => n % 2 === 0);
+
+                output.textContent = `
+Traditional function: ${traditional(5)}
+Arrow function: ${arrow(5)}
+Mapped array: [${doubled.join(', ')}]
+Filtered even numbers: [${filtered.join(', ')}]
+            `;
+            }
+
+            function demoThisBinding() {
+                const output = document.getElementById('arrow-output');
+
+                const obj = {
+                    name: 'Test Object',
+                    traditionalMethod: function () {
+                        return `Traditional: ${this.name}`;
+                    },
+                    arrowMethod: () => {
+                        return `Arrow: ${this?.name || 'undefined'}`;
+                    }
+                };
+
+                output.textContent = `
+${obj.traditionalMethod()}
+${obj.arrowMethod()}
+
+Note: Arrow functions don't have their own 'this' binding!
+            `;
+            }
+
+            function demoArrayDestructuring() {
+                const output = document.getElementById('destructuring-output');
+
+                const colors = ['red', 'green', 'blue', 'yellow'];
+                const [first, second, ...rest] = colors;
+                const [, , third] = colors; // Skip first two
+
+                output.textContent = `
+Original array: [${colors.join(', ')}]
+First: ${first}
+Second: ${second}
+Rest: [${rest.join(', ')}]
+Third (skipped first two): ${third}
+            `;
+            }
+
+            function demoObjectDestructuring() {
+                const output = document.getElementById('destructuring-output');
+
+                const person = {
+                    name: 'Alice',
+                    age: 30,
+                    job: 'Developer',
+                    location: 'San Francisco'
+                };
+
+                const { name, age, ...details } = person;
+                const { name: fullName, job: occupation } = person;
+
+                output.textContent = `
+Original object: ${JSON.stringify(person, null, 2)}
+
+Destructured:
+Name: ${name}
+Age: ${age}
+Details: ${JSON.stringify(details, null, 2)}
+
+Renamed:
+Full Name: ${fullName}
+Occupation: ${occupation}
+            `;
+            }
+
+            function demoNestedDestructuring() {
+                const output = document.getElementById('destructuring-output');
+
+                const data = {
+                    user: {
+                        name: 'Bob',
+                        preferences: {
+                            theme: 'dark',
+                            language: 'en'
+                        }
+                    }
+                };
+
+                const {
+                    user: {
+                        name,
+                        preferences: { theme, language }
+                    }
+                } = data;
+
+                output.textContent = `
+Nested object: ${JSON.stringify(data, null, 2)}
+
+Extracted values:
+Name: ${name}
+Theme: ${theme}
+Language: ${language}
+            `;
+            }
+
+            function demoSpreadOperator() {
+                const output = document.getElementById('spread-rest-output');
+
+                const arr1 = [1, 2, 3];
+                const arr2 = [4, 5, 6];
+                const combined = [...arr1, ...arr2];
+
+                const obj1 = { a: 1, b: 2 };
+                const obj2 = { b: 3, c: 4 };
+                const merged = { ...obj1, ...obj2 };
+
+                output.textContent = `
+Array spread:
+arr1: [${arr1.join(', ')}]
+arr2: [${arr2.join(', ')}]
+combined: [${combined.join(', ')}]
+
+Object spread:
+obj1: ${JSON.stringify(obj1)}
+obj2: ${JSON.stringify(obj2)}
+merged: ${JSON.stringify(merged)}
+            `;
+            }
+
+            function demoRestOperator() {
+                const output = document.getElementById('spread-rest-output');
+
+                function sum(...numbers) {
+                    return numbers.reduce((total, num) => total + num, 0);
+                }
+
+                const [head, ...tail] = [1, 2, 3, 4, 5];
+                const { name, ...otherProps } = { name: 'Alice', age: 30, job: 'Dev' };
+
+                output.textContent = `
+Rest in functions:
+sum(1, 2, 3, 4, 5) = ${sum(1, 2, 3, 4, 5)}
+
+Rest in array destructuring:
+[1, 2, 3, 4, 5] -> head: ${head}, tail: [${tail.join(', ')}]
+
+Rest in object destructuring:
+{name: 'Alice', age: 30, job: 'Dev'}
+-> name: ${name}
+-> other props: ${JSON.stringify(otherProps)}
+            `;
+            }
+
+            function demoTemplateLiterals() {
+                const output = document.getElementById('template-output');
+                const name = document.getElementById('name-input').value;
+                const age = document.getElementById('age-input').value;
+
+                const greeting = `Hello, my name is ${name} and I'm ${age} years old.`;
+                const calculation = `In 10 years, I'll be ${parseInt(age) + 10} years old.`;
+
+                const multiLine = `
+This is a multi-line template literal.
+Name: ${name}
+Age: ${age}
+Generated at: ${new Date().toLocaleTimeString()}
+            `;
+
+                output.textContent = `
+Single line: ${greeting}
+With calculation: ${calculation}
+Multi-line:${multiLine}
+            `;
+            }
+
+            function demoStringMethods() {
+                const output = document.getElementById('template-output');
+                const text = '  JavaScript ES6+  ';
+
+                output.textContent = `
+Original: "${text}"
+Trimmed: "${text.trim()}"
+Padded start: "${text.padStart(25, '*')}"
+Padded end: "${text.padEnd(25, '*')}"
+Repeated: "${'JS'.repeat(3)}"
+Starts with 'Java': ${'JavaScript'.startsWith('Java')}
+Ends with 'Script': ${'JavaScript'.endsWith('Script')}
+Includes 'Script': ${'JavaScript'.includes('Script')}
+            `;
+            }
+
+            function demoClassBasics() {
+                const output = document.getElementById('class-output');
+
+                class Vehicle {
+                    constructor(make, model, year) {
+                        this.make = make;
+                        this.model = model;
+                        this.year = year;
+                    }
+
+                    get info() {
+                        return `${this.year} ${this.make} ${this.model}`;
+                    }
+
+                    start() {
+                        return `${this.make} ${this.model} is starting...`;
+                    }
+                }
+
+                const car = new Vehicle('Toyota', 'Camry', 2022);
+
+                output.textContent = `
+Created vehicle: ${car.info}
+Start message: ${car.start()}
+            `;
+            }
+
+            function demoInheritance() {
+                const output = document.getElementById('class-output');
+
+                class Vehicle {
+                    constructor(make, model) {
+                        this.make = make;
+                        this.model = model;
+                    }
+
+                    start() {
+                        return `${this.make} is starting...`;
+                    }
+                }
+
+                class Car extends Vehicle {
+                    constructor(make, model, doors) {
+                        super(make, model);
+                        this.doors = doors;
+                    }
+
+                    start() {
+                        return super.start() + ' Engine purring!';
+                    }
+
+                    honk() {
+                        return 'Beep beep!';
+                    }
+                }
+
+                const myCar = new Car('Honda', 'Civic', 4);
+
+                output.textContent = `
+Car: ${myCar.make} ${myCar.model} with ${myCar.doors} doors
+Start: ${myCar.start()}
+Honk: ${myCar.honk()}
+            `;
+            }
+
+            function demoStaticMethods() {
+                const output = document.getElementById('class-output');
+
+                class MathUtils {
+                    static add(a, b) {
+                        return a + b;
+                    }
+
+                    static multiply(a, b) {
+                        return a * b;
+                    }
+
+                    static factorial(n) {
+                        return n <= 1 ? 1 : n * this.factorial(n - 1);
+                    }
+                }
+
+                output.textContent = `
+Static method calls:
+MathUtils.add(5, 3) = ${MathUtils.add(5, 3)}
+MathUtils.multiply(4, 7) = ${MathUtils.multiply(4, 7)}
+MathUtils.factorial(5) = ${MathUtils.factorial(5)}
+            `;
+            }
+
+            function demoPromises() {
+                const output = document.getElementById('async-output');
+                output.textContent = 'Loading...';
+
+                function mockApiCall(data, delay = 1000) {
+                    return new Promise((resolve) => {
+                        setTimeout(() => resolve(data), delay);
+                    });
+                }
+
+                mockApiCall('User data fetched')
+                    .then(result => {
+                        output.textContent = `Step 1: ${result}\n`;
+                        return mockApiCall('Posts data fetched', 500);
+                    })
+                    .then(result => {
+                        output.textContent += `Step 2: ${result}\n`;
+                        return mockApiCall('Comments data fetched', 300);
+                    })
+                    .then(result => {
+                        output.textContent += `Step 3: ${result}\nAll operations completed!`;
+                    })
+                    .catch(error => {
+                        output.textContent = `Error: ${error.message}`;
+                    });
+            }
+
+            async function demoAsyncAwait() {
+                const output = document.getElementById('async-output');
+                output.textContent = 'Loading with async/await...';
+
+                function mockApiCall(data, delay = 1000) {
+                    return new Promise((resolve) => {
+                        setTimeout(() => resolve(data), delay);
+                    });
+                }
+
+                try {
+                    const user = await mockApiCall('User data', 800);
+                    output.textContent = `Step 1: ${user}\n`;
+
+                    const posts = await mockApiCall('Posts data', 500);
+                    output.textContent += `Step 2: ${posts}\n`;
+
+                    const comments = await mockApiCall('Comments data', 300);
+                    output.textContent += `Step 3: ${comments}\nAsync/await completed!`;
+                } catch (error) {
+                    output.textContent = `Error: ${error.message}`;
+                }
+            }
+
+            async function demoParallelExecution() {
+                const output = document.getElementById('async-output');
+                output.textContent = 'Loading in parallel...';
+
+                function mockApiCall(data, delay = 1000) {
+                    return new Promise((resolve) => {
+                        setTimeout(() => resolve(data), delay);
+                    });
+                }
+
+                try {
+                    const startTime = Date.now();
+
+                    const results = await Promise.all([
+                        mockApiCall('User data', 800),
+                        mockApiCall('Posts data', 600),
+                        mockApiCall('Comments data', 400)
+                    ]);
+
+                    const endTime = Date.now();
+                    const duration = endTime - startTime;
+
+                    output.textContent = `
+Parallel execution completed in ${duration}ms:
+${results.map((result, index) => `${index + 1}. ${result}`).join('\n')}
+
+Note: All requests ran simultaneously!
+                `;
+                } catch (error) {
+                    output.textContent = `Error: ${error.message}`;
+                }
+            }
+
+            // Initialize the page
+            document.addEventListener('DOMContentLoaded', function () {
+                console.log('Modern JavaScript ES6+ demo loaded');
+            });
+        </script>
+</body>
+
+</html>

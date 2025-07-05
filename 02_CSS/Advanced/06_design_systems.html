@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Systems & Tokens</title>
+    <style>
+        /* Design System Foundation */
+        :root {
+            /* Color Tokens */
+            --color-primary-50: #eff6ff;
+            --color-primary-100: #dbeafe;
+            --color-primary-200: #bfdbfe;
+            --color-primary-300: #93c5fd;
+            --color-primary-400: #60a5fa;
+            --color-primary-500: #3b82f6;
+            --color-primary-600: #2563eb;
+            --color-primary-700: #1d4ed8;
+            --color-primary-800: #1e40af;
+            --color-primary-900: #1e3a8a;
+
+            --color-secondary-50: #fefce8;
+            --color-secondary-100: #fef3c7;
+            --color-secondary-200: #fde68a;
+            --color-secondary-300: #fcd34d;
+            --color-secondary-400: #fbbf24;
+            --color-secondary-500: #f59e0b;
+            --color-secondary-600: #d97706;
+            --color-secondary-700: #b45309;
+            --color-secondary-800: #92400e;
+            --color-secondary-900: #78350f;
+
+            --color-neutral-50: #f9fafb;
+            --color-neutral-100: #f3f4f6;
+            --color-neutral-200: #e5e7eb;
+            --color-neutral-300: #d1d5db;
+            --color-neutral-400: #9ca3af;
+            --color-neutral-500: #6b7280;
+            --color-neutral-600: #4b5563;
+            --color-neutral-700: #374151;
+            --color-neutral-800: #1f2937;
+            --color-neutral-900: #111827;
+
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-error: #ef4444;
+            --color-info: #3b82f6;
+
+            /* Typography Tokens */
+            --font-family-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-family-secondary: Georgia, 'Times New Roman', serif;
+            --font-family-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Consolas', monospace;
+
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 1.875rem;
+            --font-size-4xl: 2.25rem;
+            --font-size-5xl: 3rem;
+
+            --font-weight-light: 300;
+            --font-weight-normal: 400;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 600;
+            --font-weight-bold: 700;
+            --font-weight-extrabold: 800;
+
+            --line-height-tight: 1.25;
+            --line-height-snug: 1.375;
+            --line-height-normal: 1.5;
+            --line-height-relaxed: 1.625;
+            --line-height-loose: 2;
+
+            /* Spacing Tokens */
+            --space-0: 0;
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            --space-20: 5rem;
+            --space-24: 6rem;
+            --space-32: 8rem;
+
+            /* Border Radius Tokens */
+            --radius-none: 0;
+            --radius-sm: 0.125rem;
+            --radius-base: 0.25rem;
+            --radius-md: 0.375rem;
+            --radius-lg: 0.5rem;
+            --radius-xl: 0.75rem;
+            --radius-2xl: 1rem;
+            --radius-3xl: 1.5rem;
+            --radius-full: 9999px;
+
+            /* Shadow Tokens */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+            /* Animation Tokens */
+            --duration-75: 75ms;
+            --duration-100: 100ms;
+            --duration-150: 150ms;
+            --duration-200: 200ms;
+            --duration-300: 300ms;
+            --duration-500: 500ms;
+            --duration-700: 700ms;
+            --duration-1000: 1000ms;
+
+            --ease-linear: linear;
+            --ease-in: cubic-bezier(0.4, 0, 1, 1);
+            --ease-out: cubic-bezier(0, 0, 0.2, 1);
+            --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+            /* Breakpoint Tokens */
+            --breakpoint-sm: 640px;
+            --breakpoint-md: 768px;
+            --breakpoint-lg: 1024px;
+            --breakpoint-xl: 1280px;
+            --breakpoint-2xl: 1536px;
+
+            /* Z-index Tokens */
+            --z-dropdown: 1000;
+            --z-sticky: 1020;
+            --z-fixed: 1030;
+            --z-modal-backdrop: 1040;
+            --z-modal: 1050;
+            --z-popover: 1060;
+            --z-tooltip: 1070;
+            --z-toast: 1080;
+        }
+
+        /* Dark Theme Tokens */
+        [data-theme="dark"] {
+            --color-primary-50: #1e3a8a;
+            --color-primary-900: #eff6ff;
+            --color-neutral-50: #111827;
+            --color-neutral-900: #f9fafb;
+        }
+
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family-primary);
+            font-size: var(--font-size-base);
+            line-height: var(--line-height-normal);
+            color: var(--color-neutral-800);
+            background-color: var(--color-neutral-50);
+        }
+
+        /* Component Library */
+
+        /* Button Component */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-6);
+            font-family: var(--font-family-primary);
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-medium);
+            line-height: var(--line-height-tight);
+            border: 1px solid transparent;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--duration-150) var(--ease-in-out);
+            text-decoration: none;
+            user-select: none;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Button Variants */
+        .btn--primary {
+            background-color: var(--color-primary-600);
+            color: white;
+            border-color: var(--color-primary-600);
+        }
+
+        .btn--primary:hover:not(:disabled) {
+            background-color: var(--color-primary-700);
+            border-color: var(--color-primary-700);
+        }
+
+        .btn--secondary {
+            background-color: var(--color-secondary-600);
+            color: white;
+            border-color: var(--color-secondary-600);
+        }
+
+        .btn--secondary:hover:not(:disabled) {
+            background-color: var(--color-secondary-700);
+            border-color: var(--color-secondary-700);
+        }
+
+        .btn--outline {
+            background-color: transparent;
+            color: var(--color-primary-600);
+            border-color: var(--color-primary-600);
+        }
+
+        .btn--outline:hover:not(:disabled) {
+            background-color: var(--color-primary-600);
+            color: white;
+        }
+
+        .btn--ghost {
+            background-color: transparent;
+            color: var(--color-neutral-700);
+            border-color: transparent;
+        }
+
+        .btn--ghost:hover:not(:disabled) {
+            background-color: var(--color-neutral-100);
+        }
+
+        /* Button Sizes */
+        .btn--sm {
+            padding: var(--space-2) var(--space-4);
+            font-size: var(--font-size-sm);
+        }
+
+        .btn--lg {
+            padding: var(--space-4) var(--space-8);
+            font-size: var(--font-size-lg);
+        }
+
+        /* Card Component */
+        .card {
+            background-color: white;
+            border: 1px solid var(--color-neutral-200);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .card__header {
+            padding: var(--space-6);
+            border-bottom: 1px solid var(--color-neutral-200);
+        }
+
+        .card__body {
+            padding: var(--space-6);
+        }
+
+        .card__footer {
+            padding: var(--space-6);
+            border-top: 1px solid var(--color-neutral-200);
+            background-color: var(--color-neutral-50);
+        }
+
+        .card__title {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-neutral-900);
+            margin-bottom: var(--space-2);
+        }
+
+        .card__description {
+            color: var(--color-neutral-600);
+            line-height: var(--line-height-relaxed);
+        }
+
+        /* Input Component */
+        .input {
+            width: 100%;
+            padding: var(--space-3);
+            font-family: var(--font-family-primary);
+            font-size: var(--font-size-base);
+            line-height: var(--line-height-tight);
+            color: var(--color-neutral-900);
+            background-color: white;
+            border: 1px solid var(--color-neutral-300);
+            border-radius: var(--radius-md);
+            transition: border-color var(--duration-150) var(--ease-in-out),
+                box-shadow var(--duration-150) var(--ease-in-out);
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: var(--color-primary-500);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .input--error {
+            border-color: var(--color-error);
+        }
+
+        .input--error:focus {
+            border-color: var(--color-error);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        /* Badge Component */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: var(--space-1) var(--space-3);
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-medium);
+            line-height: var(--line-height-tight);
+            border-radius: var(--radius-full);
+        }
+
+        .badge--primary {
+            background-color: var(--color-primary-100);
+            color: var(--color-primary-800);
+        }
+
+        .badge--success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge--warning {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge--error {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Layout Components */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-4);
+        }
+
+        .grid {
+            display: grid;
+            gap: var(--space-6);
+        }
+
+        .grid--cols-1 {
+            grid-template-columns: repeat(1, 1fr);
+        }
+
+        .grid--cols-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .grid--cols-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .grid--cols-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        @media (max-width: 768px) {
+
+            .grid--cols-2,
+            .grid--cols-3,
+            .grid--cols-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .flex--column {
+            flex-direction: column;
+        }
+
+        .flex--wrap {
+            flex-wrap: wrap;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .justify-center {
+            justify-content: center;
+        }
+
+        .gap-4 {
+            gap: var(--space-4);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-700));
+            color: white;
+            padding: var(--space-8) 0;
+            text-align: center;
+        }
+
+        .header__title {
+            font-size: var(--font-size-4xl);
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--space-2);
+        }
+
+        .header__subtitle {
+            font-size: var(--font-size-xl);
+            opacity: 0.9;
+        }
+
+        /* Design System Documentation */
+        .section {
+            padding: var(--space-8) 0;
+        }
+
+        .section__title {
+            font-size: var(--font-size-3xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-neutral-900);
+            margin-bottom: var(--space-6);
+        }
+
+        .section__description {
+            font-size: var(--font-size-lg);
+            color: var(--color-neutral-600);
+            margin-bottom: var(--space-8);
+            line-height: var(--line-height-relaxed);
+        }
+
+        /* Token Display */
+        .token-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-4);
+            margin: var(--space-6) 0;
+        }
+
+        .token-item {
+            background: white;
+            border: 1px solid var(--color-neutral-200);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+        }
+
+        .token-item__name {
+            font-family: var(--font-family-mono);
+            font-size: var(--font-size-sm);
+            color: var(--color-neutral-600);
+            margin-bottom: var(--space-2);
+        }
+
+        .token-item__value {
+            font-weight: var(--font-weight-medium);
+            color: var(--color-neutral-900);
+        }
+
+        /* Color Palette */
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: var(--space-2);
+            margin: var(--space-4) 0;
+        }
+
+        .color-swatch {
+            height: 60px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--color-neutral-200);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .color-swatch__label {
+            position: absolute;
+            bottom: var(--space-1);
+            left: var(--space-1);
+            right: var(--space-1);
+            font-size: var(--font-size-xs);
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        /* Component Examples */
+        .component-showcase {
+            background: white;
+            border: 1px solid var(--color-neutral-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            margin: var(--space-4) 0;
+        }
+
+        .component-showcase__title {
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-semibold);
+            margin-bottom: var(--space-4);
+        }
+
+        .component-showcase__content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-4);
+            align-items: center;
+        }
+
+        /* Theme Switcher */
+        .theme-switcher {
+            position: fixed;
+            top: var(--space-4);
+            right: var(--space-4);
+            z-index: var(--z-fixed);
+        }
+
+        /* Code Display */
+        .code-block {
+            background: var(--color-neutral-900);
+            color: var(--color-neutral-100);
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            font-family: var(--font-family-mono);
+            font-size: var(--font-size-sm);
+            overflow-x: auto;
+            margin: var(--space-4) 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 640px) {
+            .header__title {
+                font-size: var(--font-size-3xl);
+            }
+
+            .section__title {
+                font-size: var(--font-size-2xl);
+            }
+
+            .token-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="header__title">Design Systems & Tokens</h1>
+            <p class="header__subtitle">Scalable Design Language with CSS Custom Properties</p>
+        </div>
+    </header>
+
+    <!-- Theme Switcher -->
+    <div class="theme-switcher">
+        <button class="btn btn--outline btn--sm" onclick="toggleTheme()">
+            🌙 Toggle Theme
+        </button>
+    </div>
+
+    <div class="container">
+        <!-- Design Tokens Section -->
+        <section class="section">
+            <h2 class="section__title">Design Tokens</h2>
+            <p class="section__description">
+                Design tokens are the core building blocks of our design system. They represent design decisions
+                as code, ensuring consistency across all components and platforms.
+            </p>
+
+            <!-- Color Tokens -->
+            <h3 style="font-size: var(--font-size-2xl); margin-bottom: var(--space-4);">Color Palette</h3>
+
+            <h4 style="margin: var(--space-4) 0;">Primary Colors</h4>
+            <div class="color-palette">
+                <div class="color-swatch" style="background-color: var(--color-primary-50);">
+                    <div class="color-swatch__label" style="color: black;">50</div>
+                </div>
+                <div class="color-swatch" style="background-color: var(--color-primary-100);">
+                    <div class="color-swatch__label" style="color: black;">100</div>
+                </div>
+                <div class="color-swatch" style="background-color: var(--color-primary-200);">
+                    <div class="color-swatch__label" style="color: black;">200</div>
+                </div>
+                <div class="color-swatch" style="background-color: var(--color-primary-300);">
+                    <div class="color-swatch__label" style="color: black;">300</div>
+                </div>
+                <div class="color-swatch" style="background-color: var(--color-primary-400);">
+                    <div class="color-swatch__label">400</div>
+                </div>
+                <div class="color-swatch" style="background-color: var(--color-primary-500);">
+                    <div class="color-swatch__label">500</div>
+                </div>
+                <div class="color-swatch" style="background-color: var(--color-primary-600);">
+                    <div class="color-swatch__label">600</div>
+                </div>
+                <div class="color-swatch" style="background-color: var(--color-primary-700);">
+                    <div class="color-swatch__label">700</div>
+                </div>
+                <div class="color-swatch" style="background-color: var(--color-primary-800);">
+                    <div class="color-swatch__label">800</div>
+                </div>
+                <div class="color-swatch" style="background-color: var(--color-primary-900);">
+                    <div class="color-swatch__label">900</div>
+                </div>
+            </div>
+
+            <!-- Typography Tokens -->
+            <h3 style="font-size: var(--font-size-2xl); margin: var(--space-8) 0 var(--space-4) 0;">Typography Scale
+            </h3>
+            <div class="token-grid">
+                <div class="token-item">
+                    <div class="token-item__name">--font-size-xs</div>
+                    <div class="token-item__value" style="font-size: var(--font-size-xs);">0.75rem (12px)</div>
+                </div>
+                <div class="token-item">
+                    <div class="token-item__name">--font-size-sm</div>
+                    <div class="token-item__value" style="font-size: var(--font-size-sm);">0.875rem (14px)</div>
+                </div>
+                <div class="token-item">
+                    <div class="token-item__name">--font-size-base</div>
+                    <div class="token-item__value" style="font-size: var(--font-size-base);">1rem (16px)</div>
+                </div>
+                <div class="token-item">
+                    <div class="token-item__name">--font-size-lg</div>
+                    <div class="token-item__value" style="font-size: var(--font-size-lg);">1.125rem (18px)</div>
+                </div>
+                <div class="token-item">
+                    <div class="token-item__name">--font-size-xl</div>
+                    <div class="token-item__value" style="font-size: var(--font-size-xl);">1.25rem (20px)</div>
+                </div>
+                <div class="token-item">
+                    <div class="token-item__name">--font-size-2xl</div>
+                    <div class="token-item__value" style="font-size: var(--font-size-2xl);">1.5rem (24px)</div>
+                </div>
+            </div>
+
+            <!-- Spacing Tokens -->
+            <h3 style="font-size: var(--font-size-2xl); margin: var(--space-8) 0 var(--space-4) 0;">Spacing Scale</h3>
+            <div class="token-grid">
+                <div class="token-item">
+                    <div class="token-item__name">--space-1</div>
+                    <div class="token-item__value">0.25rem (4px)</div>
+                    <div
+                        style="width: var(--space-1); height: 20px; background: var(--color-primary-500); margin-top: var(--space-2);">
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="token-item__name">--space-2</div>
+                    <div class="token-item__value">0.5rem (8px)</div>
+                    <div
+                        style="width: var(--space-2); height: 20px; background: var(--color-primary-500); margin-top: var(--space-2);">
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="token-item__name">--space-4</div>
+                    <div class="token-item__value">1rem (16px)</div>
+                    <div
+                        style="width: var(--space-4); height: 20px; background: var(--color-primary-500); margin-top: var(--space-2);">
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="token-item__name">--space-6</div>
+                    <div class="token-item__value">1.5rem (24px)</div>
+                    <div
+                        style="width: var(--space-6); height: 20px; background: var(--color-primary-500); margin-top: var(--space-2);">
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="token-item__name">--space-8</div>
+                    <div class="token-item__value">2rem (32px)</div>
+                    <div
+                        style="width: var(--space-8); height: 20px; background: var(--color-primary-500); margin-top: var(--space-2);">
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="token-item__name">--space-12</div>
+                    <div class="token-item__value">3rem (48px)</div>
+                    <div
+                        style="width: var(--space-12); height: 20px; background: var(--color-primary-500); margin-top: var(--space-2);">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Component Library Section -->
+        <section class="section">
+            <h2 class="section__title">Component Library</h2>
+            <p class="section__description">
+                Our component library uses design tokens to ensure consistency and maintainability across all UI
+                elements.
+            </p>
+
+            <!-- Button Components -->
+            <div class="component-showcase">
+                <h3 class="component-showcase__title">Buttons</h3>
+                <div class="component-showcase__content">
+                    <button class="btn btn--primary">Primary</button>
+                    <button class="btn btn--secondary">Secondary</button>
+                    <button class="btn btn--outline">Outline</button>
+                    <button class="btn btn--ghost">Ghost</button>
+                    <button class="btn btn--primary" disabled>Disabled</button>
+                </div>
+
+                <h4 style="margin: var(--space-4) 0 var(--space-2) 0;">Button Sizes</h4>
+                <div class="component-showcase__content">
+                    <button class="btn btn--primary btn--sm">Small</button>
+                    <button class="btn btn--primary">Default</button>
+                    <button class="btn btn--primary btn--lg">Large</button>
+                </div>
+            </div>
+
+            <!-- Card Components -->
+            <div class="component-showcase">
+                <h3 class="component-showcase__title">Cards</h3>
+                <div class="grid grid--cols-3">
+                    <div class="card">
+                        <div class="card__header">
+                            <h3 class="card__title">Basic Card</h3>
+                            <p class="card__description">A simple card with header and body</p>
+                        </div>
+                        <div class="card__body">
+                            <p>This is the card body content. It can contain any type of content including text, images,
+                                or other components.</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card__body">
+                            <h3 class="card__title">Card with Badge</h3>
+                            <div style="margin: var(--space-2) 0;">
+                                <span class="badge badge--primary">Featured</span>
+                            </div>
+                            <p class="card__description">This card includes a badge component to highlight important
+                                information.</p>
+                        </div>
+                        <div class="card__footer">
+                            <button class="btn btn--outline btn--sm">Learn More</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card__body">
+                            <h3 class="card__title">Status Card</h3>
+                            <div style="margin: var(--space-2) 0;">
+                                <span class="badge badge--success">Active</span>
+                                <span class="badge badge--warning">Pending</span>
+                            </div>
+                            <p class="card__description">Multiple badges can be used to show different status
+                                indicators.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Components -->
+            <div class="component-showcase">
+                <h3 class="component-showcase__title">Form Elements</h3>
+                <div style="max-width: 400px;">
+                    <div style="margin-bottom: var(--space-4);">
+                        <label
+                            style="display: block; margin-bottom: var(--space-2); font-weight: var(--font-weight-medium);">
+                            Email Address
+                        </label>
+                        <input type="email" class="input" placeholder="Enter your email">
+                    </div>
+
+                    <div style="margin-bottom: var(--space-4);">
+                        <label
+                            style="display: block; margin-bottom: var(--space-2); font-weight: var(--font-weight-medium);">
+                            Password (Error State)
+                        </label>
+                        <input type="password" class="input input--error" placeholder="Enter password">
+                        <p
+                            style="color: var(--color-error); font-size: var(--font-size-sm); margin-top: var(--space-1);">
+                            Password must be at least 8 characters
+                        </p>
+                    </div>
+
+                    <button class="btn btn--primary" style="width: 100%;">Sign In</button>
+                </div>
+            </div>
+
+            <!-- Badge Components -->
+            <div class="component-showcase">
+                <h3 class="component-showcase__title">Badges</h3>
+                <div class="component-showcase__content">
+                    <span class="badge badge--primary">Primary</span>
+                    <span class="badge badge--success">Success</span>
+                    <span class="badge badge--warning">Warning</span>
+                    <span class="badge badge--error">Error</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Design System Implementation -->
+        <section class="section">
+            <h2 class="section__title">Implementation Guide</h2>
+
+            <div class="card" style="margin-bottom: var(--space-6);">
+                <div class="card__header">
+                    <h3 class="card__title">Token Usage</h3>
+                </div>
+                <div class="card__body">
+                    <div class="code-block">
+                        /* Using design tokens in CSS */
+                        .custom-component {
+                        padding: var(--space-4) var(--space-6);
+                        background-color: var(--color-primary-50);
+                        border: 1px solid var(--color-primary-200);
+                        border-radius: var(--radius-md);
+                        font-size: var(--font-size-base);
+                        color: var(--color-neutral-800);
+                        box-shadow: var(--shadow-sm);
+                        }
+
+                        .custom-component:hover {
+                        background-color: var(--color-primary-100);
+                        box-shadow: var(--shadow-md);
+                        transition: all var(--duration-200) var(--ease-in-out);
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-bottom: var(--space-6);">
+                <div class="card__header">
+                    <h3 class="card__title">Theme Implementation</h3>
+                </div>
+                <div class="card__body">
+                    <div class="code-block">
+                        /* Theme switching with CSS custom properties */
+                        :root {
+                        --color-background: #ffffff;
+                        --color-text: #1f2937;
+                        }
+
+                        [data-theme="dark"] {
+                        --color-background: #1f2937;
+                        --color-text: #f9fafb;
+                        }
+
+                        /* Components automatically adapt to theme changes */
+                        .component {
+                        background-color: var(--color-background);
+                        color: var(--color-text);
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card__header">
+                    <h3 class="card__title">JavaScript Integration</h3>
+                </div>
+                <div class="card__body">
+                    <div class="code-block">
+                        // Reading design tokens in JavaScript
+                        const primaryColor = getComputedStyle(document.documentElement)
+                        .getPropertyValue('--color-primary-600');
+
+                        // Setting design tokens dynamically
+                        document.documentElement.style.setProperty(
+                        '--color-primary-600',
+                        '#3b82f6'
+                        );
+
+                        // Theme switching
+                        function toggleTheme() {
+                        const currentTheme = document.documentElement.getAttribute('data-theme');
+                        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                        document.documentElement.setAttribute('data-theme', newTheme);
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Design System Benefits -->
+        <section class="section">
+            <h2 class="section__title">Design System Benefits</h2>
+            <div class="grid grid--cols-2">
+                <div class="card">
+                    <div class="card__body">
+                        <h3 class="card__title">🎨 Consistency</h3>
+                        <p class="card__description">
+                            Design tokens ensure visual consistency across all components and platforms by centralizing
+                            design decisions.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card__body">
+                        <h3 class="card__title">🔧 Maintainability</h3>
+                        <p class="card__description">
+                            Changes to design tokens automatically propagate throughout the system, making updates
+                            efficient and error-free.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card__body">
+                        <h3 class="card__title">⚡ Scalability</h3>
+                        <p class="card__description">
+                            Component-based architecture with design tokens scales efficiently as teams and products
+                            grow.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card__body">
+                        <h3 class="card__title">🤝 Collaboration</h3>
+                        <p class="card__description">
+                            Shared design language improves communication between designers, developers, and
+                            stakeholders.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Theme switching functionality
+        function toggleTheme() {
+            const root = document.documentElement;
+            const currentTheme = root.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            root.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            }
+        }
+
+        // Design token utilities
+        class DesignTokens {
+            static getToken(tokenName) {
+                return getComputedStyle(document.documentElement)
+                    .getPropertyValue(tokenName).trim();
+            }
+
+            static setToken(tokenName, value) {
+                document.documentElement.style.setProperty(tokenName, value);
+            }
+
+            static getAllTokens() {
+                const styles = getComputedStyle(document.documentElement);
+                const tokens = {};
+
+                // Extract CSS custom properties
+                for (let i = 0; i < styles.length; i++) {
+                    const property = styles[i];
+                    if (property.startsWith('--')) {
+                        tokens[property] = styles.getPropertyValue(property).trim();
+                    }
+                }
+
+                return tokens;
+            }
+        }
+
+        // Color palette interaction
+        function setupColorSwatches() {
+            const swatches = document.querySelectorAll('.color-swatch');
+            swatches.forEach(swatch => {
+                swatch.addEventListener('click', () => {
+                    const color = getComputedStyle(swatch).backgroundColor;
+                    navigator.clipboard.writeText(color).then(() => {
+                        console.log('Color copied to clipboard:', color);
+
+                        // Show feedback
+                        const originalTitle = swatch.title;
+                        swatch.title = 'Copied!';
+                        setTimeout(() => {
+                            swatch.title = originalTitle;
+                        }, 1000);
+                    });
+                });
+            });
+        }
+
+        // Token inspector
+        function inspectTokens() {
+            const tokens = DesignTokens.getAllTokens();
+            console.group('Design Tokens');
+            console.table(tokens);
+            console.groupEnd();
+        }
+
+        // Component showcase interactions
+        function setupComponentShowcase() {
+            // Add hover effects to cards
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-2px)';
+                    card.style.boxShadow = 'var(--shadow-lg)';
+                    card.style.transition = 'all var(--duration-200) var(--ease-out)';
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0)';
+                    card.style.boxShadow = 'var(--shadow-sm)';
+                });
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTheme();
+            setupColorSwatches();
+            setupComponentShowcase();
+
+            // Add keyboard shortcut for theme toggle
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.key === 't') {
+                    e.preventDefault();
+                    toggleTheme();
+                }
+            });
+        });
+
+        // Export tokens for external use
+        window.DesignTokens = DesignTokens;
+        window.inspectTokens = inspectTokens;
+    </script>
+</body>
+
+</html>

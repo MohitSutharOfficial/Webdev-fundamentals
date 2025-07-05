@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Animations & Transforms - CSS Advanced</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #e91e63;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-align: center;
+        }
+
+        h2 {
+            color: #c2185b;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #fce4ec;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #ad1457;
+            margin: 20px 0 10px 0;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .demo-card {
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%);
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #e91e63;
+            overflow: hidden;
+        }
+
+        .animation-showcase {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .code-block {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .animation-button {
+            background: linear-gradient(135deg, #e91e63, #c2185b);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+        }
+
+        .animation-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4);
+        }
+
+        /* Keyframe Animations */
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.1);
+                opacity: 0;
+            }
+
+            60% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes rotateAndScale {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+
+            50% {
+                transform: rotate(180deg) scale(1.5);
+            }
+
+            100% {
+                transform: rotate(360deg) scale(1);
+            }
+        }
+
+        @keyframes morphShape {
+            0% {
+                border-radius: 0;
+                background: #e91e63;
+            }
+
+            25% {
+                border-radius: 50%;
+                background: #9c27b0;
+            }
+
+            50% {
+                border-radius: 0 50%;
+                background: #3f51b5;
+            }
+
+            75% {
+                border-radius: 50% 0;
+                background: #2196f3;
+            }
+
+            100% {
+                border-radius: 0;
+                background: #e91e63;
+            }
+        }
+
+        @keyframes textGlow {
+
+            0%,
+            100% {
+                text-shadow: 0 0 5px #e91e63, 0 0 10px #e91e63, 0 0 15px #e91e63;
+            }
+
+            50% {
+                text-shadow: 0 0 10px #e91e63, 0 0 20px #e91e63, 0 0 30px #e91e63, 0 0 40px #e91e63;
+            }
+        }
+
+        @keyframes complexPath {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            25% {
+                transform: translate(100px, -50px) rotate(90deg);
+            }
+
+            50% {
+                transform: translate(200px, 0) rotate(180deg);
+            }
+
+            75% {
+                transform: translate(100px, 50px) rotate(270deg);
+            }
+
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        /* Animation Classes */
+        .slide-in {
+            animation: slideInLeft 1s ease-out;
+        }
+
+        .bounce-in {
+            animation: bounceIn 1s ease-out;
+        }
+
+        .rotate-scale {
+            animation: rotateAndScale 2s ease-in-out infinite;
+        }
+
+        .morph-shape {
+            animation: morphShape 3s ease-in-out infinite;
+        }
+
+        .text-glow {
+            animation: textGlow 2s ease-in-out infinite;
+        }
+
+        .complex-path {
+            animation: complexPath 4s ease-in-out infinite;
+        }
+
+        /* 3D Transform Demos */
+        .transform-3d-container {
+            perspective: 1000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+        }
+
+        .cube-3d {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            transform-style: preserve-3d;
+            animation: rotateCube 6s infinite linear;
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .cube-front {
+            background: #e91e63;
+            transform: translateZ(50px);
+        }
+
+        .cube-back {
+            background: #9c27b0;
+            transform: rotateY(180deg) translateZ(50px);
+        }
+
+        .cube-right {
+            background: #3f51b5;
+            transform: rotateY(90deg) translateZ(50px);
+        }
+
+        .cube-left {
+            background: #2196f3;
+            transform: rotateY(-90deg) translateZ(50px);
+        }
+
+        .cube-top {
+            background: #00bcd4;
+            transform: rotateX(90deg) translateZ(50px);
+        }
+
+        .cube-bottom {
+            background: #4caf50;
+            transform: rotateX(-90deg) translateZ(50px);
+        }
+
+        @keyframes rotateCube {
+            from {
+                transform: rotateX(0deg) rotateY(0deg);
+            }
+
+            to {
+                transform: rotateX(360deg) rotateY(360deg);
+            }
+        }
+
+        .card-3d {
+            width: 200px;
+            height: 300px;
+            perspective: 1000px;
+            margin: 20px;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .card-3d:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #e91e63, #c2185b);
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #9c27b0, #7b1fa2);
+            transform: rotateY(180deg);
+        }
+
+        /* Performance-optimized animations */
+        .optimized-animation {
+            will-change: transform;
+            transform: translateZ(0);
+            /* Hardware acceleration */
+        }
+
+        .gpu-accelerated {
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+        }
+
+        /* Advanced timing functions */
+        .custom-timing {
+            transition: all 2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .custom-timing:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        /* Staggered animations */
+        .stagger-container .stagger-item {
+            opacity: 0;
+            transform: translateY(50px);
+            animation: staggerIn 0.6s forwards;
+        }
+
+        .stagger-container .stagger-item:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .stagger-container .stagger-item:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .stagger-container .stagger-item:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .stagger-container .stagger-item:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .stagger-container .stagger-item:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes staggerIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Interactive elements */
+        .interactive-demo {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #e91e63, #c2185b);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            display: inline-block;
+        }
+
+        .interactive-demo:hover {
+            transform: translateY(-10px) scale(1.1);
+            box-shadow: 0 20px 40px rgba(233, 30, 99, 0.3);
+        }
+
+        .interactive-demo:active {
+            transform: translateY(-5px) scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🎨 Advanced Animations & Transforms</h1>
+            <p><strong>Master CSS Animations, Keyframes, and 3D Transforms</strong></p>
+            <p>Learn advanced animation techniques, performance optimization, and create stunning visual effects with
+                CSS.</p>
+        </header>
+
+        <section class="section">
+            <h2>🔑 Keyframe Animations</h2>
+            <p>Create complex, reusable animations with CSS keyframes for precise control over every step of the
+                animation.</p>
+
+            <div class="animation-showcase">
+                <div id="animationDemo" style="width: 80px; height: 80px; background: #e91e63; border-radius: 10px;">
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <button class="animation-button" onclick="playAnimation('slide-in')">Slide In</button>
+                <button class="animation-button" onclick="playAnimation('bounce-in')">Bounce In</button>
+                <button class="animation-button" onclick="playAnimation('rotate-scale')">Rotate & Scale</button>
+                <button class="animation-button" onclick="playAnimation('morph-shape')">Morph Shape</button>
+                <button class="animation-button" onclick="playAnimation('complex-path')">Complex Path</button>
+            </div>
+
+            <h3>Keyframe Implementation Examples:</h3>
+            <div class="code-block">
+                /* Basic Slide Animation */
+                @keyframes slideInLeft {
+                from {
+                transform: translateX(-100%);
+                opacity: 0;
+                }
+                to {
+                transform: translateX(0);
+                opacity: 1;
+                }
+                }
+
+                /* Complex Multi-step Animation */
+                @keyframes morphShape {
+                0% {
+                border-radius: 0;
+                background: #e91e63;
+                transform: scale(1);
+                }
+                25% {
+                border-radius: 50%;
+                background: #9c27b0;
+                transform: scale(1.2);
+                }
+                50% {
+                border-radius: 0 50%;
+                background: #3f51b5;
+                transform: scale(0.8);
+                }
+                75% {
+                border-radius: 50% 0;
+                background: #2196f3;
+                transform: scale(1.1);
+                }
+                100% {
+                border-radius: 0;
+                background: #e91e63;
+                transform: scale(1);
+                }
+                }
+
+                /* Apply Animation */
+                .morph-shape {
+                animation: morphShape 3s ease-in-out infinite;
+                }
+
+                /* Advanced Timing with Cubic Bezier */
+                .custom-timing {
+                transition: all 2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                }
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎯 3D Transforms & Perspective</h2>
+            <p>Create immersive 3D effects using CSS transforms and perspective properties.</p>
+
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>3D Rotating Cube</h3>
+                    <div class="transform-3d-container">
+                        <div class="cube-3d">
+                            <div class="cube-face cube-front">Front</div>
+                            <div class="cube-face cube-back">Back</div>
+                            <div class="cube-face cube-right">Right</div>
+                            <div class="cube-face cube-left">Left</div>
+                            <div class="cube-face cube-top">Top</div>
+                            <div class="cube-face cube-bottom">Bottom</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="demo-card">
+                    <h3>3D Flip Card</h3>
+                    <div style="display: flex; justify-content: center;">
+                        <div class="card-3d">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <h4>Hover Me!</h4>
+                                </div>
+                                <div class="card-back">
+                                    <h4>Flipped!</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>3D Transform Code:</h3>
+            <div class="code-block">
+                /* 3D Container Setup */
+                .transform-3d-container {
+                perspective: 1000px; /* Defines viewing distance */
+                perspective-origin: center center;
+                }
+
+                /* 3D Cube Structure */
+                .cube-3d {
+                position: relative;
+                width: 100px;
+                height: 100px;
+                transform-style: preserve-3d; /* Maintains 3D positioning */
+                animation: rotateCube 6s infinite linear;
+                }
+
+                .cube-face {
+                position: absolute;
+                width: 100px;
+                height: 100px;
+                backface-visibility: hidden; /* Hide back faces */
+                }
+
+                /* Individual Face Positioning */
+                .cube-front { transform: translateZ(50px); }
+                .cube-back { transform: rotateY(180deg) translateZ(50px); }
+                .cube-right { transform: rotateY(90deg) translateZ(50px); }
+                .cube-left { transform: rotateY(-90deg) translateZ(50px); }
+                .cube-top { transform: rotateX(90deg) translateZ(50px); }
+                .cube-bottom { transform: rotateX(-90deg) translateZ(50px); }
+
+                /* 3D Animation */
+                @keyframes rotateCube {
+                from { transform: rotateX(0deg) rotateY(0deg); }
+                to { transform: rotateX(360deg) rotateY(360deg); }
+                }
+
+                /* Flip Card Effect */
+                .card-inner {
+                transition: transform 0.8s;
+                transform-style: preserve-3d;
+                }
+
+                .card-3d:hover .card-inner {
+                transform: rotateY(180deg);
+                }
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>⚡ Performance Optimization</h2>
+            <p>Optimize animations for smooth 60fps performance using hardware acceleration and efficient properties.
+            </p>
+
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>Hardware Acceleration</h3>
+                    <div class="interactive-demo gpu-accelerated" title="GPU Accelerated">
+                        GPU
+                    </div>
+                    <p>Uses transform3d() to trigger hardware acceleration</p>
+                </div>
+
+                <div class="demo-card">
+                    <h3>Will-Change Property</h3>
+                    <div class="interactive-demo optimized-animation" title="Optimized Animation">
+                        OPT
+                    </div>
+                    <p>Hints browser about upcoming changes</p>
+                </div>
+
+                <div class="demo-card">
+                    <h3>Custom Timing</h3>
+                    <div class="interactive-demo custom-timing" title="Custom Timing Function">
+                        CTF
+                    </div>
+                    <p>Uses cubic-bezier for custom easing</p>
+                </div>
+            </div>
+
+            <h3>Performance Best Practices:</h3>
+            <div class="code-block">
+                /* Hardware Acceleration Triggers */
+                .gpu-accelerated {
+                transform: translate3d(0, 0, 0); /* Force hardware layer */
+                backface-visibility: hidden; /* Optimize rendering */
+                }
+
+                /* Will-Change Property */
+                .optimized-animation {
+                will-change: transform, opacity; /* Hint browser */
+                }
+
+                /* Remove will-change after animation */
+                .animation-complete {
+                will-change: auto;
+                }
+
+                /* Efficient Properties (GPU-friendly) */
+                .efficient-animation {
+                /* ✅ Good - GPU accelerated */
+                transform: translateX(100px) scale(1.2);
+                opacity: 0.5;
+
+                /* ❌ Avoid - triggers layout/paint */
+                /* left: 100px; width: 200px; */
+                }
+
+                /* Composite Layer Creation */
+                .composite-layer {
+                transform: translateZ(0); /* Create new layer */
+                isolation: isolate; /* Force stacking context */
+                }
+
+                /* Performance Monitoring */
+                .animation-element {
+                transform: translateX(var(--offset, 0));
+                transition: transform 0.3s ease-out;
+                }
+
+                /* CSS Custom Properties for dynamic values */
+                :root {
+                --animation-duration: 1s;
+                --animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
+                }
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔄 Staggered Animations</h2>
+            <p>Create beautiful sequential animations by staggering timing across multiple elements.</p>
+
+            <div class="animation-showcase">
+                <button class="animation-button" onclick="triggerStaggerAnimation()">Trigger Stagger Animation</button>
+            </div>
+
+            <div class="stagger-container" id="staggerContainer" style="display: none;">
+                <div class="stagger-item"
+                    style="background: #e91e63; padding: 20px; margin: 10px; border-radius: 5px; color: white;">Item 1
+                </div>
+                <div class="stagger-item"
+                    style="background: #9c27b0; padding: 20px; margin: 10px; border-radius: 5px; color: white;">Item 2
+                </div>
+                <div class="stagger-item"
+                    style="background: #3f51b5; padding: 20px; margin: 10px; border-radius: 5px; color: white;">Item 3
+                </div>
+                <div class="stagger-item"
+                    style="background: #2196f3; padding: 20px; margin: 10px; border-radius: 5px; color: white;">Item 4
+                </div>
+                <div class="stagger-item"
+                    style="background: #00bcd4; padding: 20px; margin: 10px; border-radius: 5px; color: white;">Item 5
+                </div>
+            </div>
+
+            <h3>Staggered Animation Implementation:</h3>
+            <div class="code-block">
+                /* Base Animation */
+                @keyframes staggerIn {
+                from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.8);
+                }
+                to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                }
+                }
+
+                /* Staggered Delays */
+                .stagger-item {
+                opacity: 0;
+                animation: staggerIn 0.6s forwards ease-out;
+                }
+
+                .stagger-item:nth-child(1) { animation-delay: 0.1s; }
+                .stagger-item:nth-child(2) { animation-delay: 0.2s; }
+                .stagger-item:nth-child(3) { animation-delay: 0.3s; }
+                .stagger-item:nth-child(4) { animation-delay: 0.4s; }
+                .stagger-item:nth-child(5) { animation-delay: 0.5s; }
+
+                /* Dynamic Stagger with CSS Custom Properties */
+                .dynamic-stagger {
+                animation: staggerIn 0.6s forwards ease-out;
+                animation-delay: calc(var(--index) * 0.1s);
+                }
+
+                /* JavaScript Enhanced Staggering */
+                function createStaggeredAnimation(elements, delay = 100) {
+                elements.forEach((element, index) => {
+                element.style.animationDelay = `${index * delay}ms`;
+                element.classList.add('animate-in');
+                });
+                }
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎭 Advanced Animation Patterns</h2>
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>🌟 Text Glow Effect</h3>
+                    <div style="text-align: center; padding: 20px; background: #000; border-radius: 10px;">
+                        <h2 class="text-glow" style="color: #e91e63; margin: 0;">GLOWING TEXT</h2>
+                    </div>
+                </div>
+
+                <div class="demo-card">
+                    <h3>🔄 Infinite Rotation</h3>
+                    <div style="text-align: center; padding: 20px;">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #e91e63, #c2185b); border-radius: 50%; margin: 0 auto;"
+                            class="rotate-scale"></div>
+                    </div>
+                </div>
+
+                <div class="demo-card">
+                    <h3>📍 Path Animation</h3>
+                    <div
+                        style="position: relative; height: 150px; background: #f0f0f0; border-radius: 10px; overflow: hidden;">
+                        <div style="width: 20px; height: 20px; background: #e91e63; border-radius: 50%; position: absolute; top: 50%; left: 0;"
+                            class="complex-path"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Advanced Pattern Examples:</h3>
+            <div class="code-block">
+                /* Glow Effect Animation */
+                @keyframes textGlow {
+                0%, 100% {
+                text-shadow:
+                0 0 5px currentColor,
+                0 0 10px currentColor,
+                0 0 15px currentColor;
+                }
+                50% {
+                text-shadow:
+                0 0 10px currentColor,
+                0 0 20px currentColor,
+                0 0 30px currentColor,
+                0 0 40px currentColor;
+                }
+                }
+
+                /* Complex Path Animation */
+                @keyframes complexPath {
+                0% { transform: translate(0, 0) rotate(0deg); }
+                25% { transform: translate(100px, -50px) rotate(90deg); }
+                50% { transform: translate(200px, 0) rotate(180deg); }
+                75% { transform: translate(100px, 50px) rotate(270deg); }
+                100% { transform: translate(0, 0) rotate(360deg); }
+                }
+
+                /* Morphing Shapes */
+                @keyframes morphingShape {
+                0% { clip-path: circle(50% at 50% 50%); }
+                25% { clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); }
+                50% { clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%); }
+                75% { clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%); }
+                100% { clip-path: circle(50% at 50% 50%); }
+                }
+
+                /* Particle Effect */
+                .particle {
+                position: absolute;
+                width: 4px;
+                height: 4px;
+                background: #e91e63;
+                border-radius: 50%;
+                animation: particleFloat 3s infinite ease-in-out;
+                }
+
+                @keyframes particleFloat {
+                0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+                }
+                100% {
+                transform: translateY(-200px) scale(0);
+                opacity: 0;
+                }
+                }
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔧 Senior Engineer Tips</h2>
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>🚀 Performance</h3>
+                    <ul>
+                        <li>Use transform and opacity for smooth animations</li>
+                        <li>Enable hardware acceleration with translate3d()</li>
+                        <li>Use will-change property wisely</li>
+                        <li>Profile animations with DevTools</li>
+                        <li>Implement reduced motion preferences</li>
+                    </ul>
+                </div>
+
+                <div class="demo-card">
+                    <h3>♿ Accessibility</h3>
+                    <ul>
+                        <li>Respect prefers-reduced-motion</li>
+                        <li>Provide pause/play controls</li>
+                        <li>Avoid seizure-inducing effects</li>
+                        <li>Ensure content remains readable</li>
+                        <li>Test with screen readers</li>
+                    </ul>
+                </div>
+
+                <div class="demo-card">
+                    <h3>🛠️ Tools & Libraries</h3>
+                    <ul>
+                        <li>GSAP for complex animations</li>
+                        <li>Framer Motion for React</li>
+                        <li>Lottie for After Effects integration</li>
+                        <li>CSS Houdini for custom animations</li>
+                        <li>Web Animations API for JS control</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function playAnimation(animationClass) {
+            const demo = document.getElementById('animationDemo');
+
+            // Remove all animation classes
+            demo.className = '';
+
+            // Force reflow
+            demo.offsetHeight;
+
+            // Add new animation class
+            demo.classList.add(animationClass);
+
+            // Remove class after animation completes
+            setTimeout(() => {
+                demo.classList.remove(animationClass);
+            }, 4000);
+        }
+
+        function triggerStaggerAnimation() {
+            const container = document.getElementById('staggerContainer');
+            const items = container.querySelectorAll('.stagger-item');
+
+            // Reset items
+            items.forEach(item => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(50px)';
+                item.style.animation = 'none';
+            });
+
+            container.style.display = 'block';
+
+            // Force reflow
+            container.offsetHeight;
+
+            // Trigger staggered animation
+            items.forEach((item, index) => {
+                setTimeout(() => {
+                    item.style.animation = 'staggerIn 0.6s forwards ease-out';
+                }, index * 100);
+            });
+        }
+
+        // Reduced motion support
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            // Disable animations for users who prefer reduced motion
+            const style = document.createElement('style');
+            style.textContent = `
+                *, *::before, *::after {
+                    animation-duration: 0.01ms !important;
+                    animation-iteration-count: 1 !important;
+                    transition-duration: 0.01ms !important;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Performance monitoring
+        function monitorAnimationPerformance() {
+            if ('PerformanceObserver' in window) {
+                const observer = new PerformanceObserver((list) => {
+                    list.getEntries().forEach((entry) => {
+                        if (entry.duration > 16.67) { // Longer than 60fps frame
+                            console.warn('Animation frame took too long:', entry.duration + 'ms');
+                        }
+                    });
+                });
+
+                observer.observe({ entryTypes: ['measure'] });
+            }
+        }
+
+        monitorAnimationPerformance();
+
+        // Intersection Observer for performance
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '50px'
+        };
+
+        const animationObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                } else {
+                    entry.target.style.animationPlayState = 'paused';
+                }
+            });
+        }, observerOptions);
+
+        // Observe animated elements
+        document.querySelectorAll('[class*="rotate-scale"], [class*="morph-shape"]').forEach(el => {
+            animationObserver.observe(el);
+        });
+    </script>
+</body>
+
+</html>

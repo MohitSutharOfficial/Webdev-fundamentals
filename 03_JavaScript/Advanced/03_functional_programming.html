@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Functional Programming Patterns</title>
+    <style>
+        :root {
+            --color-primary: #3b82f6;
+            --color-secondary: #10b981;
+            --color-accent: #f59e0b;
+            --color-neutral-50: #f9fafb;
+            --color-neutral-100: #f3f4f6;
+            --color-neutral-200: #e5e7eb;
+            --color-neutral-500: #6b7280;
+            --color-neutral-700: #374151;
+            --color-neutral-900: #111827;
+
+            --space-2: 0.5rem;
+            --space-4: 1rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+
+            --radius-md: 0.375rem;
+            --radius-lg: 0.5rem;
+
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--color-neutral-700);
+            background-color: var(--color-neutral-50);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--color-primary), #1d4ed8);
+            color: white;
+            padding: var(--space-8) 0;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-4);
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: var(--space-2);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .section {
+            margin: var(--space-8) 0;
+        }
+
+        .section-title {
+            font-size: 1.875rem;
+            font-weight: 600;
+            color: var(--color-neutral-900);
+            margin-bottom: var(--space-6);
+        }
+
+        .demo-card {
+            background: white;
+            border: 1px solid var(--color-neutral-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            margin: var(--space-4) 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .demo-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: var(--space-4);
+        }
+
+        .code-block {
+            background: var(--color-neutral-900);
+            color: var(--color-neutral-100);
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: var(--space-4) 0;
+        }
+
+        .code-highlight {
+            background: rgba(59, 130, 246, 0.2);
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+        }
+
+        .interactive-demo {
+            background: var(--color-neutral-100);
+            border: 2px dashed var(--color-neutral-300);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+        }
+
+        .btn {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            margin: var(--space-2);
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+        }
+
+        .result-display {
+            background: white;
+            border: 1px solid var(--color-neutral-200);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            margin-top: var(--space-4);
+            font-family: monospace;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-6);
+            margin: var(--space-6) 0;
+        }
+
+        .concept-card {
+            background: white;
+            border-left: 4px solid var(--color-secondary);
+            padding: var(--space-6);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .concept-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--color-neutral-900);
+            margin-bottom: var(--space-2);
+        }
+
+        .output {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: var(--radius-md);
+            padding: var(--space-2);
+            margin: var(--space-2) 0;
+            font-family: monospace;
+            color: var(--color-neutral-700);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="title">Functional Programming Patterns</h1>
+            <p class="subtitle">Higher-Order Functions, Immutability, and Pure Functions</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Pure Functions -->
+        <section class="section">
+            <h2 class="section-title">Pure Functions</h2>
+            <div class="demo-card">
+                <h3 class="demo-title">Understanding Pure Functions</h3>
+                <p>Pure functions always return the same output for the same input and have no side effects.</p>
+
+                <div class="code-block">
+                    <span class="code-highlight">// Pure Function - Always returns same output for same input
+                        const add = (a, b) => a + b;
+
+                        // Impure Function - Depends on external state
+                        let counter = 0;
+                        const incrementCounter = () => ++counter;</span>
+
+                    // Pure function for calculating total
+                    const calculateTotal = (items, tax = 0.1) => {
+                    const subtotal = items.reduce((sum, item) => sum + item.price, 0);
+                    return subtotal + (subtotal * tax);
+                    };
+
+                    // Pure function for formatting currency
+                    const formatCurrency = (amount, currency = 'USD') => {
+                    return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: currency
+                    }).format(amount);
+                    };
+                </div>
+
+                <div class="interactive-demo">
+                    <h4>Try Pure Functions:</h4>
+                    <button class="btn" onclick="demonstratePureFunctions()">Test Pure Functions</button>
+                    <div id="pureResult" class="result-display"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Higher-Order Functions -->
+        <section class="section">
+            <h2 class="section-title">Higher-Order Functions</h2>
+            <div class="demo-card">
+                <h3 class="demo-title">Functions that Accept or Return Other Functions</h3>
+
+                <div class="code-block">
+                    <span class="code-highlight">// Higher-order function that returns a function
+                        const createMultiplier = (multiplier) => (number) => number * multiplier;
+
+                        const double = createMultiplier(2);
+                        const triple = createMultiplier(3);</span>
+
+                    // Higher-order function that accepts a function
+                    const processData = (data, transformer) => data.map(transformer);
+
+                    // Function composition
+                    const compose = (...functions) => (value) =>
+                    functions.reduceRight((acc, fn) => fn(acc), value);
+
+                    // Practical example: data processing pipeline
+                    const users = [
+                    { name: 'Alice', age: 30, active: true },
+                    { name: 'Bob', age: 25, active: false },
+                    { name: 'Charlie', age: 35, active: true }
+                    ];
+
+                    const getActiveUsers = (users) => users.filter(user => user.active);
+                    const getUserNames = (users) => users.map(user => user.name);
+                    const sortAlphabetically = (names) => [...names].sort();
+
+                    const getActiveUserNames = compose(
+                    sortAlphabetically,
+                    getUserNames,
+                    getActiveUsers
+                    );
+                </div>
+
+                <div class="interactive-demo">
+                    <h4>Try Higher-Order Functions:</h4>
+                    <button class="btn" onclick="demonstrateHigherOrder()">Process User Data</button>
+                    <div id="higherOrderResult" class="result-display"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Immutability -->
+        <section class="section">
+            <h2 class="section-title">Immutability Patterns</h2>
+            <div class="demo-card">
+                <h3 class="demo-title">Working with Immutable Data</h3>
+
+                <div class="code-block">
+                    <span class="code-highlight">// Immutable array operations
+                        const addToArray = (array, item) => [...array, item];
+                        const removeFromArray = (array, index) => [
+                        ...array.slice(0, index),
+                        ...array.slice(index + 1)
+                        ];
+                        const updateArrayItem = (array, index, newItem) => [
+                        ...array.slice(0, index),
+                        newItem,
+                        ...array.slice(index + 1)
+                        ];</span>
+
+                    // Immutable object operations
+                    const updateObject = (obj, updates) => ({ ...obj, ...updates });
+                    const updateNestedObject = (obj, path, value) => {
+                    const [head, ...tail] = path;
+                    return tail.length === 0
+                    ? { ...obj, [head]: value }
+                    : { ...obj, [head]: updateNestedObject(obj[head], tail, value) };
+                    };
+
+                    // State management with immutability
+                    class ImmutableState {
+                    constructor(initialState = {}) {
+                    this.state = initialState;
+                    this.listeners = [];
+                    }
+
+                    setState(updates) {
+                    const newState = { ...this.state, ...updates };
+                    this.state = newState;
+                    this.listeners.forEach(listener => listener(newState));
+                    }
+
+                    getState() {
+                    return { ...this.state };
+                    }
+
+                    subscribe(listener) {
+                    this.listeners.push(listener);
+                    return () => {
+                    this.listeners = this.listeners.filter(l => l !== listener);
+                    };
+                    }
+                    }
+                </div>
+
+                <div class="interactive-demo">
+                    <h4>Test Immutable Operations:</h4>
+                    <button class="btn" onclick="demonstrateImmutability()">Manipulate Array/Object</button>
+                    <div id="immutableResult" class="result-display"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Function Composition -->
+        <section class="section">
+            <h2 class="section-title">Function Composition & Currying</h2>
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h3 class="concept-title">Function Composition</h3>
+                    <p>Combining simple functions to build more complex ones.</p>
+
+                    <div class="code-block">
+                        // Pipe function (left to right)
+                        const pipe = (...functions) => (value) =>
+                        functions.reduce((acc, fn) => fn(acc), value);
+
+                        // Compose function (right to left)
+                        const compose = (...functions) => (value) =>
+                        functions.reduceRight((acc, fn) => fn(acc), value);
+
+                        // Example: text processing pipeline
+                        const toLowerCase = str => str.toLowerCase();
+                        const removeSpaces = str => str.replace(/\s+/g, '');
+                        const addPrefix = prefix => str => prefix + str;
+
+                        const processText = pipe(
+                        toLowerCase,
+                        removeSpaces,
+                        addPrefix('processed_')
+                        );
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <h3 class="concept-title">Currying</h3>
+                    <p>Converting functions to take arguments one at a time.</p>
+
+                    <div class="code-block">
+                        // Manual currying
+                        const multiply = (a) => (b) => a * b;
+                        const multiplyBy2 = multiply(2);
+
+                        // Auto-currying utility
+                        const curry = (fn) => {
+                        return function curried(...args) {
+                        if (args.length >= fn.length) {
+                        return fn.apply(this, args);
+                        } else {
+                        return function(...args2) {
+                        return curried.apply(this, args.concat(args2));
+                        };
+                        }
+                        };
+                        };
+
+                        // Curried function example
+                        const curriedAdd = curry((a, b, c) => a + b + c);
+                        const addFive = curriedAdd(5);
+                        const addFiveAndThree = addFive(3);
+                    </div>
+                </div>
+            </div>
+
+            <div class="interactive-demo">
+                <h4>Test Composition & Currying:</h4>
+                <button class="btn" onclick="demonstrateComposition()">Text Processing Pipeline</button>
+                <button class="btn" onclick="demonstrateCurrying()">Curried Functions</button>
+                <div id="compositionResult" class="result-display"></div>
+            </div>
+        </section>
+
+        <!-- Functional Data Transformation -->
+        <section class="section">
+            <h2 class="section-title">Functional Data Transformation</h2>
+            <div class="demo-card">
+                <h3 class="demo-title">Advanced Array Methods and Data Processing</h3>
+
+                <div class="code-block">
+                    <span class="code-highlight">// Advanced functional patterns for data transformation
+                        const data = [
+                        { id: 1, name: 'Product A', price: 100, category: 'electronics' },
+                        { id: 2, name: 'Product B', price: 200, category: 'clothing' },
+                        { id: 3, name: 'Product C', price: 150, category: 'electronics' },
+                        { id: 4, name: 'Product D', price: 80, category: 'books' }
+                        ];</span>
+
+                    // Grouping data functionally
+                    const groupBy = (array, keyFn) =>
+                    array.reduce((groups, item) => {
+                    const key = keyFn(item);
+                    return { ...groups, [key]: [...(groups[key] || []), item] };
+                    }, {});
+
+                    // Transforming grouped data
+                    const transformGroups = (groups, transformFn) =>
+                    Object.entries(groups).reduce((acc, [key, items]) => ({
+                    ...acc,
+                    [key]: transformFn(items)
+                    }), {});
+
+                    // Functional pipeline for complex data processing
+                    const processProducts = pipe(
+                    data => groupBy(data, product => product.category),
+                    groups => transformGroups(groups, items => ({
+                    count: items.length,
+                    averagePrice: items.reduce((sum, item) => sum + item.price, 0) / items.length,
+                    totalValue: items.reduce((sum, item) => sum + item.price, 0)
+                    }))
+                    );
+                </div>
+
+                <div class="interactive-demo">
+                    <h4>Process Product Data:</h4>
+                    <button class="btn" onclick="demonstrateDataTransformation()">Transform Data</button>
+                    <div id="dataResult" class="result-display"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Monads and Functors -->
+        <section class="section">
+            <h2 class="section-title">Monads and Functors (Advanced)</h2>
+            <div class="demo-card">
+                <h3 class="demo-title">Maybe Monad for Null Safety</h3>
+
+                <div class="code-block">
+                    <span class="code-highlight">// Maybe monad implementation
+                        class Maybe {
+                        constructor(value) {
+                        this.value = value;
+                        }
+
+                        static of(value) {
+                        return new Maybe(value);
+                        }
+
+                        static nothing() {
+                        return new Maybe(null);
+                        }
+
+                        isNothing() {
+                        return this.value === null || this.value === undefined;
+                        }
+
+                        map(fn) {
+                        return this.isNothing() ? Maybe.nothing() : Maybe.of(fn(this.value));
+                        }
+
+                        flatMap(fn) {
+                        return this.isNothing() ? Maybe.nothing() : fn(this.value);
+                        }
+
+                        getOrElse(defaultValue) {
+                        return this.isNothing() ? defaultValue : this.value;
+                        }
+                        }</span>
+
+                    // Using Maybe for safe operations
+                    const safeParseInt = (str) => {
+                    const num = parseInt(str);
+                    return isNaN(num) ? Maybe.nothing() : Maybe.of(num);
+                    };
+
+                    const safeDivide = (a, b) =>
+                    b === 0 ? Maybe.nothing() : Maybe.of(a / b);
+
+                    // Chaining safe operations
+                    const calculate = (input) =>
+                    safeParseInt(input)
+                    .flatMap(num => safeDivide(100, num))
+                    .map(result => Math.round(result * 100) / 100)
+                    .getOrElse('Invalid calculation');
+                </div>
+
+                <div class="interactive-demo">
+                    <h4>Test Maybe Monad:</h4>
+                    <input type="text" id="maybeInput" placeholder="Enter a number" style="padding: 8px; margin: 4px;">
+                    <button class="btn" onclick="demonstrateMaybe()">Calculate 100/x</button>
+                    <div id="maybeResult" class="result-display"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Functional programming utility functions
+        const pipe = (...functions) => (value) =>
+            functions.reduce((acc, fn) => fn(acc), value);
+
+        const compose = (...functions) => (value) =>
+            functions.reduceRight((acc, fn) => fn(acc), value);
+
+        const curry = (fn) => {
+            return function curried(...args) {
+                if (args.length >= fn.length) {
+                    return fn.apply(this, args);
+                } else {
+                    return function (...args2) {
+                        return curried.apply(this, args.concat(args2));
+                    };
+                }
+            };
+        };
+
+        // Pure function demonstrations
+        function demonstratePureFunctions() {
+            const add = (a, b) => a + b;
+            const multiply = (a, b) => a * b;
+
+            const items = [
+                { name: 'Item 1', price: 10.99 },
+                { name: 'Item 2', price: 25.50 },
+                { name: 'Item 3', price: 7.25 }
+            ];
+
+            const calculateTotal = (items, tax = 0.1) => {
+                const subtotal = items.reduce((sum, item) => sum + item.price, 0);
+                return subtotal + (subtotal * tax);
+            };
+
+            const formatCurrency = (amount) =>
+                new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                }).format(amount);
+
+            const total = calculateTotal(items);
+            const formatted = formatCurrency(total);
+
+            document.getElementById('pureResult').innerHTML = `
+                <strong>Pure Function Results:</strong><br>
+                Items: ${JSON.stringify(items, null, 2)}<br>
+                Total with tax: ${formatted}<br>
+                Same input always produces: ${formatted}
+            `;
+        }
+
+        // Higher-order function demonstrations
+        function demonstrateHigherOrder() {
+            const users = [
+                { name: 'Alice', age: 30, active: true },
+                { name: 'Bob', age: 25, active: false },
+                { name: 'Charlie', age: 35, active: true },
+                { name: 'Diana', age: 28, active: true }
+            ];
+
+            const getActiveUsers = (users) => users.filter(user => user.active);
+            const getUserNames = (users) => users.map(user => user.name);
+            const sortAlphabetically = (names) => [...names].sort();
+
+            const getActiveUserNames = compose(
+                sortAlphabetically,
+                getUserNames,
+                getActiveUsers
+            );
+
+            const result = getActiveUserNames(users);
+
+            document.getElementById('higherOrderResult').innerHTML = `
+                <strong>Higher-Order Function Pipeline:</strong><br>
+                Original users: ${users.length}<br>
+                Active users: ${getActiveUsers(users).map(u => u.name).join(', ')}<br>
+                Sorted active names: ${result.join(', ')}
+            `;
+        }
+
+        // Immutability demonstrations
+        function demonstrateImmutability() {
+            const originalArray = [1, 2, 3, 4, 5];
+            const originalObject = { name: 'John', age: 30, city: 'New York' };
+
+            // Immutable array operations
+            const addToArray = (array, item) => [...array, item];
+            const removeFromArray = (array, index) => [
+                ...array.slice(0, index),
+                ...array.slice(index + 1)
+            ];
+
+            // Immutable object operations
+            const updateObject = (obj, updates) => ({ ...obj, ...updates });
+
+            const newArray = addToArray(originalArray, 6);
+            const arrayWithoutFirst = removeFromArray(originalArray, 0);
+            const updatedObject = updateObject(originalObject, { age: 31, country: 'USA' });
+
+            document.getElementById('immutableResult').innerHTML = `
+                <strong>Immutability Examples:</strong><br>
+                Original Array: [${originalArray.join(', ')}]<br>
+                After adding 6: [${newArray.join(', ')}]<br>
+                After removing first: [${arrayWithoutFirst.join(', ')}]<br>
+                Original still: [${originalArray.join(', ')}]<br><br>
+                Original Object: ${JSON.stringify(originalObject)}<br>
+                Updated Object: ${JSON.stringify(updatedObject)}<br>
+                Original unchanged: ${JSON.stringify(originalObject)}
+            `;
+        }
+
+        // Function composition demonstrations
+        function demonstrateComposition() {
+            const toLowerCase = str => str.toLowerCase();
+            const removeSpaces = str => str.replace(/\s+/g, '');
+            const addPrefix = prefix => str => prefix + str;
+            const addSuffix = suffix => str => str + suffix;
+
+            const processText = pipe(
+                toLowerCase,
+                removeSpaces,
+                addPrefix('processed_'),
+                addSuffix('_final')
+            );
+
+            const input = 'Hello World Example';
+            const result = processText(input);
+
+            document.getElementById('compositionResult').innerHTML = `
+                <strong>Function Composition:</strong><br>
+                Input: "${input}"<br>
+                After toLowerCase: "${toLowerCase(input)}"<br>
+                After removeSpaces: "${removeSpaces(toLowerCase(input))}"<br>
+                Final result: "${result}"
+            `;
+        }
+
+        // Currying demonstrations
+        function demonstrateCurrying() {
+            const curriedAdd = curry((a, b, c) => a + b + c);
+
+            const add5 = curriedAdd(5);
+            const add5And3 = add5(3);
+            const final = add5And3(2);
+
+            const multiply = curry((a, b) => a * b);
+            const double = multiply(2);
+            const triple = multiply(3);
+
+            document.getElementById('compositionResult').innerHTML = `
+                <strong>Currying Examples:</strong><br>
+                curriedAdd(5)(3)(2) = ${final}<br>
+                double(4) = ${double(4)}<br>
+                triple(4) = ${triple(4)}<br>
+                Partial application allows reusable functions!
+            `;
+        }
+
+        // Data transformation demonstrations
+        function demonstrateDataTransformation() {
+            const data = [
+                { id: 1, name: 'Product A', price: 100, category: 'electronics' },
+                { id: 2, name: 'Product B', price: 200, category: 'clothing' },
+                { id: 3, name: 'Product C', price: 150, category: 'electronics' },
+                { id: 4, name: 'Product D', price: 80, category: 'books' }
+            ];
+
+            const groupBy = (array, keyFn) =>
+                array.reduce((groups, item) => {
+                    const key = keyFn(item);
+                    return { ...groups, [key]: [...(groups[key] || []), item] };
+                }, {});
+
+            const transformGroups = (groups, transformFn) =>
+                Object.entries(groups).reduce((acc, [key, items]) => ({
+                    ...acc,
+                    [key]: transformFn(items)
+                }), {});
+
+            const processProducts = pipe(
+                data => groupBy(data, product => product.category),
+                groups => transformGroups(groups, items => ({
+                    count: items.length,
+                    averagePrice: Math.round(items.reduce((sum, item) => sum + item.price, 0) / items.length),
+                    totalValue: items.reduce((sum, item) => sum + item.price, 0)
+                }))
+            );
+
+            const result = processProducts(data);
+
+            document.getElementById('dataResult').innerHTML = `
+                <strong>Functional Data Transformation:</strong><br>
+                ${JSON.stringify(result, null, 2)}
+            `;
+        }
+
+        // Maybe monad demonstration
+        class Maybe {
+            constructor(value) {
+                this.value = value;
+            }
+
+            static of(value) {
+                return new Maybe(value);
+            }
+
+            static nothing() {
+                return new Maybe(null);
+            }
+
+            isNothing() {
+                return this.value === null || this.value === undefined;
+            }
+
+            map(fn) {
+                return this.isNothing() ? Maybe.nothing() : Maybe.of(fn(this.value));
+            }
+
+            flatMap(fn) {
+                return this.isNothing() ? Maybe.nothing() : fn(this.value);
+            }
+
+            getOrElse(defaultValue) {
+                return this.isNothing() ? defaultValue : this.value;
+            }
+        }
+
+        function demonstrateMaybe() {
+            const input = document.getElementById('maybeInput').value;
+
+            const safeParseInt = (str) => {
+                const num = parseInt(str);
+                return isNaN(num) ? Maybe.nothing() : Maybe.of(num);
+            };
+
+            const safeDivide = (a, b) =>
+                b === 0 ? Maybe.nothing() : Maybe.of(a / b);
+
+            const calculate = (input) =>
+                safeParseInt(input)
+                    .flatMap(num => safeDivide(100, num))
+                    .map(result => Math.round(result * 100) / 100)
+                    .getOrElse('Invalid calculation');
+
+            const result = calculate(input);
+
+            document.getElementById('maybeResult').innerHTML = `
+                <strong>Maybe Monad Result:</strong><br>
+                Input: "${input}"<br>
+                100 ÷ ${input} = ${result}<br>
+                (Safely handles division by zero and invalid input)
+            `;
+        }
+
+        // Initialize demonstrations
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Functional Programming Patterns demo loaded');
+        });
+    </script>
+</body>
+
+</html>

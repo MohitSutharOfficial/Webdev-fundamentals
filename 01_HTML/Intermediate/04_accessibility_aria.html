@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Intermediate - Accessibility & ARIA</title>
+    <style>
+        /* Basic styling for demonstration */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+
+        .demo-section {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .good-example {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .bad-example {
+            background-color: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .senior-tip {
+            background-color: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        /* Accessibility examples */
+        .custom-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .custom-button:hover,
+        .custom-button:focus {
+            background-color: #2980b9;
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+
+        .custom-button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #3498db;
+            width: 60%;
+            transition: width 0.3s;
+        }
+
+        .tab-container {
+            border: 1px solid #ddd;
+            margin: 20px 0;
+        }
+
+        .tab-list {
+            display: flex;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab-button[aria-selected="true"] {
+            background-color: white;
+            border-bottom-color: #3498db;
+            font-weight: bold;
+        }
+
+        .tab-panel {
+            padding: 20px;
+            display: none;
+        }
+
+        .tab-panel[aria-hidden="false"] {
+            display: block;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            padding: 0;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: #3498db;
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 0 0 5px 5px;
+            z-index: 1000;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .tab-list {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <div class="container">
+        <h1 id="main-content">♿ Accessibility & ARIA</h1>
+
+        <p>Learn to create inclusive web experiences using semantic HTML, ARIA attributes, and accessibility best
+            practices. This is crucial for reaching all users and complying with web standards.</p>
+
+        <h2>🎯 Core Accessibility Principles</h2>
+
+        <div class="demo-section">
+            <h3>POUR Principles</h3>
+            <ul>
+                <li><strong>Perceivable:</strong> Information must be presentable in ways users can perceive</li>
+                <li><strong>Operable:</strong> Interface components must be operable by all users</li>
+                <li><strong>Understandable:</strong> Information and UI operation must be understandable</li>
+                <li><strong>Robust:</strong> Content must be robust enough for various assistive technologies</li>
+            </ul>
+        </div>
+
+        <h2>🏷️ ARIA Attributes</h2>
+
+        <h3>1. ARIA Roles</h3>
+        <div class="code-block">
+            &lt;!-- ARIA roles define what an element is or does --&gt;
+            &lt;div role="button" tabindex="0"&gt;Custom Button&lt;/div&gt;
+            &lt;nav role="navigation"&gt;Main Navigation&lt;/nav&gt;
+            &lt;main role="main"&gt;Main Content&lt;/main&gt;
+            &lt;aside role="complementary"&gt;Sidebar&lt;/aside&gt;
+            &lt;footer role="contentinfo"&gt;Footer&lt;/footer&gt;
+
+            &lt;!-- Widget roles --&gt;
+            &lt;div role="slider" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"&gt;&lt;/div&gt;
+            &lt;div role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"&gt;&lt;/div&gt;
+            &lt;div role="alert"&gt;Error message&lt;/div&gt;
+            &lt;div role="status"&gt;Status update&lt;/div&gt;
+        </div>
+
+        <h3>2. ARIA Properties</h3>
+        <div class="code-block">
+            &lt;!-- ARIA properties describe element properties --&gt;
+            &lt;button aria-label="Close dialog"&gt;×&lt;/button&gt;
+            &lt;input aria-describedby="password-help"&gt;
+            &lt;div id="password-help"&gt;Password must be at least 8 characters&lt;/div&gt;
+
+            &lt;!-- Labeling --&gt;
+            &lt;button aria-labelledby="save-label"&gt;
+            &lt;span id="save-label"&gt;Save Document&lt;/span&gt;
+            &lt;/button&gt;
+
+            &lt;!-- Relationships --&gt;
+            &lt;h2 id="settings-title"&gt;Settings&lt;/h2&gt;
+            &lt;div role="region" aria-labelledby="settings-title"&gt;
+            &lt;!-- Settings content --&gt;
+            &lt;/div&gt;
+        </div>
+
+        <h3>3. ARIA States</h3>
+        <div class="code-block">
+            &lt;!-- ARIA states describe current conditions --&gt;
+            &lt;button aria-pressed="false"&gt;Toggle Button&lt;/button&gt;
+            &lt;input aria-invalid="true" aria-describedby="error-msg"&gt;
+            &lt;div id="error-msg"&gt;Please enter a valid email address&lt;/div&gt;
+
+            &lt;!-- Expandable content --&gt;
+            &lt;button aria-expanded="false" aria-controls="menu"&gt;Menu&lt;/button&gt;
+            &lt;ul id="menu" aria-hidden="true"&gt;
+            &lt;li&gt;&lt;a href="#"&gt;Item 1&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="#"&gt;Item 2&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+
+            &lt;!-- Disabled state --&gt;
+            &lt;button aria-disabled="true"&gt;Disabled Button&lt;/button&gt;
+        </div>
+
+        <h2>🔘 Interactive Elements</h2>
+
+        <h3>Accessible Buttons</h3>
+        <div class="good-example">
+            <h4>✅ Good Example:</h4>
+            <div class="code-block">
+                &lt;!-- Semantic button --&gt;
+                &lt;button type="button" class="custom-button"&gt;
+                Save Changes
+                &lt;/button&gt;
+
+                &lt;!-- Custom button with proper ARIA --&gt;
+                &lt;div role="button"
+                tabindex="0"
+                class="custom-button"
+                aria-label="Save document"
+                onclick="saveDocument()"
+                onkeydown="handleKeyDown(event)"&gt;
+                💾 Save
+                &lt;/div&gt;
+            </div>
+        </div>
+
+        <div class="bad-example">
+            <h4>❌ Bad Example:</h4>
+            <div class="code-block">
+                &lt;!-- Div without proper accessibility --&gt;
+                &lt;div onclick="save()"&gt;Save&lt;/div&gt;
+
+                &lt;!-- Link used as button --&gt;
+                &lt;a href="#" onclick="save()"&gt;Save&lt;/a&gt;
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h4>🎯 Interactive Demo:</h4>
+            <button type="button" class="custom-button" onclick="alert('Button clicked!')">
+                Accessible Button
+            </button>
+            <button type="button" class="custom-button" disabled>
+                Disabled Button
+            </button>
+        </div>
+
+        <h3>Modal Dialogs</h3>
+        <div class="code-block">
+            &lt;!-- Modal dialog with proper ARIA --&gt;
+            &lt;div class="modal"
+            role="dialog"
+            aria-labelledby="modal-title"
+            aria-describedby="modal-description"
+            aria-hidden="true"&gt;
+            &lt;div class="modal-content"&gt;
+            &lt;span class="close"
+            aria-label="Close modal"
+            role="button"
+            tabindex="0"&gt;×&lt;/span&gt;
+            &lt;h2 id="modal-title"&gt;Confirm Action&lt;/h2&gt;
+            &lt;p id="modal-description"&gt;Are you sure you want to delete this item?&lt;/p&gt;
+            &lt;button type="button"&gt;Cancel&lt;/button&gt;
+            &lt;button type="button"&gt;Delete&lt;/button&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+        </div>
+
+        <div class="demo-section">
+            <h4>🎯 Modal Demo:</h4>
+            <button type="button" class="custom-button" onclick="openModal()">
+                Open Modal
+            </button>
+
+            <div id="demo-modal" class="modal" role="dialog" aria-labelledby="demo-modal-title" aria-hidden="true">
+                <div class="modal-content">
+                    <span class="close" aria-label="Close modal" role="button" tabindex="0"
+                        onclick="closeModal()">×</span>
+                    <h3 id="demo-modal-title">Demo Modal</h3>
+                    <p>This is an accessible modal dialog with proper ARIA attributes.</p>
+                    <button type="button" class="custom-button" onclick="closeModal()">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <h2>📊 Progress Indicators</h2>
+
+        <div class="code-block">
+            &lt;!-- Progress bar --&gt;
+            &lt;div role="progressbar"
+            aria-valuenow="60"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-label="Upload progress"&gt;
+            &lt;div class="progress-fill" style="width: 60%"&gt;&lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;!-- Loading indicator --&gt;
+            &lt;div role="status" aria-live="polite"&gt;
+            &lt;span class="visually-hidden"&gt;Loading...&lt;/span&gt;
+            &lt;/div&gt;
+        </div>
+
+        <div class="demo-section">
+            <h4>📈 Progress Demo:</h4>
+            <label for="demo-progress">File Upload Progress:</label>
+            <div id="demo-progress" class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                aria-valuemax="100">
+                <div class="progress-fill"></div>
+            </div>
+            <span id="progress-text">60% complete</span>
+        </div>
+
+        <h2>🗂️ Tab Interface</h2>
+
+        <div class="code-block">
+            &lt;!-- Accessible tab interface --&gt;
+            &lt;div class="tab-container"&gt;
+            &lt;ul role="tablist" aria-label="Settings tabs"&gt;
+            &lt;li role="none"&gt;
+            &lt;button role="tab"
+            aria-selected="true"
+            aria-controls="panel-1"
+            id="tab-1"&gt;
+            General
+            &lt;/button&gt;
+            &lt;/li&gt;
+            &lt;li role="none"&gt;
+            &lt;button role="tab"
+            aria-selected="false"
+            aria-controls="panel-2"
+            id="tab-2"&gt;
+            Advanced
+            &lt;/button&gt;
+            &lt;/li&gt;
+            &lt;/ul&gt;
+
+            &lt;div role="tabpanel"
+            id="panel-1"
+            aria-labelledby="tab-1"
+            aria-hidden="false"&gt;
+            General settings content...
+            &lt;/div&gt;
+
+            &lt;div role="tabpanel"
+            id="panel-2"
+            aria-labelledby="tab-2"
+            aria-hidden="true"&gt;
+            Advanced settings content...
+            &lt;/div&gt;
+            &lt;/div&gt;
+        </div>
+
+        <div class="demo-section">
+            <h4>🗂️ Tab Demo:</h4>
+            <div class="tab-container">
+                <ul role="tablist" aria-label="Demo tabs" class="tab-list">
+                    <li role="none">
+                        <button role="tab" class="tab-button" aria-selected="true" aria-controls="demo-panel-1"
+                            id="demo-tab-1" onclick="switchTab(1)">
+                            Tab 1
+                        </button>
+                    </li>
+                    <li role="none">
+                        <button role="tab" class="tab-button" aria-selected="false" aria-controls="demo-panel-2"
+                            id="demo-tab-2" onclick="switchTab(2)">
+                            Tab 2
+                        </button>
+                    </li>
+                </ul>
+
+                <div role="tabpanel" id="demo-panel-1" class="tab-panel" aria-labelledby="demo-tab-1"
+                    aria-hidden="false">
+                    <h4>Tab 1 Content</h4>
+                    <p>This is the content of the first tab.</p>
+                </div>
+
+                <div role="tabpanel" id="demo-panel-2" class="tab-panel" aria-labelledby="demo-tab-2"
+                    aria-hidden="true">
+                    <h4>Tab 2 Content</h4>
+                    <p>This is the content of the second tab.</p>
+                </div>
+            </div>
+        </div>
+
+        <h2>🎨 Visual Accessibility</h2>
+
+        <h3>Color and Contrast</h3>
+        <div class="code-block">
+            &lt;!-- High contrast button --&gt;
+            &lt;button style="background: #000; color: #fff; border: 2px solid #fff;"&gt;
+            High Contrast Button
+            &lt;/button&gt;
+
+            &lt;!-- Don't rely on color alone --&gt;
+            &lt;span style="color: red;"&gt;❌ Error:&lt;/span&gt; Invalid input
+            &lt;span style="color: green;"&gt;✅ Success:&lt;/span&gt; Data saved
+
+            &lt;!-- Pattern for color-blind users --&gt;
+            &lt;div class="status-indicator error"&gt;
+            &lt;span class="icon"&gt;⚠️&lt;/span&gt;
+            &lt;span class="text"&gt;Error occurred&lt;/span&gt;
+            &lt;/div&gt;
+        </div>
+
+        <h3>Focus Management</h3>
+        <div class="code-block">
+            &lt;!-- Custom focus styles --&gt;
+            &lt;style&gt;
+            .custom-focus:focus {
+            outline: 2px solid #3498db;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2);
+            }
+
+            /* Skip links */
+            .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: #3498db;
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 0 0 5px 5px;
+            z-index: 1000;
+            }
+
+            .skip-link:focus {
+            top: 0;
+            }
+            &lt;/style&gt;
+        </div>
+
+        <h2>🔍 Screen Reader Support</h2>
+
+        <h3>Live Regions</h3>
+        <div class="code-block">
+            &lt;!-- Live regions for dynamic content --&gt;
+            &lt;div aria-live="polite" id="status-updates"&gt;
+            &lt;!-- Status messages appear here --&gt;
+            &lt;/div&gt;
+
+            &lt;div aria-live="assertive" id="error-alerts"&gt;
+            &lt;!-- Critical alerts appear here --&gt;
+            &lt;/div&gt;
+
+            &lt;!-- Atomic updates --&gt;
+            &lt;div aria-live="polite" aria-atomic="true"&gt;
+            &lt;span id="score"&gt;Score: 100&lt;/span&gt;
+            &lt;span id="lives"&gt;Lives: 3&lt;/span&gt;
+            &lt;/div&gt;
+        </div>
+
+        <h3>Hidden Content</h3>
+        <div class="code-block">
+            &lt;!-- Visually hidden but available to screen readers --&gt;
+            &lt;span class="visually-hidden"&gt;
+            This text is hidden visually but read by screen readers
+            &lt;/span&gt;
+
+            &lt;!-- Hide from screen readers --&gt;
+            &lt;span aria-hidden="true"&gt;👍&lt;/span&gt; Good job!
+
+            &lt;!-- Decorative images --&gt;
+            &lt;img src="decoration.jpg" alt="" role="presentation"&gt;
+        </div>
+
+        <div class="senior-tip">
+            <h3>🚀 Senior Engineer Tips:</h3>
+            <ul>
+                <li><strong>Automated Testing:</strong> Use axe-core, Pa11y, or Lighthouse for accessibility audits</li>
+                <li><strong>Keyboard Navigation:</strong> Ensure all interactive elements are keyboard accessible</li>
+                <li><strong>Focus Management:</strong> Properly manage focus in SPAs and modal dialogs</li>
+                <li><strong>Semantic HTML:</strong> Use proper HTML elements before adding ARIA</li>
+                <li><strong>Testing:</strong> Test with real assistive technologies like NVDA, JAWS, VoiceOver</li>
+                <li><strong>Progressive Enhancement:</strong> Ensure core functionality works without JavaScript</li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            <h3>⚠️ Common Accessibility Mistakes:</h3>
+            <ul>
+                <li>Using div/span for interactive elements instead of buttons</li>
+                <li>Missing alt text for images</li>
+                <li>Poor color contrast ratios</li>
+                <li>Keyboard traps in modal dialogs</li>
+                <li>Missing form labels</li>
+                <li>Over-using ARIA instead of semantic HTML</li>
+                <li>Not testing with actual assistive technologies</li>
+            </ul>
+        </div>
+
+        <h2>🛠️ Practical Exercises</h2>
+
+        <div class="demo-section">
+            <h3>Exercise 1: Accessible Form</h3>
+            <p>Create a registration form with:</p>
+            <ul>
+                <li>Proper labels and form validation</li>
+                <li>Error messaging with ARIA</li>
+                <li>Required field indicators</li>
+                <li>Keyboard navigation</li>
+            </ul>
+
+            <h3>Exercise 2: Data Table</h3>
+            <p>Build an accessible data table with:</p>
+            <ul>
+                <li>Proper headers and captions</li>
+                <li>Sortable columns</li>
+                <li>Row selection</li>
+                <li>Screen reader announcements</li>
+            </ul>
+
+            <h3>Exercise 3: Image Gallery</h3>
+            <p>Create an accessible image gallery with:</p>
+            <ul>
+                <li>Keyboard navigation</li>
+                <li>Alt text for all images</li>
+                <li>Modal lightbox</li>
+                <li>Focus management</li>
+            </ul>
+        </div>
+
+        <h2>📚 Resources & Tools</h2>
+
+        <ul>
+            <li><a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank">WCAG 2.1 Quick Reference</a></li>
+            <li><a href="https://webaim.org/" target="_blank">WebAIM: Web Accessibility Resources</a></li>
+            <li><a href="https://www.deque.com/axe/" target="_blank">axe DevTools</a></li>
+            <li><a href="https://wave.webaim.org/" target="_blank">WAVE Web Accessibility Evaluation Tool</a></li>
+            <li><a href="https://www.nvaccess.org/" target="_blank">NVDA Screen Reader</a></li>
+        </ul>
+
+        <p><strong>Next:</strong> Continue to <a href="05_microdata_seo.html">Microdata & SEO</a> to learn about
+            structured data and search engine optimization.</p>
+    </div>
+
+    <script>
+        // Modal functionality
+        function openModal() {
+            const modal = document.getElementById('demo-modal');
+            modal.style.display = 'block';
+            modal.setAttribute('aria-hidden', 'false');
+
+            // Focus management
+            const firstFocusable = modal.querySelector('.close');
+            firstFocusable.focus();
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('demo-modal');
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+        }
+
+        // Tab functionality
+        function switchTab(tabNumber) {
+            // Hide all panels
+            const panels = document.querySelectorAll('[role="tabpanel"]');
+            panels.forEach(panel => {
+                panel.setAttribute('aria-hidden', 'true');
+                panel.style.display = 'none';
+            });
+
+            // Deselect all tabs
+            const tabs = document.querySelectorAll('[role="tab"]');
+            tabs.forEach(tab => {
+                tab.setAttribute('aria-selected', 'false');
+            });
+
+            // Show selected panel
+            const selectedPanel = document.getElementById(`demo-panel-${tabNumber}`);
+            selectedPanel.setAttribute('aria-hidden', 'false');
+            selectedPanel.style.display = 'block';
+
+            // Select active tab
+            const selectedTab = document.getElementById(`demo-tab-${tabNumber}`);
+            selectedTab.setAttribute('aria-selected', 'true');
+        }
+
+        // Keyboard event handlers
+        document.addEventListener('keydown', function (e) {
+            // Close modal with Escape key
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('demo-modal');
+                if (modal.style.display === 'block') {
+                    closeModal();
+                }
+            }
+        });
+
+        // Initialize tab functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabs = document.querySelectorAll('[role="tab"]');
+            tabs.forEach(tab => {
+                tab.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        tab.click();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

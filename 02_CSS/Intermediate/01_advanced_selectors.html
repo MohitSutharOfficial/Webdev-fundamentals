@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced CSS Selectors - Complete Guide</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            background: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .example {
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            background: #ecf0f1;
+        }
+
+        /* Advanced Selector Demonstrations */
+        .demo-area {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        /* Structural Pseudo-classes */
+        .demo-area .child-demo:nth-child(3n+1) {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .demo-area .child-demo:nth-child(3n+2) {
+            background: #3498db;
+            color: white;
+        }
+
+        .demo-area .child-demo:nth-child(3n+3) {
+            background: #27ae60;
+            color: white;
+        }
+
+        .demo-area .child-demo {
+            padding: 15px;
+            margin: 5px;
+            border-radius: 5px;
+            display: inline-block;
+            width: 150px;
+            text-align: center;
+        }
+
+        /* nth-of-type examples */
+        .demo-area .type-demo h3:nth-of-type(odd) {
+            color: #e74c3c;
+            background: #fadbd8;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .demo-area .type-demo h3:nth-of-type(even) {
+            color: #3498db;
+            background: #d5e8f7;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        /* Advanced attribute selectors */
+        .demo-area [data-status="active"] {
+            background: #27ae60;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .demo-area [data-status="inactive"] {
+            background: #e74c3c;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .demo-area [data-priority^="high"] {
+            border-left: 5px solid #e74c3c;
+            background: #ffeaa7;
+            padding: 10px;
+            margin: 5px 0;
+        }
+
+        .demo-area [data-category$="end"] {
+            border-right: 5px solid #3498db;
+            background: #74b9ff;
+            color: white;
+            padding: 10px;
+            margin: 5px 0;
+        }
+
+        .demo-area [data-tags*="important"] {
+            background: #fd79a8;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        /* Language and direction selectors */
+        .demo-area [lang="en"] {
+            font-style: italic;
+        }
+
+        .demo-area [lang="es"] {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        /* Form state selectors */
+        .demo-area input:valid {
+            border: 2px solid #27ae60;
+            background: #d5f4e6;
+        }
+
+        .demo-area input:invalid {
+            border: 2px solid #e74c3c;
+            background: #fadbd8;
+        }
+
+        .demo-area input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);
+        }
+
+        .demo-area input:disabled {
+            background: #ecf0f1;
+            color: #7f8c8d;
+            cursor: not-allowed;
+        }
+
+        .demo-area input:checked+label {
+            background: #27ae60;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
+
+        /* Negation pseudo-class */
+        .demo-area p:not(.special) {
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .demo-area .special {
+            color: #e74c3c;
+            font-weight: bold;
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        /* Target pseudo-class */
+        .demo-area .target-demo:target {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        /* Complex combinators */
+        .demo-area .complex-demo .parent~.sibling .child {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .demo-area .complex-demo .parent+.adjacent>.direct {
+            background: #3498db;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        /* CSS Grid and Flexbox selectors */
+        .grid-demo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .grid-demo .item:nth-child(4n+1) {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .grid-demo .item:nth-child(4n+2) {
+            background: #3498db;
+            color: white;
+        }
+
+        .grid-demo .item:nth-child(4n+3) {
+            background: #27ae60;
+            color: white;
+        }
+
+        .grid-demo .item:nth-child(4n+4) {
+            background: #f39c12;
+            color: white;
+        }
+
+        .grid-demo .item {
+            padding: 30px;
+            text-align: center;
+            border-radius: 5px;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Advanced pseudo-elements */
+        .demo-area .decorative::before {
+            content: "✨ ";
+            font-size: 1.2em;
+        }
+
+        .demo-area .decorative::after {
+            content: " ✨";
+            font-size: 1.2em;
+        }
+
+        .demo-area .tooltip {
+            position: relative;
+            cursor: pointer;
+            color: #3498db;
+            text-decoration: underline;
+        }
+
+        .demo-area .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2c3e50;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .demo-area .tooltip:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Variable-based selectors */
+        .demo-area .theme-demo {
+            --primary-color: #3498db;
+            --secondary-color: #e74c3c;
+            --accent-color: #27ae60;
+        }
+
+        .demo-area .theme-demo [data-theme="primary"] {
+            background: var(--primary-color);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 5px;
+        }
+
+        .demo-area .theme-demo [data-theme="secondary"] {
+            background: var(--secondary-color);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 5px;
+        }
+
+        .demo-area .theme-demo [data-theme="accent"] {
+            background: var(--accent-color);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 5px;
+        }
+
+        /* Utilities */
+        .tips {
+            background: #d5f4e6;
+            border-left: 4px solid #27ae60;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .warning {
+            background: #ffeaa7;
+            border-left: 4px solid #fdcb6e;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .exercise {
+            background: #74b9ff;
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+
+        .exercise h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .selector-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .selector-table th,
+        .selector-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .selector-table th {
+            background: #3498db;
+            color: white;
+        }
+
+        .selector-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .selector-table code {
+            background: #ecf0f1;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .child-demo {
+                width: 100% !important;
+                margin: 5px 0 !important;
+            }
+
+            .grid-demo {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🎯 Advanced CSS Selectors Mastery</h1>
+
+        <div class="section">
+            <h2>📚 Beyond Basic Selectors</h2>
+            <p>Advanced CSS selectors give you precise control over element targeting. They enable complex styling
+                patterns and dynamic interactions without JavaScript.</p>
+
+            <div class="highlight">
+                <h3>🎯 What You'll Master:</h3>
+                <ul>
+                    <li><strong>Structural Pseudo-classes</strong> - Target elements by position</li>
+                    <li><strong>Advanced Attribute Selectors</strong> - Complex attribute matching</li>
+                    <li><strong>Negation & Functional Selectors</strong> - :not(), :is(), :where()</li>
+                    <li><strong>Form State Selectors</strong> - Dynamic form styling</li>
+                    <li><strong>Complex Combinators</strong> - Multi-level element relationships</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔢 Structural Pseudo-classes</h2>
+
+            <h3>nth-child() Selectors</h3>
+            <div class="code-block">
+                /* Select specific positions */
+                li:nth-child(3) { color: red; } /* 3rd child */
+                li:nth-child(odd) { background: #f0f0f0; } /* odd children */
+                li:nth-child(even) { background: white; } /* even children */
+
+                /* Mathematical expressions */
+                li:nth-child(3n) { color: blue; } /* every 3rd: 3, 6, 9, 12... */
+                li:nth-child(3n+1) { color: red; } /* 1, 4, 7, 10, 13... */
+                li:nth-child(3n+2) { color: green; } /* 2, 5, 8, 11, 14... */
+
+                /* From the end */
+                li:nth-last-child(2) { font-weight: bold; } /* 2nd from end */
+            </div>
+
+            <h3>nth-of-type() Selectors</h3>
+            <div class="code-block">
+                /* Select by element type, not position */
+                h2:nth-of-type(odd) { color: red; } /* odd h2 elements */
+                p:nth-of-type(3) { font-style: italic; } /* 3rd p element */
+                img:nth-of-type(2n) { border: 2px solid blue; } /* even images */
+            </div>
+
+            <div class="example">
+                <h3>Structural Pseudo-classes Demo</h3>
+                <div class="demo-area">
+                    <h4>nth-child Pattern (3n+1, 3n+2, 3n+3):</h4>
+                    <div class="child-demo">Item 1</div>
+                    <div class="child-demo">Item 2</div>
+                    <div class="child-demo">Item 3</div>
+                    <div class="child-demo">Item 4</div>
+                    <div class="child-demo">Item 5</div>
+                    <div class="child-demo">Item 6</div>
+                    <div class="child-demo">Item 7</div>
+                    <div class="child-demo">Item 8</div>
+                    <div class="child-demo">Item 9</div>
+
+                    <div class="type-demo">
+                        <h4>nth-of-type Pattern:</h4>
+                        <h3>Heading 1 (odd)</h3>
+                        <p>Paragraph between headings</p>
+                        <h3>Heading 2 (even)</h3>
+                        <p>Another paragraph</p>
+                        <h3>Heading 3 (odd)</h3>
+                        <p>Final paragraph</p>
+                        <h3>Heading 4 (even)</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🏷️ Advanced Attribute Selectors</h2>
+
+            <div class="code-block">
+                /* Exact match */
+                [data-status="active"] { background: green; }
+
+                /* Starts with */
+                [data-priority^="high"] { border-left: 5px solid red; }
+
+                /* Ends with */
+                [data-category$="end"] { border-right: 5px solid blue; }
+
+                /* Contains substring */
+                [data-tags*="important"] { font-weight: bold; }
+
+                /* Word match (space-separated) */
+                [class~="special"] { color: purple; }
+
+                /* Language attribute match */
+                [lang|="en"] { font-style: italic; }
+
+                /* Case-insensitive match */
+                [data-type="button" i] { cursor: pointer; }
+            </div>
+
+            <div class="example">
+                <h3>Advanced Attribute Selectors Demo</h3>
+                <div class="demo-area">
+                    <div data-status="active">Active Status</div>
+                    <div data-status="inactive">Inactive Status</div>
+                    <div data-priority="high-urgent">High Priority (starts with 'high')</div>
+                    <div data-category="frontend">Frontend Category (ends with 'end')</div>
+                    <div data-tags="work important project">Contains 'important' tag</div>
+                    <p lang="en">English text (italicized)</p>
+                    <p lang="es">Spanish text (red and bold)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚫 Negation Pseudo-class</h2>
+
+            <div class="code-block">
+                /* Select all paragraphs except those with class 'special' */
+                p:not(.special) {
+                color: gray;
+                font-style: italic;
+                }
+
+                /* Select all inputs except checkboxes */
+                input:not([type="checkbox"]) {
+                border: 2px solid blue;
+                }
+
+                /* Select all elements except the first child */
+                .container > *:not(:first-child) {
+                margin-top: 20px;
+                }
+
+                /* Multiple negations */
+                button:not(.primary):not(.secondary) {
+                background: #ccc;
+                }
+            </div>
+
+            <div class="example">
+                <h3>Negation Pseudo-class Demo</h3>
+                <div class="demo-area">
+                    <p>This paragraph is not special (gray italic)</p>
+                    <p class="special">This paragraph is special (highlighted)</p>
+                    <p>Another regular paragraph (gray italic)</p>
+                    <p class="special">Another special paragraph (highlighted)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📝 Form State Selectors</h2>
+
+            <div class="code-block">
+                /* Form validation states */
+                input:valid { border: 2px solid green; }
+                input:invalid { border: 2px solid red; }
+
+                /* User interaction states */
+                input:focus { box-shadow: 0 0 0 3px rgba(0,123,255,.25); }
+                input:disabled { opacity: 0.5; cursor: not-allowed; }
+
+                /* Checkbox and radio states */
+                input:checked + label { background: blue; color: white; }
+                input:indeterminate { background: orange; }
+
+                /* Form requirement states */
+                input:required { border-left: 3px solid red; }
+                input:optional { border-left: 3px solid green; }
+
+                /* Range and number inputs */
+                input:in-range { background: lightgreen; }
+                input:out-of-range { background: lightcoral; }
+            </div>
+
+            <div class="example">
+                <h3>Form State Selectors Demo</h3>
+                <div class="demo-area">
+                    <form>
+                        <label>Email (required): </label>
+                        <input type="email" required placeholder="Enter email">
+                        <br><br>
+
+                        <label>Number (1-10): </label>
+                        <input type="number" min="1" max="10" placeholder="Enter number">
+                        <br><br>
+
+                        <input type="checkbox" id="agree">
+                        <label for="agree">I agree to terms</label>
+                        <br><br>
+
+                        <input type="text" disabled value="Disabled input">
+                        <br><br>
+
+                        <input type="text" placeholder="Focus me to see effect">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Target Pseudo-class</h2>
+
+            <div class="code-block">
+                /* Style elements when they are the target of a URL fragment */
+                .section:target {
+                background: yellow;
+                border: 2px solid orange;
+                padding: 20px;
+                }
+
+                /* Useful for creating tabs or accordion without JavaScript */
+                .tab-content:target {
+                display: block;
+                }
+
+                .tab-content:not(:target) {
+                display: none;
+                }
+            </div>
+
+            <div class="example">
+                <h3>Target Pseudo-class Demo</h3>
+                <div class="demo-area">
+                    <p><a href="#target-demo">Click here to target the section below</a></p>
+                    <div id="target-demo" class="target-demo">
+                        <h4>This section is highlighted when targeted!</h4>
+                        <p>The :target pseudo-class applies when this element's ID matches the URL fragment.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔗 Complex Combinators</h2>
+
+            <div class="code-block">
+                /* Multiple combinator types */
+                .header nav ul li a:hover {
+                color: blue;
+                }
+
+                /* Adjacent sibling after direct child */
+                .parent > .child + .sibling {
+                margin-top: 0;
+                }
+
+                /* General sibling with class */
+                .trigger ~ .target.active {
+                display: block;
+                }
+
+                /* Complex attribute and pseudo-class combination */
+                input[type="text"]:focus:valid + .success-message {
+                display: block;
+                color: green;
+                }
+            </div>
+
+            <div class="example">
+                <h3>Complex Combinators Demo</h3>
+                <div class="demo-area">
+                    <div class="complex-demo">
+                        <div class="parent">Parent Element</div>
+                        <div class="adjacent">
+                            <div class="direct">Direct child of adjacent (blue background)</div>
+                        </div>
+                        <div class="sibling">
+                            <div class="child">Child of sibling (red text)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎨 Advanced Pseudo-elements</h2>
+
+            <div class="code-block">
+                /* Generated content with attributes */
+                .tooltip::after {
+                content: attr(data-tooltip);
+                position: absolute;
+                /* ... positioning styles ... */
+                }
+
+                /* Counter usage */
+                .numbered-list {
+                counter-reset: item-counter;
+                }
+
+                .numbered-list li::before {
+                counter-increment: item-counter;
+                content: counter(item-counter) ". ";
+                font-weight: bold;
+                color: blue;
+                }
+
+                /* Multiple pseudo-elements */
+                .decorated::before {
+                content: "★ ";
+                }
+
+                .decorated::after {
+                content: " ★";
+                }
+            </div>
+
+            <div class="example">
+                <h3>Advanced Pseudo-elements Demo</h3>
+                <div class="demo-area">
+                    <p class="decorative">This text has decorative elements</p>
+                    <br>
+                    <span class="tooltip" data-tooltip="This is a CSS-only tooltip!">
+                        Hover over me for a tooltip
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎨 Modern Selector Functions</h2>
+
+            <div class="code-block">
+                /* :is() - Matches any of the selectors in the list */
+                :is(h1, h2, h3, h4, h5, h6) {
+                line-height: 1.2;
+                margin-bottom: 1em;
+                }
+
+                /* :where() - Same as :is() but with zero specificity */
+                :where(h1, h2, h3, h4, h5, h6) {
+                color: #333;
+                }
+
+                /* :has() - Parent selector (future CSS) */
+                .card:has(img) {
+                border: 2px solid blue;
+                }
+
+                /* :not() with multiple selectors */
+                button:not(.primary, .secondary) {
+                background: #ccc;
+                }
+            </div>
+
+            <div class="tips">
+                <h3>🎯 Browser Support Note:</h3>
+                <p>Some modern selectors like <code>:has()</code> have limited browser support. Always check
+                    compatibility on <a href="https://caniuse.com" target="_blank">Can I Use</a>.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Practical Applications</h2>
+
+            <h3>1. Responsive Grid with Nth-child</h3>
+            <div class="code-block">
+                /* Create a colorful grid pattern */
+                .grid-item:nth-child(4n+1) { background: #e74c3c; }
+                .grid-item:nth-child(4n+2) { background: #3498db; }
+                .grid-item:nth-child(4n+3) { background: #27ae60; }
+                .grid-item:nth-child(4n+4) { background: #f39c12; }
+            </div>
+
+            <div class="example">
+                <h3>Responsive Grid Demo</h3>
+                <div class="grid-demo">
+                    <div class="item">Item 1</div>
+                    <div class="item">Item 2</div>
+                    <div class="item">Item 3</div>
+                    <div class="item">Item 4</div>
+                    <div class="item">Item 5</div>
+                    <div class="item">Item 6</div>
+                    <div class="item">Item 7</div>
+                    <div class="item">Item 8</div>
+                </div>
+            </div>
+
+            <h3>2. Theme System with Data Attributes</h3>
+            <div class="code-block">
+                /* CSS Custom Properties with attribute selectors */
+                .theme-container {
+                --primary: #3498db;
+                --secondary: #e74c3c;
+                --accent: #27ae60;
+                }
+
+                [data-theme="primary"] { background: var(--primary); }
+                [data-theme="secondary"] { background: var(--secondary); }
+                [data-theme="accent"] { background: var(--accent); }
+            </div>
+
+            <div class="example">
+                <h3>Theme System Demo</h3>
+                <div class="demo-area">
+                    <div class="theme-demo">
+                        <div data-theme="primary">Primary Theme</div>
+                        <div data-theme="secondary">Secondary Theme</div>
+                        <div data-theme="accent">Accent Theme</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Advanced Selector Reference</h2>
+
+            <table class="selector-table">
+                <thead>
+                    <tr>
+                        <th>Selector</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>:nth-child(n)</code></td>
+                        <td>Selects every nth child element</td>
+                        <td><code>li:nth-child(3)</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>:nth-of-type(n)</code></td>
+                        <td>Selects every nth element of its type</td>
+                        <td><code>p:nth-of-type(2)</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>:not(selector)</code></td>
+                        <td>Selects elements that don't match</td>
+                        <td><code>div:not(.special)</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>:target</code></td>
+                        <td>Selects the targeted element</td>
+                        <td><code>section:target</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>[attr^="value"]</code></td>
+                        <td>Attribute starts with value</td>
+                        <td><code>[href^="https"]</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>[attr$="value"]</code></td>
+                        <td>Attribute ends with value</td>
+                        <td><code>[href$=".pdf"]</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>[attr*="value"]</code></td>
+                        <td>Attribute contains value</td>
+                        <td><code>[class*="btn"]</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>:is(selector)</code></td>
+                        <td>Matches any selector in the list</td>
+                        <td><code>:is(h1, h2, h3)</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Best Practices</h2>
+
+            <div class="tips">
+                <h3>✅ DO:</h3>
+                <ul>
+                    <li>Use semantic data attributes for JavaScript hooks</li>
+                    <li>Prefer :nth-child() over complex class naming</li>
+                    <li>Use :not() to reduce CSS duplication</li>
+                    <li>Test advanced selectors across browsers</li>
+                    <li>Document complex selector patterns</li>
+                    <li>Use CSS custom properties with attribute selectors</li>
+                </ul>
+            </div>
+
+            <div class="warning">
+                <h3>❌ DON'T:</h3>
+                <ul>
+                    <li>Over-complicate selectors unnecessarily</li>
+                    <li>Rely on browser-specific selectors</li>
+                    <li>Use :nth-child() when simple classes work better</li>
+                    <li>Forget about performance with complex selectors</li>
+                    <li>Mix too many pseudo-classes in one selector</li>
+                    <li>Ignore fallbacks for modern selectors</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚨 Performance Considerations</h2>
+
+            <div class="warning">
+                <h3>⚠️ Selector Performance Tips:</h3>
+                <ul>
+                    <li><strong>Right-to-left reading:</strong> Browsers read selectors from right to left</li>
+                    <li><strong>Avoid universal selectors:</strong> <code>* { }</code> can be slow</li>
+                    <li><strong>Limit nesting depth:</strong> Keep selectors shallow</li>
+                    <li><strong>Use IDs and classes:</strong> Faster than attribute selectors</li>
+                    <li><strong>Avoid complex :nth-child():</strong> Simple numbers are faster</li>
+                </ul>
+            </div>
+
+            <div class="code-block">
+                /* Slow */
+                div > div > div > p:nth-child(3n+1) { }
+
+                /* Better */
+                .content-item:nth-child(3n+1) { }
+
+                /* Slow */
+                *[data-*] { }
+
+                /* Better */
+                .component[data-state="active"] { }
+            </div>
+        </div>
+
+        <div class="exercise">
+            <h2>💪 Practice Exercises</h2>
+
+            <h3>Exercise 1: Structural Patterns</h3>
+            <p>Create a list where every 3rd item is highlighted, first item is red, and last item is blue.</p>
+
+            <h3>Exercise 2: Form Validation</h3>
+            <p>Style a form with different colors for valid/invalid inputs and custom checkbox styling.</p>
+
+            <h3>Exercise 3: Data Attribute Themes</h3>
+            <p>Create a theme system using data attributes and CSS custom properties.</p>
+
+            <h3>Exercise 4: Advanced Grid</h3>
+            <p>Build a responsive grid where items have different colors based on their position pattern.</p>
+
+            <h3>Exercise 5: Interactive Components</h3>
+            <p>Create tabs or accordion using only CSS with :target pseudo-class.</p>
+        </div>
+
+        <div class="section">
+            <h2>🔗 Resources & Next Steps</h2>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors" target="_blank">MDN CSS
+                        Selectors</a></li>
+                <li><a href="https://css-tricks.com/useful-nth-child-recipies/" target="_blank">CSS-Tricks nth-child
+                        Recipes</a></li>
+                <li><a href="https://caniuse.com/" target="_blank">Can I Use - Browser Support</a></li>
+                <li><a href="https://flukeout.github.io/" target="_blank">CSS Diner - Selector Game</a></li>
+            </ul>
+
+            <div class="tips">
+                <h3>🎯 Next Steps:</h3>
+                <ol>
+                    <li>Master nth-child() patterns for layouts</li>
+                    <li>Explore CSS custom properties integration</li>
+                    <li>Learn CSS Container Queries</li>
+                    <li>Study CSS architecture methodologies</li>
+                    <li>Practice with real-world projects</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

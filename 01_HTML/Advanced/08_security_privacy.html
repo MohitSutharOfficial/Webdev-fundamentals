@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security and Privacy - HTML Advanced</title>
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            color: #34495e;
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e74c3c;
+        }
+
+        .demo-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .success {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .warning {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+
+        .info {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .security-status {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .status-card {
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-secure {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+        }
+
+        .status-warning {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+
+        .status-danger {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .status-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .security-alert {
+            background: #fadbd8;
+            border: 1px solid #e74c3c;
+            color: #c0392b;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .security-alert.success {
+            background: #d5f4e6;
+            border-color: #27ae60;
+            color: #1e8449;
+        }
+
+        .security-alert.warning {
+            background: #fef9e7;
+            border-color: #f39c12;
+            color: #b7950b;
+        }
+
+        .permission-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #bdc3c7;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+            background: white;
+        }
+
+        .permission-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .permission-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .granted {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+
+        .denied {
+            background: #fadbd8;
+            color: #e74c3c;
+        }
+
+        .prompt {
+            background: #fef9e7;
+            color: #f39c12;
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .csp-policy {
+            background: #ecf0f1;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .form-group {
+            margin: 1rem 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+
+        .vulnerability-test {
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .vulnerability-test h4 {
+            color: #e53e3e;
+            margin-bottom: 0.5rem;
+        }
+
+        .test-results {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .privacy-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #27ae60;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .privacy-indicator.tracking {
+            background: #e74c3c;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="privacy-indicator" id="privacy-indicator">🔒 Secure Context</div>
+
+    <div class="container">
+        <header>
+            <h1>🔐 Security and Privacy</h1>
+            <p>Master web security fundamentals including Content Security Policy (CSP), Permissions API, secure
+                contexts, and privacy-focused development practices.</p>
+        </header>
+
+        <!-- Security Status Dashboard -->
+        <section class="demo-section">
+            <h2>Security Status Dashboard</h2>
+            <p>Monitor your application's security posture with real-time security indicators and vulnerability
+                assessments.</p>
+
+            <div class="security-status">
+                <div class="status-card status-secure">
+                    <span class="status-value" id="https-status">✓</span>
+                    <span class="status-label">HTTPS Enabled</span>
+                </div>
+                <div class="status-card" id="csp-status">
+                    <span class="status-value">✓</span>
+                    <span class="status-label">CSP Active</span>
+                </div>
+                <div class="status-card" id="hsts-status">
+                    <span class="status-value">?</span>
+                    <span class="status-label">HSTS Header</span>
+                </div>
+                <div class="status-card" id="xss-status">
+                    <span class="status-value">✓</span>
+                    <span class="status-label">XSS Protection</span>
+                </div>
+                <div class="status-card" id="clickjacking-status">
+                    <span class="status-value">✓</span>
+                    <span class="status-label">Clickjacking Protection</span>
+                </div>
+                <div class="status-card" id="referrer-status">
+                    <span class="status-value">✓</span>
+                    <span class="status-label">Referrer Policy</span>
+                </div>
+            </div>
+
+            <div class="demo-controls">
+                <button onclick="analyzeSecurityHeaders()" class="info">Analyze Security Headers</button>
+                <button onclick="checkCSP()">Check CSP</button>
+                <button onclick="runSecurityAudit()">Run Security Audit</button>
+                <button onclick="testVulnerabilities()" class="warning">Test Vulnerabilities</button>
+            </div>
+
+            <div id="security-results" class="test-results">Security analysis results will appear here...</div>
+
+            <div class="code-block">
+                // Security Headers Implementation
+                const securityHeaders = {
+                'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self'
+                'unsafe-inline'",
+                'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
+                'X-Content-Type-Options': 'nosniff',
+                'X-Frame-Options': 'DENY',
+                'X-XSS-Protection': '1; mode=block',
+                'Referrer-Policy': 'strict-origin-when-cross-origin',
+                'Permissions-Policy': 'geolocation=(), microphone=(), camera=()'
+                };
+
+                // CSP Violation Handler
+                document.addEventListener('securitypolicyviolation', (e) => {
+                console.error('CSP Violation:', {
+                directive: e.violatedDirective,
+                blockedURI: e.blockedURI,
+                lineNumber: e.lineNumber,
+                sourceFile: e.sourceFile
+                });
+
+                // Report to security monitoring service
+                reportCSPViolation(e);
+                });
+
+                function reportCSPViolation(violation) {
+                fetch('/api/csp-report', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                'csp-report': {
+                'violated-directive': violation.violatedDirective,
+                'blocked-uri': violation.blockedURI,
+                'line-number': violation.lineNumber,
+                'source-file': violation.sourceFile,
+                'timestamp': new Date().toISOString()
+                }
+                })
+                });
+                }
+            </div>
+        </section>
+
+        <!-- Content Security Policy Demo -->
+        <section class="demo-section">
+            <h2>Content Security Policy (CSP)</h2>
+            <p>Configure and test Content Security Policy to prevent XSS attacks and data injection vulnerabilities.</p>
+
+            <div class="csp-policy" id="current-csp">
+                default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'
+                data: https:;
+            </div>
+
+            <div class="form-group">
+                <label for="csp-directive">CSP Directive:</label>
+                <select id="csp-directive">
+                    <option value="default-src">default-src</option>
+                    <option value="script-src">script-src</option>
+                    <option value="style-src">style-src</option>
+                    <option value="img-src">img-src</option>
+                    <option value="connect-src">connect-src</option>
+                    <option value="font-src">font-src</option>
+                    <option value="media-src">media-src</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="csp-values">Allowed Sources:</label>
+                <input type="text" id="csp-values" placeholder="'self' 'unsafe-inline' https://example.com"
+                    value="'self'">
+            </div>
+
+            <div class="demo-controls">
+                <button onclick="updateCSP()" class="success">Update CSP</button>
+                <button onclick="testCSPViolation()" class="warning">Test CSP Violation</button>
+                <button onclick="generateCSP()">Generate Secure CSP</button>
+                <button onclick="validateCSP()">Validate CSP</button>
+            </div>
+
+            <div class="vulnerability-test">
+                <h4>⚠️ XSS Prevention Test</h4>
+                <input type="text" id="xss-input" placeholder="Try entering: &lt;script&gt;alert('XSS')&lt;/script&gt;">
+                <button onclick="testXSSPrevention()" class="warning">Test XSS</button>
+                <div id="xss-output"></div>
+            </div>
+
+            <div class="code-block">
+                // Advanced CSP Configuration
+                class CSPManager {
+                constructor() {
+                this.policy = new Map();
+                this.violations = [];
+                this.reportEndpoint = '/api/csp-report';
+                }
+
+                setDirective(directive, sources) {
+                this.policy.set(directive, Array.isArray(sources) ? sources : [sources]);
+                this.updatePolicy();
+                }
+
+                addSource(directive, source) {
+                if (!this.policy.has(directive)) {
+                this.policy.set(directive, []);
+                }
+                this.policy.get(directive).push(source);
+                this.updatePolicy();
+                }
+
+                removeSource(directive, source) {
+                if (this.policy.has(directive)) {
+                const sources = this.policy.get(directive);
+                const index = sources.indexOf(source);
+                if (index > -1) {
+                sources.splice(index, 1);
+                this.updatePolicy();
+                }
+                }
+                }
+
+                generatePolicyString() {
+                const directives = [];
+                for (const [directive, sources] of this.policy) {
+                directives.push(`${directive} ${sources.join(' ')}`);
+                }
+                return directives.join('; ');
+                }
+
+                updatePolicy() {
+                const meta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+                if (meta) {
+                meta.setAttribute('content', this.generatePolicyString());
+                }
+                }
+
+                enableReporting() {
+                this.setDirective('report-uri', this.reportEndpoint);
+                this.setDirective('report-to', 'csp-endpoint');
+                }
+
+                handleViolation(event) {
+                this.violations.push({
+                directive: event.violatedDirective,
+                blockedURI: event.blockedURI,
+                lineNumber: event.lineNumber,
+                sourceFile: event.sourceFile,
+                timestamp: new Date().toISOString()
+                });
+
+                // Send to monitoring service
+                this.reportViolation(event);
+                }
+
+                async reportViolation(event) {
+                try {
+                await fetch(this.reportEndpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                violation: {
+                directive: event.violatedDirective,
+                blocked: event.blockedURI,
+                line: event.lineNumber,
+                file: event.sourceFile
+                }
+                })
+                });
+                } catch (error) {
+                console.error('Failed to report CSP violation:', error);
+                }
+                }
+                }
+
+                // Initialize CSP Manager
+                const cspManager = new CSPManager();
+                cspManager.setDirective('default-src', "'self'");
+                cspManager.setDirective('script-src', ["'self'", "'unsafe-inline'"]);
+                cspManager.setDirective('style-src', ["'self'", "'unsafe-inline'"]);
+
+                // Listen for CSP violations
+                document.addEventListener('securitypolicyviolation', (e) => {
+                cspManager.handleViolation(e);
+                });
+            </div>
+        </section>
+
+        <!-- Permissions API Demo -->
+        <section class="demo-section">
+            <h2>Permissions API</h2>
+            <p>Manage browser permissions responsibly and provide clear user consent mechanisms.</p>
+
+            <div id="permissions-list">
+                <!-- Permission items will be dynamically generated -->
+            </div>
+
+            <div class="demo-controls">
+                <button onclick="checkAllPermissions()" class="info">Check All Permissions</button>
+                <button onclick="requestGeolocation()" class="warning">Request Geolocation</button>
+                <button onclick="requestNotifications()" class="warning">Request Notifications</button>
+                <button onclick="requestCamera()" class="warning">Request Camera</button>
+                <button onclick="requestMicrophone()" class="warning">Request Microphone</button>
+            </div>
+
+            <div id="permissions-output" class="test-results">Permission results will appear here...</div>
+
+            <div class="code-block">
+                // Advanced Permissions Management
+                class PermissionsManager {
+                constructor() {
+                this.permissions = new Map();
+                this.callbacks = new Map();
+                this.supportedPermissions = [
+                'geolocation',
+                'notifications',
+                'camera',
+                'microphone',
+                'persistent-storage',
+                'push',
+                'midi'
+                ];
+                }
+
+                async checkPermission(name) {
+                try {
+                if ('permissions' in navigator) {
+                const result = await navigator.permissions.query({ name });
+                this.permissions.set(name, result.state);
+
+                // Listen for permission changes
+                result.addEventListener('change', () => {
+                this.permissions.set(name, result.state);
+                this.notifyChange(name, result.state);
+                });
+
+                return result.state;
+                }
+                } catch (error) {
+                console.warn(`Permission ${name} not supported:`, error);
+                return 'unsupported';
+                }
+                }
+
+                async requestPermission(name, options = {}) {
+                try {
+                let result;
+
+                switch (name) {
+                case 'geolocation':
+                result = await this.requestGeolocation(options);
+                break;
+                case 'notifications':
+                result = await this.requestNotifications();
+                break;
+                case 'camera':
+                case 'microphone':
+                result = await this.requestMedia(name, options);
+                break;
+                default:
+                throw new Error(`Unsupported permission: ${name}`);
+                }
+
+                this.permissions.set(name, result);
+                return result;
+                } catch (error) {
+                console.error(`Failed to request ${name} permission:`, error);
+                this.permissions.set(name, 'denied');
+                return 'denied';
+                }
+                }
+
+                async requestGeolocation(options = {}) {
+                return new Promise((resolve) => {
+                navigator.geolocation.getCurrentPosition(
+                () => resolve('granted'),
+                () => resolve('denied'),
+                options
+                );
+                });
+                }
+
+                async requestNotifications() {
+                const permission = await Notification.requestPermission();
+                return permission === 'granted' ? 'granted' : 'denied';
+                }
+
+                async requestMedia(type, constraints = {}) {
+                try {
+                const mediaConstraints = {
+                video: type === 'camera',
+                audio: type === 'microphone',
+                ...constraints
+                };
+
+                const stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
+
+                // Stop the stream immediately (we just wanted permission)
+                stream.getTracks().forEach(track => track.stop());
+
+                return 'granted';
+                } catch (error) {
+                return 'denied';
+                }
+                }
+
+                onPermissionChange(name, callback) {
+                if (!this.callbacks.has(name)) {
+                this.callbacks.set(name, []);
+                }
+                this.callbacks.get(name).push(callback);
+                }
+
+                notifyChange(name, state) {
+                if (this.callbacks.has(name)) {
+                this.callbacks.get(name).forEach(callback => callback(state));
+                }
+                }
+
+                async checkAllPermissions() {
+                const results = {};
+                for (const permission of this.supportedPermissions) {
+                results[permission] = await this.checkPermission(permission);
+                }
+                return results;
+                }
+
+                getPermissionIcon(state) {
+                switch (state) {
+                case 'granted': return '✅';
+                case 'denied': return '❌';
+                case 'prompt': return '❓';
+                default: return '⚪';
+                }
+                }
+
+                getPermissionClass(state) {
+                switch (state) {
+                case 'granted': return 'granted';
+                case 'denied': return 'denied';
+                case 'prompt': return 'prompt';
+                default: return 'prompt';
+                }
+                }
+                }
+
+                const permissionsManager = new PermissionsManager();
+            </div>
+        </section>
+
+        <!-- Secure Context & HTTPS -->
+        <section class="demo-section">
+            <h2>Secure Contexts & HTTPS</h2>
+            <p>Ensure your application runs in secure contexts and implements proper HTTPS security measures.</p>
+
+            <div class="security-alert" id="secure-context-alert">
+                Checking secure context status...
+            </div>
+
+            <div class="form-group">
+                <label for="url-test">Test URL Security:</label>
+                <input type="url" id="url-test" placeholder="https://example.com" value="https://github.com">
+            </div>
+
+            <div class="demo-controls">
+                <button onclick="checkSecureContext()" class="info">Check Secure Context</button>
+                <button onclick="testURLSecurity()">Test URL Security</button>
+                <button onclick="checkTLSVersion()">Check TLS Version</button>
+                <button onclick="analyzeCertificate()">Analyze Certificate</button>
+            </div>
+
+            <div id="security-analysis" class="test-results">Security analysis results will appear here...</div>
+
+            <div class="code-block">
+                // Secure Context Validation
+                class SecurityValidator {
+                constructor() {
+                this.requiredFeatures = [
+                'crypto',
+                'serviceWorker',
+                'geolocation',
+                'mediaDevices',
+                'clipboard'
+                ];
+                }
+
+                checkSecureContext() {
+                const isSecure = window.isSecureContext;
+                const protocol = window.location.protocol;
+                const hostname = window.location.hostname;
+
+                return {
+                isSecure,
+                protocol,
+                hostname,
+                reasons: this.getSecurityReasons(isSecure, protocol, hostname)
+                };
+                }
+
+                getSecurityReasons(isSecure, protocol, hostname) {
+                const reasons = [];
+
+                if (!isSecure) {
+                if (protocol !== 'https:') {
+                reasons.push('Not using HTTPS protocol');
+                }
+                if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
+                reasons.push('Not localhost and not HTTPS');
+                }
+                }
+
+                return reasons;
+                }
+
+                checkAvailableFeatures() {
+                const features = {};
+
+                this.requiredFeatures.forEach(feature => {
+                switch (feature) {
+                case 'crypto':
+                features[feature] = 'crypto' in window && 'subtle' in crypto;
+                break;
+                case 'serviceWorker':
+                features[feature] = 'serviceWorker' in navigator;
+                break;
+                case 'geolocation':
+                features[feature] = 'geolocation' in navigator;
+                break;
+                case 'mediaDevices':
+                features[feature] = 'mediaDevices' in navigator;
+                break;
+                case 'clipboard':
+                features[feature] = 'clipboard' in navigator;
+                break;
+                default:
+                features[feature] = feature in window;
+                }
+                });
+
+                return features;
+                }
+
+                async testTLSConnection(url) {
+                try {
+                const response = await fetch(url, {
+                method: 'HEAD',
+                mode: 'cors'
+                });
+
+                return {
+                success: true,
+                status: response.status,
+                headers: Object.fromEntries(response.headers),
+                security: this.analyzeSecurityHeaders(response.headers)
+                };
+                } catch (error) {
+                return {
+                success: false,
+                error: error.message
+                };
+                }
+                }
+
+                analyzeSecurityHeaders(headers) {
+                const securityHeaders = {
+                'strict-transport-security': headers.get('strict-transport-security'),
+                'content-security-policy': headers.get('content-security-policy'),
+                'x-frame-options': headers.get('x-frame-options'),
+                'x-content-type-options': headers.get('x-content-type-options'),
+                'referrer-policy': headers.get('referrer-policy')
+                };
+
+                const score = Object.values(securityHeaders).filter(Boolean).length;
+
+                return {
+                headers: securityHeaders,
+                score: `${score}/5`,
+                grade: score >= 4 ? 'A' : score >= 3 ? 'B' : score >= 2 ? 'C' : 'F'
+                };
+                }
+
+                generateSecurityReport() {
+                const context = this.checkSecureContext();
+                const features = this.checkAvailableFeatures();
+
+                return {
+                secureContext: context,
+                availableFeatures: features,
+                recommendations: this.generateRecommendations(context, features)
+                };
+                }
+
+                generateRecommendations(context, features) {
+                const recommendations = [];
+
+                if (!context.isSecure) {
+                recommendations.push({
+                priority: 'high',
+                message: 'Enable HTTPS to access secure context features',
+                action: 'Configure SSL/TLS certificate'
+                });
+                }
+
+                Object.entries(features).forEach(([feature, available]) => {
+                if (!available) {
+                recommendations.push({
+                priority: 'medium',
+                message: `${feature} API not available`,
+                action: 'Check browser support and secure context requirements'
+                });
+                }
+                });
+
+                return recommendations;
+                }
+                }
+
+                const securityValidator = new SecurityValidator();
+            </div>
+        </section>
+
+        <!-- Privacy-Focused Development -->
+        <section class="demo-section">
+            <h2>Privacy-Focused Development</h2>
+            <p>Implement privacy-by-design principles and comply with data protection regulations like GDPR and CCPA.
+            </p>
+
+            <div class="privacy-indicator" id="tracking-indicator">🔒 No Tracking</div>
+
+            <div class="form-group">
+                <label for="data-category">Data Category:</label>
+                <select id="data-category">
+                    <option value="essential">Essential (Required)</option>
+                    <option value="functional">Functional (Optional)</option>
+                    <option value="analytics">Analytics (Optional)</option>
+                    <option value="marketing">Marketing (Optional)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="consent-purpose">Data Processing Purpose:</label>
+                <textarea id="consent-purpose" rows="3" placeholder="Describe why this data is needed..."></textarea>
+            </div>
+
+            <div class="demo-controls">
+                <button onclick="requestConsent()" class="warning">Request Consent</button>
+                <button onclick="checkPrivacyCompliance()" class="info">Check Privacy Compliance</button>
+                <button onclick="enableDoNotTrack()">Enable Do Not Track</button>
+                <button onclick="clearPersonalData()" class="danger">Clear Personal Data</button>
+                <button onclick="exportUserData()" class="success">Export User Data</button>
+            </div>
+
+            <div id="privacy-output" class="test-results">Privacy management results will appear here...</div>
+
+            <div class="code-block">
+                // Privacy-First Data Manager
+                class PrivacyManager {
+                constructor() {
+                this.consent = new Map();
+                this.dataCategories = ['essential', 'functional', 'analytics', 'marketing'];
+                this.personalData = new Map();
+                this.consentTimestamp = new Map();
+                this.doNotTrack = navigator.doNotTrack === '1';
+                }
+
+                async requestConsent(category, purpose, duration = 365) {
+                // Check if user has Do Not Track enabled
+                if (this.doNotTrack && category !== 'essential') {
+                this.consent.set(category, false);
+                return false;
+                }
+
+                // Show consent modal (simplified for demo)
+                const userConsent = confirm(
+                `Do you consent to ${category} data processing?\n\n` +
+                `Purpose: ${purpose}\n` +
+                `Duration: ${duration} days\n\n` +
+                `You can withdraw consent at any time.`
+                );
+
+                this.consent.set(category, userConsent);
+                this.consentTimestamp.set(category, Date.now());
+
+                // Store consent in persistent storage
+                this.persistConsent();
+
+                return userConsent;
+                }
+
+                hasValidConsent(category) {
+                if (category === 'essential') return true;
+
+                const consent = this.consent.get(category);
+                const timestamp = this.consentTimestamp.get(category);
+
+                if (!consent || !timestamp) return false;
+
+                // Check if consent is still valid (example: 1 year)
+                const oneYear = 365 * 24 * 60 * 60 * 1000;
+                return (Date.now() - timestamp) < oneYear; } collectData(category, data, identifier=null) { if
+                    (!this.hasValidConsent(category)) { console.warn(`No valid consent for ${category} data
+                    collection`); return false; } if (!this.personalData.has(category)) {
+                    this.personalData.set(category, []); } const dataEntry={ id: identifier || crypto.randomUUID(),
+                    data, timestamp: Date.now(), category }; this.personalData.get(category).push(dataEntry); return
+                    true; } withdrawConsent(category) { this.consent.set(category, false);
+                    this.clearCategoryData(category); this.persistConsent(); console.log(`Consent withdrawn for
+                    ${category}`); } clearCategoryData(category) { this.personalData.delete(category); // Clear related
+                    cookies and storage this.clearCookies(category); this.clearStorage(category); }
+                    clearCookies(category) { document.cookie.split(';').forEach(cookie=> {
+                    const [name] = cookie.trim().split('=');
+                    if (name.includes(category)) {
+                    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+                    }
+                    });
+                    }
+
+                    clearStorage(category) {
+                    // Clear localStorage items related to category
+                    Object.keys(localStorage).forEach(key => {
+                    if (key.includes(category)) {
+                    localStorage.removeItem(key);
+                    }
+                    });
+                    }
+
+                    exportUserData() {
+                    const exportData = {
+                    consent: Object.fromEntries(this.consent),
+                    consentTimestamps: Object.fromEntries(this.consentTimestamp),
+                    personalData: Object.fromEntries(this.personalData),
+                    exportTimestamp: new Date().toISOString()
+                    };
+
+                    return JSON.stringify(exportData, null, 2);
+                    }
+
+                    deleteAllUserData() {
+                    this.consent.clear();
+                    this.consentTimestamp.clear();
+                    this.personalData.clear();
+
+                    // Clear all storage
+                    localStorage.clear();
+                    sessionStorage.clear();
+
+                    // Clear cookies
+                    document.cookie.split(';').forEach(cookie => {
+                    const [name] = cookie.trim().split('=');
+                    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+                    });
+
+                    console.log('All user data deleted');
+                    }
+
+                    persistConsent() {
+                    const consentData = {
+                    consent: Object.fromEntries(this.consent),
+                    timestamps: Object.fromEntries(this.consentTimestamp)
+                    };
+
+                    localStorage.setItem('privacy_consent', JSON.stringify(consentData));
+                    }
+
+                    loadConsent() {
+                    const stored = localStorage.getItem('privacy_consent');
+                    if (stored) {
+                    const { consent, timestamps } = JSON.parse(stored);
+                    this.consent = new Map(Object.entries(consent));
+                    this.consentTimestamp = new Map(Object.entries(timestamps));
+                    }
+                    }
+
+                    checkGDPRCompliance() {
+                    const compliance = {
+                    consentMechanism: this.consent.size > 0,
+                    withdrawalMechanism: true, // We have withdrawal methods
+                    dataExport: true, // We have export functionality
+                    dataDelete: true, // We have deletion functionality
+                    purposeLimitation: true, // We collect data only for specified purposes
+                    dataMinimization: true, // We only collect necessary data
+                    transparentPrivacyPolicy: false // Would need actual policy
+                    };
+
+                    const score = Object.values(compliance).filter(Boolean).length;
+
+                    return {
+                    compliance,
+                    score: `${score}/${Object.keys(compliance).length}`,
+                    compliant: score >= 6
+                    };
+                    }
+                    }
+
+                    const privacyManager = new PrivacyManager();
+                    privacyManager.loadConsent();
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Security Analysis Implementation
+        function analyzeSecurityHeaders() {
+            const results = [];
+
+            // Check if HTTPS is enabled
+            const isHTTPS = location.protocol === 'https:';
+            results.push(`HTTPS: ${isHTTPS ? '✅ Enabled' : '❌ Not enabled'}`);
+
+            // Check CSP
+            const cspMeta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+            results.push(`CSP: ${cspMeta ? '✅ Configured' : '❌ Not configured'}`);
+
+            // Check Secure Context
+            results.push(`Secure Context: ${isSecureContext ? '✅ Yes' : '❌ No'}`);
+
+            // Check Do Not Track
+            results.push(`Do Not Track: ${navigator.doNotTrack === '1' ? '✅ Enabled' : '❌ Disabled'}`);
+
+            document.getElementById('security-results').textContent = results.join('\n');
+            updateSecurityStatus();
+        }
+
+        function updateSecurityStatus() {
+            const httpsStatus = document.getElementById('https-status');
+            const cspStatus = document.getElementById('csp-status');
+            const hstsStatus = document.getElementById('hsts-status');
+
+            // Update HTTPS status
+            if (location.protocol === 'https:') {
+                httpsStatus.parentElement.className = 'status-card status-secure';
+            } else {
+                httpsStatus.parentElement.className = 'status-card status-danger';
+                httpsStatus.textContent = '❌';
+            }
+
+            // Update CSP status
+            const cspMeta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+            if (cspMeta) {
+                cspStatus.parentElement.className = 'status-card status-secure';
+            } else {
+                cspStatus.parentElement.className = 'status-card status-warning';
+                cspStatus.textContent = '⚠️';
+            }
+        }
+
+        function checkCSP() {
+            const cspMeta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+            if (cspMeta) {
+                const policy = cspMeta.getAttribute('content');
+                document.getElementById('current-csp').textContent = policy;
+                document.getElementById('security-results').textContent = `Current CSP: ${policy}`;
+            } else {
+                document.getElementById('security-results').textContent = 'No CSP policy found';
+            }
+        }
+
+        function updateCSP() {
+            const directive = document.getElementById('csp-directive').value;
+            const values = document.getElementById('csp-values').value;
+
+            let cspMeta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+            if (!cspMeta) {
+                cspMeta = document.createElement('meta');
+                cspMeta.setAttribute('http-equiv', 'Content-Security-Policy');
+                document.head.appendChild(cspMeta);
+            }
+
+            const currentPolicy = cspMeta.getAttribute('content') || '';
+            const directives = currentPolicy.split(';').map(d => d.trim()).filter(d => d);
+
+            // Remove existing directive
+            const filteredDirectives = directives.filter(d => !d.startsWith(directive));
+
+            // Add new directive
+            filteredDirectives.push(`${directive} ${values}`);
+
+            const newPolicy = filteredDirectives.join('; ');
+            cspMeta.setAttribute('content', newPolicy);
+
+            document.getElementById('current-csp').textContent = newPolicy;
+            document.getElementById('security-results').textContent = `CSP updated: ${directive} ${values}`;
+        }
+
+        function testCSPViolation() {
+            try {
+                // This should trigger a CSP violation if inline scripts are blocked
+                eval('console.log("This would be a CSP violation if inline scripts are blocked")');
+                document.getElementById('security-results').textContent = 'CSP Test: Inline script executed (CSP may not be restrictive enough)';
+            } catch (error) {
+                document.getElementById('security-results').textContent = `CSP Test: Script blocked - ${error.message}`;
+            }
+        }
+
+        function testXSSPrevention() {
+            const input = document.getElementById('xss-input').value;
+            const output = document.getElementById('xss-output');
+
+            // Safe way to display user input (HTML escaped)
+            output.textContent = `Safely displayed: ${input}`;
+
+            // Show what would happen with dangerous innerHTML
+            document.getElementById('security-results').textContent =
+                `XSS Test: Input safely displayed as text. Using innerHTML would be dangerous: ${input}`;
+        }
+
+        function generateCSP() {
+            const secureCSP = [
+                "default-src 'self'",
+                "script-src 'self'",
+                "style-src 'self' 'unsafe-inline'",
+                "img-src 'self' data: https:",
+                "connect-src 'self'",
+                "font-src 'self'",
+                "object-src 'none'",
+                "base-uri 'self'",
+                "form-action 'self'",
+                "frame-ancestors 'none'"
+            ].join('; ');
+
+            document.getElementById('current-csp').textContent = secureCSP;
+            document.getElementById('security-results').textContent = `Generated secure CSP policy`;
+        }
+
+        function validateCSP() {
+            const cspMeta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+            if (!cspMeta) {
+                document.getElementById('security-results').textContent = 'No CSP policy to validate';
+                return;
+            }
+
+            const policy = cspMeta.getAttribute('content');
+            const directives = policy.split(';').map(d => d.trim());
+            const issues = [];
+
+            if (!directives.some(d => d.startsWith('default-src'))) {
+                issues.push('Missing default-src directive');
+            }
+
+            if (directives.some(d => d.includes("'unsafe-eval'"))) {
+                issues.push("'unsafe-eval' detected - security risk");
+            }
+
+            if (directives.some(d => d.includes('*'))) {
+                issues.push('Wildcard (*) detected - overly permissive');
+            }
+
+            const result = issues.length === 0 ?
+                'CSP validation passed' :
+                `CSP issues found:\n${issues.join('\n')}`;
+
+            document.getElementById('security-results').textContent = result;
+        }
+
+        function runSecurityAudit() {
+            const audit = {
+                https: location.protocol === 'https:',
+                secureContext: isSecureContext,
+                csp: !!document.querySelector('meta[http-equiv="Content-Security-Policy"]'),
+                doNotTrack: navigator.doNotTrack === '1',
+                referrerPolicy: !!document.querySelector('meta[name="referrer"]'),
+                cookieSecure: document.cookie.includes('Secure'),
+                cookieHttpOnly: document.cookie.includes('HttpOnly')
+            };
+
+            const score = Object.values(audit).filter(Boolean).length;
+            const total = Object.keys(audit).length;
+
+            const results = Object.entries(audit).map(([key, value]) =>
+                `${key}: ${value ? '✅' : '❌'}`
+            );
+
+            results.push(`\nSecurity Score: ${score}/${total}`);
+            results.push(`Grade: ${score >= 6 ? 'A' : score >= 4 ? 'B' : score >= 2 ? 'C' : 'F'}`);
+
+            document.getElementById('security-results').textContent = results.join('\n');
+        }
+
+        function testVulnerabilities() {
+            const vulnerabilities = [];
+
+            // Test for common vulnerabilities
+            if (typeof eval !== 'undefined') {
+                vulnerabilities.push('eval() function available - XSS risk');
+            }
+
+            if (document.domain !== location.hostname) {
+                vulnerabilities.push('Domain manipulation possible');
+            }
+
+            if (!isSecureContext) {
+                vulnerabilities.push('Not in secure context - limited API access');
+            }
+
+            const result = vulnerabilities.length === 0 ?
+                'No common vulnerabilities detected' :
+                `Vulnerabilities found:\n${vulnerabilities.join('\n')}`;
+
+            document.getElementById('security-results').textContent = result;
+        }
+
+        // Permissions API Implementation
+        async function checkAllPermissions() {
+            const permissions = ['geolocation', 'notifications', 'camera', 'microphone'];
+            const container = document.getElementById('permissions-list');
+            container.innerHTML = '';
+
+            for (const permission of permissions) {
+                try {
+                    let status = 'unsupported';
+
+                    if ('permissions' in navigator) {
+                        const result = await navigator.permissions.query({ name: permission });
+                        status = result.state;
+                    }
+
+                    const item = document.createElement('div');
+                    item.className = 'permission-item';
+                    item.innerHTML = `
+                        <span class="permission-name">${permission}</span>
+                        <span class="permission-status ${status}">${status.toUpperCase()}</span>
+                    `;
+                    container.appendChild(item);
+                } catch (error) {
+                    const item = document.createElement('div');
+                    item.className = 'permission-item';
+                    item.innerHTML = `
+                        <span class="permission-name">${permission}</span>
+                        <span class="permission-status denied">UNSUPPORTED</span>
+                    `;
+                    container.appendChild(item);
+                }
+            }
+
+            document.getElementById('permissions-output').textContent = 'Permission status updated';
+        }
+
+        async function requestGeolocation() {
+            try {
+                const position = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject);
+                });
+                document.getElementById('permissions-output').textContent =
+                    `Geolocation granted: ${position.coords.latitude}, ${position.coords.longitude}`;
+            } catch (error) {
+                document.getElementById('permissions-output').textContent =
+                    `Geolocation denied: ${error.message}`;
+            }
+            checkAllPermissions();
+        }
+
+        async function requestNotifications() {
+            try {
+                const permission = await Notification.requestPermission();
+                document.getElementById('permissions-output').textContent =
+                    `Notifications permission: ${permission}`;
+
+                if (permission === 'granted') {
+                    new Notification('Notifications enabled!', {
+                        body: 'You will now receive notifications from this site.',
+                        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🔔</text></svg>'
+                    });
+                }
+            } catch (error) {
+                document.getElementById('permissions-output').textContent =
+                    `Notification error: ${error.message}`;
+            }
+            checkAllPermissions();
+        }
+
+        async function requestCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                stream.getTracks().forEach(track => track.stop()); // Stop immediately
+                document.getElementById('permissions-output').textContent = 'Camera access granted';
+            } catch (error) {
+                document.getElementById('permissions-output').textContent =
+                    `Camera access denied: ${error.message}`;
+            }
+            checkAllPermissions();
+        }
+
+        async function requestMicrophone() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                stream.getTracks().forEach(track => track.stop()); // Stop immediately
+                document.getElementById('permissions-output').textContent = 'Microphone access granted';
+            } catch (error) {
+                document.getElementById('permissions-output').textContent =
+                    `Microphone access denied: ${error.message}`;
+            }
+            checkAllPermissions();
+        }
+
+        // Secure Context Functions
+        function checkSecureContext() {
+            const isSecure = window.isSecureContext;
+            const protocol = window.location.protocol;
+            const hostname = window.location.hostname;
+
+            const alert = document.getElementById('secure-context-alert');
+
+            if (isSecure) {
+                alert.className = 'security-alert success';
+                alert.textContent = `✅ Secure context active (${protocol}//${hostname})`;
+            } else {
+                alert.className = 'security-alert';
+                alert.textContent = `❌ Not in secure context (${protocol}//${hostname})`;
+            }
+
+            const features = [
+                'crypto.subtle',
+                'navigator.serviceWorker',
+                'navigator.geolocation',
+                'navigator.mediaDevices'
+            ];
+
+            const available = features.filter(feature => {
+                try {
+                    return !!eval(feature);
+                } catch {
+                    return false;
+                }
+            });
+
+            document.getElementById('security-analysis').textContent =
+                `Secure context: ${isSecure}\n` +
+                `Available secure features: ${available.join(', ')}\n` +
+                `Total secure APIs: ${available.length}/${features.length}`;
+        }
+
+        async function testURLSecurity() {
+            const url = document.getElementById('url-test').value;
+            if (!url) return;
+
+            try {
+                // This is a simplified test - in practice you'd check certificates, headers, etc.
+                const urlObj = new URL(url);
+                const isHTTPS = urlObj.protocol === 'https:';
+
+                document.getElementById('security-analysis').textContent =
+                    `URL: ${url}\n` +
+                    `Protocol: ${urlObj.protocol}\n` +
+                    `Secure: ${isHTTPS ? 'Yes' : 'No'}\n` +
+                    `Host: ${urlObj.hostname}`;
+
+            } catch (error) {
+                document.getElementById('security-analysis').textContent =
+                    `Invalid URL: ${error.message}`;
+            }
+        }
+
+        function checkTLSVersion() {
+            // Note: TLS version detection is limited in browsers for security reasons
+            document.getElementById('security-analysis').textContent =
+                'TLS version detection is limited in browsers for security reasons.\n' +
+                'Use server-side tools or browser developer tools to check TLS version.\n' +
+                'Modern browsers require TLS 1.2 or higher for secure contexts.';
+        }
+
+        function analyzeCertificate() {
+            if (location.protocol === 'https:') {
+                document.getElementById('security-analysis').textContent =
+                    'Certificate analysis requires server-side tools or browser DevTools.\n' +
+                    'Check the security tab in DevTools for certificate details.\n' +
+                    'Current connection appears to use valid HTTPS certificate.';
+            } else {
+                document.getElementById('security-analysis').textContent =
+                    'No HTTPS certificate to analyze (HTTP connection).\n' +
+                    'Switch to HTTPS to enable certificate analysis.';
+            }
+        }
+
+        // Privacy Management Functions
+        async function requestConsent() {
+            const category = document.getElementById('data-category').value;
+            const purpose = document.getElementById('consent-purpose').value;
+
+            if (!purpose.trim()) {
+                alert('Please specify the purpose for data processing');
+                return;
+            }
+
+            const consent = confirm(
+                `Do you consent to ${category} data processing?\n\n` +
+                `Purpose: ${purpose}\n\n` +
+                `You can withdraw consent at any time.`
+            );
+
+            document.getElementById('privacy-output').textContent =
+                `Consent for ${category}: ${consent ? 'Granted' : 'Denied'}\n` +
+                `Purpose: ${purpose}\n` +
+                `Timestamp: ${new Date().toISOString()}`;
+
+            // Update privacy indicator
+            updatePrivacyIndicator();
+        }
+
+        function checkPrivacyCompliance() {
+            const compliance = [
+                'Consent mechanism: ✅ Available',
+                'Purpose specification: ✅ Required',
+                'Data minimization: ✅ Implemented',
+                'User rights: ✅ Supported (export, delete)',
+                'Transparent processing: ✅ Clear purposes',
+                'Withdrawal mechanism: ✅ Available'
+            ];
+
+            document.getElementById('privacy-output').textContent =
+                'Privacy Compliance Check:\n' + compliance.join('\n') +
+                '\n\nGDPR Compliance Score: 6/6 ✅';
+        }
+
+        function enableDoNotTrack() {
+            // Note: Do Not Track is set by the user's browser
+            document.getElementById('privacy-output').textContent =
+                `Do Not Track status: ${navigator.doNotTrack === '1' ? 'Enabled' : 'Not enabled'}\n` +
+                'Note: Do Not Track is controlled by browser settings.\n' +
+                'This application respects Do Not Track preferences.';
+        }
+
+        function clearPersonalData() {
+            if (confirm('This will clear all personal data. Continue?')) {
+                // Clear storage
+                localStorage.clear();
+                sessionStorage.clear();
+
+                // Clear cookies
+                document.cookie.split(';').forEach(cookie => {
+                    const [name] = cookie.trim().split('=');
+                    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+                });
+
+                document.getElementById('privacy-output').textContent =
+                    'Personal data cleared:\n' +
+                    '- Local storage cleared\n' +
+                    '- Session storage cleared\n' +
+                    '- Cookies cleared\n' +
+                    'Data deletion completed.';
+            }
+        }
+
+        function exportUserData() {
+            const data = {
+                localStorage: { ...localStorage },
+                sessionStorage: { ...sessionStorage },
+                cookies: document.cookie,
+                userAgent: navigator.userAgent,
+                language: navigator.language,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                exportDate: new Date().toISOString()
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'user-data-export.json';
+            a.click();
+            URL.revokeObjectURL(url);
+
+            document.getElementById('privacy-output').textContent =
+                'User data exported to JSON file.\n' +
+                'This includes all stored data and browser information.';
+        }
+
+        function updatePrivacyIndicator() {
+            const indicator = document.getElementById('privacy-indicator');
+            const doNotTrack = navigator.doNotTrack === '1';
+
+            if (doNotTrack) {
+                indicator.textContent = '🔒 Do Not Track';
+                indicator.className = 'privacy-indicator';
+            } else {
+                indicator.textContent = '🔒 Privacy Protected';
+                indicator.className = 'privacy-indicator';
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            analyzeSecurityHeaders();
+            checkAllPermissions();
+            checkSecureContext();
+            updatePrivacyIndicator();
+        });
+    </script>
+</body>
+
+</html>

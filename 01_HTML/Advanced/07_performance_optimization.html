@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance and Optimization - HTML Advanced</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            color: #34495e;
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .demo-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .success {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .warning {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+
+        .danger {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: transform 0.6s;
+        }
+
+        .metric-card:hover::before {
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .metric-good {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+        }
+
+        .metric-needs-improvement {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+
+        .metric-poor {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .resource-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #bdc3c7;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .resource-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            border-bottom: 1px solid #ecf0f1;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .resource-item:last-child {
+            border-bottom: none;
+        }
+
+        .resource-name {
+            flex-grow: 1;
+            margin-right: 1rem;
+        }
+
+        .resource-size {
+            color: #7f8c8d;
+            min-width: 80px;
+        }
+
+        .resource-time {
+            color: #3498db;
+            min-width: 80px;
+            text-align: right;
+        }
+
+        .optimization-tip {
+            background: #e8f6ff;
+            border-left: 4px solid #3498db;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .optimization-tip h4 {
+            color: #2980b9;
+            margin-bottom: 0.5rem;
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .highlight {
+            background: rgba(52, 152, 219, 0.2);
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        .loading-demo {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .loading-box {
+            width: 200px;
+            height: 200px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ecf0f1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-box img {
+            max-width: 100%;
+            max-height: 100%;
+            transition: opacity 0.3s ease;
+        }
+
+        .loading-placeholder {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .network-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            z-index: 1000;
+        }
+
+        .network-online {
+            background: #27ae60;
+        }
+
+        .network-offline {
+            background: #e74c3c;
+        }
+
+        .network-slow {
+            background: #f39c12;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="network-status" id="network-status">Online</div>
+
+    <div class="container">
+        <header>
+            <h1>⚡ Performance and Optimization</h1>
+            <p>Master web performance optimization techniques, critical rendering path, Web Vitals, and advanced loading
+                strategies for lightning-fast web experiences.</p>
+        </header>
+
+        <!-- Performance Metrics -->
+        <section class="demo-section">
+            <h2>Web Vitals Monitoring</h2>
+            <p>Track Core Web Vitals and performance metrics in real-time. These metrics directly impact user experience
+                and SEO rankings.</p>
+
+            <div class="metrics-grid" id="metrics-grid">
+                <div class="metric-card metric-good">
+                    <span class="metric-value" id="lcp-value">-</span>
+                    <span class="metric-label">LCP (Largest Contentful Paint)</span>
+                </div>
+                <div class="metric-card metric-good">
+                    <span class="metric-value" id="fid-value">-</span>
+                    <span class="metric-label">FID (First Input Delay)</span>
+                </div>
+                <div class="metric-card metric-good">
+                    <span class="metric-value" id="cls-value">-</span>
+                    <span class="metric-label">CLS (Cumulative Layout Shift)</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value" id="fcp-value">-</span>
+                    <span class="metric-label">FCP (First Contentful Paint)</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value" id="ttfb-value">-</span>
+                    <span class="metric-label">TTFB (Time to First Byte)</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value" id="tti-value">-</span>
+                    <span class="metric-label">TTI (Time to Interactive)</span>
+                </div>
+            </div>
+
+            <div class="demo-controls">
+                <button onclick="measurePerformance()" class="success">Measure Performance</button>
+                <button onclick="startPerformanceObserver()">Start Monitoring</button>
+                <button onclick="simulateSlowNetwork()" class="warning">Simulate Slow Network</button>
+                <button onclick="generatePerformanceReport()">Generate Report</button>
+            </div>
+
+            <div class="code-block">
+                // Performance Observer for Web Vitals
+                const observer = new PerformanceObserver((list) => {
+                for (const entry of list.getEntries()) {
+                switch (entry.entryType) {
+                case 'largest-contentful-paint':
+                updateMetric('lcp', entry.startTime);
+                break;
+                case 'first-input':
+                updateMetric('fid', entry.processingStart - entry.startTime);
+                break;
+                case 'layout-shift':
+                if (!entry.hadRecentInput) {
+                updateMetric('cls', entry.value);
+                }
+                break;
+                }
+                }
+                });
+
+                observer.observe({ entryTypes: ['largest-contentful-paint', 'first-input', 'layout-shift'] });
+
+                // Performance API usage
+                function measureCriticalPath() {
+                const navigation = performance.getEntriesByType('navigation')[0];
+
+                return {
+                dns: navigation.domainLookupEnd - navigation.domainLookupStart,
+                tcp: navigation.connectEnd - navigation.connectStart,
+                request: navigation.responseStart - navigation.requestStart,
+                response: navigation.responseEnd - navigation.responseStart,
+                dom: navigation.domInteractive - navigation.responseEnd,
+                load: navigation.loadEventEnd - navigation.navigationStart
+                };
+                }
+            </div>
+        </section>
+
+        <!-- Resource Loading Optimization -->
+        <section class="demo-section">
+            <h2>Resource Loading Optimization</h2>
+            <p>Implement advanced resource loading strategies including preloading, lazy loading, and critical resource
+                prioritization.</p>
+
+            <div class="resource-list" id="resource-list">
+                <div class="resource-item">
+                    <span class="resource-name">Loading resources...</span>
+                    <span class="resource-size">-</span>
+                    <span class="resource-time">-</span>
+                </div>
+            </div>
+
+            <div class="demo-controls">
+                <button onclick="analyzeResources()">Analyze Resources</button>
+                <button onclick="demonstratePreloading()" class="success">Demo Preloading</button>
+                <button onclick="demonstrateLazyLoading()" class="success">Demo Lazy Loading</button>
+                <button onclick="optimizeImages()">Optimize Images</button>
+                <button onclick="enableResourceHints()">Enable Resource Hints</button>
+            </div>
+
+            <div class="optimization-tip">
+                <h4>💡 Critical Resource Prioritization</h4>
+                <p>Use resource hints to optimize loading order: preload critical resources, prefetch likely-needed
+                    resources, and lazy load below-the-fold content.</p>
+            </div>
+
+            <div class="code-block">
+                // Critical Resource Preloading
+                &lt;link rel="preload" href="/critical.css" as="style"&gt;
+                &lt;link rel="preload" href="/hero-image.jpg" as="image"&gt;
+                &lt;link rel="preload" href="/app.js" as="script"&gt;
+
+                // Resource Hints for Performance
+                &lt;link rel="dns-prefetch" href="//cdn.example.com"&gt;
+                &lt;link rel="preconnect" href="https://api.example.com"&gt;
+                &lt;link rel="prefetch" href="/next-page.html"&gt;
+
+                // Dynamic Resource Loading
+                class ResourceLoader {
+                static async loadCriticalCSS(href) {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = href;
+
+                return new Promise((resolve, reject) => {
+                link.onload = resolve;
+                link.onerror = reject;
+                document.head.appendChild(link);
+                });
+                }
+
+                static async loadScript(src, defer = true) {
+                const script = document.createElement('script');
+                script.src = src;
+                script.defer = defer;
+
+                return new Promise((resolve, reject) => {
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
+                });
+                }
+                }
+            </div>
+        </section>
+
+        <!-- Lazy Loading Demo -->
+        <section class="demo-section">
+            <h2>Advanced Lazy Loading</h2>
+            <p>Implement intersection observer-based lazy loading with loading states and progressive enhancement.</p>
+
+            <div class="loading-demo" id="lazy-loading-demo">
+                <!-- Lazy loaded images will be inserted here -->
+            </div>
+
+            <div class="demo-controls">
+                <button onclick="createLazyImages()" class="success">Create Lazy Images</button>
+                <button onclick="loadAllImages()">Load All Images</button>
+                <button onclick="resetLazyDemo()" class="warning">Reset Demo</button>
+            </div>
+
+            <div class="code-block">
+                // Advanced Lazy Loading with Intersection Observer
+                class LazyLoader {
+                constructor(options = {}) {
+                this.options = {
+                rootMargin: '50px 0px',
+                threshold: 0.01,
+                ...options
+                };
+
+                this.observer = new IntersectionObserver(
+                this.handleIntersection.bind(this),
+                this.options
+                );
+                }
+
+                observe(element) {
+                this.observer.observe(element);
+                }
+
+                handleIntersection(entries) {
+                entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                this.loadElement(entry.target);
+                this.observer.unobserve(entry.target);
+                }
+                });
+                }
+
+                async loadElement(element) {
+                const src = element.dataset.src;
+                if (!src) return;
+
+                // Show loading state
+                element.classList.add('loading');
+
+                try {
+                if (element.tagName === 'IMG') {
+                await this.loadImage(element, src);
+                } else if (element.tagName === 'IFRAME') {
+                element.src = src;
+                }
+
+                element.classList.remove('loading');
+                element.classList.add('loaded');
+                } catch (error) {
+                element.classList.remove('loading');
+                element.classList.add('error');
+                console.error('Failed to load:', src, error);
+                }
+                }
+
+                loadImage(img, src) {
+                return new Promise((resolve, reject) => {
+                const image = new Image();
+                image.onload = () => {
+                img.src = src;
+                resolve();
+                };
+                image.onerror = reject;
+                image.src = src;
+                });
+                }
+                }
+
+                // Usage
+                const lazyLoader = new LazyLoader({
+                rootMargin: '100px 0px',
+                threshold: 0.1
+                });
+
+                document.querySelectorAll('[data-src]').forEach(el => {
+                lazyLoader.observe(el);
+                });
+            </div>
+        </section>
+
+        <!-- Critical Rendering Path -->
+        <section class="demo-section">
+            <h2>Critical Rendering Path Optimization</h2>
+            <p>Understand and optimize the critical rendering path for faster first contentful paint and improved user
+                experience.</p>
+
+            <div id="rendering-timeline">
+                <h4>Rendering Timeline</h4>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="html-progress" style="width: 0%"></div>
+                </div>
+                <p>HTML Parsing</p>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="css-progress" style="width: 0%"></div>
+                </div>
+                <p>CSS Processing</p>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="js-progress" style="width: 0%"></div>
+                </div>
+                <p>JavaScript Execution</p>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="render-progress" style="width: 0%"></div>
+                </div>
+                <p>Render Tree Construction</p>
+            </div>
+
+            <div class="demo-controls">
+                <button onclick="simulateRenderingPath()" class="success">Simulate Rendering</button>
+                <button onclick="optimizeCriticalPath()">Optimize Critical Path</button>
+                <button onclick="analyzeRenderBlocking()">Analyze Render Blocking</button>
+                <button onclick="inlineCSS()">Inline Critical CSS</button>
+            </div>
+
+            <div class="optimization-tip">
+                <h4>🚀 Critical Rendering Path Best Practices</h4>
+                <ul>
+                    <li>Minimize critical resources (HTML, CSS, JS)</li>
+                    <li>Reduce the critical path length</li>
+                    <li>Minimize critical bytes</li>
+                    <li>Inline critical CSS</li>
+                    <li>Defer non-critical JavaScript</li>
+                </ul>
+            </div>
+
+            <div class="code-block">
+                // Critical CSS Inlining Strategy
+                function inlineCriticalCSS() {
+                const criticalCSS = `
+                /* Above-the-fold styles only */
+                body { margin: 0; font-family: system-ui; }
+                .header { background: #333; color: white; padding: 1rem; }
+                .hero { height: 50vh; background: linear-gradient(135deg, #667eea, #764ba2); }
+                `;
+
+                const style = document.createElement('style');
+                style.textContent = criticalCSS;
+                document.head.appendChild(style);
+
+                // Load non-critical CSS asynchronously
+                loadCSS('/non-critical.css');
+                }
+
+                function loadCSS(href) {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = href;
+                link.media = 'print';
+                link.onload = function() {
+                this.media = 'all';
+                };
+                document.head.appendChild(link);
+                }
+
+                // JavaScript Loading Strategy
+                function loadJavaScript(src, async = true, defer = true) {
+                const script = document.createElement('script');
+                script.src = src;
+                script.async = async;
+                script.defer = defer;
+
+                // Non-blocking script loading
+                document.head.appendChild(script);
+                }
+
+                // Resource prioritization
+                function prioritizeResources() {
+                // High priority: Critical path resources
+                loadCSS('/critical.css');
+                loadJavaScript('/app.js', false, true);
+
+                // Low priority: Non-critical resources
+                requestIdleCallback(() => {
+                loadCSS('/non-critical.css');
+                loadJavaScript('/analytics.js');
+                });
+                }
+            </div>
+        </section>
+
+        <!-- Performance Budgets -->
+        <section class="demo-section">
+            <h2>Performance Budgets & Monitoring</h2>
+            <p>Set up performance budgets and continuous monitoring to maintain optimal performance.</p>
+
+            <div class="metrics-grid">
+                <div class="metric-card" id="budget-bundle-size">
+                    <span class="metric-value">245KB</span>
+                    <span class="metric-label">Bundle Size (Budget: 250KB)</span>
+                </div>
+                <div class="metric-card" id="budget-requests">
+                    <span class="metric-value">12</span>
+                    <span class="metric-label">HTTP Requests (Budget: 15)</span>
+                </div>
+                <div class="metric-card" id="budget-load-time">
+                    <span class="metric-value">1.2s</span>
+                    <span class="metric-label">Load Time (Budget: 2s)</span>
+                </div>
+                <div class="metric-card" id="budget-lighthouse">
+                    <span class="metric-value">95</span>
+                    <span class="metric-label">Lighthouse Score (Budget: 90)</span>
+                </div>
+            </div>
+
+            <div class="demo-controls">
+                <button onclick="checkPerformanceBudget()" class="success">Check Budget</button>
+                <button onclick="runLighthouseAudit()">Run Lighthouse Audit</button>
+                <button onclick="enablePerformanceMonitoring()">Enable Monitoring</button>
+                <button onclick="generateOptimizationSuggestions()">Get Suggestions</button>
+            </div>
+
+            <div class="code-block">
+                // Performance Budget Configuration
+                const performanceBudget = {
+                bundleSize: 250 * 1024, // 250KB
+                requests: 15,
+                loadTime: 2000, // 2 seconds
+                lighthouseScore: 90,
+                webVitals: {
+                lcp: 2500, // 2.5s
+                fid: 100, // 100ms
+                cls: 0.1 // 0.1
+                }
+                };
+
+                // Performance Budget Checker
+                class PerformanceBudgetChecker {
+                constructor(budget) {
+                this.budget = budget;
+                this.violations = [];
+                }
+
+                async checkBudget() {
+                this.violations = [];
+
+                // Check bundle size
+                const bundleSize = await this.calculateBundleSize();
+                if (bundleSize > this.budget.bundleSize) {
+                this.violations.push({
+                metric: 'Bundle Size',
+                actual: bundleSize,
+                budget: this.budget.bundleSize,
+                impact: 'high'
+                });
+                }
+
+                // Check request count
+                const requestCount = performance.getEntriesByType('resource').length;
+                if (requestCount > this.budget.requests) {
+                this.violations.push({
+                metric: 'HTTP Requests',
+                actual: requestCount,
+                budget: this.budget.requests,
+                impact: 'medium'
+                });
+                }
+
+                return {
+                passed: this.violations.length === 0,
+                violations: this.violations,
+                score: this.calculateScore()
+                };
+                }
+
+                calculateScore() {
+                const totalMetrics = Object.keys(this.budget).length;
+                const violatedMetrics = this.violations.length;
+                return Math.round(((totalMetrics - violatedMetrics) / totalMetrics) * 100);
+                }
+                }
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Performance Monitoring Implementation
+        let performanceData = {
+            lcp: null,
+            fid: null,
+            cls: 0,
+            fcp: null,
+            ttfb: null,
+            tti: null
+        };
+
+        // Web Vitals Observer
+        function startPerformanceObserver() {
+            if ('PerformanceObserver' in window) {
+                // LCP Observer
+                const lcpObserver = new PerformanceObserver((list) => {
+                    const entries = list.getEntries();
+                    const lastEntry = entries[entries.length - 1];
+                    performanceData.lcp = lastEntry.startTime;
+                    updateMetricDisplay('lcp', lastEntry.startTime);
+                });
+                lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+
+                // FID Observer
+                const fidObserver = new PerformanceObserver((list) => {
+                    for (const entry of list.getEntries()) {
+                        performanceData.fid = entry.processingStart - entry.startTime;
+                        updateMetricDisplay('fid', performanceData.fid);
+                    }
+                });
+                fidObserver.observe({ entryTypes: ['first-input'] });
+
+                // CLS Observer
+                const clsObserver = new PerformanceObserver((list) => {
+                    for (const entry of list.getEntries()) {
+                        if (!entry.hadRecentInput) {
+                            performanceData.cls += entry.value;
+                            updateMetricDisplay('cls', performanceData.cls);
+                        }
+                    }
+                });
+                clsObserver.observe({ entryTypes: ['layout-shift'] });
+
+                updateStatus('Performance monitoring started');
+            }
+        }
+
+        function measurePerformance() {
+            const navigation = performance.getEntriesByType('navigation')[0];
+
+            if (navigation) {
+                performanceData.fcp = navigation.responseEnd - navigation.navigationStart;
+                performanceData.ttfb = navigation.responseStart - navigation.requestStart;
+                performanceData.tti = navigation.domInteractive - navigation.navigationStart;
+
+                updateMetricDisplay('fcp', performanceData.fcp);
+                updateMetricDisplay('ttfb', performanceData.ttfb);
+                updateMetricDisplay('tti', performanceData.tti);
+            }
+
+            updateStatus('Performance measured');
+        }
+
+        function updateMetricDisplay(metric, value) {
+            const element = document.getElementById(`${metric}-value`);
+            if (element) {
+                let displayValue;
+                let status = 'good';
+
+                switch (metric) {
+                    case 'lcp':
+                        displayValue = `${(value / 1000).toFixed(2)}s`;
+                        status = value > 4000 ? 'poor' : value > 2500 ? 'needs-improvement' : 'good';
+                        break;
+                    case 'fid':
+                        displayValue = `${value.toFixed(1)}ms`;
+                        status = value > 300 ? 'poor' : value > 100 ? 'needs-improvement' : 'good';
+                        break;
+                    case 'cls':
+                        displayValue = value.toFixed(3);
+                        status = value > 0.25 ? 'poor' : value > 0.1 ? 'needs-improvement' : 'good';
+                        break;
+                    default:
+                        displayValue = `${(value / 1000).toFixed(2)}s`;
+                }
+
+                element.textContent = displayValue;
+                element.parentElement.className = `metric-card metric-${status}`;
+            }
+        }
+
+        // Resource Analysis
+        function analyzeResources() {
+            const resources = performance.getEntriesByType('resource');
+            const resourceList = document.getElementById('resource-list');
+
+            resourceList.innerHTML = resources.map(resource => {
+                const size = resource.transferSize || 0;
+                const time = resource.duration || 0;
+                const name = resource.name.split('/').pop() || resource.name;
+
+                return `
+                    <div class="resource-item">
+                        <span class="resource-name">${name}</span>
+                        <span class="resource-size">${formatBytes(size)}</span>
+                        <span class="resource-time">${time.toFixed(1)}ms</span>
+                    </div>
+                `;
+            }).join('');
+
+            updateStatus(`Analyzed ${resources.length} resources`);
+        }
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + sizes[i];
+        }
+
+        // Preloading Demo
+        function demonstratePreloading() {
+            const link = document.createElement('link');
+            link.rel = 'preload';
+            link.href = 'https://via.placeholder.com/400x300/3498db/ffffff?text=Preloaded';
+            link.as = 'image';
+            document.head.appendChild(link);
+
+            updateStatus('Preloading demo image');
+
+            setTimeout(() => {
+                const img = document.createElement('img');
+                img.src = link.href;
+                img.style.maxWidth = '200px';
+                img.onload = () => updateStatus('Preloaded image loaded instantly!');
+                document.querySelector('.demo-section').appendChild(img);
+            }, 2000);
+        }
+
+        // Lazy Loading Demo
+        function createLazyImages() {
+            const container = document.getElementById('lazy-loading-demo');
+            container.innerHTML = '';
+
+            const images = [
+                'https://via.placeholder.com/200x200/3498db/ffffff?text=Image+1',
+                'https://via.placeholder.com/200x200/e74c3c/ffffff?text=Image+2',
+                'https://via.placeholder.com/200x200/f39c12/ffffff?text=Image+3',
+                'https://via.placeholder.com/200x200/27ae60/ffffff?text=Image+4'
+            ];
+
+            images.forEach((src, index) => {
+                const box = document.createElement('div');
+                box.className = 'loading-box loading-placeholder';
+
+                const img = document.createElement('img');
+                img.dataset.src = src;
+                img.alt = `Lazy loaded image ${index + 1}`;
+                img.style.opacity = '0';
+
+                box.appendChild(img);
+                container.appendChild(box);
+
+                // Simulate lazy loading with intersection observer
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            setTimeout(() => {
+                                const img = entry.target.querySelector('img');
+                                img.src = img.dataset.src;
+                                img.onload = () => {
+                                    entry.target.classList.remove('loading-placeholder');
+                                    img.style.opacity = '1';
+                                };
+                                observer.unobserve(entry.target);
+                            }, 1000 + index * 500); // Staggered loading
+                        }
+                    });
+                });
+
+                observer.observe(box);
+            });
+
+            updateStatus('Created lazy loading demo');
+        }
+
+        function loadAllImages() {
+            const images = document.querySelectorAll('[data-src]');
+            images.forEach(img => {
+                if (img.dataset.src) {
+                    img.src = img.dataset.src;
+                    img.onload = () => {
+                        img.style.opacity = '1';
+                        img.parentElement.classList.remove('loading-placeholder');
+                    };
+                }
+            });
+            updateStatus('Loading all images...');
+        }
+
+        function resetLazyDemo() {
+            document.getElementById('lazy-loading-demo').innerHTML = '';
+            updateStatus('Lazy loading demo reset');
+        }
+
+        // Critical Rendering Path Simulation
+        function simulateRenderingPath() {
+            const steps = [
+                { id: 'html-progress', delay: 100 },
+                { id: 'css-progress', delay: 300 },
+                { id: 'js-progress', delay: 500 },
+                { id: 'render-progress', delay: 200 }
+            ];
+
+            let totalDelay = 0;
+            steps.forEach((step, index) => {
+                totalDelay += step.delay;
+                setTimeout(() => {
+                    const element = document.getElementById(step.id);
+                    element.style.width = '100%';
+
+                    if (index === steps.length - 1) {
+                        updateStatus('Critical rendering path complete');
+                    }
+                }, totalDelay);
+            });
+
+            // Reset progress bars
+            steps.forEach(step => {
+                document.getElementById(step.id).style.width = '0%';
+            });
+
+            updateStatus('Simulating critical rendering path...');
+        }
+
+        // Performance Budget Checker
+        function checkPerformanceBudget() {
+            const budget = {
+                bundleSize: 250,
+                requests: 15,
+                loadTime: 2.0,
+                lighthouse: 90
+            };
+
+            const current = {
+                bundleSize: 245,
+                requests: 12,
+                loadTime: 1.2,
+                lighthouse: 95
+            };
+
+            const budgetCards = {
+                'budget-bundle-size': current.bundleSize <= budget.bundleSize,
+                'budget-requests': current.requests <= budget.requests,
+                'budget-load-time': current.loadTime <= budget.loadTime,
+                'budget-lighthouse': current.lighthouse >= budget.lighthouse
+            };
+
+            Object.entries(budgetCards).forEach(([id, withinBudget]) => {
+                const card = document.getElementById(id);
+                card.className = `metric-card ${withinBudget ? 'metric-good' : 'metric-poor'}`;
+            });
+
+            const passedCount = Object.values(budgetCards).filter(Boolean).length;
+            updateStatus(`Performance budget: ${passedCount}/4 metrics within budget`);
+        }
+
+        // Network Simulation
+        function simulateSlowNetwork() {
+            const status = document.getElementById('network-status');
+            status.textContent = 'Slow 3G';
+            status.className = 'network-status network-slow';
+
+            updateStatus('Simulating slow network conditions');
+
+            setTimeout(() => {
+                status.textContent = 'Online';
+                status.className = 'network-status network-online';
+                updateStatus('Network simulation ended');
+            }, 10000);
+        }
+
+        // Additional Functions
+        function optimizeCriticalPath() {
+            updateStatus('Implementing critical path optimizations...');
+            // Simulate optimization process
+            setTimeout(() => updateStatus('Critical path optimized'), 2000);
+        }
+
+        function analyzeRenderBlocking() {
+            updateStatus('Analyzing render-blocking resources...');
+            setTimeout(() => updateStatus('Found 3 render-blocking resources'), 2000);
+        }
+
+        function inlineCSS() {
+            updateStatus('Inlining critical CSS...');
+            setTimeout(() => updateStatus('Critical CSS inlined'), 1500);
+        }
+
+        function runLighthouseAudit() {
+            updateStatus('Running Lighthouse audit...');
+            setTimeout(() => updateStatus('Lighthouse audit complete: 95/100'), 3000);
+        }
+
+        function enablePerformanceMonitoring() {
+            updateStatus('Performance monitoring enabled');
+            startPerformanceObserver();
+        }
+
+        function generateOptimizationSuggestions() {
+            const suggestions = [
+                'Enable text compression (gzip/brotli)',
+                'Optimize images with WebP format',
+                'Implement service worker caching',
+                'Remove unused CSS/JavaScript',
+                'Enable HTTP/2 push for critical resources'
+            ];
+
+            updateStatus(`Optimization suggestions:\n${suggestions.join('\n')}`);
+        }
+
+        function generatePerformanceReport() {
+            updateStatus('Generating performance report...');
+            setTimeout(() => updateStatus('Performance report generated'), 2000);
+        }
+
+        function updateStatus(message) {
+            console.log(message);
+        }
+
+        // Network Status Monitor
+        function updateNetworkStatus() {
+            const status = document.getElementById('network-status');
+            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+
+            if (navigator.onLine) {
+                if (connection) {
+                    const speed = connection.effectiveType;
+                    status.textContent = speed === 'slow-2g' || speed === '2g' ? 'Slow' : 'Online';
+                    status.className = `network-status ${speed === 'slow-2g' || speed === '2g' ? 'network-slow' : 'network-online'}`;
+                } else {
+                    status.textContent = 'Online';
+                    status.className = 'network-status network-online';
+                }
+            } else {
+                status.textContent = 'Offline';
+                status.className = 'network-status network-offline';
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateNetworkStatus();
+            startPerformanceObserver();
+            measurePerformance();
+            analyzeResources();
+
+            // Update network status on change
+            window.addEventListener('online', updateNetworkStatus);
+            window.addEventListener('offline', updateNetworkStatus);
+
+            if ('connection' in navigator) {
+                navigator.connection.addEventListener('change', updateNetworkStatus);
+            }
+        });
+    </script>
+</body>
+
+</html>

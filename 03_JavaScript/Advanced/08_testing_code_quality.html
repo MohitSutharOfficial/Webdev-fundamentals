@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Testing and Code Quality</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.3em;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .card h3 {
+            color: #764ba2;
+            margin: 25px 0 15px 0;
+            font-size: 1.3em;
+        }
+
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: attr(data-language);
+            position: absolute;
+            top: -12px;
+            right: 15px;
+            background: #667eea;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+        }
+
+        .demo-container {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .demo-title {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .output {
+            background: #2d3748;
+            color: #68d391;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .best-practices {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .best-practices h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .best-practices ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .best-practices li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .best-practices li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #68d391;
+            font-weight: bold;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            border-radius: 8px 8px 0 0;
+            margin-right: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background: white;
+            border-radius: 0 8px 8px 8px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .framework-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .framework-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .framework-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+        }
+
+        .framework-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .complexity-meter {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .complexity-label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .complexity-bar {
+            flex: 1;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .complexity-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #68d391, #f6ad55, #f56565);
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .framework-comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>Testing & Code Quality</h1>
+            <p>Master JavaScript testing frameworks, methodologies, and code quality tools for building robust,
+                maintainable applications</p>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h2>🧪 Testing Fundamentals</h2>
+
+                <h3>Types of Testing</h3>
+                <div class="code-block" data-language="JavaScript">
+                    // Unit Testing - Testing individual functions/components
+                    function add(a, b) {
+                    return a + b;
+                    }
+
+                    // Test
+                    function testAdd() {
+                    console.assert(add(2, 3) === 5, 'add(2, 3) should equal 5');
+                    console.assert(add(-1, 1) === 0, 'add(-1, 1) should equal 0');
+                    }
+
+                    // Integration Testing - Testing component interactions
+                    class Calculator {
+                    constructor() {
+                    this.history = [];
+                    }
+
+                    add(a, b) {
+                    const result = a + b;
+                    this.history.push({ operation: 'add', a, b, result });
+                    return result;
+                    }
+
+                    getHistory() {
+                    return this.history;
+                    }
+                    }
+
+                    // Integration test
+                    function testCalculatorIntegration() {
+                    const calc = new Calculator();
+                    calc.add(2, 3);
+                    calc.add(5, 7);
+
+                    const history = calc.getHistory();
+                    console.assert(history.length === 2, 'Should have 2 operations in history');
+                    console.assert(history[0].result === 5, 'First result should be 5');
+                    }
+                </div>
+
+                <h3>Test-Driven Development (TDD)</h3>
+                <div class="code-block" data-language="JavaScript">
+                    // Red-Green-Refactor Cycle
+
+                    // 1. RED: Write failing test first
+                    function testStringReverse() {
+                    const result = reverseString('hello');
+                    console.assert(result === 'olleh', 'Should reverse string correctly');
+                    }
+
+                    // 2. GREEN: Make test pass with minimal code
+                    function reverseString(str) {
+                    return str.split('').reverse().join('');
+                    }
+
+                    // 3. REFACTOR: Improve implementation
+                    function reverseString(str) {
+                    if (typeof str !== 'string') {
+                    throw new TypeError('Expected string input');
+                    }
+                    return str.split('').reverse().join('');
+                    }
+
+                    // Advanced TDD example - Building a simple validation library
+                    class Validator {
+                    static email(email) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    return emailRegex.test(email);
+                    }
+
+                    static password(password) {
+                    // At least 8 characters, one uppercase, one lowercase, one number
+                    return password.length >= 8 &&
+                    /[A-Z]/.test(password) &&
+                    /[a-z]/.test(password) &&
+                    /[0-9]/.test(password);
+                    }
+                    }
+
+                    // Test suite
+                    function runValidatorTests() {
+                    // Email tests
+                    console.assert(Validator.email('test@example.com') === true);
+                    console.assert(Validator.email('invalid-email') === false);
+
+                    // Password tests
+                    console.assert(Validator.password('StrongP@ss1') === true);
+                    console.assert(Validator.password('weak') === false);
+
+                    console.log('All validator tests passed!');
+                    }
+                </div>
+
+                <div class="demo-container">
+                    <div class="demo-title">🎯 TDD Demo</div>
+                    <button onclick="runTDDDemo()">Run TDD Example</button>
+                    <div id="tdd-output" class="output" style="display: none;"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🔧 Testing Frameworks</h2>
+
+                <div class="tabs">
+                    <button class="tab active" onclick="showTab('jest')">Jest</button>
+                    <button class="tab" onclick="showTab('mocha')">Mocha</button>
+                    <button class="tab" onclick="showTab('vitest')">Vitest</button>
+                    <button class="tab" onclick="showTab('cypress')">Cypress</button>
+                </div>
+
+                <div id="jest" class="tab-content active">
+                    <h3>Jest - JavaScript Testing Framework</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // Jest test examples
+                        describe('Math utilities', () => {
+                        beforeEach(() => {
+                        console.log('Setting up test...');
+                        });
+
+                        test('should add two numbers correctly', () => {
+                        expect(add(2, 3)).toBe(5);
+                        expect(add(-1, 1)).toBe(0);
+                        });
+
+                        test('should handle edge cases', () => {
+                        expect(add(0, 0)).toBe(0);
+                        expect(add(Infinity, 1)).toBe(Infinity);
+                        });
+
+                        test('should throw error for invalid input', () => {
+                        expect(() => add('a', 'b')).toThrow();
+                        });
+                        });
+
+                        // Async testing
+                        describe('Async operations', () => {
+                        test('should resolve promise', async () => {
+                        const data = await fetchData();
+                        expect(data).toHaveProperty('id');
+                        });
+
+                        test('should handle rejected promise', async () => {
+                        await expect(fetchInvalidData()).rejects.toThrow('Invalid data');
+                        });
+                        });
+
+                        // Mocking
+                        describe('API calls', () => {
+                        test('should mock API response', () => {
+                        const mockFetch = jest.fn();
+                        mockFetch.mockResolvedValue({
+                        json: () => Promise.resolve({ id: 1, name: 'Test' })
+                        });
+
+                        // Test with mocked fetch
+                        expect(mockFetch).toHaveBeenCalledTimes(0);
+                        });
+                        });
+                    </div>
+                </div>
+
+                <div id="mocha" class="tab-content">
+                    <h3>Mocha - Test Framework</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // Mocha with Chai assertions
+                        const { expect } = require('chai');
+
+                        describe('Array operations', function() {
+                        let testArray;
+
+                        beforeEach(function() {
+                        testArray = [1, 2, 3, 4, 5];
+                        });
+
+                        it('should filter even numbers', function() {
+                        const evenNumbers = testArray.filter(n => n % 2 === 0);
+                        expect(evenNumbers).to.deep.equal([2, 4]);
+                        });
+
+                        it('should map to doubled values', function() {
+                        const doubled = testArray.map(n => n * 2);
+                        expect(doubled).to.have.lengthOf(5);
+                        expect(doubled[0]).to.equal(2);
+                        });
+
+                        it('should reduce to sum', function() {
+                        const sum = testArray.reduce((acc, n) => acc + n, 0);
+                        expect(sum).to.equal(15);
+                        });
+                        });
+
+                        // Timeout and slow tests
+                        describe('Performance tests', function() {
+                        this.timeout(5000);
+
+                        it('should complete within time limit', function(done) {
+                        this.slow(1000);
+
+                        setTimeout(() => {
+                        expect(true).to.be.true;
+                        done();
+                        }, 500);
+                        });
+                        });
+                    </div>
+                </div>
+
+                <div id="vitest" class="tab-content">
+                    <h3>Vitest - Fast Unit Testing</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // Vitest examples
+                        import { describe, it, expect, vi } from 'vitest';
+
+                        describe('Component testing', () => {
+                        it('should render component correctly', () => {
+                        const component = new Component();
+                        expect(component.render()).toContain('Hello World');
+                        });
+
+                        it('should handle user interactions', () => {
+                        const mockCallback = vi.fn();
+                        const component = new Component({ onClick: mockCallback });
+
+                        component.handleClick();
+                        expect(mockCallback).toHaveBeenCalledOnce();
+                        });
+                        });
+
+                        // Snapshot testing
+                        describe('Snapshot tests', () => {
+                        it('should match snapshot', () => {
+                        const data = {
+                        id: 1,
+                        name: 'Test User',
+                        email: 'test@example.com'
+                        };
+                        expect(data).toMatchSnapshot();
+                        });
+                        });
+
+                        // Benchmarking
+                        import { bench, describe } from 'vitest';
+
+                        describe('Performance benchmarks', () => {
+                        bench('Array.map vs for loop', () => {
+                        const arr = Array.from({ length: 1000 }, (_, i) => i);
+                        arr.map(x => x * 2);
+                        });
+
+                        bench('for loop', () => {
+                        const arr = Array.from({ length: 1000 }, (_, i) => i);
+                        const result = [];
+                        for (let i = 0; i < arr.length; i++) { result.push(arr[i] * 2); } }); }); </div>
+                    </div>
+
+                    <div id="cypress" class="tab-content">
+                        <h3>Cypress - E2E Testing</h3>
+                        <div class="code-block" data-language="JavaScript">
+                            // Cypress end-to-end tests
+                            describe('Todo App E2E', () => {
+                            beforeEach(() => {
+                            cy.visit('/');
+                            });
+
+                            it('should add a new todo', () => {
+                            cy.get('[data-cy=todo-input]')
+                            .type('Learn Cypress testing');
+
+                            cy.get('[data-cy=add-button]')
+                            .click();
+
+                            cy.get('[data-cy=todo-list]')
+                            .should('contain', 'Learn Cypress testing');
+                            });
+
+                            it('should mark todo as completed', () => {
+                            cy.get('[data-cy=todo-input]')
+                            .type('Complete this task');
+
+                            cy.get('[data-cy=add-button]')
+                            .click();
+
+                            cy.get('[data-cy=todo-item]')
+                            .first()
+                            .find('[data-cy=checkbox]')
+                            .check();
+
+                            cy.get('[data-cy=todo-item]')
+                            .first()
+                            .should('have.class', 'completed');
+                            });
+
+                            it('should filter todos', () => {
+                            // Add multiple todos
+                            cy.get('[data-cy=todo-input]').type('Active todo');
+                            cy.get('[data-cy=add-button]').click();
+
+                            cy.get('[data-cy=todo-input]').type('Completed todo');
+                            cy.get('[data-cy=add-button]').click();
+
+                            // Complete one todo
+                            cy.get('[data-cy=todo-item]')
+                            .last()
+                            .find('[data-cy=checkbox]')
+                            .check();
+
+                            // Filter by active
+                            cy.get('[data-cy=filter-active]').click();
+                            cy.get('[data-cy=todo-item]').should('have.length', 1);
+
+                            // Filter by completed
+                            cy.get('[data-cy=filter-completed]').click();
+                            cy.get('[data-cy=todo-item]').should('have.length', 1);
+                            });
+                            });
+
+                            // Custom commands
+                            Cypress.Commands.add('addTodo', (text) => {
+                            cy.get('[data-cy=todo-input]').type(text);
+                            cy.get('[data-cy=add-button]').click();
+                            });
+
+                            // Using custom command
+                            it('should use custom command', () => {
+                            cy.addTodo('Custom command test');
+                            cy.get('[data-cy=todo-list]').should('contain', 'Custom command test');
+                            });
+                        </div>
+                    </div>
+
+                    <div class="framework-comparison">
+                        <div class="framework-card">
+                            <h4>Jest</h4>
+                            <p>Zero-config testing framework</p>
+                            <div class="complexity-meter">
+                                <span class="complexity-label">Learning Curve:</span>
+                                <div class="complexity-bar">
+                                    <div class="complexity-fill" style="width: 40%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="framework-card">
+                            <h4>Mocha</h4>
+                            <p>Flexible testing framework</p>
+                            <div class="complexity-meter">
+                                <span class="complexity-label">Learning Curve:</span>
+                                <div class="complexity-bar">
+                                    <div class="complexity-fill" style="width: 60%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="framework-card">
+                            <h4>Vitest</h4>
+                            <p>Fast, modern testing</p>
+                            <div class="complexity-meter">
+                                <span class="complexity-label">Learning Curve:</span>
+                                <div class="complexity-bar">
+                                    <div class="complexity-fill" style="width: 35%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="framework-card">
+                            <h4>Cypress</h4>
+                            <p>E2E testing powerhouse</p>
+                            <div class="complexity-meter">
+                                <span class="complexity-label">Learning Curve:</span>
+                                <div class="complexity-bar">
+                                    <div class="complexity-fill" style="width: 70%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>📊 Code Quality Tools</h2>
+
+                    <h3>ESLint - Code Linting</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // .eslintrc.js configuration
+                        module.exports = {
+                        env: {
+                        browser: true,
+                        es2021: true,
+                        node: true
+                        },
+                        extends: [
+                        'eslint:recommended',
+                        '@typescript-eslint/recommended'
+                        ],
+                        parserOptions: {
+                        ecmaVersion: 12,
+                        sourceType: 'module'
+                        },
+                        rules: {
+                        'no-unused-vars': 'error',
+                        'no-console': 'warn',
+                        'prefer-const': 'error',
+                        'no-var': 'error',
+                        'indent': ['error', 2],
+                        'quotes': ['error', 'single'],
+                        'semi': ['error', 'always']
+                        }
+                        };
+
+                        // Custom ESLint rule
+                        const rule = {
+                        meta: {
+                        type: 'suggestion',
+                        docs: {
+                        description: 'Enforce consistent function naming',
+                        category: 'Best Practices'
+                        },
+                        fixable: 'code'
+                        },
+                        create(context) {
+                        return {
+                        FunctionDeclaration(node) {
+                        const name = node.id.name;
+                        if (name && !name.match(/^[a-z][a-zA-Z0-9]*$/)) {
+                        context.report({
+                        node,
+                        message: 'Function names should be camelCase',
+                        fix(fixer) {
+                        const camelCaseName = name.replace(/_([a-z])/g,
+                        (match, letter) => letter.toUpperCase());
+                        return fixer.replaceText(node.id, camelCaseName);
+                        }
+                        });
+                        }
+                        }
+                        };
+                        }
+                        };
+                    </div>
+
+                    <h3>Prettier - Code Formatting</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // .prettierrc.js
+                        module.exports = {
+                        semi: true,
+                        trailingComma: 'es5',
+                        singleQuote: true,
+                        printWidth: 80,
+                        tabWidth: 2,
+                        useTabs: false
+                        };
+
+                        // Before Prettier
+                        const data={name:'John',age:30,city:'New York',hobbies:['reading','swimming','coding']};
+
+                        // After Prettier
+                        const data = {
+                        name: 'John',
+                        age: 30,
+                        city: 'New York',
+                        hobbies: ['reading', 'swimming', 'coding'],
+                        };
+                    </div>
+
+                    <h3>Husky - Git Hooks</h3>
+                    <div class="code-block" data-language="JSON">
+                        // package.json
+                        {
+                        "husky": {
+                        "hooks": {
+                        "pre-commit": "lint-staged",
+                        "pre-push": "npm test",
+                        "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+                        }
+                        },
+                        "lint-staged": {
+                        "*.{js,ts}": [
+                        "eslint --fix",
+                        "prettier --write",
+                        "git add"
+                        ]
+                        }
+                        }
+                    </div>
+
+                    <h3>SonarQube - Code Quality Analysis</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // sonar-project.properties
+                        sonar.projectKey=my-project
+                        sonar.projectName=My Project
+                        sonar.projectVersion=1.0.0
+                        sonar.sources=src
+                        sonar.tests=test
+                        sonar.javascript.lcov.reportPaths=coverage/lcov.info
+
+                        // Quality gates and metrics
+                        const qualityMetrics = {
+                        coverage: '80%', // Minimum code coverage
+                        duplicatedLines: '3%', // Maximum duplicated lines
+                        maintainabilityRating: 'A', // Code maintainability
+                        reliabilityRating: 'A', // Code reliability
+                        securityRating: 'A', // Security rating
+                        technicalDebt: '5%', // Technical debt ratio
+                        cognitiveComplexity: 15, // Max cognitive complexity
+                        cyclomaticComplexity: 10 // Max cyclomatic complexity
+                        };
+
+                        // Example of reducing cognitive complexity
+                        // Bad: High cognitive complexity
+                        function processUser(user) {
+                        if (user) {
+                        if (user.isActive) {
+                        if (user.hasPermission) {
+                        if (user.profile) {
+                        if (user.profile.isComplete) {
+                        return processActiveUser(user);
+                        } else {
+                        return handleIncompleteProfile(user);
+                        }
+                        } else {
+                        return createProfile(user);
+                        }
+                        } else {
+                        return handlePermissionDenied(user);
+                        }
+                        } else {
+                        return handleInactiveUser(user);
+                        }
+                        }
+                        return null;
+                        }
+
+                        // Good: Reduced cognitive complexity
+                        function processUser(user) {
+                        if (!user) return null;
+                        if (!user.isActive) return handleInactiveUser(user);
+                        if (!user.hasPermission) return handlePermissionDenied(user);
+                        if (!user.profile) return createProfile(user);
+                        if (!user.profile.isComplete) return handleIncompleteProfile(user);
+
+                        return processActiveUser(user);
+                        }
+                    </div>
+
+                    <div class="demo-container">
+                        <div class="demo-title">🔍 Code Quality Demo</div>
+                        <button onclick="runQualityAnalysis()">Analyze Code Quality</button>
+                        <div id="quality-output" class="output" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>🏗️ Testing Strategies</h2>
+
+                    <h3>Test Pyramid</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // Unit Tests (Base of pyramid - 70%)
+                        class UserService {
+                        constructor(database) {
+                        this.database = database;
+                        }
+
+                        async createUser(userData) {
+                        if (!userData.email) {
+                        throw new Error('Email is required');
+                        }
+                        return this.database.save(userData);
+                        }
+                        }
+
+                        // Unit test
+                        describe('UserService', () => {
+                        it('should throw error when email is missing', async () => {
+                        const mockDatabase = { save: jest.fn() };
+                        const userService = new UserService(mockDatabase);
+
+                        await expect(userService.createUser({ name: 'John' }))
+                        .rejects.toThrow('Email is required');
+                        });
+                        });
+
+                        // Integration Tests (Middle of pyramid - 20%)
+                        describe('User API Integration', () => {
+                        it('should create user via API', async () => {
+                        const response = await request(app)
+                        .post('/api/users')
+                        .send({
+                        name: 'John Doe',
+                        email: 'john@example.com'
+                        });
+
+                        expect(response.status).toBe(201);
+                        expect(response.body).toHaveProperty('id');
+                        });
+                        });
+
+                        // E2E Tests (Top of pyramid - 10%)
+                        describe('User Registration Flow', () => {
+                        it('should allow user to register', () => {
+                        cy.visit('/register');
+                        cy.get('[data-cy=name-input]').type('John Doe');
+                        cy.get('[data-cy=email-input]').type('john@example.com');
+                        cy.get('[data-cy=password-input]').type('password123');
+                        cy.get('[data-cy=submit-button]').click();
+
+                        cy.url().should('include', '/dashboard');
+                        cy.get('[data-cy=welcome-message]').should('contain', 'Welcome, John');
+                        });
+                        });
+                    </div>
+
+                    <h3>Testing Best Practices</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // AAA Pattern: Arrange, Act, Assert
+                        describe('Shopping Cart', () => {
+                        it('should calculate total price correctly', () => {
+                        // Arrange
+                        const cart = new ShoppingCart();
+                        const item1 = { id: 1, name: 'Book', price: 10 };
+                        const item2 = { id: 2, name: 'Pen', price: 5 };
+
+                        // Act
+                        cart.addItem(item1);
+                        cart.addItem(item2);
+                        const total = cart.getTotal();
+
+                        // Assert
+                        expect(total).toBe(15);
+                        });
+                        });
+
+                        // Given-When-Then Pattern (BDD)
+                        describe('User Authentication', () => {
+                        it('should login successfully with valid credentials', async () => {
+                        // Given
+                        const user = {
+                        email: 'test@example.com',
+                        password: 'password123'
+                        };
+                        await createUser(user);
+
+                        // When
+                        const result = await authService.login(user.email, user.password);
+
+                        // Then
+                        expect(result).toHaveProperty('token');
+                        expect(result.user.email).toBe(user.email);
+                        });
+                        });
+
+                        // Test Data Builders
+                        class UserBuilder {
+                        constructor() {
+                        this.user = {
+                        name: 'Default User',
+                        email: 'default@example.com',
+                        age: 25,
+                        isActive: true
+                        };
+                        }
+
+                        withName(name) {
+                        this.user.name = name;
+                        return this;
+                        }
+
+                        withEmail(email) {
+                        this.user.email = email;
+                        return this;
+                        }
+
+                        withAge(age) {
+                        this.user.age = age;
+                        return this;
+                        }
+
+                        inactive() {
+                        this.user.isActive = false;
+                        return this;
+                        }
+
+                        build() {
+                        return { ...this.user };
+                        }
+                        }
+
+                        // Usage
+                        const testUser = new UserBuilder()
+                        .withName('John Doe')
+                        .withEmail('john@example.com')
+                        .withAge(30)
+                        .build();
+                    </div>
+
+                    <h3>Mocking and Stubbing</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // API Mocking
+                        class ApiService {
+                        async fetchUsers() {
+                        const response = await fetch('/api/users');
+                        return response.json();
+                        }
+                        }
+
+                        // Mock implementation
+                        describe('ApiService', () => {
+                        it('should fetch users successfully', async () => {
+                        // Mock fetch
+                        global.fetch = jest.fn().mockResolvedValue({
+                        json: jest.fn().mockResolvedValue([
+                        { id: 1, name: 'John' },
+                        { id: 2, name: 'Jane' }
+                        ])
+                        });
+
+                        const apiService = new ApiService();
+                        const users = await apiService.fetchUsers();
+
+                        expect(users).toHaveLength(2);
+                        expect(users[0].name).toBe('John');
+                        expect(fetch).toHaveBeenCalledWith('/api/users');
+                        });
+                        });
+
+                        // Dependency Injection for Testing
+                        class EmailService {
+                        constructor(emailProvider) {
+                        this.emailProvider = emailProvider;
+                        }
+
+                        async sendEmail(to, subject, body) {
+                        return this.emailProvider.send(to, subject, body);
+                        }
+                        }
+
+                        // Test with mock
+                        describe('EmailService', () => {
+                        it('should send email successfully', async () => {
+                        const mockProvider = {
+                        send: jest.fn().mockResolvedValue({ success: true })
+                        };
+
+                        const emailService = new EmailService(mockProvider);
+                        const result = await emailService.sendEmail(
+                        'test@example.com',
+                        'Test Subject',
+                        'Test Body'
+                        );
+
+                        expect(result.success).toBe(true);
+                        expect(mockProvider.send).toHaveBeenCalledWith(
+                        'test@example.com',
+                        'Test Subject',
+                        'Test Body'
+                        );
+                        });
+                        });
+                    </div>
+
+                    <div class="demo-container">
+                        <div class="demo-title">🧪 Testing Strategy Demo</div>
+                        <button onclick="runTestingDemo()">Run Testing Examples</button>
+                        <div id="testing-output" class="output" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>📈 Performance Testing</h2>
+
+                    <h3>Load Testing</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // Performance testing with Jest
+                        describe('Performance Tests', () => {
+                        it('should execute within performance threshold', async () => {
+                        const startTime = performance.now();
+
+                        // Execute operation
+                        const result = await heavyOperation();
+
+                        const endTime = performance.now();
+                        const executionTime = endTime - startTime;
+
+                        expect(executionTime).toBeLessThan(1000); // 1 second
+                        expect(result).toBeDefined();
+                        });
+                        });
+
+                        // Memory leak detection
+                        describe('Memory Tests', () => {
+                        it('should not create memory leaks', () => {
+                        const initialMemory = process.memoryUsage().heapUsed;
+
+                        // Perform operations
+                        for (let i = 0; i < 1000; i++) { const obj=createLargeObject(); processObject(obj); } // Force
+                            garbage collection if (global.gc) { global.gc(); } const
+                            finalMemory=process.memoryUsage().heapUsed; const memoryIncrease=finalMemory -
+                            initialMemory; expect(memoryIncrease).toBeLessThan(10 * 1024 * 1024); // 10MB }); }); //
+                            Benchmark testing function benchmark(name, fn, iterations=1000) { const
+                            startTime=performance.now(); for (let i=0; i < iterations; i++) { fn(); } const
+                            endTime=performance.now(); const totalTime=endTime - startTime; const avgTime=totalTime /
+                            iterations; console.log(`${name}: ${avgTime.toFixed(4)}ms per iteration`); return avgTime; }
+                            // Usage describe('Performance Benchmarks', ()=> {
+                            it('should compare algorithm performance', () => {
+                            const arr = Array.from({ length: 1000 }, (_, i) => i);
+
+                            const forLoopTime = benchmark('For Loop', () => {
+                            let sum = 0;
+                            for (let i = 0; i < arr.length; i++) { sum +=arr[i]; } }); const
+                                reduceTime=benchmark('Array.reduce', ()=> {
+                                arr.reduce((sum, num) => sum + num, 0);
+                                });
+
+                                // Assert performance characteristics
+                                expect(forLoopTime).toBeLessThan(1); // Less than 1ms
+                                expect(reduceTime).toBeLessThan(2); // Less than 2ms
+                                });
+                                });
+                    </div>
+
+                    <h3>Browser Performance Testing</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // Web Performance API
+                        function measurePageLoad() {
+                        const navigation = performance.getEntriesByType('navigation')[0];
+                        const metrics = {
+                        domContentLoaded: navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart,
+                        loadComplete: navigation.loadEventEnd - navigation.loadEventStart,
+                        firstPaint: 0,
+                        firstContentfulPaint: 0
+                        };
+
+                        // Get paint metrics
+                        const paintMetrics = performance.getEntriesByType('paint');
+                        paintMetrics.forEach(metric => {
+                        if (metric.name === 'first-paint') {
+                        metrics.firstPaint = metric.startTime;
+                        } else if (metric.name === 'first-contentful-paint') {
+                        metrics.firstContentfulPaint = metric.startTime;
+                        }
+                        });
+
+                        return metrics;
+                        }
+
+                        // Lighthouse CI integration
+                        const lighthouse = require('lighthouse');
+                        const chromeLauncher = require('chrome-launcher');
+
+                        async function runLighthouseTest(url) {
+                        const chrome = await chromeLauncher.launch({chromeFlags: ['--headless']});
+                        const options = {
+                        logLevel: 'info',
+                        output: 'json',
+                        onlyCategories: ['performance'],
+                        port: chrome.port
+                        };
+
+                        const runnerResult = await lighthouse(url, options);
+                        await chrome.kill();
+
+                        const score = runnerResult.lhr.categories.performance.score * 100;
+                        return {
+                        score,
+                        metrics: runnerResult.lhr.audits
+                        };
+                        }
+
+                        // Usage in tests
+                        describe('Performance Tests', () => {
+                        it('should meet performance budget', async () => {
+                        const result = await runLighthouseTest('http://localhost:3000');
+
+                        expect(result.score).toBeGreaterThan(90);
+                        expect(result.metrics['first-contentful-paint'].numericValue).toBeLessThan(2000);
+                        });
+                        });
+                    </div>
+
+                    <div class="demo-container">
+                        <div class="demo-title">⚡ Performance Demo</div>
+                        <button onclick="runPerformanceTest()">Run Performance Tests</button>
+                        <div id="performance-output" class="output" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="best-practices">
+                <h3>🎯 Testing and Code Quality Best Practices</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4>Testing Strategy</h4>
+                        <ul>
+                            <li>Follow the test pyramid (70% unit, 20% integration, 10% E2E)</li>
+                            <li>Write tests first (TDD) when possible</li>
+                            <li>Test behavior, not implementation</li>
+                            <li>Use descriptive test names</li>
+                            <li>Keep tests isolated and independent</li>
+                            <li>Mock external dependencies</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Code Quality</h4>
+                        <ul>
+                            <li>Maintain consistent code style</li>
+                            <li>Use linters and formatters</li>
+                            <li>Implement code review processes</li>
+                            <li>Monitor code coverage (aim for 80%+)</li>
+                            <li>Refactor regularly to reduce technical debt</li>
+                            <li>Use automated quality gates</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Performance</h4>
+                        <ul>
+                            <li>Set performance budgets</li>
+                            <li>Test with realistic data volumes</li>
+                            <li>Monitor memory usage</li>
+                            <li>Use profiling tools</li>
+                            <li>Test on different devices and networks</li>
+                            <li>Implement continuous performance monitoring</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>🚀 Enterprise Testing Patterns</h3>
+                <p>
+                    <strong>Page Object Model:</strong> Encapsulate page interactions in objects for maintainable E2E
+                    tests.<br>
+                    <strong>Test Data Management:</strong> Use builders and factories for consistent test data
+                    creation.<br>
+                    <strong>Parallel Testing:</strong> Run tests in parallel to reduce execution time.<br>
+                    <strong>Flaky Test Detection:</strong> Implement retry mechanisms and flaky test reporting.<br>
+                    <strong>Test Environment Management:</strong> Use containers and infrastructure as code for
+                    consistent test environments.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            // Tab functionality
+            function showTab(tabName) {
+                // Hide all tab contents
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+
+                // Show selected tab content
+                document.getElementById(tabName).classList.add('active');
+
+                // Add active class to clicked tab
+                event.target.classList.add('active');
+            }
+
+            // TDD Demo
+            function runTDDDemo() {
+                const output = document.getElementById('tdd-output');
+                output.style.display = 'block';
+
+                let result = '';
+
+                // Red: Write failing test
+                result += '🔴 RED: Writing failing test...\n';
+                result += 'function testStringReverse() {\n';
+                result += '  assert(reverseString("hello") === "olleh");\n';
+                result += '}\n\n';
+
+                // Green: Make it pass
+                result += '🟢 GREEN: Making test pass...\n';
+                result += 'function reverseString(str) {\n';
+                result += '  return str.split("").reverse().join("");\n';
+                result += '}\n\n';
+
+                // Refactor: Improve code
+                result += '🔵 REFACTOR: Improving implementation...\n';
+                result += 'function reverseString(str) {\n';
+                result += '  if (typeof str !== "string") throw new Error("Expected string");\n';
+                result += '  return str.split("").reverse().join("");\n';
+                result += '}\n\n';
+
+                result += '✅ Test: reverseString("hello") === "olleh"\n';
+                result += '✅ Test: reverseString("world") === "dlrow"\n';
+                result += '✅ All tests passed!\n';
+
+                output.textContent = result;
+            }
+
+            // Quality Analysis Demo
+            function runQualityAnalysis() {
+                const output = document.getElementById('quality-output');
+                output.style.display = 'block';
+
+                let result = '';
+
+                result += '🔍 Running ESLint...\n';
+                result += '  ✅ No unused variables\n';
+                result += '  ✅ Consistent indentation\n';
+                result += '  ⚠️  Console statements found (2 warnings)\n\n';
+
+                result += '🎨 Running Prettier...\n';
+                result += '  ✅ Code formatted successfully\n';
+                result += '  ✅ 15 files reformatted\n\n';
+
+                result += '📊 Code Coverage:\n';
+                result += '  Statements: 85% (340/400)\n';
+                result += '  Branches: 78% (156/200)\n';
+                result += '  Functions: 92% (46/50)\n';
+                result += '  Lines: 85% (340/400)\n\n';
+
+                result += '🏆 Quality Score: A (9.2/10)\n';
+                result += '  Maintainability: A\n';
+                result += '  Reliability: A\n';
+                result += '  Security: A\n';
+                result += '  Technical Debt: 4%\n';
+
+                output.textContent = result;
+            }
+
+            // Testing Demo
+            function runTestingDemo() {
+                const output = document.getElementById('testing-output');
+                output.style.display = 'block';
+
+                let result = '';
+
+                result += '🧪 Running Unit Tests...\n';
+                result += '  ✅ UserService.createUser - should validate email\n';
+                result += '  ✅ UserService.createUser - should save valid user\n';
+                result += '  ✅ Calculator.add - should add numbers correctly\n';
+                result += '  ✅ Calculator.getHistory - should track operations\n\n';
+
+                result += '🔗 Running Integration Tests...\n';
+                result += '  ✅ POST /api/users - should create user\n';
+                result += '  ✅ GET /api/users - should return users list\n';
+                result += '  ✅ Database connection - should persist data\n\n';
+
+                result += '🌐 Running E2E Tests...\n';
+                result += '  ✅ User Registration Flow - should complete registration\n';
+                result += '  ✅ Login Flow - should authenticate user\n';
+                result += '  ✅ Dashboard - should display user data\n\n';
+
+                result += '📈 Test Results:\n';
+                result += '  Unit Tests: 45/45 passed\n';
+                result += '  Integration Tests: 12/12 passed\n';
+                result += '  E2E Tests: 8/8 passed\n';
+                result += '  Total: 65/65 tests passed ✅\n';
+                result += '  Coverage: 87%\n';
+                result += '  Duration: 2.3s\n';
+
+                output.textContent = result;
+            }
+
+            // Performance Test Demo
+            function runPerformanceTest() {
+                const output = document.getElementById('performance-output');
+                output.style.display = 'block';
+
+                let result = '';
+
+                result += '⚡ Running Performance Tests...\n\n';
+
+                // Simulate performance measurements
+                const tests = [
+                    { name: 'Array.map vs for loop', mapTime: 0.0045, forTime: 0.0023 },
+                    { name: 'DOM manipulation', time: 12.5, threshold: 16.7 },
+                    { name: 'API response time', time: 245, threshold: 500 },
+                    { name: 'Memory usage', used: 8.2, max: 50 }
+                ];
+
+                tests.forEach(test => {
+                    if (test.mapTime) {
+                        result += `🔄 ${test.name}:\n`;
+                        result += `  Array.map: ${test.mapTime}ms per iteration\n`;
+                        result += `  for loop: ${test.forTime}ms per iteration\n`;
+                        result += `  Winner: for loop (${((test.mapTime / test.forTime) * 100 - 100).toFixed(1)}% faster)\n\n`;
+                    } else if (test.time && test.threshold) {
+                        const status = test.time < test.threshold ? '✅' : '❌';
+                        result += `${status} ${test.name}: ${test.time}ms (threshold: ${test.threshold}ms)\n`;
+                    } else if (test.used && test.max) {
+                        const status = test.used < test.max ? '✅' : '❌';
+                        result += `${status} ${test.name}: ${test.used}MB / ${test.max}MB\n`;
+                    }
+                });
+
+                result += '\n🏆 Performance Budget:\n';
+                result += '  First Contentful Paint: 1.2s ✅\n';
+                result += '  Largest Contentful Paint: 2.1s ✅\n';
+                result += '  Cumulative Layout Shift: 0.05 ✅\n';
+                result += '  First Input Delay: 45ms ✅\n';
+                result += '  Lighthouse Score: 94/100 ✅\n';
+
+                output.textContent = result;
+            }
+
+            // Initialize page
+            document.addEventListener('DOMContentLoaded', function () {
+                console.log('Testing and Code Quality guide loaded');
+
+                // Add some interactive elements
+                const complexityBars = document.querySelectorAll('.complexity-fill');
+                complexityBars.forEach(bar => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 500);
+                });
+            });
+        </script>
+</body>
+
+</html>

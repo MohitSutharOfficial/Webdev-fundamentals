@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Intermediate - Microdata & SEO</title>
+    <style>
+        /* Basic styling for demonstration */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+
+        .demo-section {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .good-example {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .bad-example {
+            background-color: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .senior-tip {
+            background-color: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        /* Schema.org examples styling */
+        .person-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            background: #fff;
+        }
+
+        .product-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            background: #fff;
+            display: flex;
+            gap: 20px;
+        }
+
+        .product-image {
+            flex-shrink: 0;
+        }
+
+        .product-details {
+            flex-grow: 1;
+        }
+
+        .rating {
+            color: #f39c12;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .article-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            background: #fff;
+        }
+
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .author-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .meta-info {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .breadcrumb {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        .breadcrumb a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .faq-item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 0;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .faq-answer {
+            padding: 15px;
+            background: white;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .product-card {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🏷️ Microdata & SEO</h1>
+
+        <p>Learn to enhance your HTML with structured data using Schema.org microdata, JSON-LD, and SEO best practices.
+            This helps search engines better understand and display your content.</p>
+
+        <h2>🔍 What is Structured Data?</h2>
+
+        <div class="demo-section">
+            <p>Structured data is a standardized format for providing information about a page and classifying the page
+                content. It helps search engines understand your content better and can result in rich snippets in
+                search results.</p>
+
+            <h3>Benefits:</h3>
+            <ul>
+                <li><strong>Rich Snippets:</strong> Enhanced search results with additional information</li>
+                <li><strong>Voice Search:</strong> Better compatibility with voice assistants</li>
+                <li><strong>Knowledge Graph:</strong> Inclusion in Google's Knowledge Graph</li>
+                <li><strong>CTR Improvement:</strong> Higher click-through rates from search results</li>
+            </ul>
+        </div>
+
+        <h2>📝 Schema.org with Microdata</h2>
+
+        <h3>1. Person Schema</h3>
+        <div class="code-block">
+            &lt;!-- Person microdata --&gt;
+            &lt;div itemscope itemtype="https://schema.org/Person"&gt;
+            &lt;img itemprop="image" src="john-doe.jpg" alt="John Doe"&gt;
+            &lt;h2 itemprop="name"&gt;John Doe&lt;/h2&gt;
+            &lt;p itemprop="jobTitle"&gt;Senior Web Developer&lt;/p&gt;
+            &lt;p&gt;Email: &lt;span itemprop="email"&gt;john@example.com&lt;/span&gt;&lt;/p&gt;
+            &lt;p&gt;Phone: &lt;span itemprop="telephone"&gt;+1-555-123-4567&lt;/span&gt;&lt;/p&gt;
+            &lt;div itemprop="address" itemscope itemtype="https://schema.org/PostalAddress"&gt;
+            &lt;span itemprop="streetAddress"&gt;123 Web Street&lt;/span&gt;,
+            &lt;span itemprop="addressLocality"&gt;Tech City&lt;/span&gt;,
+            &lt;span itemprop="addressRegion"&gt;CA&lt;/span&gt;
+            &lt;span itemprop="postalCode"&gt;90210&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;p itemprop="description"&gt;
+            Experienced web developer specializing in modern JavaScript frameworks
+            and responsive design with over 8 years of industry experience.
+            &lt;/p&gt;
+            &lt;/div&gt;
+        </div>
+
+        <div class="demo-section">
+            <h4>👤 Demo: Person Schema</h4>
+            <div class="person-card" itemscope itemtype="https://schema.org/Person">
+                <img itemprop="image" src="https://via.placeholder.com/100x100/3498db/ffffff?text=JD" alt="John Doe">
+                <h3 itemprop="name">John Doe</h3>
+                <p itemprop="jobTitle">Senior Web Developer</p>
+                <p>Email: <span itemprop="email">john@example.com</span></p>
+                <p>Phone: <span itemprop="telephone">+1-555-123-4567</span></p>
+                <div itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+                    <span itemprop="streetAddress">123 Web Street</span>,
+                    <span itemprop="addressLocality">Tech City</span>,
+                    <span itemprop="addressRegion">CA</span>
+                    <span itemprop="postalCode">90210</span>
+                </div>
+            </div>
+        </div>
+
+        <h3>2. Product Schema</h3>
+        <div class="code-block">
+            &lt;!-- Product microdata --&gt;
+            &lt;div itemscope itemtype="https://schema.org/Product"&gt;
+            &lt;img itemprop="image" src="laptop.jpg" alt="Gaming Laptop"&gt;
+            &lt;h2 itemprop="name"&gt;UltraBook Pro 15&lt;/h2&gt;
+            &lt;p itemprop="brand" itemscope itemtype="https://schema.org/Brand"&gt;
+            &lt;span itemprop="name"&gt;TechCorp&lt;/span&gt;
+            &lt;/p&gt;
+            &lt;p itemprop="description"&gt;
+            High-performance laptop for gaming and professional work
+            &lt;/p&gt;
+
+            &lt;div itemprop="offers" itemscope itemtype="https://schema.org/Offer"&gt;
+            &lt;span itemprop="price" content="1299.99"&gt;$1,299.99&lt;/span&gt;
+            &lt;span itemprop="priceCurrency" content="USD"&gt;&lt;/span&gt;
+            &lt;span itemprop="availability" content="https://schema.org/InStock"&gt;
+            In Stock
+            &lt;/span&gt;
+            &lt;/div&gt;
+
+            &lt;div itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating"&gt;
+            Rating: &lt;span itemprop="ratingValue"&gt;4.5&lt;/span&gt; out of
+            &lt;span itemprop="bestRating"&gt;5&lt;/span&gt;
+            (&lt;span itemprop="ratingCount"&gt;127&lt;/span&gt; reviews)
+            &lt;/div&gt;
+            &lt;/div&gt;
+        </div>
+
+        <div class="demo-section">
+            <h4>🛒 Demo: Product Schema</h4>
+            <div class="product-card" itemscope itemtype="https://schema.org/Product">
+                <div class="product-image">
+                    <img itemprop="image" src="https://via.placeholder.com/150x100/34495e/ffffff?text=Laptop"
+                        alt="Gaming Laptop">
+                </div>
+                <div class="product-details">
+                    <h3 itemprop="name">UltraBook Pro 15</h3>
+                    <p itemprop="brand" itemscope itemtype="https://schema.org/Brand">
+                        Brand: <span itemprop="name">TechCorp</span>
+                    </p>
+                    <p itemprop="description">High-performance laptop for gaming and professional work</p>
+
+                    <div itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+                        <div class="price">
+                            <span itemprop="price" content="1299.99">$1,299.99</span>
+                            <span itemprop="priceCurrency" content="USD"></span>
+                        </div>
+                        <span itemprop="availability" content="https://schema.org/InStock">✅ In Stock</span>
+                    </div>
+
+                    <div itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">
+                        <span class="rating">
+                            ⭐⭐⭐⭐⭐ <span itemprop="ratingValue">4.5</span>/<span itemprop="bestRating">5</span>
+                        </span>
+                        (<span itemprop="ratingCount">127</span> reviews)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3>3. Article Schema</h3>
+        <div class="code-block">
+            &lt;!-- Article microdata --&gt;
+            &lt;article itemscope itemtype="https://schema.org/Article"&gt;
+            &lt;header&gt;
+            &lt;h1 itemprop="headline"&gt;The Future of Web Development&lt;/h1&gt;
+            &lt;div itemprop="author" itemscope itemtype="https://schema.org/Person"&gt;
+            By &lt;span itemprop="name"&gt;Jane Smith&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;time itemprop="datePublished" datetime="2024-01-15"&gt;
+            January 15, 2024
+            &lt;/time&gt;
+            &lt;time itemprop="dateModified" datetime="2024-01-20"&gt;
+            Last updated: January 20, 2024
+            &lt;/time&gt;
+            &lt;/header&gt;
+
+            &lt;img itemprop="image" src="web-dev-future.jpg" alt="Future of Web Development"&gt;
+
+            &lt;div itemprop="articleBody"&gt;
+            &lt;p&gt;Web development continues to evolve rapidly...&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;div itemprop="publisher" itemscope itemtype="https://schema.org/Organization"&gt;
+            &lt;span itemprop="name"&gt;Tech Blog&lt;/span&gt;
+            &lt;div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject"&gt;
+            &lt;img itemprop="url" src="logo.png" alt="Tech Blog Logo"&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/article&gt;
+        </div>
+
+        <div class="demo-section">
+            <h4>📰 Demo: Article Schema</h4>
+            <article class="article-card" itemscope itemtype="https://schema.org/Article">
+                <header>
+                    <h3 itemprop="headline">The Future of Web Development</h3>
+                    <div class="author-info">
+                        <img class="author-image" src="https://via.placeholder.com/40x40/e74c3c/ffffff?text=JS"
+                            alt="Author">
+                        <div itemprop="author" itemscope itemtype="https://schema.org/Person">
+                            By <span itemprop="name">Jane Smith</span>
+                        </div>
+                    </div>
+                    <div class="meta-info">
+                        Published: <time itemprop="datePublished" datetime="2024-01-15">January 15, 2024</time> |
+                        Updated: <time itemprop="dateModified" datetime="2024-01-20">January 20, 2024</time>
+                    </div>
+                </header>
+
+                <img itemprop="image" src="https://via.placeholder.com/400x200/3498db/ffffff?text=Web+Development"
+                    alt="Future of Web Development">
+
+                <div itemprop="articleBody">
+                    <p>Web development continues to evolve rapidly with new frameworks, tools, and best practices
+                        emerging constantly...</p>
+                </div>
+            </article>
+        </div>
+
+        <h2>🔗 JSON-LD (Recommended)</h2>
+
+        <div class="code-block">
+            &lt;!-- JSON-LD is the preferred method by Google --&gt;
+            &lt;script type="application/ld+json"&gt;
+            {
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "name": "Tech Solutions Inc",
+            "description": "Professional web development services",
+            "url": "https://techsolutions.example.com",
+            "telephone": "+1-555-123-4567",
+            "email": "info@techsolutions.example.com",
+            "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "456 Business Ave",
+            "addressLocality": "San Francisco",
+            "addressRegion": "CA",
+            "postalCode": "94102",
+            "addressCountry": "US"
+            },
+            "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "37.7749",
+            "longitude": "-122.4194"
+            },
+            "openingHours": [
+            "Mo-Fr 09:00-17:00"
+            ],
+            "sameAs": [
+            "https://facebook.com/techsolutions",
+            "https://twitter.com/techsolutions",
+            "https://linkedin.com/company/techsolutions"
+            ]
+            }
+            &lt;/script&gt;
+        </div>
+
+        <h3>Organization Schema (JSON-LD)</h3>
+        <div class="code-block">
+            &lt;script type="application/ld+json"&gt;
+            {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "WebDev Academy",
+            "alternateName": "WDA",
+            "url": "https://webdevacademy.example.com",
+            "logo": "https://webdevacademy.example.com/logo.png",
+            "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+1-555-987-6543",
+            "contactType": "customer service",
+            "areaServed": "US",
+            "availableLanguage": ["English", "Spanish"]
+            },
+            "sameAs": [
+            "https://facebook.com/webdevacademy",
+            "https://twitter.com/webdevacademy",
+            "https://instagram.com/webdevacademy"
+            ],
+            "founder": {
+            "@type": "Person",
+            "name": "Alex Johnson"
+            }
+            }
+            &lt;/script&gt;
+        </div>
+
+        <h2>🍞 Breadcrumb Navigation</h2>
+
+        <div class="code-block">
+            &lt;!-- Breadcrumb microdata --&gt;
+            &lt;nav aria-label="Breadcrumb"&gt;
+            &lt;ol itemscope itemtype="https://schema.org/BreadcrumbList"&gt;
+            &lt;li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"&gt;
+            &lt;a itemprop="item" href="/"&gt;
+            &lt;span itemprop="name"&gt;Home&lt;/span&gt;
+            &lt;/a&gt;
+            &lt;meta itemprop="position" content="1"&gt;
+            &lt;/li&gt;
+            &lt;li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"&gt;
+            &lt;a itemprop="item" href="/products"&gt;
+            &lt;span itemprop="name"&gt;Products&lt;/span&gt;
+            &lt;/a&gt;
+            &lt;meta itemprop="position" content="2"&gt;
+            &lt;/li&gt;
+            &lt;li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"&gt;
+            &lt;span itemprop="name"&gt;Laptops&lt;/span&gt;
+            &lt;meta itemprop="position" content="3"&gt;
+            &lt;/li&gt;
+            &lt;/ol&gt;
+            &lt;/nav&gt;
+        </div>
+
+        <div class="demo-section">
+            <h4>🍞 Demo: Breadcrumb Navigation</h4>
+            <nav aria-label="Breadcrumb" class="breadcrumb">
+                <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+                    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                        <a itemprop="item" href="/">
+                            <span itemprop="name">Home</span>
+                        </a>
+                        <meta itemprop="position" content="1">
+                        →
+                    </li>
+                    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                        <a itemprop="item" href="/products">
+                            <span itemprop="name">Products</span>
+                        </a>
+                        <meta itemprop="position" content="2">
+                        →
+                    </li>
+                    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                        <span itemprop="name">Laptops</span>
+                        <meta itemprop="position" content="3">
+                    </li>
+                </ol>
+            </nav>
+        </div>
+
+        <h2>❓ FAQ Schema</h2>
+
+        <div class="code-block">
+            &lt;!-- FAQ Schema JSON-LD --&gt;
+            &lt;script type="application/ld+json"&gt;
+            {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+            {
+            "@type": "Question",
+            "name": "What is responsive web design?",
+            "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Responsive web design is an approach to web design that makes web pages render well on a variety of
+            devices and window or screen sizes."
+            }
+            },
+            {
+            "@type": "Question",
+            "name": "Why is accessibility important?",
+            "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Web accessibility ensures that websites and tools are designed and developed so that people with
+            disabilities can use them effectively."
+            }
+            }
+            ]
+            }
+            &lt;/script&gt;
+        </div>
+
+        <div class="demo-section">
+            <h4>❓ Demo: FAQ Section</h4>
+            <div class="faq-item">
+                <h4 class="faq-question">What is responsive web design?</h4>
+                <div class="faq-answer">
+                    <p>Responsive web design is an approach to web design that makes web pages render well on a variety
+                        of devices and window or screen sizes.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <h4 class="faq-question">Why is accessibility important?</h4>
+                <div class="faq-answer">
+                    <p>Web accessibility ensures that websites and tools are designed and developed so that people with
+                        disabilities can use them effectively.</p>
+                </div>
+            </div>
+        </div>
+
+        <h2>🎯 SEO Best Practices</h2>
+
+        <h3>Meta Tags and Open Graph</h3>
+        <div class="code-block">
+            &lt;!-- Essential meta tags --&gt;
+            &lt;head&gt;
+            &lt;meta charset="UTF-8"&gt;
+            &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+            &lt;title&gt;Page Title - Keep Under 60 Characters&lt;/title&gt;
+            &lt;meta name="description" content="Page description under 160 characters that accurately describes the
+            content"&gt;
+            &lt;meta name="keywords" content="web development, HTML, CSS, JavaScript"&gt;
+            &lt;meta name="author" content="Your Name"&gt;
+            &lt;link rel="canonical" href="https://example.com/page"&gt;
+
+            &lt;!-- Open Graph / Facebook --&gt;
+            &lt;meta property="og:type" content="website"&gt;
+            &lt;meta property="og:url" content="https://example.com/page"&gt;
+            &lt;meta property="og:title" content="Page Title"&gt;
+            &lt;meta property="og:description" content="Page description"&gt;
+            &lt;meta property="og:image" content="https://example.com/image.jpg"&gt;
+
+            &lt;!-- Twitter --&gt;
+            &lt;meta property="twitter:card" content="summary_large_image"&gt;
+            &lt;meta property="twitter:url" content="https://example.com/page"&gt;
+            &lt;meta property="twitter:title" content="Page Title"&gt;
+            &lt;meta property="twitter:description" content="Page description"&gt;
+            &lt;meta property="twitter:image" content="https://example.com/image.jpg"&gt;
+            &lt;/head&gt;
+        </div>
+
+        <h3>Semantic HTML Structure</h3>
+        <div class="good-example">
+            <h4>✅ Good SEO Structure:</h4>
+            <div class="code-block">
+                &lt;!DOCTYPE html&gt;
+                &lt;html lang="en"&gt;
+                &lt;head&gt;
+                &lt;title&gt;Descriptive Page Title&lt;/title&gt;
+                &lt;meta name="description" content="Clear, concise description"&gt;
+                &lt;/head&gt;
+                &lt;body&gt;
+                &lt;header&gt;
+                &lt;nav aria-label="Main navigation"&gt;...&lt;/nav&gt;
+                &lt;/header&gt;
+
+                &lt;main&gt;
+                &lt;article&gt;
+                &lt;header&gt;
+                &lt;h1&gt;Main Heading (H1)&lt;/h1&gt;
+                &lt;p&gt;Article summary&lt;/p&gt;
+                &lt;/header&gt;
+
+                &lt;section&gt;
+                &lt;h2&gt;Section Heading (H2)&lt;/h2&gt;
+                &lt;p&gt;Content with proper heading hierarchy&lt;/p&gt;
+
+                &lt;h3&gt;Subsection (H3)&lt;/h3&gt;
+                &lt;p&gt;More detailed content&lt;/p&gt;
+                &lt;/section&gt;
+                &lt;/article&gt;
+                &lt;/main&gt;
+
+                &lt;aside&gt;
+                &lt;h2&gt;Related Content&lt;/h2&gt;
+                &lt;/aside&gt;
+
+                &lt;footer&gt;
+                &lt;p&gt;&amp;copy; 2024 Company Name&lt;/p&gt;
+                &lt;/footer&gt;
+                &lt;/body&gt;
+                &lt;/html&gt;
+            </div>
+        </div>
+
+        <div class="bad-example">
+            <h4>❌ Poor SEO Structure:</h4>
+            <div class="code-block">
+                &lt;!-- Missing semantic elements, poor heading hierarchy --&gt;
+                &lt;div class="header"&gt;
+                &lt;div class="nav"&gt;...&lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div class="content"&gt;
+                &lt;h1&gt;Title&lt;/h1&gt;
+                &lt;h3&gt;Skipped H2&lt;/h3&gt; &lt;!-- Bad hierarchy --&gt;
+                &lt;p&gt;Content without proper structure&lt;/p&gt;
+                &lt;h1&gt;Another H1&lt;/h1&gt; &lt;!-- Multiple H1s --&gt;
+                &lt;/div&gt;
+
+                &lt;div class="footer"&gt;...&lt;/div&gt;
+            </div>
+        </div>
+
+        <div class="senior-tip">
+            <h3>🚀 Senior Engineer SEO Tips:</h3>
+            <ul>
+                <li><strong>Core Web Vitals:</strong> Optimize for LCP, FID, and CLS metrics</li>
+                <li><strong>Structured Data Testing:</strong> Use Google's Rich Results Test tool</li>
+                <li><strong>Mobile-First Indexing:</strong> Ensure mobile version has same content as desktop</li>
+                <li><strong>Page Speed:</strong> Optimize images, minify code, use CDN</li>
+                <li><strong>Internal Linking:</strong> Create logical site architecture with descriptive anchor text
+                </li>
+                <li><strong>Schema Markup:</strong> Use JSON-LD for better maintainability</li>
+                <li><strong>Monitoring:</strong> Set up Google Search Console and Analytics</li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            <h3>⚠️ Common SEO Mistakes:</h3>
+            <ul>
+                <li>Duplicate or missing meta descriptions</li>
+                <li>Multiple H1 tags on the same page</li>
+                <li>Poor URL structure (non-descriptive URLs)</li>
+                <li>Missing alt text for images</li>
+                <li>Broken internal links</li>
+                <li>Thin or duplicate content</li>
+                <li>Not using HTTPS</li>
+                <li>Ignoring mobile optimization</li>
+            </ul>
+        </div>
+
+        <h2>🛠️ Testing Tools</h2>
+
+        <div class="demo-section">
+            <h3>Essential SEO & Schema Testing Tools:</h3>
+            <ul>
+                <li><strong>Google Rich Results Test:</strong> Test structured data markup</li>
+                <li><strong>Google Search Console:</strong> Monitor search performance</li>
+                <li><strong>Schema.org Validator:</strong> Validate microdata markup</li>
+                <li><strong>Lighthouse:</strong> Audit performance, accessibility, and SEO</li>
+                <li><strong>PageSpeed Insights:</strong> Test Core Web Vitals</li>
+                <li><strong>Screaming Frog:</strong> Technical SEO auditing</li>
+                <li><strong>Structured Data Testing Tool:</strong> Validate JSON-LD</li>
+            </ul>
+        </div>
+
+        <h2>🛠️ Practical Exercises</h2>
+
+        <div class="demo-section">
+            <h3>Exercise 1: Local Business Schema</h3>
+            <p>Create a local business page with:</p>
+            <ul>
+                <li>Complete business information in JSON-LD</li>
+                <li>Contact details and opening hours</li>
+                <li>Customer reviews schema</li>
+                <li>Proper meta tags and Open Graph</li>
+            </ul>
+
+            <h3>Exercise 2: E-commerce Product Page</h3>
+            <p>Build a product page with:</p>
+            <ul>
+                <li>Product schema with pricing and availability</li>
+                <li>Review and rating aggregation</li>
+                <li>Breadcrumb navigation</li>
+                <li>Rich snippets optimization</li>
+            </ul>
+
+            <h3>Exercise 3: Blog Article with SEO</h3>
+            <p>Create a blog article with:</p>
+            <ul>
+                <li>Article schema markup</li>
+                <li>Author and publisher information</li>
+                <li>Proper heading hierarchy</li>
+                <li>Related articles and internal linking</li>
+            </ul>
+        </div>
+
+        <h2>📚 Resources & Tools</h2>
+
+        <ul>
+            <li><a href="https://schema.org/" target="_blank">Schema.org Official Documentation</a></li>
+            <li><a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+            <li><a href="https://developers.google.com/search/docs/guides/intro-structured-data" target="_blank">Google
+                    Structured Data Guidelines</a></li>
+            <li><a href="https://jsonld.com/" target="_blank">JSON-LD Playground</a></li>
+            <li><a href="https://moz.com/learn/seo" target="_blank">Moz SEO Learning Center</a></li>
+        </ul>
+
+        <p><strong>Next:</strong> Continue to <a href="06_modern_html.html">Modern HTML Features</a> to learn about the
+            latest HTML APIs and features.</p>
+    </div>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "EducationalOrganization",
+      "name": "WebDev Learning",
+      "description": "Comprehensive web development learning resources",
+      "url": "https://webdev-learning.example.com",
+      "courseMode": "online",
+      "educationalLevel": "intermediate",
+      "teaches": ["HTML", "CSS", "JavaScript", "Web Development"]
+    }
+    </script>
+</body>
+
+</html>

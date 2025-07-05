@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Advanced - Web Components Deep Dive</title>
+    <style>
+        /* Basic styling for demonstration */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+
+        .demo-section {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .senior-tip {
+            background-color: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        /* Custom Elements Styling */
+        .component-demo {
+            border: 2px dashed #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        /* Shadow DOM demo styling */
+        .shadow-host {
+            padding: 20px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .template-demo {
+            margin: 20px 0;
+        }
+
+        .slot-demo {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🧩 Web Components Deep Dive</h1>
+
+        <p>Master the art of building reusable, encapsulated HTML elements using Web Components. This advanced topic
+            covers Custom Elements, Shadow DOM, HTML Templates, and building scalable component architectures.</p>
+
+        <h2>🔧 Custom Elements</h2>
+
+        <h3>1. Autonomous Custom Elements</h3>
+        <div class="code-block">
+            &lt;!-- Define a custom element --&gt;
+            &lt;script&gt;
+            class AdvancedButton extends HTMLElement {
+            constructor() {
+            super();
+
+            // Attach shadow DOM
+            this.attachShadow({ mode: 'open' });
+
+            // Set up initial state
+            this.state = {
+            disabled: false,
+            loading: false,
+            variant: 'primary'
+            };
+
+            this.render();
+            this.setupEventListeners();
+            }
+
+            // Define observed attributes
+            static get observedAttributes() {
+            return ['disabled', 'loading', 'variant', 'size'];
+            }
+
+            // Lifecycle callbacks
+            connectedCallback() {
+            console.log('AdvancedButton connected to DOM');
+            this.setAttribute('role', 'button');
+            this.setAttribute('tabindex', '0');
+            }
+
+            disconnectedCallback() {
+            console.log('AdvancedButton removed from DOM');
+            this.cleanup();
+            }
+
+            attributeChangedCallback(name, oldValue, newValue) {
+            if (oldValue === newValue) return;
+
+            switch(name) {
+            case 'disabled':
+            this.state.disabled = newValue !== null;
+            break;
+            case 'loading':
+            this.state.loading = newValue !== null;
+            break;
+            case 'variant':
+            this.state.variant = newValue || 'primary';
+            break;
+            }
+
+            this.render();
+            }
+
+            // Custom methods
+            render() {
+            const { disabled, loading, variant } = this.state;
+
+            this.shadowRoot.innerHTML = `
+            &lt;style&gt;
+            :host {
+            display: inline-block;
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --danger-color: #e74c3c;
+            }
+
+            button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            }
+
+            .primary {
+            background-color: var(--primary-color);
+            color: white;
+            }
+
+            .secondary {
+            background-color: var(--secondary-color);
+            color: white;
+            }
+
+            .danger {
+            background-color: var(--danger-color);
+            color: white;
+            }
+
+            button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            }
+
+            button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            }
+
+            .loading {
+            position: relative;
+            color: transparent;
+            }
+
+            .spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            }
+
+            @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+            }
+            &lt;/style&gt;
+
+            &lt;button
+            class="${variant} ${loading ? 'loading' : ''}"
+            ${disabled || loading ? 'disabled' : ''}
+            &gt;
+            ${loading ? '&lt;div class="spinner"&gt;&lt;/div&gt;' : ''}
+            &lt;slot&gt;Button&lt;/slot&gt;
+            &lt;/button&gt;
+            `;
+            }
+
+            setupEventListeners() {
+            this.shadowRoot.addEventListener('click', this.handleClick.bind(this));
+            this.addEventListener('keydown', this.handleKeydown.bind(this));
+            }
+
+            handleClick(event) {
+            if (this.state.disabled || this.state.loading) {
+            event.preventDefault();
+            return;
+            }
+
+            // Dispatch custom event
+            this.dispatchEvent(new CustomEvent('advanced-click', {
+            bubbles: true,
+            detail: { variant: this.state.variant }
+            }));
+            }
+
+            handleKeydown(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            this.shadowRoot.querySelector('button').click();
+            }
+            }
+
+            // Public API methods
+            setLoading(loading) {
+            if (loading) {
+            this.setAttribute('loading', '');
+            } else {
+            this.removeAttribute('loading');
+            }
+            }
+
+            cleanup() {
+            // Clean up event listeners if needed
+            }
+            }
+
+            // Register the custom element
+            customElements.define('advanced-button', AdvancedButton);
+            &lt;/script&gt;
+        </div>
+
+        <div class="demo-section">
+            <h4>🎯 Custom Element Demo:</h4>
+            <div class="component-demo">
+                <h4>Advanced Button Components:</h4>
+                <p>Primary Button: <button onclick="demoCustomButton('primary')">Demo Primary</button></p>
+                <p>Secondary Button: <button onclick="demoCustomButton('secondary')">Demo Secondary</button></p>
+                <p>Danger Button: <button onclick="demoCustomButton('danger')">Demo Danger</button></p>
+                <p>Loading State: <button onclick="demoLoadingButton()">Demo Loading</button></p>
+
+                <div id="custom-buttons-container"></div>
+            </div>
+        </div>
+
+        <h3>2. Customized Built-in Elements</h3>
+        <div class="code-block">
+            &lt;!-- Extending existing HTML elements --&gt;
+            &lt;script&gt;
+            class EnhancedInput extends HTMLInputElement {
+            constructor() {
+            super();
+            this.setupValidation();
+            this.setupStyling();
+            }
+
+            connectedCallback() {
+            this.addEventListener('input', this.validateInput.bind(this));
+            this.addEventListener('blur', this.showValidation.bind(this));
+            }
+
+            setupValidation() {
+            this.validationRules = {
+            required: this.hasAttribute('required'),
+            minLength: this.getAttribute('minlength'),
+            pattern: this.getAttribute('pattern')
+            };
+            }
+
+            setupStyling() {
+            this.style.transition = 'border-color 0.3s ease';
+            this.style.border = '2px solid #ddd';
+            this.style.borderRadius = '4px';
+            this.style.padding = '8px 12px';
+            }
+
+            validateInput() {
+            const value = this.value;
+            let isValid = true;
+            let errors = [];
+
+            if (this.validationRules.required && !value.trim()) {
+            isValid = false;
+            errors.push('This field is required');
+            }
+
+            if (this.validationRules.minLength && value.length < this.validationRules.minLength) { isValid=false;
+                errors.push(`Minimum length is ${this.validationRules.minLength}`); } if (this.validationRules.pattern)
+                { const regex=new RegExp(this.validationRules.pattern); if (!regex.test(value)) { isValid=false;
+                errors.push('Invalid format'); } } this.updateValidationState(isValid, errors); return isValid; }
+                updateValidationState(isValid, errors) { if (isValid) { this.style.borderColor='#2ecc71' ;
+                this.removeValidationMessage(); } else { this.style.borderColor='#e74c3c' ;
+                this.showValidationMessage(errors); } } showValidationMessage(errors) { this.removeValidationMessage();
+                const errorDiv=document.createElement('div'); errorDiv.className='validation-error' ;
+                errorDiv.style.color='#e74c3c' ; errorDiv.style.fontSize='12px' ; errorDiv.style.marginTop='4px' ;
+                errorDiv.textContent=errors[0]; this.parentNode.insertBefore(errorDiv, this.nextSibling); }
+                removeValidationMessage() { const errorDiv=this.parentNode.querySelector('.validation-error'); if
+                (errorDiv) { errorDiv.remove(); } } showValidation() { this.validateInput(); } } // Register the
+                customized built-in element customElements.define('enhanced-input', EnhancedInput, { extends: 'input'
+                }); &lt;/script&gt; &lt;!-- Usage --&gt; &lt;input is="enhanced-input" type="text"
+                placeholder="Enter username" required minlength="3" pattern="[a-zA-Z0-9]+" &gt; </div>
+
+                <h2>🎭 Shadow DOM</h2>
+
+                <h3>CSS Encapsulation and Styling</h3>
+                <div class="code-block">
+                    &lt;script&gt;
+                    class StyledCard extends HTMLElement {
+                    constructor() {
+                    super();
+                    this.attachShadow({ mode: 'open' });
+                    this.render();
+                    }
+
+                    render() {
+                    this.shadowRoot.innerHTML = `
+                    &lt;style&gt;
+                    /* Styles are encapsulated within this component */
+                    :host {
+                    display: block;
+                    margin: 16px 0;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                    border-radius: 8px;
+                    overflow: hidden;
+                    background: white;
+                    }
+
+                    /* Host pseudo-classes */
+                    :host([highlighted]) {
+                    box-shadow: 0 4px 16px rgba(52, 152, 219, 0.3);
+                    border: 2px solid #3498db;
+                    }
+
+                    :host(.large) {
+                    max-width: 800px;
+                    }
+
+                    /* Slotted content styling */
+                    ::slotted(h3) {
+                    margin: 0 0 12px 0;
+                    color: #2c3e50;
+                    font-size: 24px;
+                    }
+
+                    ::slotted(p) {
+                    color: #666;
+                    line-height: 1.6;
+                    }
+
+                    /* Internal styling */
+                    .card-header {
+                    background: linear-gradient(135deg, #3498db, #2980b9);
+                    color: white;
+                    padding: 16px 20px;
+                    }
+
+                    .card-body {
+                    padding: 20px;
+                    }
+
+                    .card-footer {
+                    background: #f8f9fa;
+                    padding: 12px 20px;
+                    border-top: 1px solid #dee2e6;
+                    }
+
+                    /* CSS Custom Properties for theming */
+                    .card-header {
+                    background: var(--card-header-bg, linear-gradient(135deg, #3498db, #2980b9));
+                    color: var(--card-header-color, white);
+                    }
+
+                    /* Media queries work inside Shadow DOM */
+                    @media (max-width: 768px) {
+                    .card-header, .card-body, .card-footer {
+                    padding: 12px 16px;
+                    }
+                    }
+                    &lt;/style&gt;
+
+                    &lt;div class="card-header"&gt;
+                    &lt;slot name="header"&gt;Default Header&lt;/slot&gt;
+                    &lt;/div&gt;
+                    &lt;div class="card-body"&gt;
+                    &lt;slot&gt;Default content&lt;/slot&gt;
+                    &lt;/div&gt;
+                    &lt;div class="card-footer"&gt;
+                    &lt;slot name="footer"&gt;
+                    &lt;small&gt;Default footer&lt;/small&gt;
+                    &lt;/slot&gt;
+                    &lt;/div&gt;
+                    `;
+                    }
+                    }
+
+                    customElements.define('styled-card', StyledCard);
+                    &lt;/script&gt;
+                </div>
+
+                <div class="demo-section">
+                    <h4>🎭 Shadow DOM Demo:</h4>
+                    <div class="shadow-host">
+                        <h4>Styled Card Component (Simulated)</h4>
+                        <div
+                            style="box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; background: white; margin: 16px 0;">
+                            <div
+                                style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 16px 20px;">
+                                Custom Header
+                            </div>
+                            <div style="padding: 20px;">
+                                This demonstrates how Shadow DOM provides style encapsulation. The styles inside this
+                                component don't affect the outside page, and external styles don't leak in.
+                            </div>
+                            <div style="background: #f8f9fa; padding: 12px 20px; border-top: 1px solid #dee2e6;">
+                                <small>Card footer content</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>📋 HTML Templates</h2>
+
+                <div class="code-block">
+                    &lt;!-- Define template --&gt;
+                    &lt;template id="user-card-template"&gt;
+                    &lt;style&gt;
+                    .user-card {
+                    display: flex;
+                    align-items: center;
+                    padding: 16px;
+                    border: 1px solid #ddd;
+                    border-radius: 8px;
+                    margin: 8px 0;
+                    background: white;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    }
+
+                    .avatar {
+                    width: 64px;
+                    height: 64px;
+                    border-radius: 50%;
+                    margin-right: 16px;
+                    object-fit: cover;
+                    }
+
+                    .user-info h3 {
+                    margin: 0 0 4px 0;
+                    color: #2c3e50;
+                    }
+
+                    .user-info p {
+                    margin: 0;
+                    color: #666;
+                    font-size: 14px;
+                    }
+
+                    .user-actions {
+                    margin-left: auto;
+                    }
+
+                    .btn {
+                    padding: 6px 12px;
+                    margin: 0 4px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 12px;
+                    }
+
+                    .btn-primary {
+                    background: #3498db;
+                    color: white;
+                    }
+
+                    .btn-secondary {
+                    background: #95a5a6;
+                    color: white;
+                    }
+                    &lt;/style&gt;
+
+                    &lt;div class="user-card"&gt;
+                    &lt;img class="avatar" src="" alt="User avatar"&gt;
+                    &lt;div class="user-info"&gt;
+                    &lt;h3 class="name"&gt;&lt;/h3&gt;
+                    &lt;p class="email"&gt;&lt;/p&gt;
+                    &lt;p class="role"&gt;&lt;/p&gt;
+                    &lt;/div&gt;
+                    &lt;div class="user-actions"&gt;
+                    &lt;button class="btn btn-primary"&gt;Edit&lt;/button&gt;
+                    &lt;button class="btn btn-secondary"&gt;Delete&lt;/button&gt;
+                    &lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;/template&gt;
+
+                    &lt;script&gt;
+                    class UserCard extends HTMLElement {
+                    constructor() {
+                    super();
+                    this.attachShadow({ mode: 'open' });
+
+                    // Clone template
+                    const template = document.getElementById('user-card-template');
+                    const templateContent = template.content.cloneNode(true);
+
+                    this.shadowRoot.appendChild(templateContent);
+                    this.updateContent();
+                    }
+
+                    static get observedAttributes() {
+                    return ['name', 'email', 'role', 'avatar'];
+                    }
+
+                    attributeChangedCallback() {
+                    this.updateContent();
+                    }
+
+                    updateContent() {
+                    const name = this.getAttribute('name') || 'Unknown User';
+                    const email = this.getAttribute('email') || 'No email';
+                    const role = this.getAttribute('role') || 'No role';
+                    const avatar = this.getAttribute('avatar') || 'https://via.placeholder.com/64';
+
+                    const nameEl = this.shadowRoot.querySelector('.name');
+                    const emailEl = this.shadowRoot.querySelector('.email');
+                    const roleEl = this.shadowRoot.querySelector('.role');
+                    const avatarEl = this.shadowRoot.querySelector('.avatar');
+
+                    if (nameEl) nameEl.textContent = name;
+                    if (emailEl) emailEl.textContent = email;
+                    if (roleEl) roleEl.textContent = role;
+                    if (avatarEl) {
+                    avatarEl.src = avatar;
+                    avatarEl.alt = `${name}'s avatar`;
+                    }
+                    }
+                    }
+
+                    customElements.define('user-card', UserCard);
+                    &lt;/script&gt;
+                </div>
+
+                <div class="demo-section template-demo">
+                    <h4>📋 Template Demo:</h4>
+                    <button onclick="createUserCard()">Create User Card</button>
+                    <div id="user-cards-container"></div>
+                </div>
+
+                <h2>🔄 Slots and Content Projection</h2>
+
+                <div class="code-block">
+                    &lt;script&gt;
+                    class FlexibleCard extends HTMLElement {
+                    constructor() {
+                    super();
+                    this.attachShadow({ mode: 'open' });
+                    this.render();
+                    }
+
+                    render() {
+                    this.shadowRoot.innerHTML = `
+                    &lt;style&gt;
+                    :host {
+                    display: block;
+                    border: 1px solid #ddd;
+                    border-radius: 8px;
+                    overflow: hidden;
+                    margin: 16px 0;
+                    background: white;
+                    }
+
+                    .card-header {
+                    background: #f8f9fa;
+                    padding: 16px;
+                    border-bottom: 1px solid #dee2e6;
+                    }
+
+                    .card-body {
+                    padding: 16px;
+                    }
+
+                    .card-sidebar {
+                    background: #e9ecef;
+                    padding: 16px;
+                    border-left: 1px solid #dee2e6;
+                    }
+
+                    .card-main {
+                    display: flex;
+                    }
+
+                    .card-content {
+                    flex: 1;
+                    padding: 16px;
+                    }
+
+                    .card-footer {
+                    background: #f8f9fa;
+                    padding: 12px 16px;
+                    border-top: 1px solid #dee2e6;
+                    text-align: right;
+                    }
+
+                    /* Style slotted content */
+                    ::slotted(h2) {
+                    margin: 0;
+                    color: #2c3e50;
+                    }
+
+                    ::slotted(.highlight) {
+                    background: yellow;
+                    padding: 2px 4px;
+                    }
+                    &lt;/style&gt;
+
+                    &lt;div class="card-header"&gt;
+                    &lt;slot name="header"&gt;Default Header&lt;/slot&gt;
+                    &lt;/div&gt;
+
+                    &lt;div class="card-main"&gt;
+                    &lt;div class="card-content"&gt;
+                    &lt;div class="card-body"&gt;
+                    &lt;slot&gt;Default content goes here&lt;/slot&gt;
+                    &lt;/div&gt;
+                    &lt;/div&gt;
+
+                    &lt;div class="card-sidebar"&gt;
+                    &lt;slot name="sidebar"&gt;
+                    &lt;p&gt;Default sidebar&lt;/p&gt;
+                    &lt;/slot&gt;
+                    &lt;/div&gt;
+                    &lt;/div&gt;
+
+                    &lt;div class="card-footer"&gt;
+                    &lt;slot name="footer"&gt;
+                    &lt;button&gt;Default Action&lt;/button&gt;
+                    &lt;/slot&gt;
+                    &lt;/div&gt;
+                    `;
+                    }
+                    }
+
+                    customElements.define('flexible-card', FlexibleCard);
+                    &lt;/script&gt;
+
+                    &lt;!-- Usage with slots --&gt;
+                    &lt;flexible-card&gt;
+                    &lt;h2 slot="header"&gt;Custom Header&lt;/h2&gt;
+
+                    &lt;p&gt;This is the main content area. It uses the default slot.&lt;/p&gt;
+                    &lt;p class="highlight"&gt;This text will be highlighted.&lt;/p&gt;
+
+                    &lt;div slot="sidebar"&gt;
+                    &lt;h4&gt;Custom Sidebar&lt;/h4&gt;
+                    &lt;ul&gt;
+                    &lt;li&gt;Item 1&lt;/li&gt;
+                    &lt;li&gt;Item 2&lt;/li&gt;
+                    &lt;/ul&gt;
+                    &lt;/div&gt;
+
+                    &lt;div slot="footer"&gt;
+                    &lt;button&gt;Save&lt;/button&gt;
+                    &lt;button&gt;Cancel&lt;/button&gt;
+                    &lt;/div&gt;
+                    &lt;/flexible-card&gt;
+                </div>
+
+                <div class="demo-section slot-demo">
+                    <h4>🔄 Slots Demo:</h4>
+                    <div
+                        style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden; margin: 16px 0; background: white;">
+                        <div style="background: #f8f9fa; padding: 16px; border-bottom: 1px solid #dee2e6;">
+                            <h3 style="margin: 0; color: #2c3e50;">Custom Header</h3>
+                        </div>
+
+                        <div style="display: flex;">
+                            <div style="flex: 1; padding: 16px;">
+                                <p>This demonstrates slot content projection. The content here comes from the light DOM
+                                    but is displayed within the component's Shadow DOM structure.</p>
+                                <p style="background: yellow; padding: 2px 4px; display: inline;">This text is
+                                    highlighted</p>
+                            </div>
+
+                            <div style="background: #e9ecef; padding: 16px; border-left: 1px solid #dee2e6;">
+                                <h4>Custom Sidebar</h4>
+                                <ul>
+                                    <li>Item 1</li>
+                                    <li>Item 2</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div
+                            style="background: #f8f9fa; padding: 12px 16px; border-top: 1px solid #dee2e6; text-align: right;">
+                            <button
+                                style="margin: 0 4px; padding: 6px 12px; border: none; border-radius: 4px; background: #3498db; color: white; cursor: pointer;">Save</button>
+                            <button
+                                style="margin: 0 4px; padding: 6px 12px; border: none; border-radius: 4px; background: #95a5a6; color: white; cursor: pointer;">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="senior-tip">
+                    <h3>🚀 Senior Engineer Tips:</h3>
+                    <ul>
+                        <li><strong>Component Architecture:</strong> Design reusable components with clear APIs and
+                            well-defined contracts</li>
+                        <li><strong>Performance:</strong> Use lightweight components and avoid unnecessary re-renders
+                        </li>
+                        <li><strong>Accessibility:</strong> Ensure custom elements work with screen readers and keyboard
+                            navigation</li>
+                        <li><strong>Styling Strategy:</strong> Use CSS Custom Properties for themeable components</li>
+                        <li><strong>Event Handling:</strong> Implement proper event delegation and custom event systems
+                        </li>
+                        <li><strong>Testing:</strong> Write comprehensive tests for component lifecycle and interactions
+                        </li>
+                        <li><strong>Documentation:</strong> Document component APIs, slots, and CSS custom properties
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="warning">
+                    <h3>⚠️ Browser Compatibility & Considerations:</h3>
+                    <ul>
+                        <li>Web Components are supported in all modern browsers</li>
+                        <li>Use polyfills for older browser support if needed</li>
+                        <li>Shadow DOM can affect styling and event handling</li>
+                        <li>Test thoroughly across different browsers and devices</li>
+                        <li>Consider SSR implications for web components</li>
+                        <li>Be mindful of performance with large numbers of components</li>
+                    </ul>
+                </div>
+
+                <h2>🛠️ Practical Exercises</h2>
+
+                <div class="demo-section">
+                    <h3>Exercise 1: Build a Data Table Component</h3>
+                    <p>Create a reusable data table with:</p>
+                    <ul>
+                        <li>Sortable columns</li>
+                        <li>Pagination controls</li>
+                        <li>Custom cell renderers</li>
+                        <li>Keyboard navigation</li>
+                    </ul>
+
+                    <h3>Exercise 2: Create a Form Builder</h3>
+                    <p>Build a dynamic form system with:</p>
+                    <ul>
+                        <li>Custom input components</li>
+                        <li>Validation system</li>
+                        <li>Layout components</li>
+                        <li>Data binding</li>
+                    </ul>
+
+                    <h3>Exercise 3: Design System Components</h3>
+                    <p>Develop a component library with:</p>
+                    <ul>
+                        <li>Consistent theming</li>
+                        <li>Accessibility features</li>
+                        <li>TypeScript definitions</li>
+                        <li>Storybook documentation</li>
+                    </ul>
+                </div>
+
+                <h2>📚 Resources & Next Steps</h2>
+
+                <ul>
+                    <li><a href="https://developers.google.com/web/fundamentals/web-components" target="_blank">Google
+                            Web Components Guide</a></li>
+                    <li><a href="https://lit.dev/" target="_blank">Lit - Simple. Fast. Web Components.</a></li>
+                    <li><a href="https://stenciljs.com/" target="_blank">Stencil - Compiler for Web Components</a></li>
+                    <li><a href="https://open-wc.org/" target="_blank">Open Web Components</a></li>
+                </ul>
+
+                <p><strong>Next:</strong> Continue to <a href="02_progressive_web_apps.html">Progressive Web Apps</a> to
+                    learn about building app-like web experiences.</p>
+        </div>
+
+        <script>
+            // Demo functions for the page
+            function demoCustomButton(variant) {
+                const container = document.getElementById('custom-buttons-container');
+                const buttonHtml = `
+                <div style="margin: 10px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
+                    <p><strong>${variant.charAt(0).toUpperCase() + variant.slice(1)} Button:</strong></p>
+                    <button style="
+                        padding: 12px 24px;
+                        border: none;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        font-size: 16px;
+                        font-weight: 500;
+                        transition: all 0.3s ease;
+                        background-color: ${variant === 'primary' ? '#3498db' : variant === 'secondary' ? '#2ecc71' : '#e74c3c'};
+                        color: white;
+                    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'"
+                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+                       onclick="alert('${variant} button clicked!')">
+                        ${variant.charAt(0).toUpperCase() + variant.slice(1)} Action
+                    </button>
+                </div>
+            `;
+                container.innerHTML += buttonHtml;
+            }
+
+            function demoLoadingButton() {
+                const container = document.getElementById('custom-buttons-container');
+                const loadingHtml = `
+                <div style="margin: 10px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
+                    <p><strong>Loading Button:</strong></p>
+                    <button style="
+                        padding: 12px 24px;
+                        border: none;
+                        border-radius: 6px;
+                        font-size: 16px;
+                        font-weight: 500;
+                        background-color: #3498db;
+                        color: white;
+                        position: relative;
+                        opacity: 0.7;
+                        cursor: not-allowed;
+                    ">
+                        <div style="
+                            display: inline-block;
+                            width: 16px;
+                            height: 16px;
+                            border: 2px solid rgba(255,255,255,0.3);
+                            border-top: 2px solid white;
+                            border-radius: 50%;
+                            animation: spin 1s linear infinite;
+                            margin-right: 8px;
+                        "></div>
+                        Loading...
+                    </button>
+                </div>
+                <style>
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                </style>
+            `;
+                container.innerHTML += loadingHtml;
+            }
+
+            function createUserCard() {
+                const users = [
+                    { name: 'Alice Johnson', email: 'alice@example.com', role: 'Frontend Developer', avatar: 'https://via.placeholder.com/64/3498db/ffffff?text=AJ' },
+                    { name: 'Bob Smith', email: 'bob@example.com', role: 'Backend Developer', avatar: 'https://via.placeholder.com/64/e74c3c/ffffff?text=BS' },
+                    { name: 'Carol Davis', email: 'carol@example.com', role: 'UI/UX Designer', avatar: 'https://via.placeholder.com/64/2ecc71/ffffff?text=CD' }
+                ];
+
+                const randomUser = users[Math.floor(Math.random() * users.length)];
+                const container = document.getElementById('user-cards-container');
+
+                const cardHtml = `
+                <div style="
+                    display: flex;
+                    align-items: center;
+                    padding: 16px;
+                    border: 1px solid #ddd;
+                    border-radius: 8px;
+                    margin: 8px 0;
+                    background: white;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                ">
+                    <img src="${randomUser.avatar}" alt="${randomUser.name}'s avatar" style="
+                        width: 64px;
+                        height: 64px;
+                        border-radius: 50%;
+                        margin-right: 16px;
+                        object-fit: cover;
+                    ">
+                    <div style="flex: 1;">
+                        <h3 style="margin: 0 0 4px 0; color: #2c3e50;">${randomUser.name}</h3>
+                        <p style="margin: 0; color: #666; font-size: 14px;">${randomUser.email}</p>
+                        <p style="margin: 0; color: #666; font-size: 14px;">${randomUser.role}</p>
+                    </div>
+                    <div>
+                        <button style="
+                            padding: 6px 12px;
+                            margin: 0 4px;
+                            border: none;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            font-size: 12px;
+                            background: #3498db;
+                            color: white;
+                        " onclick="alert('Edit ${randomUser.name}')">Edit</button>
+                        <button style="
+                            padding: 6px 12px;
+                            margin: 0 4px;
+                            border: none;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            font-size: 12px;
+                            background: #95a5a6;
+                            color: white;
+                        " onclick="this.parentElement.parentElement.remove()">Delete</button>
+                    </div>
+                </div>
+            `;
+
+                container.innerHTML += cardHtml;
+            }
+
+            // Initialize the page
+            document.addEventListener('DOMContentLoaded', function () {
+                console.log('Web Components Deep Dive demo loaded');
+            });
+        </script>
+</body>
+
+</html>

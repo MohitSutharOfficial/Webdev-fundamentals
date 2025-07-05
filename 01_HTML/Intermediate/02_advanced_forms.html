@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced HTML Forms and Validation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            border-left: 4px solid #3498db;
+            background: #f8f9fa;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .section h3 {
+            color: #34495e;
+            margin: 1.5rem 0 1rem;
+            font-size: 1.3rem;
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .demo-form {
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 1rem 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .form-control:valid {
+            border-color: #27ae60;
+        }
+
+        .form-control:invalid:not(:focus):not(:placeholder-shown) {
+            border-color: #e74c3c;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #27ae60;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .help-text {
+            color: #7f8c8d;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .input-group .form-control {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .input-group-append {
+            background: #ecf0f1;
+            border: 2px solid #bdc3c7;
+            border-left: none;
+            padding: 0.75rem;
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+
+        .checkbox-group,
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .checkbox-item,
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .fieldset {
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .legend {
+            background: white;
+            padding: 0 0.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .tip-box {
+            background: #e8f5e9;
+            border: 1px solid #4caf50;
+            border-radius: 5px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 5px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 5px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+        }
+
+        /* Custom form validation styles */
+        .form-control:invalid:not(:focus):not(:placeholder-shown)+.error-message {
+            display: block;
+        }
+
+        .form-control:valid+.error-message {
+            display: none;
+        }
+
+        /* Date and time input improvements */
+        input[type="date"],
+        input[type="time"],
+        input[type="datetime-local"] {
+            position: relative;
+        }
+
+        /* File input styling */
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            background: #3498db;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .file-input-wrapper:hover {
+            background: #2980b9;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        /* Range input styling */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #ddd;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3498db;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3498db;
+            cursor: pointer;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Advanced HTML Forms & Validation</h1>
+            <p>Master modern form techniques, validation, and accessibility</p>
+        </div>
+
+        <div class="content">
+            <!-- HTML5 Input Types -->
+            <div class="section">
+                <h2>1. HTML5 Input Types</h2>
+                <p>HTML5 introduced many new input types that provide better user experience and built-in validation.
+                </p>
+
+                <div class="demo-form">
+                    <h3>Modern Input Types Demo</h3>
+                    <form id="input-types-form" novalidate>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="email-input">Email (with validation)</label>
+                                <input type="email" id="email-input" class="form-control" placeholder="user@example.com"
+                                    required>
+                                <div class="error-message">Please enter a valid email address</div>
+                                <div class="help-text">Will validate email format automatically</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="url-input">Website URL</label>
+                                <input type="url" id="url-input" class="form-control" placeholder="https://example.com">
+                                <div class="error-message">Please enter a valid URL</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tel-input">Phone Number</label>
+                                <input type="tel" id="tel-input" class="form-control" placeholder="+1 (555) 123-4567"
+                                    pattern="[+]?[0-9\s\-\(\)]+" required>
+                                <div class="error-message">Please enter a valid phone number</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="number-input">Age (18-120)</label>
+                                <input type="number" id="number-input" class="form-control" min="18" max="120" step="1"
+                                    required>
+                                <div class="error-message">Age must be between 18 and 120</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="date-input">Birth Date</label>
+                                <input type="date" id="date-input" class="form-control" min="1900-01-01"
+                                    max="2023-12-31" required>
+                                <div class="error-message">Please select a valid date</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="time-input">Preferred Contact Time</label>
+                                <input type="time" id="time-input" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="color-input">Favorite Color</label>
+                                <input type="color" id="color-input" class="form-control" value="#3498db">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="range-input">Experience Level (1-10): <span
+                                        id="range-value">5</span></label>
+                                <input type="range" id="range-input" min="1" max="10" value="5">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="search-input">Search Skills</label>
+                            <div class="input-group">
+                                <input type="search" id="search-input" class="form-control"
+                                    placeholder="Type to search..." list="skills-list">
+                                <div class="input-group-append">🔍</div>
+                            </div>
+                            <datalist id="skills-list">
+                                <option value="HTML">
+                                <option value="CSS">
+                                <option value="JavaScript">
+                                <option value="React">
+                                <option value="Vue">
+                                <option value="Angular">
+                                <option value="Node.js">
+                                <option value="Python">
+                            </datalist>
+                        </div>
+
+                        <button type="submit" class="btn">Validate Form</button>
+                    </form>
+                </div>
+
+                <div class="code-block">
+                    &lt;!-- HTML5 Input Types Example --&gt;
+                    &lt;input type="email" required placeholder="user@example.com"&gt;
+                    &lt;input type="url" placeholder="https://example.com"&gt;
+                    &lt;input type="tel" pattern="[+]?[0-9\s\-\(\)]+"&gt;
+                    &lt;input type="number" min="18" max="120" step="1"&gt;
+                    &lt;input type="date" min="1900-01-01" max="2023-12-31"&gt;
+                    &lt;input type="time"&gt;
+                    &lt;input type="color" value="#3498db"&gt;
+                    &lt;input type="range" min="1" max="10" value="5"&gt;
+                    &lt;input type="search" list="suggestions"&gt;
+
+                    &lt;!-- Datalist for autocomplete --&gt;
+                    &lt;datalist id="suggestions"&gt;
+                    &lt;option value="HTML"&gt;
+                    &lt;option value="CSS"&gt;
+                    &lt;option value="JavaScript"&gt;
+                    &lt;/datalist&gt;</div>
+            </div>
+
+            <!-- Custom Validation -->
+            <div class="section">
+                <h2>2. Custom Validation with HTML5 API</h2>
+                <p>Use the HTML5 Constraint Validation API for custom validation messages and logic.</p>
+
+                <div class="demo-form">
+                    <h3>Custom Validation Demo</h3>
+                    <form id="custom-validation-form" novalidate>
+                        <div class="form-group">
+                            <label for="username">Username (3-15 characters, letters only)</label>
+                            <input type="text" id="username" class="form-control" minlength="3" maxlength="15"
+                                pattern="[a-zA-Z]+" required>
+                            <div class="error-message" id="username-error">Username must be 3-15 letters only</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password (min 8 chars, 1 uppercase, 1 number)</label>
+                            <input type="password" id="password" class="form-control" minlength="8" required>
+                            <div class="error-message" id="password-error">Password requirements not met</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="password-strength"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirm-password">Confirm Password</label>
+                            <input type="password" id="confirm-password" class="form-control" required>
+                            <div class="error-message" id="confirm-error">Passwords do not match</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="credit-card">Credit Card Number</label>
+                            <input type="text" id="credit-card" class="form-control" placeholder="1234 5678 9012 3456"
+                                maxlength="19">
+                            <div class="error-message" id="card-error">Please enter a valid credit card number</div>
+                        </div>
+
+                        <button type="submit" class="btn">Submit with Custom Validation</button>
+                    </form>
+                </div>
+
+                <div class="code-block">
+                    // Custom validation with JavaScript
+                    const input = document.getElementById('username');
+
+                    input.addEventListener('input', function() {
+                    const value = this.value;
+
+                    if (value.length < 3) { this.setCustomValidity('Username must be at least 3 characters'); } else if
+                        (!/^[a-zA-Z]+$/.test(value)) { this.setCustomValidity('Username must contain only letters'); }
+                        else { this.setCustomValidity(''); // Valid } }); // Form submission with validation
+                        form.addEventListener('submit', function(e) { e.preventDefault(); if (this.checkValidity()) {
+                        console.log('Form is valid!'); } else { console.log('Form has errors'); // Show first invalid
+                        field this.querySelector(':invalid').focus(); } });</div>
+                </div>
+
+                <!-- Accessibility and ARIA -->
+                <div class="section">
+                    <h2>3. Form Accessibility with ARIA</h2>
+                    <p>Create accessible forms that work perfectly with screen readers and assistive technologies.</p>
+
+                    <div class="demo-form">
+                        <h3>Accessible Form Demo</h3>
+                        <form id="accessible-form" novalidate>
+                            <fieldset class="fieldset">
+                                <legend class="legend">Personal Information</legend>
+
+                                <div class="form-group">
+                                    <label for="full-name">Full Name *</label>
+                                    <input type="text" id="full-name" class="form-control" required
+                                        aria-describedby="name-help name-error">
+                                    <div id="name-help" class="help-text">Enter your first and last name</div>
+                                    <div id="name-error" class="error-message" aria-live="polite">This field is required
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="accessible-email">Email Address *</label>
+                                    <input type="email" id="accessible-email" class="form-control" required
+                                        aria-describedby="email-help email-error">
+                                    <div id="email-help" class="help-text">We'll never share your email</div>
+                                    <div id="email-error" class="error-message" aria-live="polite">Please enter a valid
+                                        email</div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset class="fieldset">
+                                <legend class="legend">Preferences</legend>
+
+                                <div class="form-group">
+                                    <fieldset>
+                                        <legend>Contact Method *</legend>
+                                        <div class="radio-group" role="radiogroup" aria-describedby="contact-help">
+                                            <div class="radio-item">
+                                                <input type="radio" id="contact-email" name="contact-method"
+                                                    value="email" required>
+                                                <label for="contact-email">Email</label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" id="contact-phone" name="contact-method"
+                                                    value="phone">
+                                                <label for="contact-phone">Phone</label>
+                                            </div>
+                                            <div class="radio-item">
+                                                <input type="radio" id="contact-sms" name="contact-method" value="sms">
+                                                <label for="contact-sms">SMS</label>
+                                            </div>
+                                        </div>
+                                        <div id="contact-help" class="help-text">Choose your preferred contact method
+                                        </div>
+                                    </fieldset>
+                                </div>
+
+                                <div class="form-group">
+                                    <fieldset>
+                                        <legend>Interests (Select all that apply)</legend>
+                                        <div class="checkbox-group">
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="web-dev" name="interests"
+                                                    value="web-development">
+                                                <label for="web-dev">Web Development</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="mobile-dev" name="interests"
+                                                    value="mobile-development">
+                                                <label for="mobile-dev">Mobile Development</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="data-science" name="interests"
+                                                    value="data-science">
+                                                <label for="data-science">Data Science</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="ai-ml" name="interests" value="ai-ml">
+                                                <label for="ai-ml">AI/Machine Learning</label>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </fieldset>
+
+                            <div class="form-group">
+                                <label for="bio">Biography</label>
+                                <textarea id="bio" class="form-control" rows="4" aria-describedby="bio-help"
+                                    maxlength="500"></textarea>
+                                <div id="bio-help" class="help-text">Tell us about yourself (max 500 characters)</div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="file-input-wrapper">
+                                    <input type="file" id="resume" accept=".pdf,.doc,.docx"
+                                        aria-describedby="file-help">
+                                    <span>📎 Upload Resume</span>
+                                </div>
+                                <div id="file-help" class="help-text">PDF, DOC, or DOCX files only</div>
+                            </div>
+
+                            <button type="submit" class="btn">Submit Accessible Form</button>
+                        </form>
+                    </div>
+
+                    <div class="tip-box">
+                        <h4>🎯 Accessibility Best Practices:</h4>
+                        <ul>
+                            <li><strong>Labels:</strong> Every input must have a proper label</li>
+                            <li><strong>ARIA:</strong> Use aria-describedby for help text and errors</li>
+                            <li><strong>Fieldsets:</strong> Group related fields with fieldset and legend</li>
+                            <li><strong>Error Handling:</strong> Use aria-live for dynamic error messages</li>
+                            <li><strong>Focus Management:</strong> Ensure proper tab order and focus indicators</li>
+                            <li><strong>Instructions:</strong> Provide clear instructions and requirements</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Progressive Enhancement -->
+                <div class="section">
+                    <h2>4. Progressive Enhancement</h2>
+                    <p>Build forms that work without JavaScript and enhance with advanced features.</p>
+
+                    <div class="demo-form">
+                        <h3>Progressive Enhancement Demo</h3>
+                        <form id="progressive-form" action="#" method="post">
+                            <div class="form-group">
+                                <label for="enhanced-search">Smart Search</label>
+                                <input type="search" id="enhanced-search" class="form-control"
+                                    placeholder="Type to search with autocomplete...">
+                                <div id="search-results" style="display: none;"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="dynamic-select">Dynamic Dropdown</label>
+                                <select id="dynamic-select" class="form-control">
+                                    <option value="">Select a category...</option>
+                                    <option value="frontend">Frontend Development</option>
+                                    <option value="backend">Backend Development</option>
+                                    <option value="mobile">Mobile Development</option>
+                                    <option value="data">Data Science</option>
+                                </select>
+                                <select id="sub-category" class="form-control"
+                                    style="margin-top: 0.5rem; display: none;">
+                                    <option value="">Select a subcategory...</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="char-count">Message (max 200 characters)</label>
+                                <textarea id="char-count" class="form-control" maxlength="200" rows="3"></textarea>
+                                <div class="help-text">Characters remaining: <span id="remaining">200</span></div>
+                            </div>
+
+                            <button type="submit" class="btn">Submit Enhanced Form</button>
+                        </form>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>💡 Progressive Enhancement Strategy:</h4>
+                        <ol>
+                            <li><strong>Base Layer:</strong> HTML form that works without JavaScript</li>
+                            <li><strong>Enhancement Layer:</strong> Add JavaScript for better UX</li>
+                            <li><strong>Advanced Layer:</strong> Add AJAX, real-time validation, etc.</li>
+                            <li><strong>Graceful Degradation:</strong> Ensure fallbacks for all features</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Senior Engineer Tips -->
+                <div class="section">
+                    <h2>5. Senior Engineer Form Patterns</h2>
+
+                    <div class="warning-box">
+                        <h4>⚡ Performance & Security Tips:</h4>
+                        <ul>
+                            <li><strong>Client-side validation is UX, not security</strong> - Always validate on server
+                            </li>
+                            <li><strong>Debounce expensive validation</strong> - Don't validate on every keystroke</li>
+                            <li><strong>Use autocomplete attributes</strong> - Help password managers and browsers</li>
+                            <li><strong>Implement CSRF protection</strong> - Use tokens for form security</li>
+                            <li><strong>Sanitize all input</strong> - Prevent XSS and injection attacks</li>
+                            <li><strong>Consider form analytics</strong> - Track where users drop off</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block">
+                        &lt;!-- Security and UX best practices --&gt;
+                        &lt;form method="post" action="/submit" autocomplete="on"&gt;
+                        &lt;!-- CSRF protection --&gt;
+                        &lt;input type="hidden" name="csrf_token" value="abc123"&gt;
+
+                        &lt;!-- Autocomplete hints for better UX --&gt;
+                        &lt;input type="email" name="email" autocomplete="email" required&gt;
+                        &lt;input type="password" name="password" autocomplete="current-password" required&gt;
+                        &lt;input type="text" name="full_name" autocomplete="name" required&gt;
+                        &lt;input type="tel" name="phone" autocomplete="tel"&gt;
+
+                        &lt;!-- Honeypot for spam protection --&gt;
+                        &lt;input type="text" name="website" style="display: none;" tabindex="-1" autocomplete="off"&gt;
+
+                        &lt;button type="submit"&gt;Submit Securely&lt;/button&gt;
+                        &lt;/form&gt;</div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Range input value display
+            document.getElementById('range-input').addEventListener('input', function () {
+                document.getElementById('range-value').textContent = this.value;
+            });
+
+            // Custom validation for input types form
+            document.getElementById('input-types-form').addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                if (this.checkValidity()) {
+                    alert('✅ Form is valid! All HTML5 input types passed validation.');
+                } else {
+                    alert('❌ Please fix the validation errors.');
+                    this.querySelector(':invalid').focus();
+                }
+            });
+
+            // Custom password validation
+            const passwordInput = document.getElementById('password');
+            const confirmInput = document.getElementById('confirm-password');
+            const strengthBar = document.getElementById('password-strength');
+
+            passwordInput.addEventListener('input', function () {
+                const password = this.value;
+                let strength = 0;
+
+                // Check password requirements
+                if (password.length >= 8) strength += 25;
+                if (/[A-Z]/.test(password)) strength += 25;
+                if (/[0-9]/.test(password)) strength += 25;
+                if (/[^A-Za-z0-9]/.test(password)) strength += 25;
+
+                strengthBar.style.width = strength + '%';
+
+                // Custom validation message
+                if (password.length < 8) {
+                    this.setCustomValidity('Password must be at least 8 characters');
+                } else if (!/[A-Z]/.test(password)) {
+                    this.setCustomValidity('Password must contain at least one uppercase letter');
+                } else if (!/[0-9]/.test(password)) {
+                    this.setCustomValidity('Password must contain at least one number');
+                } else {
+                    this.setCustomValidity('');
+                }
+
+                // Check password match
+                if (confirmInput.value && confirmInput.value !== password) {
+                    confirmInput.setCustomValidity('Passwords do not match');
+                } else {
+                    confirmInput.setCustomValidity('');
+                }
+            });
+
+            confirmInput.addEventListener('input', function () {
+                if (this.value !== passwordInput.value) {
+                    this.setCustomValidity('Passwords do not match');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+
+            // Credit card formatting
+            document.getElementById('credit-card').addEventListener('input', function () {
+                let value = this.value.replace(/\s/g, '');
+                let formattedValue = value.replace(/(.{4})/g, '$1 ').trim();
+
+                if (formattedValue.length <= 19) {
+                    this.value = formattedValue;
+                }
+
+                // Simple Luhn algorithm check
+                const isValid = luhnCheck(value);
+                if (value.length > 0 && !isValid) {
+                    this.setCustomValidity('Please enter a valid credit card number');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+
+            // Luhn algorithm for credit card validation
+            function luhnCheck(cardNumber) {
+                if (cardNumber.length < 13) return false;
+
+                let sum = 0;
+                let isEven = false;
+
+                for (let i = cardNumber.length - 1; i >= 0; i--) {
+                    let digit = parseInt(cardNumber[i]);
+
+                    if (isEven) {
+                        digit *= 2;
+                        if (digit > 9) digit -= 9;
+                    }
+
+                    sum += digit;
+                    isEven = !isEven;
+                }
+
+                return sum % 10 === 0;
+            }
+
+            // Progressive enhancement - Dynamic dropdowns
+            const categorySelect = document.getElementById('dynamic-select');
+            const subCategorySelect = document.getElementById('sub-category');
+
+            const subcategories = {
+                frontend: ['HTML/CSS', 'JavaScript', 'React', 'Vue', 'Angular'],
+                backend: ['Node.js', 'Python', 'Java', 'C#', 'PHP'],
+                mobile: ['React Native', 'Flutter', 'iOS', 'Android', 'Xamarin'],
+                data: ['Python', 'R', 'SQL', 'Machine Learning', 'Analytics']
+            };
+
+            categorySelect.addEventListener('change', function () {
+                const category = this.value;
+
+                if (category && subcategories[category]) {
+                    subCategorySelect.innerHTML = '<option value="">Select a subcategory...</option>';
+                    subcategories[category].forEach(sub => {
+                        const option = document.createElement('option');
+                        option.value = sub.toLowerCase().replace(/\s+/g, '-');
+                        option.textContent = sub;
+                        subCategorySelect.appendChild(option);
+                    });
+                    subCategorySelect.style.display = 'block';
+                } else {
+                    subCategorySelect.style.display = 'none';
+                }
+            });
+
+            // Character counter
+            document.getElementById('char-count').addEventListener('input', function () {
+                const remaining = 200 - this.value.length;
+                document.getElementById('remaining').textContent = remaining;
+            });
+
+            // Enhanced search with simulated autocomplete
+            const searchInput = document.getElementById('enhanced-search');
+            const searchResults = document.getElementById('search-results');
+            const suggestions = ['HTML', 'CSS', 'JavaScript', 'React', 'Vue', 'Angular', 'Node.js', 'Python', 'Java', 'PHP'];
+
+            searchInput.addEventListener('input', function () {
+                const query = this.value.toLowerCase();
+
+                if (query.length > 1) {
+                    const matches = suggestions.filter(item =>
+                        item.toLowerCase().includes(query)
+                    );
+
+                    if (matches.length > 0) {
+                        searchResults.innerHTML = matches.map(match =>
+                            `<div style="padding: 0.5rem; border-bottom: 1px solid #eee; cursor: pointer;" onclick="selectSuggestion('${match}')">${match}</div>`
+                        ).join('');
+                        searchResults.style.display = 'block';
+                        searchResults.style.background = 'white';
+                        searchResults.style.border = '1px solid #ddd';
+                        searchResults.style.borderTop = 'none';
+                        searchResults.style.maxHeight = '200px';
+                        searchResults.style.overflowY = 'auto';
+                    } else {
+                        searchResults.style.display = 'none';
+                    }
+                } else {
+                    searchResults.style.display = 'none';
+                }
+            });
+
+            function selectSuggestion(suggestion) {
+                searchInput.value = suggestion;
+                searchResults.style.display = 'none';
+            }
+
+            // Close search results when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                    searchResults.style.display = 'none';
+                }
+            });
+
+            // Form submission handlers
+            document.getElementById('custom-validation-form').addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                if (this.checkValidity()) {
+                    alert('✅ Custom validation passed! Form is ready to submit.');
+                } else {
+                    alert('❌ Please fix validation errors.');
+                    this.querySelector(':invalid').focus();
+                }
+            });
+
+            document.getElementById('accessible-form').addEventListener('submit', function (e) {
+                e.preventDefault();
+                alert('✅ Accessible form submitted! Screen readers will love this.');
+            });
+
+            document.getElementById('progressive-form').addEventListener('submit', function (e) {
+                e.preventDefault();
+                alert('✅ Progressive enhancement form submitted!');
+            });
+
+            // Username validation
+            document.getElementById('username').addEventListener('input', function () {
+                const value = this.value;
+
+                if (value.length < 3) {
+                    this.setCustomValidity('Username must be at least 3 characters');
+                } else if (value.length > 15) {
+                    this.setCustomValidity('Username must be no more than 15 characters');
+                } else if (!/^[a-zA-Z]+$/.test(value)) {
+                    this.setCustomValidity('Username must contain only letters');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+        </script>
+</body>
+
+</html>

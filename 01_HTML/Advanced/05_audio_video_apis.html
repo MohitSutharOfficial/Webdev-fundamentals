@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio and Video APIs - HTML Advanced</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #f44336;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-align: center;
+        }
+
+        h2 {
+            color: #d32f2f;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #ffebee;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #c62828;
+            margin: 20px 0 10px 0;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .demo-card {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #f44336;
+        }
+
+        .media-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        video,
+        audio {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.2);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .media-button {
+            background: linear-gradient(135deg, #f44336, #d32f2f);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+        }
+
+        .media-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
+        }
+
+        .media-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .code-block {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .visualizer {
+            width: 100%;
+            height: 200px;
+            background: #000;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .slider {
+            flex: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #f44336;
+            cursor: pointer;
+        }
+
+        .status-display {
+            background: #2196f3;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+
+        .webrtc-video {
+            width: 300px;
+            height: 200px;
+            background: #000;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .audio-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .control-group {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f44336;
+        }
+
+        .permission-status {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-granted {
+            background-color: #4caf50;
+        }
+
+        .status-denied {
+            background-color: #f44336;
+        }
+
+        .status-prompt {
+            background-color: #ff9800;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .webrtc-video {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🎵 Audio and Video APIs</h1>
+            <p><strong>Advanced Media Processing with Web Audio API, WebRTC, and Media APIs</strong></p>
+            <p>Master real-time audio processing, video manipulation, peer-to-peer communication, and advanced media
+                controls.</p>
+        </header>
+
+        <section class="section">
+            <h2>🎼 Web Audio API</h2>
+            <p>Create sophisticated audio applications with real-time processing, synthesis, and effects.</p>
+
+            <div class="media-container">
+                <audio id="audioElement" controls>
+                    <source
+                        src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmcoJyaSyvaejB4jMmuO2ZOCPS5PZK6pwWciBjPBNmmq1rwuYjUuUIGdoGQcBjOJ3/LNeSsFJHfH8N2QQAoUXrPp66hVFApGn+DyvmcoJyaSyvaejB4jMmuO2ZOCPS5PZK6pwWciASNAEBAAQb8AAAEAAjdmNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmcoJyaSyvaejB4jMmuO2ZOCPS5PZK6pwWciBjPBNmmq1rwuYjUuUIGdoGQcBjOJ3/LNeSsFJHfH8N2QQAoUXrPp66hVFApGn+DyvmcoJyaSyvaejB4jMmuO2ZOCPS5PZK6pwWciASNAEBAAQb8AAAEAAjdmNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmcoJyaSyvaejB4jMmuO2ZOCPS5PZK6pwWciBjPBNmmq1rwuYjUuUIGdoGQcBjOJ3/LNeSsFJHfH8N2QQAoUXrPp66hVFApGn+DyvmcoJyaSyvaejB4jMmuO2ZOCPS5PZK6pwWci"
+                        type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+                <canvas id="audioVisualizer" class="visualizer"></canvas>
+            </div>
+
+            <div class="controls">
+                <button class="media-button" onclick="initAudioContext()">Initialize Audio Context</button>
+                <button class="media-button" onclick="playTone()">Play Tone</button>
+                <button class="media-button" onclick="createFilter()">Add Filter</button>
+                <button class="media-button" onclick="recordAudio()">Record Audio</button>
+                <button class="media-button" onclick="playRecording()">Play Recording</button>
+            </div>
+
+            <div class="audio-controls">
+                <div class="control-group">
+                    <h4>Frequency</h4>
+                    <div class="slider-container">
+                        <input type="range" class="slider" id="frequency" min="100" max="2000" value="440">
+                        <span id="frequencyValue">440 Hz</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <h4>Volume</h4>
+                    <div class="slider-container">
+                        <input type="range" class="slider" id="volume" min="0" max="100" value="50">
+                        <span id="volumeValue">50%</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <h4>Filter Frequency</h4>
+                    <div class="slider-container">
+                        <input type="range" class="slider" id="filterFreq" min="100" max="5000" value="1000">
+                        <span id="filterFreqValue">1000 Hz</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Web Audio API Implementation:</h3>
+            <div class="code-block">
+                // Web Audio Context Setup
+                let audioContext;
+                let oscillator;
+                let gainNode;
+                let filterNode;
+                let analyser;
+                let mediaRecorder;
+                let recordedChunks = [];
+
+                function initAudioContext() {
+                if (audioContext) return;
+
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+                // Create audio nodes
+                analyser = audioContext.createAnalyser();
+                analyser.fftSize = 256;
+                analyser.connect(audioContext.destination);
+
+                console.log('Audio Context initialized');
+                console.log('Sample Rate:', audioContext.sampleRate);
+                console.log('State:', audioContext.state);
+                }
+
+                // Oscillator and Tone Generation
+                function createOscillator(frequency = 440, type = 'sine') {
+                if (!audioContext) initAudioContext();
+
+                // Create oscillator
+                oscillator = audioContext.createOscillator();
+                oscillator.type = type;
+                oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+
+                // Create gain node for volume control
+                gainNode = audioContext.createGain();
+                gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+
+                // Create filter
+                filterNode = audioContext.createBiquadFilter();
+                filterNode.type = 'lowpass';
+                filterNode.frequency.setValueAtTime(1000, audioContext.currentTime);
+
+                // Connect the audio graph
+                oscillator.connect(filterNode);
+                filterNode.connect(gainNode);
+                gainNode.connect(analyser);
+
+                return { oscillator, gainNode, filterNode };
+                }
+
+                // Advanced Audio Effects
+                class AudioEffects {
+                constructor(audioContext) {
+                this.context = audioContext;
+                this.effects = {};
+                }
+
+                createReverb(roomSize = 2, decay = 2) {
+                const convolver = this.context.createConvolver();
+                const length = this.context.sampleRate * decay;
+                const impulse = this.context.createBuffer(2, length, this.context.sampleRate);
+
+                for (let channel = 0; channel < 2; channel++) { const channelData=impulse.getChannelData(channel); for
+                    (let i=0; i < length; i++) { const n=length - i; channelData[i]=(Math.random() * 2 - 1) * Math.pow(n
+                    / length, roomSize); } } convolver.buffer=impulse; this.effects.reverb=convolver; return convolver;
+                    } createDelay(delayTime=0.3, feedback=0.4) { const delay=this.context.createDelay(1); const
+                    delayGain=this.context.createGain(); const feedbackGain=this.context.createGain();
+                    delay.delayTime.setValueAtTime(delayTime, this.context.currentTime);
+                    delayGain.gain.setValueAtTime(0.5, this.context.currentTime);
+                    feedbackGain.gain.setValueAtTime(feedback, this.context.currentTime); // Create feedback loop
+                    delay.connect(delayGain); delay.connect(feedbackGain); feedbackGain.connect(delay);
+                    this.effects.delay={ delay, delayGain, feedbackGain }; return this.effects.delay; }
+                    createDistortion(amount=50) { const waveshaper=this.context.createWaveShaper(); const samples=44100;
+                    const curve=new Float32Array(samples); const deg=Math.PI / 180; for (let i=0; i < samples; i++) {
+                    const x=(i * 2) / samples - 1; curve[i]=((3 + amount) * x * 20 * deg) / (Math.PI + amount *
+                    Math.abs(x)); } waveshaper.curve=curve; waveshaper.oversample='4x' ;
+                    this.effects.distortion=waveshaper; return waveshaper; } } // Real-time Audio Analysis class
+                    AudioVisualizer { constructor(canvasId, analyserNode) {
+                    this.canvas=document.getElementById(canvasId); this.ctx=this.canvas.getContext('2d');
+                    this.analyser=analyserNode; this.dataArray=new Uint8Array(this.analyser.frequencyBinCount);
+                    this.isRunning=false; } start() { this.isRunning=true; this.draw(); } stop() { this.isRunning=false;
+                    } draw() { if (!this.isRunning) return; requestAnimationFrame(()=> this.draw());
+
+                    this.analyser.getByteFrequencyData(this.dataArray);
+
+                    this.ctx.fillStyle = 'rgb(0, 0, 0)';
+                    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+                    const barWidth = (this.canvas.width / this.dataArray.length) * 2.5;
+                    let barHeight;
+                    let x = 0;
+
+                    for (let i = 0; i < this.dataArray.length; i++) { barHeight=(this.dataArray[i] / 255) *
+                        this.canvas.height; const r=barHeight + 25 * (i / this.dataArray.length); const g=250 * (i /
+                        this.dataArray.length); const b=50; this.ctx.fillStyle=`rgb(${r},${g},${b})`;
+                        this.ctx.fillRect(x, this.canvas.height - barHeight, barWidth, barHeight); x +=barWidth + 1; } }
+                        } </div>
+        </section>
+
+        <section class="section">
+            <h2>📹 Video Processing & Media Source Extensions</h2>
+            <p>Advanced video manipulation, streaming, and Media Source Extensions for adaptive streaming.</p>
+
+            <div class="media-container">
+                <video id="videoElement" width="500" height="300" controls>
+                    <source src="data:video/mp4;base64," type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <canvas id="videoCanvas" width="500" height="300" class="visualizer"></canvas>
+            </div>
+
+            <div class="controls">
+                <button class="media-button" onclick="captureFrame()">Capture Frame</button>
+                <button class="media-button" onclick="applyFilter()">Apply Filter</button>
+                <button class="media-button" onclick="createPictureInPicture()">Picture-in-Picture</button>
+                <button class="media-button" onclick="initMediaSource()">Media Source Extensions</button>
+            </div>
+
+            <div id="videoStatus" class="status-display">Video processing ready...</div>
+
+            <h3>Video Processing Implementation:</h3>
+            <div class="code-block">
+                // Video Canvas Processing
+                class VideoProcessor {
+                constructor(videoElement, canvasElement) {
+                this.video = videoElement;
+                this.canvas = canvasElement;
+                this.ctx = this.canvas.getContext('2d');
+                this.filters = [];
+                this.isProcessing = false;
+                }
+
+                startProcessing() {
+                this.isProcessing = true;
+                this.processFrame();
+                }
+
+                stopProcessing() {
+                this.isProcessing = false;
+                }
+
+                processFrame() {
+                if (!this.isProcessing) return;
+
+                // Draw video frame to canvas
+                this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
+
+                // Apply filters
+                this.applyFilters();
+
+                requestAnimationFrame(() => this.processFrame());
+                }
+
+                applyFilters() {
+                const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+                const data = imageData.data;
+
+                // Apply each filter
+                this.filters.forEach(filter => filter(data));
+
+                this.ctx.putImageData(imageData, 0, 0);
+                }
+
+                addFilter(filterFunction) {
+                this.filters.push(filterFunction);
+                }
+
+                removeAllFilters() {
+                this.filters = [];
+                }
+                }
+
+                // Video Filters
+                const VideoFilters = {
+                grayscale: (data) => {
+                for (let i = 0; i < data.length; i +=4) { const avg=(data[i] + data[i + 1] + data[i + 2]) / 3;
+                    data[i]=avg; // red data[i + 1]=avg; // green data[i + 2]=avg; // blue } }, sepia: (data)=> {
+                    for (let i = 0; i < data.length; i +=4) { const r=data[i]; const g=data[i + 1]; const b=data[i + 2];
+                        data[i]=Math.min(255, (r * 0.393) + (g * 0.769) + (b * 0.189)); data[i + 1]=Math.min(255, (r *
+                        0.349) + (g * 0.686) + (b * 0.168)); data[i + 2]=Math.min(255, (r * 0.272) + (g * 0.534) + (b *
+                        0.131)); } }, invert: (data)=> {
+                        for (let i = 0; i < data.length; i +=4) { data[i]=255 - data[i]; // red data[i + 1]=255 - data[i
+                            + 1]; // green data[i + 2]=255 - data[i + 2]; // blue } }, blur: (data, width, height)=> {
+                            // Simple box blur implementation
+                            const kernel = [
+                            [1/16, 2/16, 1/16],
+                            [2/16, 4/16, 2/16],
+                            [1/16, 2/16, 1/16]
+                            ];
+
+                            const output = new Uint8ClampedArray(data);
+
+                            for (let y = 1; y < height - 1; y++) { for (let x=1; x < width - 1; x++) { for (let c=0; c <
+                                3; c++) { let sum=0; for (let ky=-1; ky <=1; ky++) { for (let kx=-1; kx <=1; kx++) {
+                                const idx=((y + ky) * width + (x + kx)) * 4 + c; sum +=data[idx] * kernel[ky + 1][kx +
+                                1]; } } output[(y * width + x) * 4 + c]=sum; } } } data.set(output); } }; // Media
+                                Source Extensions for Adaptive Streaming class AdaptiveStreaming {
+                                constructor(videoElement) { this.video=videoElement; this.mediaSource=null;
+                                this.sourceBuffer=null; this.segments=[]; this.currentSegment=0; } async init() { if
+                                (!('MediaSource' in window)) { throw new Error('MediaSource API not supported'); }
+                                this.mediaSource=new MediaSource();
+                                this.video.src=URL.createObjectURL(this.mediaSource); return new Promise((resolve,
+                                reject)=> {
+                                this.mediaSource.addEventListener('sourceopen', () => {
+                                try {
+                                this.sourceBuffer = this.mediaSource.addSourceBuffer('video/mp4; codecs="avc1.42E01E"');
+                                this.sourceBuffer.addEventListener('updateend', () => this.onUpdateEnd());
+                                resolve();
+                                } catch (error) {
+                                reject(error);
+                                }
+                                });
+                                });
+                                }
+
+                                async loadSegment(url) {
+                                const response = await fetch(url);
+                                const arrayBuffer = await response.arrayBuffer();
+
+                                if (!this.sourceBuffer.updating) {
+                                this.sourceBuffer.appendBuffer(arrayBuffer);
+                                }
+                                }
+
+                                onUpdateEnd() {
+                                if (this.currentSegment < this.segments.length - 1) { this.currentSegment++;
+                                    this.loadSegment(this.segments[this.currentSegment]); } else if
+                                    (this.mediaSource.readyState==='open' ) { this.mediaSource.endOfStream(); } } //
+                                    Adaptive bitrate switching switchQuality(newSegments) { this.segments=newSegments;
+                                    // Implementation would include buffer management // and seamless quality switching
+                                    logic } } </div>
+        </section>
+
+        <section class="section">
+            <h2>🌐 WebRTC Real-Time Communication</h2>
+            <p>Build real-time peer-to-peer video calls, screen sharing, and data channels.</p>
+
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>📹 Local Video</h3>
+                    <video id="localVideo" class="webrtc-video" autoplay muted></video>
+                    <div class="controls" style="margin-top: 10px;">
+                        <button class="media-button" onclick="startLocalVideo()">Start Camera</button>
+                        <button class="media-button" onclick="shareScreen()">Share Screen</button>
+                    </div>
+                </div>
+
+                <div class="demo-card">
+                    <h3>🌐 Remote Video</h3>
+                    <video id="remoteVideo" class="webrtc-video" autoplay></video>
+                    <div class="controls" style="margin-top: 10px;">
+                        <button class="media-button" onclick="createOffer()">Create Offer</button>
+                        <button class="media-button" onclick="createAnswer()">Create Answer</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="webrtcStatus" class="status-display">
+                <span class="permission-status status-prompt"></span>
+                WebRTC Status: Ready to start
+            </div>
+
+            <h3>WebRTC Implementation:</h3>
+            <div class="code-block">
+                // WebRTC Peer Connection Setup
+                class WebRTCConnection {
+                constructor() {
+                this.localVideo = document.getElementById('localVideo');
+                this.remoteVideo = document.getElementById('remoteVideo');
+                this.localStream = null;
+                this.remoteStream = null;
+                this.peerConnection = null;
+                this.dataChannel = null;
+
+                // STUN/TURN servers for NAT traversal
+                this.configuration = {
+                iceServers: [
+                { urls: 'stun:stun.l.google.com:19302' },
+                { urls: 'stun:stun1.l.google.com:19302' }
+                ]
+                };
+                }
+
+                async getUserMedia(constraints = { video: true, audio: true }) {
+                try {
+                this.localStream = await navigator.mediaDevices.getUserMedia(constraints);
+                this.localVideo.srcObject = this.localStream;
+                return this.localStream;
+                } catch (error) {
+                console.error('Error accessing media devices:', error);
+                throw error;
+                }
+                }
+
+                async getDisplayMedia() {
+                try {
+                this.localStream = await navigator.mediaDevices.getDisplayMedia({
+                video: true,
+                audio: true
+                });
+                this.localVideo.srcObject = this.localStream;
+                return this.localStream;
+                } catch (error) {
+                console.error('Error accessing screen share:', error);
+                throw error;
+                }
+                }
+
+                createPeerConnection() {
+                this.peerConnection = new RTCPeerConnection(this.configuration);
+
+                // Handle ICE candidates
+                this.peerConnection.onicecandidate = (event) => {
+                if (event.candidate) {
+                this.sendSignal({ ice: event.candidate });
+                }
+                };
+
+                // Handle remote stream
+                this.peerConnection.ontrack = (event) => {
+                this.remoteStream = event.streams[0];
+                this.remoteVideo.srcObject = this.remoteStream;
+                };
+
+                // Handle connection state changes
+                this.peerConnection.onconnectionstatechange = () => {
+                console.log('Connection state:', this.peerConnection.connectionState);
+                };
+
+                // Add local stream tracks
+                if (this.localStream) {
+                this.localStream.getTracks().forEach(track => {
+                this.peerConnection.addTrack(track, this.localStream);
+                });
+                }
+
+                return this.peerConnection;
+                }
+
+                createDataChannel(label = 'dataChannel') {
+                if (!this.peerConnection) {
+                this.createPeerConnection();
+                }
+
+                this.dataChannel = this.peerConnection.createDataChannel(label);
+
+                this.dataChannel.onopen = () => {
+                console.log('Data channel opened');
+                };
+
+                this.dataChannel.onmessage = (event) => {
+                console.log('Received message:', event.data);
+                };
+
+                this.dataChannel.onclose = () => {
+                console.log('Data channel closed');
+                };
+
+                return this.dataChannel;
+                }
+
+                async createOffer() {
+                if (!this.peerConnection) {
+                this.createPeerConnection();
+                }
+
+                const offer = await this.peerConnection.createOffer();
+                await this.peerConnection.setLocalDescription(offer);
+
+                this.sendSignal({ offer });
+                return offer;
+                }
+
+                async createAnswer(offer) {
+                if (!this.peerConnection) {
+                this.createPeerConnection();
+                }
+
+                await this.peerConnection.setRemoteDescription(offer);
+                const answer = await this.peerConnection.createAnswer();
+                await this.peerConnection.setLocalDescription(answer);
+
+                this.sendSignal({ answer });
+                return answer;
+                }
+
+                async handleAnswer(answer) {
+                await this.peerConnection.setRemoteDescription(answer);
+                }
+
+                async handleIceCandidate(candidate) {
+                await this.peerConnection.addIceCandidate(candidate);
+                }
+
+                sendSignal(signal) {
+                // In a real application, this would send the signal
+                // through a signaling server (WebSocket, Socket.IO, etc.)
+                console.log('Sending signal:', signal);
+                }
+
+                disconnect() {
+                if (this.localStream) {
+                this.localStream.getTracks().forEach(track => track.stop());
+                }
+
+                if (this.peerConnection) {
+                this.peerConnection.close();
+                }
+
+                if (this.dataChannel) {
+                this.dataChannel.close();
+                }
+                }
+                }
+
+                // Advanced WebRTC Features
+                class AdvancedWebRTC extends WebRTCConnection {
+                constructor() {
+                super();
+                this.isRecording = false;
+                this.recordedChunks = [];
+                this.mediaRecorder = null;
+                }
+
+                async startRecording() {
+                if (!this.localStream) {
+                throw new Error('No local stream available');
+                }
+
+                this.mediaRecorder = new MediaRecorder(this.localStream);
+                this.recordedChunks = [];
+
+                this.mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                this.recordedChunks.push(event.data);
+                }
+                };
+
+                this.mediaRecorder.onstop = () => {
+                const blob = new Blob(this.recordedChunks, { type: 'video/webm' });
+                const url = URL.createObjectURL(blob);
+
+                // Create download link
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'recording.webm';
+                a.click();
+                };
+
+                this.mediaRecorder.start();
+                this.isRecording = true;
+                }
+
+                stopRecording() {
+                if (this.mediaRecorder && this.isRecording) {
+                this.mediaRecorder.stop();
+                this.isRecording = false;
+                }
+                }
+
+                async applyVideoFilters() {
+                if (!this.localStream) return;
+
+                // Create a canvas to process video
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const video = document.createElement('video');
+
+                video.srcObject = this.localStream;
+                video.play();
+
+                canvas.width = 640;
+                canvas.height = 480;
+
+                const processFrame = () => {
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                // Apply filters here
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                VideoFilters.sepia(imageData.data);
+                ctx.putImageData(imageData, 0, 0);
+
+                requestAnimationFrame(processFrame);
+                };
+
+                video.addEventListener('loadedmetadata', () => {
+                processFrame();
+                });
+
+                // Create new stream from canvas
+                const filteredStream = canvas.captureStream(30);
+                this.localVideo.srcObject = filteredStream;
+
+                return filteredStream;
+                }
+                }
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🔧 Advanced Media Controls & Best Practices</h2>
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>🎛️ Performance Optimization</h3>
+                    <ul>
+                        <li>Use Web Workers for audio processing</li>
+                        <li>Implement efficient buffer management</li>
+                        <li>Optimize canvas operations</li>
+                        <li>Use requestAnimationFrame for smooth playback</li>
+                        <li>Implement lazy loading for media</li>
+                        <li>Monitor memory usage</li>
+                    </ul>
+                </div>
+
+                <div class="demo-card">
+                    <h3>🛡️ Error Handling</h3>
+                    <ul>
+                        <li>Handle getUserMedia permissions</li>
+                        <li>Implement fallbacks for unsupported features</li>
+                        <li>Monitor connection quality</li>
+                        <li>Handle network interruptions</li>
+                        <li>Provide meaningful error messages</li>
+                        <li>Implement retry mechanisms</li>
+                    </ul>
+                </div>
+
+                <div class="demo-card">
+                    <h3>♿ Accessibility</h3>
+                    <ul>
+                        <li>Provide captions and subtitles</li>
+                        <li>Support keyboard navigation</li>
+                        <li>Implement audio descriptions</li>
+                        <li>Respect user motion preferences</li>
+                        <li>Provide alternative formats</li>
+                        <li>Use ARIA labels appropriately</li>
+                    </ul>
+                </div>
+
+                <div class="demo-card">
+                    <h3>🌐 Cross-Browser Support</h3>
+                    <ul>
+                        <li>Use feature detection</li>
+                        <li>Implement polyfills where needed</li>
+                        <li>Test across different browsers</li>
+                        <li>Handle vendor prefixes</li>
+                        <li>Provide fallback implementations</li>
+                        <li>Monitor browser compatibility</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Global variables
+        let audioContext, oscillator, gainNode, filterNode, analyser;
+        let mediaRecorder, recordedChunks = [];
+        let webrtcConnection;
+        let audioVisualizer;
+        let videoProcessor;
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            setupSliders();
+            checkMediaSupport();
+            webrtcConnection = new WebRTCConnection();
+        });
+
+        // Check media API support
+        function checkMediaSupport() {
+            const features = {
+                'getUserMedia': 'mediaDevices' in navigator,
+                'getDisplayMedia': 'getDisplayMedia' in (navigator.mediaDevices || {}),
+                'WebRTC': 'RTCPeerConnection' in window,
+                'Web Audio API': 'AudioContext' in window || 'webkitAudioContext' in window,
+                'Media Recorder': 'MediaRecorder' in window,
+                'Media Source Extensions': 'MediaSource' in window
+            };
+
+            console.log('Media API Support:', features);
+        }
+
+        // Audio functions
+        function initAudioContext() {
+            if (audioContext) return;
+
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+            analyser = audioContext.createAnalyser();
+            analyser.fftSize = 256;
+            analyser.connect(audioContext.destination);
+
+            audioVisualizer = new AudioVisualizer('audioVisualizer', analyser);
+            audioVisualizer.start();
+
+            updateStatus('Audio Context initialized successfully');
+        }
+
+        function playTone() {
+            if (!audioContext) initAudioContext();
+
+            // Stop previous oscillator
+            if (oscillator) {
+                oscillator.stop();
+            }
+
+            const frequency = document.getElementById('frequency').value;
+            const volume = document.getElementById('volume').value / 100;
+
+            oscillator = audioContext.createOscillator();
+            gainNode = audioContext.createGain();
+
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(volume, audioContext.currentTime + 0.1);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 2);
+
+            oscillator.connect(gainNode);
+            gainNode.connect(analyser);
+
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 2);
+
+            updateStatus('Playing tone at ' + frequency + ' Hz');
+        }
+
+        function createFilter() {
+            if (!filterNode) {
+                updateStatus('Please play a tone first');
+                return;
+            }
+
+            const filterFreq = document.getElementById('filterFreq').value;
+            filterNode.frequency.setValueAtTime(filterFreq, audioContext.currentTime);
+
+            updateStatus('Filter applied at ' + filterFreq + ' Hz');
+        }
+
+        async function recordAudio() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                recordedChunks = [];
+
+                mediaRecorder.ondataavailable = (event) => {
+                    recordedChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(recordedChunks, { type: 'audio/webm' });
+                    const url = URL.createObjectURL(blob);
+
+                    const audio = document.getElementById('audioElement');
+                    audio.src = url;
+
+                    updateStatus('Recording complete');
+                };
+
+                mediaRecorder.start();
+                updateStatus('Recording started... (recording for 5 seconds)');
+
+                setTimeout(() => {
+                    if (mediaRecorder.state === 'recording') {
+                        mediaRecorder.stop();
+                        stream.getTracks().forEach(track => track.stop());
+                    }
+                }, 5000);
+
+            } catch (error) {
+                updateStatus('Error recording audio: ' + error.message);
+            }
+        }
+
+        function playRecording() {
+            const audio = document.getElementById('audioElement');
+            if (audio.src) {
+                audio.play();
+                updateStatus('Playing recording');
+            } else {
+                updateStatus('No recording available');
+            }
+        }
+
+        // Video functions
+        function captureFrame() {
+            const video = document.getElementById('videoElement');
+            const canvas = document.getElementById('videoCanvas');
+            const ctx = canvas.getContext('2d');
+
+            if (video.videoWidth > 0) {
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                updateVideoStatus('Frame captured');
+            } else {
+                updateVideoStatus('No video loaded');
+            }
+        }
+
+        function applyFilter() {
+            const canvas = document.getElementById('videoCanvas');
+            const ctx = canvas.getContext('2d');
+
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+            // Apply sepia filter
+            for (let i = 0; i < imageData.data.length; i += 4) {
+                const r = imageData.data[i];
+                const g = imageData.data[i + 1];
+                const b = imageData.data[i + 2];
+
+                imageData.data[i] = Math.min(255, (r * 0.393) + (g * 0.769) + (b * 0.189));
+                imageData.data[i + 1] = Math.min(255, (r * 0.349) + (g * 0.686) + (b * 0.168));
+                imageData.data[i + 2] = Math.min(255, (r * 0.272) + (g * 0.534) + (b * 0.131));
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+            updateVideoStatus('Sepia filter applied');
+        }
+
+        async function createPictureInPicture() {
+            const video = document.getElementById('videoElement');
+
+            try {
+                if (document.pictureInPictureElement) {
+                    await document.exitPictureInPicture();
+                } else {
+                    await video.requestPictureInPicture();
+                }
+            } catch (error) {
+                updateVideoStatus('Picture-in-Picture not supported: ' + error.message);
+            }
+        }
+
+        function initMediaSource() {
+            updateVideoStatus('Media Source Extensions demo - would initialize adaptive streaming');
+        }
+
+        // WebRTC functions
+        async function startLocalVideo() {
+            try {
+                await webrtcConnection.getUserMedia();
+                updateWebRTCStatus('Camera started successfully', 'granted');
+            } catch (error) {
+                updateWebRTCStatus('Camera access denied: ' + error.message, 'denied');
+            }
+        }
+
+        async function shareScreen() {
+            try {
+                await webrtcConnection.getDisplayMedia();
+                updateWebRTCStatus('Screen sharing started', 'granted');
+            } catch (error) {
+                updateWebRTCStatus('Screen sharing failed: ' + error.message, 'denied');
+            }
+        }
+
+        async function createOffer() {
+            try {
+                const offer = await webrtcConnection.createOffer();
+                updateWebRTCStatus('Offer created - would send to peer', 'granted');
+                console.log('Offer:', offer);
+            } catch (error) {
+                updateWebRTCStatus('Failed to create offer: ' + error.message, 'denied');
+            }
+        }
+
+        function createAnswer() {
+            updateWebRTCStatus('Answer creation - requires offer from peer', 'prompt');
+        }
+
+        // Utility functions
+        function setupSliders() {
+            const sliders = [
+                { id: 'frequency', valueId: 'frequencyValue', suffix: ' Hz' },
+                { id: 'volume', valueId: 'volumeValue', suffix: '%' },
+                { id: 'filterFreq', valueId: 'filterFreqValue', suffix: ' Hz' }
+            ];
+
+            sliders.forEach(slider => {
+                const element = document.getElementById(slider.id);
+                const valueElement = document.getElementById(slider.valueId);
+
+                element.addEventListener('input', function () {
+                    valueElement.textContent = this.value + slider.suffix;
+                });
+            });
+        }
+
+        function updateStatus(message) {
+            console.log('Audio Status:', message);
+        }
+
+        function updateVideoStatus(message) {
+            document.getElementById('videoStatus').textContent = message;
+        }
+
+        function updateWebRTCStatus(message, status = 'prompt') {
+            const statusElement = document.getElementById('webrtcStatus');
+            const indicator = statusElement.querySelector('.permission-status');
+
+            indicator.className = `permission-status status-${status}`;
+            statusElement.innerHTML = `<span class="permission-status status-${status}"></span>WebRTC Status: ${message}`;
+        }
+
+        // Audio Visualizer class
+        class AudioVisualizer {
+            constructor(canvasId, analyserNode) {
+                this.canvas = document.getElementById(canvasId);
+                this.ctx = this.canvas.getContext('2d');
+                this.analyser = analyserNode;
+                this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
+                this.isRunning = false;
+            }
+
+            start() {
+                this.isRunning = true;
+                this.draw();
+            }
+
+            stop() {
+                this.isRunning = false;
+            }
+
+            draw() {
+                if (!this.isRunning) return;
+
+                requestAnimationFrame(() => this.draw());
+
+                this.analyser.getByteFrequencyData(this.dataArray);
+
+                this.ctx.fillStyle = 'rgb(0, 0, 0)';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+                const barWidth = (this.canvas.width / this.dataArray.length) * 2.5;
+                let barHeight;
+                let x = 0;
+
+                for (let i = 0; i < this.dataArray.length; i++) {
+                    barHeight = (this.dataArray[i] / 255) * this.canvas.height;
+
+                    const r = barHeight + 25 * (i / this.dataArray.length);
+                    const g = 250 * (i / this.dataArray.length);
+                    const b = 50;
+
+                    this.ctx.fillStyle = `rgb(${r},${g},${b})`;
+                    this.ctx.fillRect(x, this.canvas.height - barHeight, barWidth, barHeight);
+
+                    x += barWidth + 1;
+                }
+            }
+        }
+
+        // WebRTC Connection class (simplified for demo)
+        class WebRTCConnection {
+            constructor() {
+                this.localVideo = document.getElementById('localVideo');
+                this.remoteVideo = document.getElementById('remoteVideo');
+                this.localStream = null;
+                this.peerConnection = null;
+            }
+
+            async getUserMedia(constraints = { video: true, audio: true }) {
+                this.localStream = await navigator.mediaDevices.getUserMedia(constraints);
+                this.localVideo.srcObject = this.localStream;
+                return this.localStream;
+            }
+
+            async getDisplayMedia() {
+                this.localStream = await navigator.mediaDevices.getDisplayMedia({
+                    video: true,
+                    audio: true
+                });
+                this.localVideo.srcObject = this.localStream;
+                return this.localStream;
+            }
+
+            async createOffer() {
+                this.peerConnection = new RTCPeerConnection({
+                    iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+                });
+
+                if (this.localStream) {
+                    this.localStream.getTracks().forEach(track => {
+                        this.peerConnection.addTrack(track, this.localStream);
+                    });
+                }
+
+                const offer = await this.peerConnection.createOffer();
+                await this.peerConnection.setLocalDescription(offer);
+
+                return offer;
+            }
+        }
+    </script>
+</body>
+
+</html>

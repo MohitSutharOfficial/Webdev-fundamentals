@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Handling & Debugging - JavaScript Advanced</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #7c3aed;
+            --accent-color: #059669;
+            --error-color: #dc2626;
+            --warning-color: #d97706;
+            --success-color: #16a34a;
+
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+
+            --border-radius: 8px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+            --space-2: 0.5rem;
+            --space-4: 1rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+
+            --font-mono: 'Fira Code', 'Courier New', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-8);
+        }
+
+        .header {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            padding: var(--space-8);
+            margin-bottom: var(--space-6);
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+        }
+
+        .section {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            padding: var(--space-6);
+            margin-bottom: var(--space-6);
+            box-shadow: var(--shadow-md);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: var(--space-4);
+            font-weight: 700;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 1.875rem;
+            margin-bottom: var(--space-4);
+            border-bottom: 2px solid var(--bg-tertiary);
+            padding-bottom: var(--space-2);
+        }
+
+        h3 {
+            color: var(--accent-color);
+            font-size: 1.25rem;
+            margin: var(--space-6) 0 var(--space-4) 0;
+            font-weight: 600;
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: var(--border-radius);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .demo-container {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: var(--space-6);
+            margin: var(--space-4) 0;
+            border: 1px solid var(--bg-tertiary);
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-4);
+            margin: var(--space-4) 0;
+        }
+
+        .demo-card {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            padding: var(--space-4);
+            border-left: 4px solid var(--accent-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: var(--space-2) var(--space-4);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: var(--space-2);
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background: var(--error-color);
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+
+        .btn-warning {
+            background: var(--warning-color);
+        }
+
+        .btn-warning:hover {
+            background: #c2410c;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+        }
+
+        .btn-success:hover {
+            background: #15803d;
+        }
+
+        .output {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: var(--border-radius);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .error-output {
+            background: #fef2f2;
+            border: 1px solid #dc2626;
+            color: var(--error-color);
+        }
+
+        .warning {
+            background: #fffbeb;
+            border-left: 4px solid var(--warning-color);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .tip {
+            background: #f0fdf4;
+            border-left: 4px solid var(--success-color);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .error-example {
+            background: #fef2f2;
+            border: 1px solid #dc2626;
+            border-radius: var(--border-radius);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+        }
+
+        .debug-panel {
+            background: #1e293b;
+            border-radius: var(--border-radius);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+        }
+
+        .debug-panel h4 {
+            color: #60a5fa;
+            margin-bottom: var(--space-2);
+        }
+
+        .debug-panel pre {
+            color: #e2e8f0;
+            margin: var(--space-2) 0;
+        }
+
+        .stack-trace {
+            background: #1e293b;
+            border: 1px solid #374151;
+            border-radius: var(--border-radius);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: #e2e8f0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .performance-monitor {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            border: 1px solid var(--bg-tertiary);
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: var(--space-2) 0;
+            padding: var(--space-2);
+            background: var(--bg-primary);
+            border-radius: 4px;
+        }
+
+        .metric-name {
+            font-weight: 600;
+        }
+
+        .metric-value {
+            color: var(--accent-color);
+            font-family: var(--font-mono);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: var(--space-4);
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐛 Error Handling & Debugging</h1>
+            <p>Master professional error handling, debugging techniques, and production-ready code practices for
+                bulletproof JavaScript applications.</p>
+        </div>
+
+        <div class="section">
+            <h2>⚠️ Error Types & Handling</h2>
+
+            <h3>1. JavaScript Error Types</h3>
+            <div class="code-block">
+                // Built-in Error Types
+                class ErrorTypeExamples {
+                // SyntaxError - Code parsing errors
+                static syntaxErrorExample() {
+                try {
+                // This would cause a SyntaxError if uncommented
+                // eval('function broken() { return }}');
+                console.log('Syntax error would occur here');
+                } catch (error) {
+                console.log('SyntaxError caught:', error.message);
+                }
+                }
+
+                // ReferenceError - Variable doesn't exist
+                static referenceErrorExample() {
+                try {
+                console.log(undefinedVariable);
+                } catch (error) {
+                console.log('ReferenceError:', error.message);
+                return error;
+                }
+                }
+
+                // TypeError - Wrong type or method doesn't exist
+                static typeErrorExample() {
+                try {
+                const obj = null;
+                obj.someMethod(); // TypeError
+                } catch (error) {
+                console.log('TypeError:', error.message);
+                return error;
+                }
+                }
+
+                // RangeError - Number out of range
+                static rangeErrorExample() {
+                try {
+                const arr = new Array(-1); // RangeError
+                } catch (error) {
+                console.log('RangeError:', error.message);
+                return error;
+                }
+                }
+
+                // URIError - URI encoding/decoding error
+                static uriErrorExample() {
+                try {
+                decodeURIComponent('%'); // URIError
+                } catch (error) {
+                console.log('URIError:', error.message);
+                return error;
+                }
+                }
+
+                // EvalError - eval() function error (rarely used)
+                static evalErrorExample() {
+                try {
+                throw new EvalError('Custom eval error');
+                } catch (error) {
+                console.log('EvalError:', error.message);
+                return error;
+                }
+                }
+                }
+
+                // Custom Error Classes
+                class ValidationError extends Error {
+                constructor(message, field) {
+                super(message);
+                this.name = 'ValidationError';
+                this.field = field;
+                this.timestamp = new Date();
+                }
+                }
+
+                class NetworkError extends Error {
+                constructor(message, status, url) {
+                super(message);
+                this.name = 'NetworkError';
+                this.status = status;
+                this.url = url;
+                this.timestamp = new Date();
+                }
+                }
+
+                class BusinessLogicError extends Error {
+                constructor(message, code, details) {
+                super(message);
+                this.name = 'BusinessLogicError';
+                this.code = code;
+                this.details = details;
+                this.timestamp = new Date();
+                }
+                }
+
+                // Advanced Error Handling Patterns
+                class ErrorHandler {
+                constructor() {
+                this.errorLog = [];
+                this.maxLogSize = 100;
+                }
+
+                // Try-catch with multiple error types
+                handleOperation(operation) {
+                try {
+                return operation();
+                } catch (error) {
+                switch (error.constructor) {
+                case ValidationError:
+                return this.handleValidationError(error);
+                case NetworkError:
+                return this.handleNetworkError(error);
+                case BusinessLogicError:
+                return this.handleBusinessLogicError(error);
+                default:
+                return this.handleUnknownError(error);
+                }
+                }
+                }
+
+                handleValidationError(error) {
+                this.logError(error);
+                return {
+                success: false,
+                message: `Validation failed for field: ${error.field}`,
+                details: error.message
+                };
+                }
+
+                handleNetworkError(error) {
+                this.logError(error);
+                return {
+                success: false,
+                message: 'Network request failed',
+                status: error.status,
+                url: error.url,
+                retryable: error.status >= 500
+                };
+                }
+
+                handleBusinessLogicError(error) {
+                this.logError(error);
+                return {
+                success: false,
+                message: error.message,
+                code: error.code,
+                details: error.details
+                };
+                }
+
+                handleUnknownError(error) {
+                this.logError(error);
+                return {
+                success: false,
+                message: 'An unexpected error occurred',
+                originalError: error.message
+                };
+                }
+
+                logError(error) {
+                const errorEntry = {
+                timestamp: new Date().toISOString(),
+                name: error.name,
+                message: error.message,
+                stack: error.stack,
+                customData: {
+                field: error.field,
+                status: error.status,
+                url: error.url,
+                code: error.code,
+                details: error.details
+                }
+                };
+
+                this.errorLog.push(errorEntry);
+
+                // Keep log size manageable
+                if (this.errorLog.length > this.maxLogSize) {
+                this.errorLog.shift();
+                }
+
+                // In production, send to logging service
+                this.sendToLoggingService(errorEntry);
+                }
+
+                sendToLoggingService(errorEntry) {
+                // Mock logging service
+                console.log('📊 Logging to service:', errorEntry);
+                }
+
+                getErrorLog() {
+                return [...this.errorLog];
+                }
+
+                clearErrorLog() {
+                this.errorLog = [];
+                }
+                }
+            </div>
+
+            <div class="demo-container">
+                <h4>⚠️ Error Handling Demo:</h4>
+                <div class="demo-grid">
+                    <div class="demo-card">
+                        <button class="btn btn-danger" onclick="demoErrorTypes()">Test Error Types</button>
+                        <button class="btn btn-warning" onclick="demoCustomErrors()">Custom Errors</button>
+                        <div id="errorOutput" class="output error-output"></div>
+                    </div>
+                    <div class="demo-card">
+                        <button class="btn" onclick="demoErrorHandler()">Advanced Handler</button>
+                        <button class="btn btn-success" onclick="viewErrorLog()">View Error Log</button>
+                        <div id="handlerOutput" class="output"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔍 Debugging Techniques</h2>
+
+            <h3>1. Console Debugging</h3>
+            <div class="code-block">
+                class ConsoleDebugger {
+                static basicLogging() {
+                console.log('Basic log message');
+                console.info('Info message');
+                console.warn('Warning message');
+                console.error('Error message');
+                console.debug('Debug message');
+                }
+
+                static advancedLogging() {
+                const user = { name: 'John', age: 30, roles: ['admin', 'user'] };
+
+                // Formatted output
+                console.log('User: %o', user);
+                console.log('User name: %s, age: %d', user.name, user.age);
+
+                // Styled output
+                console.log('%c Styled Message', 'color: blue; font-size: 16px; font-weight: bold;');
+
+                // Table output
+                console.table(user);
+                console.table([user, { name: 'Jane', age: 25, roles: ['user'] }]);
+                }
+
+                static groupedLogging() {
+                console.group('User Operations');
+                console.log('Creating user...');
+                console.log('Validating data...');
+
+                console.group('Database Operations');
+                console.log('Connecting to database...');
+                console.log('Executing query...');
+                console.groupEnd();
+
+                console.log('User created successfully');
+                console.groupEnd();
+                }
+
+                static timingAndProfiling() {
+                // Timing
+                console.time('operation');
+
+                // Simulate work
+                let result = 0;
+                for (let i = 0; i < 1000000; i++) { result +=i; } console.timeEnd('operation'); // Count for (let i=0; i
+                    < 5; i++) { console.count('loop iteration'); } console.countReset('loop iteration'); // Stack trace
+                    console.trace('Current stack trace'); } static assertions() { const user={ name: 'John' , age: 30 };
+                    // Assertions console.assert(user.name==='John' , 'User name should be John' );
+                    console.assert(user.age>= 18, 'User should be an adult');
+                    console.assert(user.email, 'User should have an email', user);
+                    }
+
+                    static conditionalLogging() {
+                    const DEBUG = true;
+                    const VERBOSE = false;
+
+                    if (DEBUG) {
+                    console.log('Debug mode enabled');
+                    }
+
+                    if (VERBOSE) {
+                    console.log('Verbose logging enabled');
+                    }
+                    }
+                    }
+
+                    // Advanced Debugging Utilities
+                    class DebugUtils {
+                    static deepClone(obj) {
+                    // Safe deep clone for debugging
+                    try {
+                    return JSON.parse(JSON.stringify(obj));
+                    } catch (error) {
+                    console.warn('Could not deep clone object:', error);
+                    return obj;
+                    }
+                    }
+
+                    static compareObjects(obj1, obj2, path = '') {
+                    const differences = [];
+
+                    for (const key in obj1) {
+                    const currentPath = path ? `${path}.${key}` : key;
+
+                    if (!(key in obj2)) {
+                    differences.push(`Missing key: ${currentPath}`);
+                    } else if (typeof obj1[key] === 'object' && obj1[key] !== null) {
+                    differences.push(...this.compareObjects(obj1[key], obj2[key], currentPath));
+                    } else if (obj1[key] !== obj2[key]) {
+                    differences.push(`Different value at ${currentPath}: ${obj1[key]} vs ${obj2[key]}`);
+                    }
+                    }
+
+                    for (const key in obj2) {
+                    if (!(key in obj1)) {
+                    const currentPath = path ? `${path}.${key}` : key;
+                    differences.push(`Extra key: ${currentPath}`);
+                    }
+                    }
+
+                    return differences;
+                    }
+
+                    static getObjectInfo(obj) {
+                    return {
+                    type: typeof obj,
+                    constructor: obj?.constructor?.name,
+                    keys: Object.keys(obj || {}),
+                    length: obj?.length,
+                    size: obj?.size,
+                    isArray: Array.isArray(obj),
+                    isNull: obj === null,
+                    isUndefined: obj === undefined,
+                    toString: String(obj)
+                    };
+                    }
+
+                    static functionProfiler(fn, name = 'function') {
+                    return function(...args) {
+                    console.time(`${name} execution`);
+                    console.log(`${name} called with:`, args);
+
+                    try {
+                    const result = fn.apply(this, args);
+                    console.log(`${name} returned:`, result);
+                    return result;
+                    } catch (error) {
+                    console.error(`${name} threw error:`, error);
+                    throw error;
+                    } finally {
+                    console.timeEnd(`${name} execution`);
+                    }
+                    };
+                    }
+
+                    static memoryUsage() {
+                    if (performance.memory) {
+                    return {
+                    used: Math.round(performance.memory.usedJSHeapSize / 1024 / 1024) + ' MB',
+                    total: Math.round(performance.memory.totalJSHeapSize / 1024 / 1024) + ' MB',
+                    limit: Math.round(performance.memory.jsHeapSizeLimit / 1024 / 1024) + ' MB'
+                    };
+                    }
+                    return 'Memory info not available';
+                    }
+                    }
+            </div>
+
+            <h3>2. Breakpoints & Step Debugging</h3>
+            <div class="code-block">
+                // Programmatic Breakpoints
+                class BreakpointDebugging {
+                static conditionalBreakpoint(condition, message = 'Breakpoint hit') {
+                if (condition) {
+                console.log(message);
+                debugger; // Programmatic breakpoint
+                }
+                }
+
+                static logBreakpoint(variable, expectedValue, message) {
+                console.log(`Checking ${message}:`, variable);
+                if (variable === expectedValue) {
+                console.log(`✓ ${message} matches expected value`);
+                } else {
+                console.warn(`✗ ${message} does not match expected value`);
+                console.log('Expected:', expectedValue);
+                console.log('Actual:', variable);
+                debugger;
+                }
+                }
+
+                static stepByStepExecution() {
+                console.log('Step 1: Initialize data');
+                const data = { count: 0 };
+
+                console.log('Step 2: Process data');
+                for (let i = 0; i < 5; i++) { data.count +=i; console.log(`Loop iteration ${i}, count: ${data.count}`);
+                    } console.log('Step 3: Validate result'); if (data.count !==10) { console.error('Unexpected
+                    result!'); debugger; } console.log('Step 4: Return result'); return data.count; } } // Source Map
+                    Debugging class SourceMapUtils { static generateSourceMap(originalCode, transformedCode) { // Mock
+                    source map generation return { version: 3, sources: ['original.js'], names: ['original', 'function'
+                    ], mappings: 'AAAA,SAAS,QAAQ' , sourcesContent: [originalCode] }; } static
+                    parseStackTrace(stackTrace) { const lines=stackTrace.split('\n'); return lines.map(line=> {
+                    const match = line.match(/at (.+) \((.+):(\d+):(\d+)\)/);
+                    if (match) {
+                    return {
+                    function: match[1],
+                    file: match[2],
+                    line: parseInt(match[3]),
+                    column: parseInt(match[4])
+                    };
+                    }
+                    return { raw: line };
+                    });
+                    }
+                    }
+            </div>
+
+            <div class="demo-container">
+                <h4>🔍 Debugging Demo:</h4>
+                <div class="demo-grid">
+                    <div class="demo-card">
+                        <button class="btn" onclick="demoConsoleDebugging()">Console Debugging</button>
+                        <button class="btn btn-warning" onclick="demoBreakpoints()">Breakpoints</button>
+                        <div id="debugOutput" class="output"></div>
+                    </div>
+                    <div class="demo-card">
+                        <button class="btn" onclick="demoDebugUtils()">Debug Utils</button>
+                        <button class="btn btn-success" onclick="memoryCheck()">Memory Check</button>
+                        <div id="utilsOutput" class="output"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Performance Monitoring</h2>
+
+            <h3>1. Performance Measurement</h3>
+            <div class="code-block">
+                class PerformanceMonitor {
+                constructor() {
+                this.metrics = new Map();
+                this.observers = [];
+                this.isSupported = 'performance' in window;
+                }
+
+                // High-precision timing
+                startTimer(name) {
+                if (!this.isSupported) return;
+
+                const start = performance.now();
+                this.metrics.set(name, { start, end: null, duration: null });
+                console.log(`⏱️ Started timer: ${name}`);
+                }
+
+                endTimer(name) {
+                if (!this.isSupported) return;
+
+                const metric = this.metrics.get(name);
+                if (!metric) {
+                console.warn(`Timer '${name}' not found`);
+                return;
+                }
+
+                metric.end = performance.now();
+                metric.duration = metric.end - metric.start;
+
+                console.log(`⏱️ Timer '${name}': ${metric.duration.toFixed(2)}ms`);
+                return metric.duration;
+                }
+
+                // Function execution timing
+                measureFunction(fn, name = 'function') {
+                return (...args) => {
+                this.startTimer(name);
+                try {
+                const result = fn.apply(this, args);
+
+                // Handle async functions
+                if (result && typeof result.then === 'function') {
+                return result.finally(() => this.endTimer(name));
+                }
+
+                this.endTimer(name);
+                return result;
+                } catch (error) {
+                this.endTimer(name);
+                throw error;
+                }
+                };
+                }
+
+                // Memory usage monitoring
+                getMemoryUsage() {
+                if (performance.memory) {
+                return {
+                used: performance.memory.usedJSHeapSize,
+                total: performance.memory.totalJSHeapSize,
+                limit: performance.memory.jsHeapSizeLimit,
+                usedMB: Math.round(performance.memory.usedJSHeapSize / 1024 / 1024),
+                totalMB: Math.round(performance.memory.totalJSHeapSize / 1024 / 1024),
+                limitMB: Math.round(performance.memory.jsHeapSizeLimit / 1024 / 1024)
+                };
+                }
+                return null;
+                }
+
+                // Performance entries
+                getPerformanceEntries() {
+                if (!this.isSupported) return [];
+
+                return {
+                navigation: performance.getEntriesByType('navigation'),
+                resource: performance.getEntriesByType('resource'),
+                measure: performance.getEntriesByType('measure'),
+                mark: performance.getEntriesByType('mark')
+                };
+                }
+
+                // Long task detection
+                observeLongTasks() {
+                if ('PerformanceObserver' in window) {
+                const observer = new PerformanceObserver((list) => {
+                list.getEntries().forEach((entry) => {
+                console.warn(`🐌 Long task detected: ${entry.duration.toFixed(2)}ms`, entry);
+                });
+                });
+
+                observer.observe({ entryTypes: ['longtask'] });
+                this.observers.push(observer);
+                }
+                }
+
+                // Layout shift detection
+                observeLayoutShifts() {
+                if ('PerformanceObserver' in window) {
+                const observer = new PerformanceObserver((list) => {
+                list.getEntries().forEach((entry) => {
+                if (entry.hadRecentInput) return;
+                console.warn(`📐 Layout shift detected: ${entry.value.toFixed(4)}`, entry);
+                });
+                });
+
+                observer.observe({ entryTypes: ['layout-shift'] });
+                this.observers.push(observer);
+                }
+                }
+
+                // Resource timing
+                analyzeResourceTiming() {
+                const resources = performance.getEntriesByType('resource');
+                const analysis = {
+                total: resources.length,
+                slow: [],
+                byType: {},
+                totalSize: 0
+                };
+
+                resources.forEach(resource => {
+                const duration = resource.responseEnd - resource.startTime;
+
+                if (duration > 1000) { // Slow resources (>1s)
+                analysis.slow.push({
+                name: resource.name,
+                duration: duration.toFixed(2),
+                size: resource.transferSize
+                });
+                }
+
+                const type = resource.name.split('.').pop() || 'unknown';
+                analysis.byType[type] = (analysis.byType[type] || 0) + 1;
+                analysis.totalSize += resource.transferSize || 0;
+                });
+
+                return analysis;
+                }
+
+                // FPS monitoring
+                startFPSMonitoring() {
+                let lastTime = performance.now();
+                let frameCount = 0;
+                let fps = 0;
+
+                const measureFPS = () => {
+                const currentTime = performance.now();
+                frameCount++;
+
+                if (currentTime - lastTime >= 1000) {
+                fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
+                console.log(`📊 FPS: ${fps}`);
+                frameCount = 0;
+                lastTime = currentTime;
+                }
+
+                requestAnimationFrame(measureFPS);
+                };
+
+                measureFPS();
+                }
+
+                // Cleanup
+                disconnect() {
+                this.observers.forEach(observer => observer.disconnect());
+                this.observers = [];
+                }
+
+                // Get all metrics
+                getAllMetrics() {
+                const metrics = {};
+                this.metrics.forEach((value, key) => {
+                metrics[key] = value;
+                });
+                return metrics;
+                }
+                }
+
+                // Resource Monitoring
+                class ResourceMonitor {
+                static checkResourceLoading() {
+                return new Promise((resolve) => {
+                const resources = {
+                scripts: document.scripts.length,
+                stylesheets: document.styleSheets.length,
+                images: document.images.length,
+                loaded: 0,
+                failed: 0
+                };
+
+                // Check images
+                Array.from(document.images).forEach(img => {
+                if (img.complete) {
+                img.naturalWidth > 0 ? resources.loaded++ : resources.failed++;
+                }
+                });
+
+                resolve(resources);
+                });
+                }
+
+                static getNetworkInformation() {
+                if ('connection' in navigator) {
+                return {
+                effectiveType: navigator.connection.effectiveType,
+                downlink: navigator.connection.downlink,
+                rtt: navigator.connection.rtt,
+                saveData: navigator.connection.saveData
+                };
+                }
+                return null;
+                }
+                }
+            </div>
+
+            <div class="demo-container">
+                <h4>🎯 Performance Monitoring Demo:</h4>
+                <div class="demo-grid">
+                    <div class="demo-card">
+                        <button class="btn" onclick="demoPerformanceMonitor()">Start Monitoring</button>
+                        <button class="btn btn-warning" onclick="simulateSlowOperation()">Slow Operation</button>
+                        <div class="performance-monitor" id="performanceMetrics"></div>
+                    </div>
+                    <div class="demo-card">
+                        <button class="btn" onclick="analyzeResources()">Analyze Resources</button>
+                        <button class="btn btn-success" onclick="checkNetworkInfo()">Network Info</button>
+                        <div id="resourceOutput" class="output"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Production Debugging</h2>
+
+            <h3>1. Error Reporting & Logging</h3>
+            <div class="code-block">
+                class ProductionErrorReporter {
+                constructor(config = {}) {
+                this.config = {
+                apiEndpoint: config.apiEndpoint || '/api/errors',
+                userId: config.userId || 'anonymous',
+                sessionId: config.sessionId || this.generateSessionId(),
+                environment: config.environment || 'production',
+                version: config.version || '1.0.0',
+                maxRetries: config.maxRetries || 3,
+                batchSize: config.batchSize || 10,
+                flushInterval: config.flushInterval || 30000 // 30 seconds
+                };
+
+                this.errorQueue = [];
+                this.isOnline = navigator.onLine;
+                this.setupEventListeners();
+                this.startBatchProcessor();
+                }
+
+                generateSessionId() {
+                return Date.now().toString(36) + Math.random().toString(36).substr(2);
+                }
+
+                setupEventListeners() {
+                // Global error handler
+                window.addEventListener('error', (event) => {
+                this.reportError({
+                type: 'javascript',
+                message: event.message,
+                filename: event.filename,
+                lineno: event.lineno,
+                colno: event.colno,
+                stack: event.error?.stack,
+                timestamp: new Date().toISOString()
+                });
+                });
+
+                // Unhandled promise rejection
+                window.addEventListener('unhandledrejection', (event) => {
+                this.reportError({
+                type: 'promise',
+                message: event.reason?.message || 'Unhandled promise rejection',
+                stack: event.reason?.stack,
+                timestamp: new Date().toISOString()
+                });
+                });
+
+                // Network status
+                window.addEventListener('online', () => {
+                this.isOnline = true;
+                this.flushErrorQueue();
+                });
+
+                window.addEventListener('offline', () => {
+                this.isOnline = false;
+                });
+                }
+
+                reportError(errorData) {
+                const enrichedError = {
+                ...errorData,
+                sessionId: this.config.sessionId,
+                userId: this.config.userId,
+                environment: this.config.environment,
+                version: this.config.version,
+                userAgent: navigator.userAgent,
+                url: window.location.href,
+                timestamp: errorData.timestamp || new Date().toISOString(),
+                breadcrumbs: this.getBreadcrumbs()
+                };
+
+                this.errorQueue.push(enrichedError);
+                console.error('Error reported:', enrichedError);
+
+                // Immediate send for critical errors
+                if (this.isCriticalError(errorData)) {
+                this.flushErrorQueue();
+                }
+                }
+
+                isCriticalError(error) {
+                const criticalMessages = [
+                'Script error',
+                'ChunkLoadError',
+                'Network Error',
+                'SecurityError'
+                ];
+
+                return criticalMessages.some(msg =>
+                error.message?.includes(msg) || error.type === 'security'
+                );
+                }
+
+                getBreadcrumbs() {
+                // Simple breadcrumb implementation
+                const breadcrumbs = JSON.parse(sessionStorage.getItem('breadcrumbs') || '[]');
+                return breadcrumbs.slice(-10); // Last 10 breadcrumbs
+                }
+
+                addBreadcrumb(action, data = {}) {
+                const breadcrumbs = JSON.parse(sessionStorage.getItem('breadcrumbs') || '[]');
+                breadcrumbs.push({
+                action,
+                data,
+                timestamp: new Date().toISOString()
+                });
+
+                // Keep only last 50 breadcrumbs
+                if (breadcrumbs.length > 50) {
+                breadcrumbs.shift();
+                }
+
+                sessionStorage.setItem('breadcrumbs', JSON.stringify(breadcrumbs));
+                }
+
+                async flushErrorQueue() {
+                if (this.errorQueue.length === 0 || !this.isOnline) return;
+
+                const errors = this.errorQueue.splice(0, this.config.batchSize);
+
+                try {
+                await this.sendErrors(errors);
+                } catch (error) {
+                console.warn('Failed to send errors:', error);
+                // Put errors back in queue
+                this.errorQueue.unshift(...errors);
+                }
+                }
+
+                async sendErrors(errors) {
+                const response = await fetch(this.config.apiEndpoint, {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ errors })
+                });
+
+                if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                return response.json();
+                }
+
+                startBatchProcessor() {
+                setInterval(() => {
+                this.flushErrorQueue();
+                }, this.config.flushInterval);
+                }
+
+                // Manual error reporting
+                captureException(error, context = {}) {
+                this.reportError({
+                type: 'manual',
+                message: error.message,
+                stack: error.stack,
+                context,
+                timestamp: new Date().toISOString()
+                });
+                }
+
+                // Performance monitoring
+                capturePerformanceMetrics() {
+                const metrics = {
+                navigation: performance.getEntriesByType('navigation')[0],
+                memory: performance.memory ? {
+                used: performance.memory.usedJSHeapSize,
+                total: performance.memory.totalJSHeapSize,
+                limit: performance.memory.jsHeapSizeLimit
+                } : null,
+                timestamp: new Date().toISOString()
+                };
+
+                this.reportError({
+                type: 'performance',
+                message: 'Performance metrics',
+                context: metrics,
+                timestamp: new Date().toISOString()
+                });
+                }
+                }
+
+                // A/B Testing & Feature Flags
+                class FeatureFlags {
+                constructor() {
+                this.flags = new Map();
+                this.userId = this.getUserId();
+                }
+
+                getUserId() {
+                return localStorage.getItem('userId') || 'anonymous';
+                }
+
+                setFlag(name, enabled) {
+                this.flags.set(name, enabled);
+                }
+
+                isEnabled(name) {
+                return this.flags.get(name) || false;
+                }
+
+                // Percentage-based rollout
+                isEnabledForUser(name, percentage = 50) {
+                const hash = this.hashString(this.userId + name);
+                return (hash % 100) < percentage; } hashString(str) { let hash=0; for (let i=0; i < str.length; i++) {
+                    const char=str.charCodeAt(i); hash=((hash << 5) - hash) + char; hash=hash & hash; // Convert to
+                    32-bit integer } return Math.abs(hash); } // Debug wrapper debugFeature(name, callback) { if
+                    (this.isEnabled('debug_' + name)) { console.group(`🚩 Feature: ${name}`); console.log('User ID:',
+                    this.userId); console.log('Feature enabled:', this.isEnabled(name)); try { const result=callback();
+                    console.log('Feature result:', result); return result; } catch (error) { console.error('Feature
+                    error:', error); throw error; } finally { console.groupEnd(); } } else { return callback(); } } }
+                    </div>
+
+                    <div class="demo-container">
+                        <h4>🔧 Production Debugging Demo:</h4>
+                        <div class="demo-grid">
+                            <div class="demo-card">
+                                <button class="btn" onclick="demoErrorReporting()">Test Error Reporting</button>
+                                <button class="btn btn-warning" onclick="simulateError()">Simulate Error</button>
+                                <div id="errorReportOutput" class="output"></div>
+                            </div>
+                            <div class="demo-card">
+                                <button class="btn" onclick="demoFeatureFlags()">Test Feature Flags</button>
+                                <button class="btn btn-success" onclick="addBreadcrumb()">Add Breadcrumb</button>
+                                <div id="featureFlagsOutput" class="output"></div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+            <div class="section">
+                <h2>🚀 Best Practices & Tips</h2>
+
+                <div class="tip">
+                    <h3>💡 Senior Developer Tips:</h3>
+                    <ul>
+                        <li><strong>Fail Fast:</strong> Validate inputs early and throw meaningful errors</li>
+                        <li><strong>Defensive Programming:</strong> Always assume external data is invalid</li>
+                        <li><strong>Error Boundaries:</strong> Use error boundaries in React or similar patterns</li>
+                        <li><strong>Logging Levels:</strong> Use appropriate log levels (debug, info, warn, error)</li>
+                        <li><strong>Context Preservation:</strong> Include relevant context in error messages</li>
+                        <li><strong>Performance Monitoring:</strong> Monitor both errors and performance metrics</li>
+                    </ul>
+                </div>
+
+                <div class="warning">
+                    <h3>⚠️ Common Debugging Mistakes:</h3>
+                    <ul>
+                        <li>Leaving debugger statements in production code</li>
+                        <li>Catching errors without proper handling or logging</li>
+                        <li>Not providing enough context in error messages</li>
+                        <li>Ignoring browser developer tools warnings</li>
+                        <li>Not testing error scenarios during development</li>
+                        <li>Over-relying on try-catch without understanding the root cause</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📚 Resources & Next Steps</h2>
+                <ul>
+                    <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error"
+                            target="_blank">MDN Error Reference</a></li>
+                    <li><a href="https://developers.google.com/web/tools/chrome-devtools" target="_blank">Chrome
+                            DevTools</a></li>
+                    <li><a href="https://sentry.io/" target="_blank">Sentry - Error Tracking</a></li>
+                    <li><a href="https://web.dev/debug/" target="_blank">Web.dev Debugging Guide</a></li>
+                </ul>
+
+                <p><strong>Next:</strong> Continue to <a href="08_testing_code_quality.html">Testing & Code Quality</a>
+                    to learn comprehensive testing strategies.</p>
+            </div>
+        </div>
+
+        <script>
+            // Global instances
+            const errorHandler = new ErrorHandler();
+            const performanceMonitor = new PerformanceMonitor();
+            const errorReporter = new ProductionErrorReporter();
+            const featureFlags = new FeatureFlags();
+
+            // Demo Functions
+            function demoErrorTypes() {
+                const output = document.getElementById('errorOutput');
+                let result = '';
+
+                try {
+                    result += '=== Testing Error Types ===\n';
+
+                    // Reference Error
+                    const refError = ErrorTypeExamples.referenceErrorExample();
+                    result += `ReferenceError: ${refError.message}\n`;
+
+                    // Type Error
+                    const typeError = ErrorTypeExamples.typeErrorExample();
+                    result += `TypeError: ${typeError.message}\n`;
+
+                    // Range Error
+                    const rangeError = ErrorTypeExamples.rangeErrorExample();
+                    result += `RangeError: ${rangeError.message}\n`;
+
+                    // URI Error
+                    const uriError = ErrorTypeExamples.uriErrorExample();
+                    result += `URIError: ${uriError.message}\n`;
+
+                } catch (error) {
+                    result += `Unexpected error: ${error.message}\n`;
+                }
+
+                output.textContent = result;
+            }
+
+            function demoCustomErrors() {
+                const output = document.getElementById('errorOutput');
+                let result = '';
+
+                try {
+                    result += '=== Custom Errors Demo ===\n';
+
+                    // Validation Error
+                    try {
+                        throw new ValidationError('Email is required', 'email');
+                    } catch (error) {
+                        result += `ValidationError: ${error.message} (field: ${error.field})\n`;
+                    }
+
+                    // Network Error
+                    try {
+                        throw new NetworkError('Request failed', 404, '/api/users');
+                    } catch (error) {
+                        result += `NetworkError: ${error.message} (status: ${error.status})\n`;
+                    }
+
+                    // Business Logic Error
+                    try {
+                        throw new BusinessLogicError('Insufficient funds', 'INSUFFICIENT_FUNDS', { balance: 100, requested: 200 });
+                    } catch (error) {
+                        result += `BusinessLogicError: ${error.message} (code: ${error.code})\n`;
+                    }
+
+                } catch (error) {
+                    result += `Unexpected error: ${error.message}\n`;
+                }
+
+                output.textContent = result;
+            }
+
+            function demoErrorHandler() {
+                const output = document.getElementById('handlerOutput');
+                let result = '';
+
+                result += '=== Advanced Error Handler Demo ===\n';
+
+                // Test different error types
+                const validationResult = errorHandler.handleOperation(() => {
+                    throw new ValidationError('Name is required', 'name');
+                });
+                result += `Validation Result: ${JSON.stringify(validationResult)}\n\n`;
+
+                const networkResult = errorHandler.handleOperation(() => {
+                    throw new NetworkError('Server unavailable', 503, '/api/data');
+                });
+                result += `Network Result: ${JSON.stringify(networkResult)}\n\n`;
+
+                const unknownResult = errorHandler.handleOperation(() => {
+                    throw new Error('Something went wrong');
+                });
+                result += `Unknown Error Result: ${JSON.stringify(unknownResult)}\n`;
+
+                output.textContent = result;
+            }
+
+            function viewErrorLog() {
+                const output = document.getElementById('handlerOutput');
+                const errorLog = errorHandler.getErrorLog();
+
+                if (errorLog.length === 0) {
+                    output.textContent = 'No errors logged yet. Try running other error demos first.';
+                } else {
+                    output.textContent = `Error Log (${errorLog.length} entries):\n\n${JSON.stringify(errorLog, null, 2)}`;
+                }
+            }
+
+            function demoConsoleDebugging() {
+                const output = document.getElementById('debugOutput');
+
+                // Run console debugging examples
+                ConsoleDebugger.basicLogging();
+                ConsoleDebugger.advancedLogging();
+                ConsoleDebugger.groupedLogging();
+                ConsoleDebugger.timingAndProfiling();
+                ConsoleDebugger.assertions();
+
+                output.textContent = 'Console debugging examples executed. Check browser console for output.';
+            }
+
+            function demoBreakpoints() {
+                const output = document.getElementById('debugOutput');
+
+                // Run breakpoint examples
+                BreakpointDebugging.conditionalBreakpoint(true, 'Conditional breakpoint triggered');
+                BreakpointDebugging.logBreakpoint(42, 42, 'Answer to everything');
+                const result = BreakpointDebugging.stepByStepExecution();
+
+                output.textContent = `Breakpoint demo completed. Result: ${result}`;
+            }
+
+            function demoDebugUtils() {
+                const output = document.getElementById('utilsOutput');
+                let result = '';
+
+                // Test debug utilities
+                const obj1 = { name: 'John', age: 30, active: true };
+                const obj2 = { name: 'Jane', age: 30, active: false };
+
+                result += '=== Debug Utils Demo ===\n';
+                result += `Object 1 info: ${JSON.stringify(DebugUtils.getObjectInfo(obj1))}\n\n`;
+
+                const differences = DebugUtils.compareObjects(obj1, obj2);
+                result += `Differences: ${differences.join(', ')}\n\n`;
+
+                // Test function profiler
+                const slowFunction = DebugUtils.functionProfiler((n) => {
+                    let sum = 0;
+                    for (let i = 0; i < n; i++) {
+                        sum += i;
+                    }
+                    return sum;
+                }, 'slowFunction');
+
+                const profilerResult = slowFunction(10000);
+                result += `Profiler result: ${profilerResult}\n`;
+
+                output.textContent = result;
+            }
+
+            function memoryCheck() {
+                const output = document.getElementById('utilsOutput');
+                const memoryInfo = DebugUtils.memoryUsage();
+
+                output.textContent = `Memory Usage:\n${JSON.stringify(memoryInfo, null, 2)}`;
+            }
+
+            function demoPerformanceMonitor() {
+                const output = document.getElementById('performanceMetrics');
+
+                // Start various monitoring
+                performanceMonitor.observeLongTasks();
+                performanceMonitor.observeLayoutShifts();
+                performanceMonitor.startFPSMonitoring();
+
+                // Update metrics display
+                const updateMetrics = () => {
+                    const memory = performanceMonitor.getMemoryUsage();
+                    const metrics = performanceMonitor.getAllMetrics();
+
+                    let html = '<h4>Performance Metrics</h4>';
+
+                    if (memory) {
+                        html += `<div class="metric">
+                        <span class="metric-name">Memory Used</span>
+                        <span class="metric-value">${memory.usedMB} MB</span>
+                    </div>`;
+                        html += `<div class="metric">
+                        <span class="metric-name">Memory Total</span>
+                        <span class="metric-value">${memory.totalMB} MB</span>
+                    </div>`;
+                    }
+
+                    Object.entries(metrics).forEach(([name, metric]) => {
+                        if (metric.duration) {
+                            html += `<div class="metric">
+                            <span class="metric-name">${name}</span>
+                            <span class="metric-value">${metric.duration.toFixed(2)}ms</span>
+                        </div>`;
+                        }
+                    });
+
+                    output.innerHTML = html;
+                };
+
+                updateMetrics();
+                setInterval(updateMetrics, 2000);
+            }
+
+            function simulateSlowOperation() {
+                performanceMonitor.startTimer('slowOperation');
+
+                // Simulate slow operation
+                setTimeout(() => {
+                    let result = 0;
+                    for (let i = 0; i < 1000000; i++) {
+                        result += Math.random();
+                    }
+                    performanceMonitor.endTimer('slowOperation');
+                    console.log('Slow operation completed:', result);
+                }, 100);
+            }
+
+            function analyzeResources() {
+                const output = document.getElementById('resourceOutput');
+                const analysis = performanceMonitor.analyzeResourceTiming();
+
+                output.textContent = `Resource Analysis:\n${JSON.stringify(analysis, null, 2)}`;
+            }
+
+            function checkNetworkInfo() {
+                const output = document.getElementById('resourceOutput');
+                const networkInfo = ResourceMonitor.getNetworkInformation();
+
+                if (networkInfo) {
+                    output.textContent = `Network Information:\n${JSON.stringify(networkInfo, null, 2)}`;
+                } else {
+                    output.textContent = 'Network Information API not supported';
+                }
+            }
+
+            function demoErrorReporting() {
+                const output = document.getElementById('errorReportOutput');
+
+                // Test error reporting
+                errorReporter.captureException(new Error('Test error'), {
+                    component: 'demo',
+                    action: 'test_error_reporting'
+                });
+
+                output.textContent = 'Test error reported. Check console for details.';
+            }
+
+            function simulateError() {
+                const output = document.getElementById('errorReportOutput');
+
+                // Simulate different types of errors
+                const errorTypes = [
+                    () => { throw new Error('Simulated JavaScript error'); },
+                    () => { return Promise.reject(new Error('Simulated promise rejection')); },
+                    () => { undefinedVariable.someMethod(); }
+                ];
+
+                const randomError = errorTypes[Math.floor(Math.random() * errorTypes.length)];
+
+                try {
+                    randomError();
+                } catch (error) {
+                    output.textContent = `Simulated error: ${error.message}`;
+                }
+            }
+
+            function demoFeatureFlags() {
+                const output = document.getElementById('featureFlagsOutput');
+                let result = '';
+
+                // Set some feature flags
+                featureFlags.setFlag('newFeature', true);
+                featureFlags.setFlag('experimentalUI', false);
+                featureFlags.setFlag('debug_newFeature', true);
+
+                result += '=== Feature Flags Demo ===\n';
+                result += `New Feature: ${featureFlags.isEnabled('newFeature')}\n`;
+                result += `Experimental UI: ${featureFlags.isEnabled('experimentalUI')}\n`;
+                result += `User-based rollout (50%): ${featureFlags.isEnabledForUser('betaFeature', 50)}\n`;
+
+                // Test debug feature
+                const debugResult = featureFlags.debugFeature('newFeature', () => {
+                    return 'Feature executed successfully';
+                });
+                result += `Debug Feature Result: ${debugResult}\n`;
+
+                output.textContent = result;
+            }
+
+            function addBreadcrumb() {
+                const output = document.getElementById('featureFlagsOutput');
+
+                errorReporter.addBreadcrumb('user_action', {
+                    action: 'button_click',
+                    element: 'breadcrumb_demo',
+                    timestamp: new Date().toISOString()
+                });
+
+                const breadcrumbs = errorReporter.getBreadcrumbs();
+                output.textContent = `Breadcrumbs (${breadcrumbs.length}):\n${JSON.stringify(breadcrumbs, null, 2)}`;
+            }
+
+            // Initialize demos on page load
+            document.addEventListener('DOMContentLoaded', () => {
+                console.log('Error Handling & Debugging demo loaded');
+
+                // Add initial breadcrumb
+                errorReporter.addBreadcrumb('page_load', {
+                    page: 'error_handling_debugging',
+                    timestamp: new Date().toISOString()
+                });
+            });
+        </script>
+</body>
+
+</html>
