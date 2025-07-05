@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch API - Complete Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.3em;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 30px 0;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-section h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 2.2em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .content-section h3 {
+            color: #2d3748;
+            margin: 30px 0 15px 0;
+            font-size: 1.5em;
+        }
+
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            position: relative;
+            border-left: 4px solid #667eea;
+        }
+
+        .code-block::before {
+            content: "JavaScript";
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 0.8em;
+            color: #a0aec0;
+        }
+
+        .interactive-demo {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            color: white;
+        }
+
+        .demo-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .demo-controls button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .demo-controls button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .demo-controls button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .demo-controls input,
+        .demo-controls select {
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 1em;
+        }
+
+        .result-display {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-family: 'Courier New', monospace;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .method-card {
+            background: #f8f9fa;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .method-card h4 {
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .method-card .method-type {
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .status-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .status-error {
+            background: #ef4444;
+            color: white;
+        }
+
+        .status-loading {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .best-practices {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            color: #2d3748;
+        }
+
+        .best-practices h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .best-practices ul {
+            padding-left: 20px;
+        }
+
+        .best-practices li {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .loading-indicator {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .response-viewer {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid #4a5568;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .highlight {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .demo-controls {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>Fetch API</h1>
+            <p>Master modern HTTP requests in JavaScript - From basic GET to advanced patterns</p>
+        </div>
+
+        <div class="content-section">
+            <h2>🌐 What is the Fetch API?</h2>
+            <p>The Fetch API provides a modern, promise-based interface for making HTTP requests. It's the successor to
+                XMLHttpRequest and offers a cleaner, more powerful way to handle network requests.</p>
+
+            <h3>Key Features</h3>
+            <ul>
+                <li><strong>Promise-based:</strong> Works seamlessly with async/await</li>
+                <li><strong>Streaming support:</strong> Handle large responses efficiently</li>
+                <li><strong>Request/Response objects:</strong> Rich API for request/response manipulation</li>
+                <li><strong>CORS support:</strong> Built-in cross-origin request handling</li>
+                <li><strong>Service Worker friendly:</strong> Perfect for PWAs and caching</li>
+            </ul>
+
+            <h3>Basic Syntax</h3>
+            <div class="code-block">
+                // Basic GET request
+                fetch('https://api.example.com/data')
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.error('Error:', error));
+
+                // With async/await
+                async function fetchData() {
+                try {
+                const response = await fetch('https://api.example.com/data');
+                const data = await response.json();
+                console.log(data);
+                } catch (error) {
+                console.error('Error:', error);
+                }
+                }
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🚀 HTTP Methods</h2>
+            <p>The Fetch API supports all standard HTTP methods through the options parameter.</p>
+
+            <div class="method-grid">
+                <div class="method-card">
+                    <h4>GET <span class="method-type">READ</span></h4>
+                    <p>Retrieve data from the server</p>
+                </div>
+                <div class="method-card">
+                    <h4>POST <span class="method-type">CREATE</span></h4>
+                    <p>Send data to create a new resource</p>
+                </div>
+                <div class="method-card">
+                    <h4>PUT <span class="method-type">UPDATE</span></h4>
+                    <p>Update an existing resource completely</p>
+                </div>
+                <div class="method-card">
+                    <h4>PATCH <span class="method-type">MODIFY</span></h4>
+                    <p>Partially update an existing resource</p>
+                </div>
+                <div class="method-card">
+                    <h4>DELETE <span class="method-type">REMOVE</span></h4>
+                    <p>Delete a resource from the server</p>
+                </div>
+                <div class="method-card">
+                    <h4>HEAD <span class="method-type">HEADERS</span></h4>
+                    <p>Get headers without the response body</p>
+                </div>
+            </div>
+
+            <h3>GET Request Examples</h3>
+            <div class="code-block">
+                // Simple GET request
+                const response = await fetch('https://jsonplaceholder.typicode.com/posts/1');
+                const post = await response.json();
+                console.log(post);
+
+                // GET with query parameters
+                const params = new URLSearchParams({
+                page: 1,
+                limit: 10,
+                sort: 'date'
+                });
+                const response2 = await fetch(`https://api.example.com/posts?${params}`);
+                const posts = await response2.json();
+
+                // GET with headers
+                const response3 = await fetch('https://api.example.com/protected', {
+                method: 'GET',
+                headers: {
+                'Authorization': 'Bearer your-token-here',
+                'Content-Type': 'application/json'
+                }
+                });
+            </div>
+
+            <h3>POST Request Examples</h3>
+            <div class="code-block">
+                // POST with JSON data
+                const newPost = {
+                title: 'My New Post',
+                body: 'This is the content of my post',
+                userId: 1
+                };
+
+                const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newPost)
+                });
+
+                const createdPost = await response.json();
+                console.log(createdPost);
+
+                // POST with form data
+                const formData = new FormData();
+                formData.append('name', 'John Doe');
+                formData.append('email', 'john@example.com');
+                formData.append('avatar', fileInput.files[0]);
+
+                const response2 = await fetch('https://api.example.com/users', {
+                method: 'POST',
+                body: formData // No need to set Content-Type with FormData
+                });
+            </div>
+
+            <h3>PUT and PATCH Examples</h3>
+            <div class="code-block">
+                // PUT - complete update
+                const updatedPost = {
+                id: 1,
+                title: 'Updated Title',
+                body: 'Updated content',
+                userId: 1
+                };
+
+                const putResponse = await fetch('https://jsonplaceholder.typicode.com/posts/1', {
+                method: 'PUT',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedPost)
+                });
+
+                // PATCH - partial update
+                const partialUpdate = {
+                title: 'New Title Only'
+                };
+
+                const patchResponse = await fetch('https://jsonplaceholder.typicode.com/posts/1', {
+                method: 'PATCH',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(partialUpdate)
+                });
+            </div>
+
+            <h3>DELETE Example</h3>
+            <div class="code-block">
+                // DELETE request
+                const deleteResponse = await fetch('https://jsonplaceholder.typicode.com/posts/1', {
+                method: 'DELETE'
+                });
+
+                if (deleteResponse.ok) {
+                console.log('Post deleted successfully');
+                } else {
+                console.error('Failed to delete post');
+                }
+            </div>
+
+            <div class="interactive-demo">
+                <h3>🎮 Interactive HTTP Methods Demo</h3>
+                <div class="demo-controls">
+                    <select id="httpMethod">
+                        <option value="GET">GET</option>
+                        <option value="POST">POST</option>
+                        <option value="PUT">PUT</option>
+                        <option value="PATCH">PATCH</option>
+                        <option value="DELETE">DELETE</option>
+                    </select>
+                    <input type="text" id="apiUrl" placeholder="API URL"
+                        value="https://jsonplaceholder.typicode.com/posts/1">
+                    <button onclick="makeRequest()">Make Request</button>
+                    <button onclick="clearResults()">Clear Results</button>
+                </div>
+                <div class="result-display" id="httpResult">
+                    Select a method and click "Make Request" to see results...
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔧 Request Configuration</h2>
+            <p>The Fetch API provides extensive configuration options for customizing requests.</p>
+
+            <h3>Request Headers</h3>
+            <div class="code-block">
+                // Setting headers
+                const response = await fetch('https://api.example.com/data', {
+                method: 'GET',
+                headers: {
+                'Authorization': 'Bearer your-token',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-Custom-Header': 'custom-value'
+                }
+                });
+
+                // Using Headers constructor
+                const headers = new Headers();
+                headers.append('Authorization', 'Bearer your-token');
+                headers.append('Content-Type', 'application/json');
+
+                const response2 = await fetch('https://api.example.com/data', {
+                method: 'GET',
+                headers: headers
+                });
+
+                // Dynamic headers
+                const getHeaders = (includeAuth = false) => {
+                const headers = {
+                'Content-Type': 'application/json'
+                };
+
+                if (includeAuth) {
+                headers.Authorization = `Bearer ${getToken()}`;
+                }
+
+                return headers;
+                };
+            </div>
+
+            <h3>Request Body Types</h3>
+            <div class="code-block">
+                // JSON data
+                const jsonData = { name: 'John', age: 30 };
+                const response1 = await fetch('/api/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(jsonData)
+                });
+
+                // FormData (for file uploads)
+                const formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+                formData.append('description', 'My file');
+
+                const response2 = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+                });
+
+                // URLSearchParams (for form-encoded data)
+                const params = new URLSearchParams();
+                params.append('username', 'john');
+                params.append('password', 'secret');
+
+                const response3 = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: params
+                });
+
+                // Raw text
+                const response4 = await fetch('/api/text', {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain' },
+                body: 'Raw text content'
+                });
+
+                // Blob (for binary data)
+                const blob = new Blob(['binary data'], { type: 'application/octet-stream' });
+                const response5 = await fetch('/api/binary', {
+                method: 'POST',
+                body: blob
+                });
+            </div>
+
+            <h3>Request Options</h3>
+            <div class="code-block">
+                // Comprehensive request configuration
+                const response = await fetch('https://api.example.com/data', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer token'
+                },
+                body: JSON.stringify({ data: 'value' }),
+
+                // Request options
+                mode: 'cors', // cors, no-cors, same-origin
+                credentials: 'include', // omit, same-origin, include
+                cache: 'default', // default, no-store, reload, no-cache, force-cache
+                redirect: 'follow', // follow, error, manual
+                referrerPolicy: 'no-referrer', // no-referrer, origin, same-origin, etc.
+
+                // AbortController for cancellation
+                signal: abortController.signal
+                });
+
+                // Request timeout
+                const controller = new AbortController();
+                setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+                try {
+                const response = await fetch('https://api.example.com/slow', {
+                signal: controller.signal
+                });
+                } catch (error) {
+                if (error.name === 'AbortError') {
+                console.log('Request was aborted');
+                }
+                }
+            </div>
+
+            <div class="interactive-demo">
+                <h3>🎮 Interactive Request Configuration</h3>
+                <div class="demo-controls">
+                    <input type="text" id="customUrl" placeholder="Custom URL" value="https://httpbin.org/post">
+                    <select id="requestMode">
+                        <option value="cors">CORS</option>
+                        <option value="no-cors">No CORS</option>
+                        <option value="same-origin">Same Origin</option>
+                    </select>
+                    <select id="requestCredentials">
+                        <option value="omit">Omit</option>
+                        <option value="same-origin">Same Origin</option>
+                        <option value="include">Include</option>
+                    </select>
+                    <button onclick="makeConfiguredRequest()">Make Configured Request</button>
+                    <button onclick="makeRequestWithTimeout()">Request with Timeout</button>
+                </div>
+                <div class="result-display" id="configResult">
+                    Configuration results will appear here...
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📨 Response Handling</h2>
+            <p>The Response object provides rich information about the server's response and various methods to extract
+                data.</p>
+
+            <h3>Response Properties</h3>
+            <div class="code-block">
+                const response = await fetch('https://api.example.com/data');
+
+                // Response properties
+                console.log(response.status); // 200
+                console.log(response.statusText); // "OK"
+                console.log(response.ok); // true (status 200-299)
+                console.log(response.headers); // Headers object
+                console.log(response.url); // Final URL (after redirects)
+                console.log(response.redirected); // true if redirected
+                console.log(response.type); // "basic", "cors", "error", "opaque"
+
+                // Check if response is successful
+                if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+                }
+            </div>
+
+            <h3>Response Methods</h3>
+            <div class="code-block">
+                // Different ways to read the response body
+                const response = await fetch('https://api.example.com/data');
+
+                // JSON parsing
+                const jsonData = await response.json();
+
+                // Text content
+                const textData = await response.text();
+
+                // Binary data as ArrayBuffer
+                const binaryData = await response.arrayBuffer();
+
+                // Binary data as Blob
+                const blobData = await response.blob();
+
+                // Form data
+                const formData = await response.formData();
+
+                // Note: Each method can only be called once per response
+                // Clone the response if you need to read it multiple times
+                const response2 = response.clone();
+                const json = await response.json();
+                const text = await response2.text();
+            </div>
+
+            <h3>Response Headers</h3>
+            <div class="code-block">
+                const response = await fetch('https://api.example.com/data');
+
+                // Accessing headers
+                console.log(response.headers.get('content-type'));
+                console.log(response.headers.get('x-custom-header'));
+
+                // Check if header exists
+                if (response.headers.has('authorization')) {
+                console.log('Authorization header present');
+                }
+
+                // Iterate over headers
+                for (const [key, value] of response.headers) {
+                console.log(`${key}: ${value}`);
+                }
+
+                // Common headers to check
+                const contentType = response.headers.get('content-type');
+                const contentLength = response.headers.get('content-length');
+                const lastModified = response.headers.get('last-modified');
+                const etag = response.headers.get('etag');
+            </div>
+
+            <h3>Error Handling</h3>
+            <div class="code-block">
+                // Comprehensive error handling
+                async function fetchWithErrorHandling(url) {
+                try {
+                const response = await fetch(url);
+
+                // Check if response is ok
+                if (!response.ok) {
+                // Different error handling based on status
+                switch (response.status) {
+                case 400:
+                throw new Error('Bad Request - Invalid data sent');
+                case 401:
+                throw new Error('Unauthorized - Please log in');
+                case 403:
+                throw new Error('Forbidden - Access denied');
+                case 404:
+                throw new Error('Not Found - Resource does not exist');
+                case 500:
+                throw new Error('Internal Server Error - Please try again later');
+                default:
+                throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                }
+
+                // Try to parse JSON
+                const data = await response.json();
+                return data;
+
+                } catch (error) {
+                // Handle different types of errors
+                if (error instanceof TypeError) {
+                throw new Error('Network error - Check your connection');
+                } else if (error instanceof SyntaxError) {
+                throw new Error('Invalid JSON response');
+                } else {
+                throw error; // Re-throw other errors
+                }
+                }
+                }
+
+                // Usage
+                try {
+                const data = await fetchWithErrorHandling('https://api.example.com/data');
+                console.log(data);
+                } catch (error) {
+                console.error('Error:', error.message);
+                }
+            </div>
+
+            <div class="interactive-demo">
+                <h3>🎮 Interactive Response Handling</h3>
+                <div class="demo-controls">
+                    <input type="text" id="responseUrl" placeholder="Response URL" value="https://httpbin.org/json">
+                    <button onclick="demonstrateResponse()">Analyze Response</button>
+                    <button onclick="demonstrateError()">Test Error Handling</button>
+                    <button onclick="demonstrateHeaders()">Check Headers</button>
+                </div>
+                <div class="result-display" id="responseResult">
+                    Response analysis will appear here...
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔄 Advanced Patterns</h2>
+
+            <h3>1. Request Interceptors</h3>
+            <div class="code-block">
+                // Create a custom fetch wrapper with interceptors
+                class FetchInterceptor {
+                constructor() {
+                this.requestInterceptors = [];
+                this.responseInterceptors = [];
+                }
+
+                // Add request interceptor
+                addRequestInterceptor(interceptor) {
+                this.requestInterceptors.push(interceptor);
+                }
+
+                // Add response interceptor
+                addResponseInterceptor(interceptor) {
+                this.responseInterceptors.push(interceptor);
+                }
+
+                // Enhanced fetch method
+                async fetch(url, options = {}) {
+                // Apply request interceptors
+                for (const interceptor of this.requestInterceptors) {
+                options = await interceptor(url, options);
+                }
+
+                // Make the request
+                let response = await fetch(url, options);
+
+                // Apply response interceptors
+                for (const interceptor of this.responseInterceptors) {
+                response = await interceptor(response);
+                }
+
+                return response;
+                }
+                }
+
+                // Usage
+                const api = new FetchInterceptor();
+
+                // Add authentication interceptor
+                api.addRequestInterceptor(async (url, options) => {
+                const token = localStorage.getItem('token');
+                if (token) {
+                options.headers = {
+                ...options.headers,
+                Authorization: `Bearer ${token}`
+                };
+                }
+                return options;
+                });
+
+                // Add logging interceptor
+                api.addResponseInterceptor(async (response) => {
+                console.log(`${response.status} ${response.url}`);
+                return response;
+                });
+            </div>
+
+            <h3>2. Retry Logic</h3>
+            <div class="code-block">
+                // Retry failed requests with exponential backoff
+                async function fetchWithRetry(url, options = {}, maxRetries = 3) {
+                for (let i = 0; i <= maxRetries; i++) { try { const response=await fetch(url, options); // Don't retry
+                    on client errors (4xx) if (response.status>= 400 && response.status < 500) { return response; } //
+                        Retry on server errors (5xx) or network errors if (response.ok) { return response; } if
+                        (i===maxRetries) { return response; // Return last response } } catch (error) { if
+                        (i===maxRetries) { throw error; } } // Wait before retrying (exponential backoff) const
+                        delay=Math.pow(2, i) * 1000; await new Promise(resolve=> setTimeout(resolve, delay));
+                        }
+                        }
+
+                        // Usage
+                        try {
+                        const response = await fetchWithRetry('https://api.example.com/data');
+                        const data = await response.json();
+                        } catch (error) {
+                        console.error('All retries failed:', error);
+                        }
+            </div>
+
+            <h3>3. Request Caching</h3>
+            <div class="code-block">
+                // Simple request caching
+                class RequestCache {
+                constructor(ttl = 300000) { // 5 minutes default
+                this.cache = new Map();
+                this.ttl = ttl;
+                }
+
+                generateKey(url, options) {
+                return `${url}:${JSON.stringify(options)}`;
+                }
+
+                async fetch(url, options = {}) {
+                const key = this.generateKey(url, options);
+                const cached = this.cache.get(key);
+
+                // Check if cached response is still valid
+                if (cached && (Date.now() - cached.timestamp) < this.ttl) { return cached.response.clone(); } // Make
+                    fresh request const response=await fetch(url, options); // Cache successful responses if
+                    (response.ok) { this.cache.set(key, { response: response.clone(), timestamp: Date.now() }); } return
+                    response; } clear() { this.cache.clear(); } } // Usage const cachedFetch=new RequestCache(); const
+                    response=await cachedFetch.fetch('https://api.example.com/data'); </div>
+
+                    <h3>4. Concurrent Request Management</h3>
+                    <div class="code-block">
+                        // Manage multiple concurrent requests
+                        class RequestManager {
+                        constructor(maxConcurrent = 5) {
+                        this.maxConcurrent = maxConcurrent;
+                        this.running = 0;
+                        this.queue = [];
+                        }
+
+                        async fetch(url, options = {}) {
+                        return new Promise((resolve, reject) => {
+                        this.queue.push({ url, options, resolve, reject });
+                        this.process();
+                        });
+                        }
+
+                        async process() {
+                        if (this.running >= this.maxConcurrent || this.queue.length === 0) {
+                        return;
+                        }
+
+                        this.running++;
+                        const { url, options, resolve, reject } = this.queue.shift();
+
+                        try {
+                        const response = await fetch(url, options);
+                        resolve(response);
+                        } catch (error) {
+                        reject(error);
+                        } finally {
+                        this.running--;
+                        this.process();
+                        }
+                        }
+                        }
+
+                        // Usage
+                        const requestManager = new RequestManager(3); // Max 3 concurrent requests
+
+                        const urls = [
+                        'https://api.example.com/data1',
+                        'https://api.example.com/data2',
+                        'https://api.example.com/data3',
+                        'https://api.example.com/data4',
+                        'https://api.example.com/data5'
+                        ];
+
+                        const responses = await Promise.all(
+                        urls.map(url => requestManager.fetch(url))
+                        );
+                    </div>
+
+                    <div class="interactive-demo">
+                        <h3>🎮 Interactive Advanced Patterns</h3>
+                        <div class="demo-controls">
+                            <button onclick="demonstrateRetry()">Retry Pattern</button>
+                            <button onclick="demonstrateCache()">Cache Pattern</button>
+                            <button onclick="demonstrateConcurrency()">Concurrency Control</button>
+                            <button onclick="demonstrateInterceptor()">Request Interceptor</button>
+                        </div>
+                        <div class="result-display" id="advancedResult">
+                            Advanced pattern results will appear here...
+                        </div>
+                    </div>
+            </div>
+
+            <div class="best-practices">
+                <h3>✅ Best Practices</h3>
+                <ul>
+                    <li><strong>Always handle errors:</strong> Check response.ok and use try/catch blocks</li>
+                    <li><strong>Use AbortController:</strong> Implement request timeouts and cancellation</li>
+                    <li><strong>Set appropriate headers:</strong> Content-Type, Accept, Authorization</li>
+                    <li><strong>Handle different response types:</strong> JSON, text, blob, etc.</li>
+                    <li><strong>Implement retry logic:</strong> For transient network failures</li>
+                    <li><strong>Use HTTPS:</strong> Always use secure connections for sensitive data</li>
+                    <li><strong>Cache when appropriate:</strong> Reduce server load and improve performance</li>
+                    <li><strong>Validate responses:</strong> Don't trust server responses blindly</li>
+                </ul>
+            </div>
+
+            <div class="content-section">
+                <h2>⚠️ Common Pitfalls</h2>
+
+                <h3>1. Not Checking Response Status</h3>
+                <div class="code-block">
+                    // ❌ Wrong: Assuming fetch always succeeds
+                    const response = await fetch('/api/data');
+                    const data = await response.json(); // Could fail if response is not JSON
+
+                    // ✅ Correct: Check response status
+                    const response = await fetch('/api/data');
+                    if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                </div>
+
+                <h3>2. Reading Response Body Multiple Times</h3>
+                <div class="code-block">
+                    // ❌ Wrong: Reading body twice
+                    const response = await fetch('/api/data');
+                    const text = await response.text();
+                    const json = await response.json(); // Error: body already read
+
+                    // ✅ Correct: Clone response if needed
+                    const response = await fetch('/api/data');
+                    const text = await response.clone().text();
+                    const json = await response.json();
+                </div>
+
+                <h3>3. Not Handling Network Errors</h3>
+                <div class="code-block">
+                    // ❌ Wrong: Only catching fetch errors
+                    try {
+                    const response = await fetch('/api/data');
+                    const data = await response.json();
+                    } catch (error) {
+                    console.log('Only catches network errors, not HTTP errors');
+                    }
+
+                    // ✅ Correct: Handle both network and HTTP errors
+                    try {
+                    const response = await fetch('/api/data');
+                    if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    } catch (error) {
+                    console.log('Handles both network and HTTP errors');
+                    }
+                </div>
+
+                <h3>4. Forgetting Content-Type Headers</h3>
+                <div class="code-block">
+                    // ❌ Wrong: Missing Content-Type for JSON
+                    const response = await fetch('/api/data', {
+                    method: 'POST',
+                    body: JSON.stringify({ name: 'John' })
+                    });
+
+                    // ✅ Correct: Include Content-Type header
+                    const response = await fetch('/api/data', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: 'John' })
+                    });
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Utility functions
+            function delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
+            async function makeRequest() {
+                const method = document.getElementById('httpMethod').value;
+                const url = document.getElementById('apiUrl').value;
+                const resultDiv = document.getElementById('httpResult');
+
+                resultDiv.innerHTML = `<div class="loading-indicator"></div> Making ${method} request...`;
+
+                try {
+                    const options = { method };
+
+                    // Add body for POST, PUT, PATCH
+                    if (['POST', 'PUT', 'PATCH'].includes(method)) {
+                        options.headers = { 'Content-Type': 'application/json' };
+                        options.body = JSON.stringify({
+                            title: 'Test Post',
+                            body: 'This is a test post',
+                            userId: 1
+                        });
+                    }
+
+                    const response = await fetch(url, options);
+                    const data = await response.json();
+
+                    resultDiv.innerHTML = `
+                    <h4>✅ ${method} Request Successful</h4>
+                    <p><strong>Status:</strong> ${response.status} ${response.statusText}</p>
+                    <p><strong>URL:</strong> ${response.url}</p>
+                    <div class="response-viewer">${JSON.stringify(data, null, 2)}</div>
+                `;
+                } catch (error) {
+                    resultDiv.innerHTML = `
+                    <h4>❌ ${method} Request Failed</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+                }
+            }
+
+            async function makeConfiguredRequest() {
+                const url = document.getElementById('customUrl').value;
+                const mode = document.getElementById('requestMode').value;
+                const credentials = document.getElementById('requestCredentials').value;
+                const resultDiv = document.getElementById('configResult');
+
+                resultDiv.innerHTML = `<div class="loading-indicator"></div> Making configured request...`;
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        mode: mode,
+                        credentials: credentials,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Custom-Header': 'test-value'
+                        },
+                        body: JSON.stringify({
+                            message: 'Hello from configured request',
+                            timestamp: new Date().toISOString()
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    resultDiv.innerHTML = `
+                    <h4>✅ Configured Request Successful</h4>
+                    <p><strong>Mode:</strong> ${mode}</p>
+                    <p><strong>Credentials:</strong> ${credentials}</p>
+                    <p><strong>Status:</strong> ${response.status}</p>
+                    <div class="response-viewer">${JSON.stringify(data, null, 2)}</div>
+                `;
+                } catch (error) {
+                    resultDiv.innerHTML = `
+                    <h4>❌ Configured Request Failed</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+                }
+            }
+
+            async function makeRequestWithTimeout() {
+                const resultDiv = document.getElementById('configResult');
+                resultDiv.innerHTML = `<div class="loading-indicator"></div> Making request with timeout...`;
+
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 2000);
+
+                try {
+                    const response = await fetch('https://httpbin.org/delay/3', {
+                        signal: controller.signal
+                    });
+
+                    clearTimeout(timeoutId);
+                    const data = await response.json();
+
+                    resultDiv.innerHTML = `
+                    <h4>✅ Request Completed (Unexpected)</h4>
+                    <p><strong>Status:</strong> ${response.status}</p>
+                    <div class="response-viewer">${JSON.stringify(data, null, 2)}</div>
+                `;
+                } catch (error) {
+                    clearTimeout(timeoutId);
+                    if (error.name === 'AbortError') {
+                        resultDiv.innerHTML = `
+                        <h4>⏰ Request Timed Out</h4>
+                        <p><strong>Message:</strong> Request was aborted after 2 seconds</p>
+                        <p><strong>Note:</strong> This is expected behavior for the timeout demo</p>
+                    `;
+                    } else {
+                        resultDiv.innerHTML = `
+                        <h4>❌ Request Failed</h4>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                    `;
+                    }
+                }
+            }
+
+            async function demonstrateResponse() {
+                const url = document.getElementById('responseUrl').value;
+                const resultDiv = document.getElementById('responseResult');
+
+                resultDiv.innerHTML = `<div class="loading-indicator"></div> Analyzing response...`;
+
+                try {
+                    const response = await fetch(url);
+
+                    // Get response properties
+                    const headers = {};
+                    for (const [key, value] of response.headers) {
+                        headers[key] = value;
+                    }
+
+                    const data = await response.json();
+
+                    resultDiv.innerHTML = `
+                    <h4>✅ Response Analysis</h4>
+                    <p><strong>Status:</strong> ${response.status} ${response.statusText}</p>
+                    <p><strong>OK:</strong> ${response.ok}</p>
+                    <p><strong>Type:</strong> ${response.type}</p>
+                    <p><strong>URL:</strong> ${response.url}</p>
+                    <p><strong>Redirected:</strong> ${response.redirected}</p>
+                    <h5>Headers:</h5>
+                    <div class="response-viewer">${JSON.stringify(headers, null, 2)}</div>
+                    <h5>Body:</h5>
+                    <div class="response-viewer">${JSON.stringify(data, null, 2)}</div>
+                `;
+                } catch (error) {
+                    resultDiv.innerHTML = `
+                    <h4>❌ Response Analysis Failed</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+                }
+            }
+
+            async function demonstrateError() {
+                const resultDiv = document.getElementById('responseResult');
+                resultDiv.innerHTML = `<div class="loading-indicator"></div> Testing error handling...`;
+
+                try {
+                    const response = await fetch('https://httpbin.org/status/404');
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+
+                    resultDiv.innerHTML = `
+                    <h4>Unexpected Success</h4>
+                    <div class="response-viewer">${JSON.stringify(data, null, 2)}</div>
+                `;
+                } catch (error) {
+                    resultDiv.innerHTML = `
+                    <h4>✅ Error Handled Successfully</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>Note:</strong> This demonstrates proper error handling for HTTP errors</p>
+                `;
+                }
+            }
+
+            async function demonstrateHeaders() {
+                const resultDiv = document.getElementById('responseResult');
+                resultDiv.innerHTML = `<div class="loading-indicator"></div> Checking headers...`;
+
+                try {
+                    const response = await fetch('https://httpbin.org/response-headers?Custom-Header=test-value');
+
+                    const headerInfo = {
+                        'content-type': response.headers.get('content-type'),
+                        'content-length': response.headers.get('content-length'),
+                        'custom-header': response.headers.get('custom-header'),
+                        'server': response.headers.get('server'),
+                        'date': response.headers.get('date')
+                    };
+
+                    resultDiv.innerHTML = `
+                    <h4>✅ Headers Retrieved</h4>
+                    <p><strong>Content-Type:</strong> ${headerInfo['content-type']}</p>
+                    <p><strong>Custom Header:</strong> ${headerInfo['custom-header']}</p>
+                    <p><strong>Server:</strong> ${headerInfo['server']}</p>
+                    <h5>All Headers:</h5>
+                    <div class="response-viewer">${JSON.stringify(headerInfo, null, 2)}</div>
+                `;
+                } catch (error) {
+                    resultDiv.innerHTML = `
+                    <h4>❌ Header Check Failed</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+                }
+            }
+
+            async function demonstrateRetry() {
+                const resultDiv = document.getElementById('advancedResult');
+                resultDiv.innerHTML = `<div class="loading-indicator"></div> Testing retry pattern...`;
+
+                let attempts = 0;
+
+                async function unreliableRequest() {
+                    attempts++;
+                    if (attempts < 3) {
+                        throw new Error(`Attempt ${attempts} failed`);
+                    }
+                    return { success: true, attempts };
+                }
+
+                async function fetchWithRetry(requestFn, maxRetries = 3) {
+                    for (let i = 0; i < maxRetries; i++) {
+                        try {
+                            return await requestFn();
+                        } catch (error) {
+                            if (i === maxRetries - 1) throw error;
+                            await delay(Math.pow(2, i) * 500); // Exponential backoff
+                        }
+                    }
+                }
+
+                try {
+                    const result = await fetchWithRetry(unreliableRequest);
+                    resultDiv.innerHTML = `
+                    <h4>✅ Retry Pattern Success</h4>
+                    <p><strong>Result:</strong> ${JSON.stringify(result)}</p>
+                    <p><strong>Total Attempts:</strong> ${attempts}</p>
+                    <p><strong>Note:</strong> Request succeeded after ${attempts} attempts</p>
+                `;
+                } catch (error) {
+                    resultDiv.innerHTML = `
+                    <h4>❌ Retry Pattern Failed</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>Attempts:</strong> ${attempts}</p>
+                `;
+                }
+            }
+
+            async function demonstrateCache() {
+                const resultDiv = document.getElementById('advancedResult');
+                resultDiv.innerHTML = `<div class="loading-indicator"></div> Testing cache pattern...`;
+
+                class SimpleCache {
+                    constructor() {
+                        this.cache = new Map();
+                    }
+
+                    async fetch(url) {
+                        if (this.cache.has(url)) {
+                            return { data: this.cache.get(url), cached: true };
+                        }
+
+                        const response = await fetch(url);
+                        const data = await response.json();
+                        this.cache.set(url, data);
+                        return { data, cached: false };
+                    }
+                }
+
+                const cache = new SimpleCache();
+
+                try {
+                    // First request
+                    const result1 = await cache.fetch('https://httpbin.org/uuid');
+                    await delay(100);
+
+                    // Second request (should be cached)
+                    const result2 = await cache.fetch('https://httpbin.org/uuid');
+
+                    resultDiv.innerHTML = `
+                    <h4>✅ Cache Pattern Success</h4>
+                    <p><strong>First Request:</strong> ${result1.cached ? 'Cached' : 'Fresh'}</p>
+                    <p><strong>Second Request:</strong> ${result2.cached ? 'Cached' : 'Fresh'}</p>
+                    <h5>First Result:</h5>
+                    <div class="response-viewer">${JSON.stringify(result1.data, null, 2)}</div>
+                    <h5>Second Result:</h5>
+                    <div class="response-viewer">${JSON.stringify(result2.data, null, 2)}</div>
+                `;
+                } catch (error) {
+                    resultDiv.innerHTML = `
+                    <h4>❌ Cache Pattern Failed</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+                }
+            }
+
+            async function demonstrateConcurrency() {
+                const resultDiv = document.getElementById('advancedResult');
+                resultDiv.innerHTML = `<div class="loading-indicator"></div> Testing concurrency control...`;
+
+                class ConcurrencyController {
+                    constructor(maxConcurrent = 2) {
+                        this.maxConcurrent = maxConcurrent;
+                        this.running = 0;
+                        this.queue = [];
+                    }
+
+                    async fetch(url) {
+                        return new Promise((resolve, reject) => {
+                            this.queue.push({ url, resolve, reject });
+                            this.process();
+                        });
+                    }
+
+                    async process() {
+                        if (this.running >= this.maxConcurrent || this.queue.length === 0) {
+                            return;
+                        }
+
+                        this.running++;
+                        const { url, resolve, reject } = this.queue.shift();
+
+                        try {
+                            const response = await fetch(url);
+                            const data = await response.json();
+                            resolve({ url, data });
+                        } catch (error) {
+                            reject(error);
+                        } finally {
+                            this.running--;
+                            this.process();
+                        }
+                    }
+                }
+
+                const controller = new ConcurrencyController(2);
+                const urls = [
+                    'https://httpbin.org/uuid',
+                    'https://httpbin.org/json',
+                    'https://httpbin.org/user-agent',
+                    'https://httpbin.org/headers'
+                ];
+
+                try {
+                    const startTime = Date.now();
+                    const results = await Promise.all(
+                        urls.map(url => controller.fetch(url))
+                    );
+                    const endTime = Date.now();
+
+                    resultDiv.innerHTML = `
+                    <h4>✅ Concurrency Control Success</h4>
+                    <p><strong>Total Requests:</strong> ${results.length}</p>
+                    <p><strong>Max Concurrent:</strong> 2</p>
+                    <p><strong>Total Time:</strong> ${endTime - startTime}ms</p>
+                    <h5>Results:</h5>
+                    <div class="response-viewer">${results.map(r => `${r.url}: ${Object.keys(r.data).length} properties`).join('\n')}</div>
+                `;
+                } catch (error) {
+                    resultDiv.innerHTML = `
+                    <h4>❌ Concurrency Control Failed</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+                }
+            }
+
+            async function demonstrateInterceptor() {
+                const resultDiv = document.getElementById('advancedResult');
+                resultDiv.innerHTML = `<div class="loading-indicator"></div> Testing interceptor pattern...`;
+
+                class InterceptorFetch {
+                    constructor() {
+                        this.requestInterceptors = [];
+                        this.responseInterceptors = [];
+                    }
+
+                    addRequestInterceptor(fn) {
+                        this.requestInterceptors.push(fn);
+                    }
+
+                    addResponseInterceptor(fn) {
+                        this.responseInterceptors.push(fn);
+                    }
+
+                    async fetch(url, options = {}) {
+                        // Apply request interceptors
+                        for (const interceptor of this.requestInterceptors) {
+                            options = await interceptor(url, options);
+                        }
+
+                        // Make request
+                        let response = await fetch(url, options);
+
+                        // Apply response interceptors
+                        for (const interceptor of this.responseInterceptors) {
+                            response = await interceptor(response);
+                        }
+
+                        return response;
+                    }
+                }
+
+                const interceptorFetch = new InterceptorFetch();
+
+                // Add auth interceptor
+                interceptorFetch.addRequestInterceptor(async (url, options) => {
+                    options.headers = {
+                        ...options.headers,
+                        'Authorization': 'Bearer test-token',
+                        'X-Custom': 'intercepted'
+                    };
+                    return options;
+                });
+
+                // Add logging interceptor
+                const logs = [];
+                interceptorFetch.addResponseInterceptor(async (response) => {
+                    logs.push(`${response.status} ${response.url}`);
+                    return response;
+                });
+
+                try {
+                    const response = await interceptorFetch.fetch('https://httpbin.org/headers');
+                    const data = await response.json();
+
+                    resultDiv.innerHTML = `
+                    <h4>✅ Interceptor Pattern Success</h4>
+                    <p><strong>Request intercepted:</strong> Added auth and custom headers</p>
+                    <p><strong>Response intercepted:</strong> Logged request</p>
+                    <p><strong>Log:</strong> ${logs.join(', ')}</p>
+                    <h5>Headers Sent:</h5>
+                    <div class="response-viewer">${JSON.stringify(data.headers, null, 2)}</div>
+                `;
+                } catch (error) {
+                    resultDiv.innerHTML = `
+                    <h4>❌ Interceptor Pattern Failed</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+                }
+            }
+
+            function clearResults() {
+                document.getElementById('httpResult').innerHTML = 'Results cleared...';
+            }
+
+            // Initialize with default demonstrations
+            document.addEventListener('DOMContentLoaded', function () {
+                makeRequest();
+                demonstrateResponse();
+                demonstrateRetry();
+            });
+        </script>
+</body>
+
+</html>

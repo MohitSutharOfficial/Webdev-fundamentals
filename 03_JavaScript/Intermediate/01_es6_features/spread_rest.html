@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ES6 Spread & Rest Operators - Complete Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.3em;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 30px 0;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-section h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 2.2em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .content-section h3 {
+            color: #2d3748;
+            margin: 30px 0 15px 0;
+            font-size: 1.5em;
+        }
+
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            position: relative;
+            border-left: 4px solid #667eea;
+        }
+
+        .code-block::before {
+            content: "JavaScript";
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 0.8em;
+            color: #a0aec0;
+        }
+
+        .interactive-demo {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            color: white;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .demo-controls button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .demo-controls button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .demo-controls input {
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 1em;
+        }
+
+        .result-display {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .highlight {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .best-practices {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            color: #2d3748;
+        }
+
+        .best-practices h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .best-practices ul {
+            padding-left: 20px;
+        }
+
+        .best-practices li {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .syntax-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .syntax-card h4 {
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .demo-controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>ES6 Spread & Rest Operators</h1>
+            <p>Master the power of three dots (...) in JavaScript - From array manipulation to function parameters</p>
+        </div>
+
+        <div class="content-section">
+            <h2>🌟 Understanding the Three Dots</h2>
+            <p>The three dots (<span class="highlight">...</span>) in JavaScript can be used as both the <strong>spread
+                    operator</strong> and the <strong>rest parameter</strong>. The context determines which one it is:
+            </p>
+
+            <div class="syntax-card">
+                <h4>Spread Operator (Expands)</h4>
+                <div class="code-block">
+                    const arr = [1, 2, 3];
+                    const newArr = [...arr, 4, 5]; // Spreads elements
+                    console.log(newArr); // [1, 2, 3, 4, 5]</div>
+            </div>
+
+            <div class="syntax-card">
+                <h4>Rest Parameter (Collects)</h4>
+                <div class="code-block">
+                    function sum(...numbers) { // Collects parameters
+                    return numbers.reduce((a, b) => a + b, 0);
+                    }
+                    console.log(sum(1, 2, 3, 4)); // 10</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📦 Spread Operator</h2>
+            <p>The spread operator allows you to expand iterables (arrays, strings, objects) into individual elements.
+            </p>
+
+            <h3>Array Spreading</h3>
+            <div class="code-block">
+                // Combining arrays
+                const fruits = ['apple', 'banana'];
+                const vegetables = ['carrot', 'lettuce'];
+                const food = [...fruits, ...vegetables];
+                console.log(food); // ['apple', 'banana', 'carrot', 'lettuce']
+
+                // Copying arrays (shallow copy)
+                const original = [1, 2, 3];
+                const copy = [...original];
+                copy.push(4);
+                console.log(original); // [1, 2, 3] (unchanged)
+                console.log(copy); // [1, 2, 3, 4]
+
+                // Finding max/min
+                const numbers = [5, 2, 8, 1, 9];
+                console.log(Math.max(...numbers)); // 9
+                console.log(Math.min(...numbers)); // 1</div>
+
+            <h3>Object Spreading</h3>
+            <div class="code-block">
+                // Combining objects
+                const person = { name: 'John', age: 30 };
+                const details = { city: 'New York', country: 'USA' };
+                const fullInfo = { ...person, ...details };
+                console.log(fullInfo); // { name: 'John', age: 30, city: 'New York', country: 'USA' }
+
+                // Updating objects immutably
+                const user = { id: 1, name: 'Alice', email: 'alice@example.com' };
+                const updatedUser = { ...user, email: 'alice.new@example.com' };
+                console.log(updatedUser); // { id: 1, name: 'Alice', email: 'alice.new@example.com' }</div>
+
+            <h3>String Spreading</h3>
+            <div class="code-block">
+                // Convert string to array
+                const str = 'hello';
+                const chars = [...str];
+                console.log(chars); // ['h', 'e', 'l', 'l', 'o']
+
+                // Unique characters
+                const text = 'programming';
+                const uniqueChars = [...new Set(text)];
+                console.log(uniqueChars); // ['p', 'r', 'o', 'g', 'a', 'm', 'i', 'n']</div>
+
+            <div class="interactive-demo">
+                <h3>🎮 Interactive Spread Demo</h3>
+                <div class="demo-controls">
+                    <input type="text" id="array1Input" placeholder="Enter array 1 (comma-separated)" value="1,2,3">
+                    <input type="text" id="array2Input" placeholder="Enter array 2 (comma-separated)" value="4,5,6">
+                    <button onclick="demonstrateSpread()">Spread Arrays</button>
+                    <button onclick="demonstrateObjectSpread()">Spread Objects</button>
+                    <button onclick="demonstrateStringSpread()">Spread String</button>
+                </div>
+                <div class="result-display" id="spreadResult">
+                    Results will appear here...
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔄 Rest Parameters</h2>
+            <p>Rest parameters allow you to represent an indefinite number of arguments as an array.</p>
+
+            <h3>Function Parameters</h3>
+            <div class="code-block">
+                // Basic rest parameter
+                function sum(...numbers) {
+                return numbers.reduce((total, num) => total + num, 0);
+                }
+                console.log(sum(1, 2, 3, 4, 5)); // 15
+
+                // Mixed parameters
+                function greet(greeting, ...names) {
+                return `${greeting} ${names.join(', ')}!`;
+                }
+                console.log(greet('Hello', 'Alice', 'Bob', 'Charlie')); // "Hello Alice, Bob, Charlie!"
+
+                // Rest must be last parameter
+                function processData(operation, ...data) {
+                switch(operation) {
+                case 'sum':
+                return data.reduce((a, b) => a + b, 0);
+                case 'multiply':
+                return data.reduce((a, b) => a * b, 1);
+                case 'average':
+                return data.reduce((a, b) => a + b, 0) / data.length;
+                default:
+                return data;
+                }
+                }
+                console.log(processData('sum', 1, 2, 3, 4)); // 10
+                console.log(processData('average', 10, 20, 30)); // 20</div>
+
+            <h3>Destructuring with Rest</h3>
+            <div class="code-block">
+                // Array destructuring
+                const [first, second, ...rest] = [1, 2, 3, 4, 5];
+                console.log(first); // 1
+                console.log(second); // 2
+                console.log(rest); // [3, 4, 5]
+
+                // Object destructuring
+                const { name, age, ...otherProps } = {
+                name: 'John',
+                age: 30,
+                city: 'New York',
+                country: 'USA',
+                occupation: 'Developer'
+                };
+                console.log(name); // 'John'
+                console.log(age); // 30
+                console.log(otherProps); // { city: 'New York', country: 'USA', occupation: 'Developer' }</div>
+
+            <div class="interactive-demo">
+                <h3>🎮 Interactive Rest Demo</h3>
+                <div class="demo-controls">
+                    <input type="text" id="numbersInput" placeholder="Enter numbers (comma-separated)"
+                        value="1,2,3,4,5">
+                    <button onclick="demonstrateRestSum()">Sum with Rest</button>
+                    <button onclick="demonstrateRestDestructuring()">Destructuring Rest</button>
+                    <button onclick="demonstrateRestFunction()">Custom Rest Function</button>
+                </div>
+                <div class="result-display" id="restResult">
+                    Results will appear here...
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔄 Spread vs Rest Comparison</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Spread Operator</th>
+                        <th>Rest Parameter</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Purpose</strong></td>
+                        <td>Expands/spreads elements</td>
+                        <td>Collects/gathers elements</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Context</strong></td>
+                        <td>Function calls, array literals, object literals</td>
+                        <td>Function parameters, destructuring</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Direction</strong></td>
+                        <td>Unpacks collection into individual elements</td>
+                        <td>Packs individual elements into collection</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Position</strong></td>
+                        <td>Can be anywhere</td>
+                        <td>Must be last in parameters</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Example</strong></td>
+                        <td><code>func(...arr)</code></td>
+                        <td><code>function func(...args)</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2>🚀 Advanced Use Cases</h2>
+
+            <h3>1. Function Composition</h3>
+            <div class="code-block">
+                // Composing functions with spread
+                const pipe = (...functions) => (value) =>
+                functions.reduce((acc, fn) => fn(acc), value);
+
+                const add5 = x => x + 5;
+                const multiply2 = x => x * 2;
+                const subtract1 = x => x - 1;
+
+                const composedFunction = pipe(add5, multiply2, subtract1);
+                console.log(composedFunction(10)); // ((10 + 5) * 2) - 1 = 29</div>
+
+            <h3>2. Cloning and Merging</h3>
+            <div class="code-block">
+                // Deep cloning with nested objects
+                const original = {
+                name: 'John',
+                address: { city: 'New York', zip: '10001' },
+                hobbies: ['reading', 'swimming']
+                };
+
+                // Shallow clone (be careful with nested objects)
+                const shallowClone = { ...original };
+
+                // For deep cloning, use other methods
+                const deepClone = JSON.parse(JSON.stringify(original));
+
+                // Merging with conflict resolution
+                const defaults = { theme: 'light', language: 'en', notifications: true };
+                const userPrefs = { theme: 'dark', language: 'es' };
+                const finalPrefs = { ...defaults, ...userPrefs };
+                console.log(finalPrefs); // { theme: 'dark', language: 'es', notifications: true }</div>
+
+            <h3>3. Dynamic Function Creation</h3>
+            <div class="code-block">
+                // Creating functions with dynamic parameters
+                const createValidator = (...rules) => (value) => {
+                return rules.every(rule => rule(value));
+                };
+
+                const isRequired = val => val !== undefined && val !== null && val !== '';
+                const isMinLength = min => val => val.length >= min;
+                const isMaxLength = max => val => val.length <= max; const isEmail=val=>
+                    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+
+                    const emailValidator = createValidator(
+                    isRequired,
+                    isMinLength(5),
+                    isMaxLength(50),
+                    isEmail
+                    );
+
+                    console.log(emailValidator('user@example.com')); // true
+                    console.log(emailValidator('invalid')); // false</div>
+
+            <div class="interactive-demo">
+                <h3>🎮 Advanced Demo</h3>
+                <div class="demo-controls">
+                    <input type="text" id="advancedInput" placeholder="Enter email to validate"
+                        value="user@example.com">
+                    <button onclick="demonstrateAdvancedSpread()">Validate Email</button>
+                    <button onclick="demonstrateComposition()">Function Composition</button>
+                    <button onclick="demonstrateDeepMerge()">Deep Merge</button>
+                </div>
+                <div class="result-display" id="advancedResult">
+                    Results will appear here...
+                </div>
+            </div>
+        </div>
+
+        <div class="best-practices">
+            <h3>✅ Best Practices</h3>
+            <ul>
+                <li><strong>Use spread for immutable updates:</strong> Always use spread when updating state in React or
+                    similar frameworks</li>
+                <li><strong>Prefer rest parameters over arguments:</strong> Rest parameters are more explicit and work
+                    with arrow functions</li>
+                <li><strong>Be cautious with shallow copying:</strong> Spread only creates shallow copies of objects and
+                    arrays</li>
+                <li><strong>Use meaningful parameter names:</strong> Instead of <code>...args</code>, use
+                    <code>...items</code> or <code>...values</code></li>
+                <li><strong>Consider performance:</strong> Spreading large arrays or objects can be expensive</li>
+                <li><strong>Rest must be last:</strong> Rest parameters must always be the last parameter in function
+                    definitions</li>
+                <li><strong>Combine with destructuring:</strong> Use spread with destructuring for powerful data
+                    manipulation</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🔍 Common Pitfalls</h2>
+
+            <h3>1. Shallow vs Deep Copying</h3>
+            <div class="code-block">
+                // Pitfall: Shallow copy doesn't clone nested objects
+                const original = { user: { name: 'John' }, settings: { theme: 'dark' } };
+                const copy = { ...original };
+
+                copy.user.name = 'Jane'; // This modifies the original too!
+                console.log(original.user.name); // 'Jane' (unexpected!)
+
+                // Solution: Deep cloning for nested objects
+                const deepCopy = JSON.parse(JSON.stringify(original));
+                // Or use a library like Lodash's cloneDeep</div>
+
+            <h3>2. Rest Parameter Position</h3>
+            <div class="code-block">
+                // Wrong: Rest parameter not last
+                // function wrong(a, ...rest, b) { } // SyntaxError
+
+                // Correct: Rest parameter must be last
+                function correct(a, b, ...rest) {
+                console.log('a:', a, 'b:', b, 'rest:', rest);
+                }
+                correct(1, 2, 3, 4, 5); // a: 1, b: 2, rest: [3, 4, 5]</div>
+
+            <h3>3. Spread with Iterables</h3>
+            <div class="code-block">
+                // Pitfall: Not all objects are iterable
+                const obj = { a: 1, b: 2 };
+                // const arr = [...obj]; // TypeError: obj is not iterable
+
+                // Solution: Use Object methods
+                const keys = [...Object.keys(obj)]; // ['a', 'b']
+                const values = [...Object.values(obj)]; // [1, 2]
+                const entries = [...Object.entries(obj)]; // [['a', 1], ['b', 2]]</div>
+        </div>
+    </div>
+
+    <script>
+        function demonstrateSpread() {
+            const array1 = document.getElementById('array1Input').value.split(',').map(x => x.trim());
+            const array2 = document.getElementById('array2Input').value.split(',').map(x => x.trim());
+
+            const combined = [...array1, ...array2];
+            const result = `
+                <h4>Array Spreading Demo</h4>
+                <p><strong>Array 1:</strong> [${array1.join(', ')}]</p>
+                <p><strong>Array 2:</strong> [${array2.join(', ')}]</p>
+                <p><strong>Combined:</strong> [${combined.join(', ')}]</p>
+                <p><strong>Code:</strong> <code>[...array1, ...array2]</code></p>
+            `;
+            document.getElementById('spreadResult').innerHTML = result;
+        }
+
+        function demonstrateObjectSpread() {
+            const obj1 = { name: 'John', age: 30 };
+            const obj2 = { city: 'New York', country: 'USA' };
+            const combined = { ...obj1, ...obj2 };
+
+            const result = `
+                <h4>Object Spreading Demo</h4>
+                <p><strong>Object 1:</strong> ${JSON.stringify(obj1)}</p>
+                <p><strong>Object 2:</strong> ${JSON.stringify(obj2)}</p>
+                <p><strong>Combined:</strong> ${JSON.stringify(combined)}</p>
+                <p><strong>Code:</strong> <code>{ ...obj1, ...obj2 }</code></p>
+            `;
+            document.getElementById('spreadResult').innerHTML = result;
+        }
+
+        function demonstrateStringSpread() {
+            const str = 'Hello';
+            const chars = [...str];
+            const unique = [...new Set(str.toLowerCase())];
+
+            const result = `
+                <h4>String Spreading Demo</h4>
+                <p><strong>Original String:</strong> "${str}"</p>
+                <p><strong>Characters Array:</strong> [${chars.map(c => `'${c}'`).join(', ')}]</p>
+                <p><strong>Unique Characters:</strong> [${unique.map(c => `'${c}'`).join(', ')}]</p>
+                <p><strong>Code:</strong> <code>[...str]</code></p>
+            `;
+            document.getElementById('spreadResult').innerHTML = result;
+        }
+
+        function demonstrateRestSum() {
+            const input = document.getElementById('numbersInput').value;
+            const numbers = input.split(',').map(x => parseFloat(x.trim())).filter(x => !isNaN(x));
+
+            const sum = (...nums) => nums.reduce((a, b) => a + b, 0);
+            const result = sum(...numbers);
+
+            const resultHTML = `
+                <h4>Rest Parameters - Sum Demo</h4>
+                <p><strong>Numbers:</strong> [${numbers.join(', ')}]</p>
+                <p><strong>Sum:</strong> ${result}</p>
+                <p><strong>Function:</strong> <code>sum(...numbers)</code></p>
+                <p><strong>Inside function:</strong> numbers becomes [${numbers.join(', ')}]</p>
+            `;
+            document.getElementById('restResult').innerHTML = resultHTML;
+        }
+
+        function demonstrateRestDestructuring() {
+            const input = document.getElementById('numbersInput').value;
+            const numbers = input.split(',').map(x => parseFloat(x.trim())).filter(x => !isNaN(x));
+
+            const [first, second, ...rest] = numbers;
+
+            const resultHTML = `
+                <h4>Rest in Destructuring Demo</h4>
+                <p><strong>Original Array:</strong> [${numbers.join(', ')}]</p>
+                <p><strong>First:</strong> ${first}</p>
+                <p><strong>Second:</strong> ${second}</p>
+                <p><strong>Rest:</strong> [${rest.join(', ')}]</p>
+                <p><strong>Code:</strong> <code>const [first, second, ...rest] = numbers;</code></p>
+            `;
+            document.getElementById('restResult').innerHTML = resultHTML;
+        }
+
+        function demonstrateRestFunction() {
+            const input = document.getElementById('numbersInput').value;
+            const numbers = input.split(',').map(x => parseFloat(x.trim())).filter(x => !isNaN(x));
+
+            const processNumbers = (operation, ...nums) => {
+                switch (operation) {
+                    case 'sum': return nums.reduce((a, b) => a + b, 0);
+                    case 'product': return nums.reduce((a, b) => a * b, 1);
+                    case 'average': return nums.reduce((a, b) => a + b, 0) / nums.length;
+                    default: return nums;
+                }
+            };
+
+            const sum = processNumbers('sum', ...numbers);
+            const product = processNumbers('product', ...numbers);
+            const average = processNumbers('average', ...numbers);
+
+            const resultHTML = `
+                <h4>Custom Rest Function Demo</h4>
+                <p><strong>Numbers:</strong> [${numbers.join(', ')}]</p>
+                <p><strong>Sum:</strong> ${sum}</p>
+                <p><strong>Product:</strong> ${product}</p>
+                <p><strong>Average:</strong> ${average.toFixed(2)}</p>
+                <p><strong>Function:</strong> <code>processNumbers(operation, ...nums)</code></p>
+            `;
+            document.getElementById('restResult').innerHTML = resultHTML;
+        }
+
+        function demonstrateAdvancedSpread() {
+            const email = document.getElementById('advancedInput').value;
+
+            const isRequired = val => val !== undefined && val !== null && val !== '';
+            const isMinLength = min => val => val.length >= min;
+            const isMaxLength = max => val => val.length <= max;
+            const isEmail = val => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+
+            const createValidator = (...rules) => (value) => {
+                return rules.every(rule => rule(value));
+            };
+
+            const emailValidator = createValidator(
+                isRequired,
+                isMinLength(5),
+                isMaxLength(50),
+                isEmail
+            );
+
+            const isValid = emailValidator(email);
+
+            const resultHTML = `
+                <h4>Advanced Validator Demo</h4>
+                <p><strong>Email:</strong> "${email}"</p>
+                <p><strong>Valid:</strong> ${isValid ? '✅ Yes' : '❌ No'}</p>
+                <p><strong>Validation Rules:</strong> Required, Min 5 chars, Max 50 chars, Email format</p>
+                <p><strong>Code:</strong> <code>createValidator(...rules)</code></p>
+            `;
+            document.getElementById('advancedResult').innerHTML = resultHTML;
+        }
+
+        function demonstrateComposition() {
+            const pipe = (...functions) => (value) =>
+                functions.reduce((acc, fn) => fn(acc), value);
+
+            const add5 = x => x + 5;
+            const multiply2 = x => x * 2;
+            const subtract1 = x => x - 1;
+
+            const composedFunction = pipe(add5, multiply2, subtract1);
+            const input = 10;
+            const result = composedFunction(input);
+
+            const resultHTML = `
+                <h4>Function Composition Demo</h4>
+                <p><strong>Input:</strong> ${input}</p>
+                <p><strong>Steps:</strong> ${input} → +5 → ×2 → -1 = ${result}</p>
+                <p><strong>Result:</strong> ${result}</p>
+                <p><strong>Code:</strong> <code>pipe(add5, multiply2, subtract1)</code></p>
+            `;
+            document.getElementById('advancedResult').innerHTML = resultHTML;
+        }
+
+        function demonstrateDeepMerge() {
+            const defaults = { theme: 'light', language: 'en', notifications: true, ui: { sidebar: true } };
+            const userPrefs = { theme: 'dark', language: 'es', ui: { toolbar: false } };
+            const merged = { ...defaults, ...userPrefs };
+
+            const resultHTML = `
+                <h4>Object Merging Demo</h4>
+                <p><strong>Defaults:</strong> ${JSON.stringify(defaults)}</p>
+                <p><strong>User Preferences:</strong> ${JSON.stringify(userPrefs)}</p>
+                <p><strong>Merged:</strong> ${JSON.stringify(merged)}</p>
+                <p><strong>Note:</strong> UI object is replaced, not merged (shallow copy)</p>
+                <p><strong>Code:</strong> <code>{ ...defaults, ...userPrefs }</code></p>
+            `;
+            document.getElementById('advancedResult').innerHTML = resultHTML;
+        }
+
+        // Initialize with default demonstrations
+        document.addEventListener('DOMContentLoaded', function () {
+            demonstrateSpread();
+            demonstrateRestSum();
+            demonstrateAdvancedSpread();
+        });
+    </script>
+</body>
+
+</html>

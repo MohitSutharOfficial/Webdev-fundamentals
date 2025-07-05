@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON and Data Manipulation - Modern JavaScript</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            background: #f8f9fa;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #f39c12;
+            font-size: 1.5rem;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            border-left: 4px solid #f39c12;
+        }
+
+        .demo-area {
+            background: white;
+            border: 2px dashed #f39c12;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            min-height: 100px;
+        }
+
+        .btn {
+            background: #f39c12;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 0.25rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-success {
+            background: #27ae60;
+        }
+
+        .btn-success:hover {
+            background: #219a52;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-info {
+            background: #3498db;
+        }
+
+        .btn-info:hover {
+            background: #2980b9;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #f39c12;
+            box-shadow: 0 0 0 0.2rem rgba(243, 156, 18, 0.25);
+        }
+
+        .output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            margin: 1rem 0;
+            border-left: 4px solid #27ae60;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .tip {
+            background: #d4edda;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .warning {
+            background: #f8d7da;
+            border: 1px solid #e74c3c;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .json-viewer {
+            background: #263238;
+            color: #eceff1;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .json-key {
+            color: #82b1ff;
+        }
+
+        .json-string {
+            color: #c3e88d;
+        }
+
+        .json-number {
+            color: #ff9800;
+        }
+
+        .json-boolean {
+            color: #ff5722;
+        }
+
+        .json-null {
+            color: #9e9e9e;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .data-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ffcdd2;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 JSON & Data Manipulation</h1>
+            <p>Master JavaScript Object Notation and Data Processing</p>
+        </div>
+
+        <div class="content">
+            <!-- JSON Basics -->
+            <div class="section">
+                <h2>1. JSON Fundamentals</h2>
+                <p>JSON (JavaScript Object Notation) is a lightweight data-interchange format that's easy for humans to
+                    read and write.</p>
+
+                <div class="code-block">// JSON Syntax Rules
+                    // 1. Data is in name/value pairs
+                    // 2. Data is separated by commas
+                    // 3. Curly braces hold objects
+                    // 4. Square brackets hold arrays
+                    // 5. Strings must be in double quotes
+
+                    // Valid JSON
+                    const validJSON = `{
+                    "name": "John Doe",
+                    "age": 30,
+                    "isActive": true,
+                    "address": {
+                    "street": "123 Main St",
+                    "city": "New York",
+                    "zipCode": "10001"
+                    },
+                    "hobbies": ["reading", "swimming", "coding"],
+                    "spouse": null
+                    }`;
+
+                    // Converting between JSON and JavaScript objects
+                    const jsonString = JSON.stringify(obj); // Object to JSON string
+                    const jsObject = JSON.parse(jsonString); // JSON string to Object
+
+                    // JSON with custom serialization
+                    const customJSON = JSON.stringify(obj, null, 2); // Pretty print with 2 spaces
+                    const filteredJSON = JSON.stringify(obj, ['name', 'age']); // Only include specific properties</div>
+
+                <div class="demo-area">
+                    <h3>JSON Conversion Demo</h3>
+                    <div class="grid">
+                        <div>
+                            <button class="btn" onclick="demoStringify()">Object to JSON</button>
+                            <button class="btn" onclick="demoParse()">JSON to Object</button>
+                            <button class="btn btn-info" onclick="demoPrettyPrint()">Pretty Print JSON</button>
+                        </div>
+                        <div>
+                            <button class="btn btn-success" onclick="demoFilteredJSON()">Filtered JSON</button>
+                            <button class="btn btn-danger" onclick="clearJSONDemo()">Clear</button>
+                        </div>
+                    </div>
+                    <div id="json-output" class="output" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Data Transformation -->
+            <div class="section">
+                <h2>2. Data Transformation Techniques</h2>
+                <p>Transform and manipulate data structures using modern JavaScript methods.</p>
+
+                <div class="code-block">// Array transformation methods
+                    const data = [
+                    { name: 'Alice', age: 28, department: 'Engineering' },
+                    { name: 'Bob', age: 35, department: 'Marketing' },
+                    { name: 'Charlie', age: 42, department: 'Engineering' },
+                    { name: 'Diana', age: 31, department: 'Sales' }
+                    ];
+
+                    // Map - Transform each element
+                    const names = data.map(person => person.name);
+                    const ages = data.map(person => person.age);
+
+                    // Filter - Select elements that match criteria
+                    const engineers = data.filter(person => person.department === 'Engineering');
+                    const youngEmployees = data.filter(person => person.age < 35); // Reduce - Aggregate data const
+                        totalAge=data.reduce((sum, person)=> sum + person.age, 0);
+                        const departmentCount = data.reduce((acc, person) => {
+                        acc[person.department] = (acc[person.department] || 0) + 1;
+                        return acc;
+                        }, {});
+
+                        // Chain operations
+                        const engineerNames = data
+                        .filter(person => person.department === 'Engineering')
+                        .map(person => person.name)
+                        .sort();
+
+                        // Group by department
+                        const groupedByDepartment = data.reduce((acc, person) => {
+                        if (!acc[person.department]) acc[person.department] = [];
+                        acc[person.department].push(person);
+                        return acc;
+                        }, {});</div>
+
+                <div class="demo-area">
+                    <h3>Data Transformation Demo</h3>
+                    <div class="grid">
+                        <div>
+                            <button class="btn" onclick="demoMap()">Map Transform</button>
+                            <button class="btn" onclick="demoFilter()">Filter Data</button>
+                            <button class="btn" onclick="demoReduce()">Reduce Aggregate</button>
+                        </div>
+                        <div>
+                            <button class="btn btn-success" onclick="demoChaining()">Method Chaining</button>
+                            <button class="btn btn-info" onclick="demoGroupBy()">Group By</button>
+                            <button class="btn btn-danger" onclick="clearTransformDemo()">Clear</button>
+                        </div>
+                    </div>
+                    <div id="transform-output" class="output" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Data Validation -->
+            <div class="section">
+                <h2>3. Data Validation and Sanitization</h2>
+                <p>Ensure data integrity and security by validating and sanitizing input data.</p>
+
+                <div class="code-block">// Data validation functions
+                    function validateEmail(email) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    return emailRegex.test(email);
+                    }
+
+                    function validatePhone(phone) {
+                    const phoneRegex = /^\(\d{3}\)\s\d{3}-\d{4}$/;
+                    return phoneRegex.test(phone);
+                    }
+
+                    function validateAge(age) {
+                    return Number.isInteger(age) && age >= 0 && age <= 150; } // Comprehensive validation schema const
+                        userSchema={ name: { required: true, minLength: 2, maxLength: 50, pattern: /^[a-zA-Z\s]+$/ },
+                        email: { required: true, validator: validateEmail }, age: { required: true, validator:
+                        validateAge }, phone: { required: false, validator: validatePhone } }; function
+                        validateUser(user, schema) { const errors=[]; for (const [field, rules] of
+                        Object.entries(schema)) { const value=user[field]; if (rules.required && (!value || value===''
+                        )) { errors.push(`${field} is required`); continue; } if (value && rules.minLength &&
+                        value.length < rules.minLength) { errors.push(`${field} must be at least ${rules.minLength}
+                        characters`); } if (value && rules.maxLength && value.length> rules.maxLength) {
+                        errors.push(`${field} must not exceed ${rules.maxLength} characters`);
+                        }
+
+                        if (value && rules.pattern && !rules.pattern.test(value)) {
+                        errors.push(`${field} format is invalid`);
+                        }
+
+                        if (value && rules.validator && !rules.validator(value)) {
+                        errors.push(`${field} is invalid`);
+                        }
+                        }
+
+                        return errors;
+                        }
+
+                        // Data sanitization
+                        function sanitizeString(str) {
+                        return str.trim().replace(/[<>]/g, '');
+                            }
+
+                            function sanitizeObject(obj) {
+                            const sanitized = {};
+                            for (const [key, value] of Object.entries(obj)) {
+                            if (typeof value === 'string') {
+                            sanitized[key] = sanitizeString(value);
+                            } else if (typeof value === 'object' && value !== null) {
+                            sanitized[key] = sanitizeObject(value);
+                            } else {
+                            sanitized[key] = value;
+                            }
+                            }
+                            return sanitized;
+                            }</div>
+
+                <div class="demo-area">
+                    <h3>Data Validation Demo</h3>
+                    <div class="grid">
+                        <div>
+                            <div class="form-group">
+                                <label for="user-name">Name:</label>
+                                <input type="text" class="form-control" id="user-name" placeholder="Enter name">
+                            </div>
+                            <div class="form-group">
+                                <label for="user-email">Email:</label>
+                                <input type="email" class="form-control" id="user-email" placeholder="Enter email">
+                            </div>
+                            <div class="form-group">
+                                <label for="user-age">Age:</label>
+                                <input type="number" class="form-control" id="user-age" placeholder="Enter age">
+                            </div>
+                            <div class="form-group">
+                                <label for="user-phone">Phone (optional):</label>
+                                <input type="tel" class="form-control" id="user-phone" placeholder="(123) 456-7890">
+                            </div>
+                            <button class="btn" onclick="validateUserForm()">Validate User</button>
+                            <button class="btn btn-success" onclick="sanitizeUserData()">Sanitize Data</button>
+                        </div>
+                        <div>
+                            <div id="validation-output" class="output" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deep Cloning -->
+            <div class="section">
+                <h2>4. Deep Cloning and Object Manipulation</h2>
+                <p>Create deep copies of objects and manipulate complex data structures.</p>
+
+                <div class="code-block">// Shallow vs Deep copy
+                    const original = {
+                    name: 'John',
+                    address: {
+                    street: '123 Main St',
+                    city: 'New York'
+                    },
+                    hobbies: ['reading', 'swimming']
+                    };
+
+                    // Shallow copy methods
+                    const shallowCopy1 = { ...original };
+                    const shallowCopy2 = Object.assign({}, original);
+
+                    // Deep copy methods
+                    const deepCopy1 = JSON.parse(JSON.stringify(original)); // Simple but limited
+                    const deepCopy2 = structuredClone(original); // Modern browsers
+
+                    // Custom deep clone function
+                    function deepClone(obj) {
+                    if (obj === null || typeof obj !== 'object') return obj;
+
+                    if (obj instanceof Date) return new Date(obj);
+                    if (obj instanceof Array) return obj.map(item => deepClone(item));
+
+                    const cloned = {};
+                    for (const [key, value] of Object.entries(obj)) {
+                    cloned[key] = deepClone(value);
+                    }
+                    return cloned;
+                    }
+
+                    // Object manipulation utilities
+                    function getNestedValue(obj, path) {
+                    return path.split('.').reduce((current, key) => current?.[key], obj);
+                    }
+
+                    function setNestedValue(obj, path, value) {
+                    const keys = path.split('.');
+                    const lastKey = keys.pop();
+                    const target = keys.reduce((current, key) => {
+                    if (!(key in current)) current[key] = {};
+                    return current[key];
+                    }, obj);
+                    target[lastKey] = value;
+                    }
+
+                    function deleteNestedValue(obj, path) {
+                    const keys = path.split('.');
+                    const lastKey = keys.pop();
+                    const target = keys.reduce((current, key) => current?.[key], obj);
+                    if (target) delete target[lastKey];
+                    }
+
+                    // Object merging
+                    function mergeObjects(target, ...sources) {
+                    sources.forEach(source => {
+                    Object.keys(source).forEach(key => {
+                    if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+                    if (!target[key]) target[key] = {};
+                    mergeObjects(target[key], source[key]);
+                    } else {
+                    target[key] = source[key];
+                    }
+                    });
+                    });
+                    return target;
+                    }</div>
+
+                <div class="demo-area">
+                    <h3>Object Manipulation Demo</h3>
+                    <div class="grid">
+                        <div>
+                            <button class="btn" onclick="demoCopyMethods()">Copy Methods</button>
+                            <button class="btn" onclick="demoNestedAccess()">Nested Access</button>
+                            <button class="btn" onclick="demoObjectMerging()">Object Merging</button>
+                        </div>
+                        <div>
+                            <button class="btn btn-success" onclick="demoDeepClone()">Deep Clone</button>
+                            <button class="btn btn-danger" onclick="clearObjectDemo()">Clear</button>
+                        </div>
+                    </div>
+                    <div id="object-output" class="output" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Data Fetching -->
+            <div class="section">
+                <h2>5. Data Fetching and API Integration</h2>
+                <p>Fetch and process data from external APIs using modern JavaScript techniques.</p>
+
+                <div class="code-block">// Fetch API examples
+                    async function fetchUserData(userId) {
+                    try {
+                    const response = await fetch(`/api/users/${userId}`);
+
+                    if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const userData = await response.json();
+                    return userData;
+                    } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    throw error;
+                    }
+                    }
+
+                    // POST request with JSON data
+                    async function createUser(userData) {
+                    try {
+                    const response = await fetch('/api/users', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData)
+                    });
+
+                    if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    return await response.json();
+                    } catch (error) {
+                    console.error('Error creating user:', error);
+                    throw error;
+                    }
+                    }
+
+                    // Handling multiple API calls
+                    async function fetchUserProfile(userId) {
+                    try {
+                    const [user, posts, comments] = await Promise.all([
+                    fetch(`/api/users/${userId}`).then(r => r.json()),
+                    fetch(`/api/users/${userId}/posts`).then(r => r.json()),
+                    fetch(`/api/users/${userId}/comments`).then(r => r.json())
+                    ]);
+
+                    return { user, posts, comments };
+                    } catch (error) {
+                    console.error('Error fetching user profile:', error);
+                    throw error;
+                    }
+                    }
+
+                    // Error handling and retry logic
+                    async function fetchWithRetry(url, options = {}, maxRetries = 3) {
+                    for (let i = 0; i < maxRetries; i++) { try { const response=await fetch(url, options); if
+                        (response.ok) { return await response.json(); } if (i===maxRetries - 1) { throw new
+                        Error(`Request failed after ${maxRetries} attempts`); } // Wait before retrying await new
+                        Promise(resolve=> setTimeout(resolve, 1000 * Math.pow(2, i)));
+                        } catch (error) {
+                        if (i === maxRetries - 1) throw error;
+                        }
+                        }
+                        }</div>
+
+                <div class="demo-area">
+                    <h3>Data Fetching Demo</h3>
+                    <div class="grid">
+                        <div>
+                            <button class="btn" onclick="fetchRandomUser()">Fetch Random User</button>
+                            <button class="btn" onclick="fetchMultipleUsers()">Fetch Multiple Users</button>
+                            <button class="btn btn-info" onclick="fetchJSONPlaceholder()">JSONPlaceholder API</button>
+                        </div>
+                        <div>
+                            <button class="btn btn-success" onclick="simulateAPIError()">Simulate Error</button>
+                            <button class="btn btn-danger" onclick="clearFetchDemo()">Clear</button>
+                        </div>
+                    </div>
+                    <div id="fetch-output" class="output" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Data Visualization -->
+            <div class="section">
+                <h2>6. Data Visualization and Table Creation</h2>
+                <p>Create dynamic tables and visualizations from JSON data.</p>
+
+                <div class="demo-area">
+                    <h3>Dynamic Table Generator</h3>
+                    <div class="grid">
+                        <div>
+                            <button class="btn" onclick="generateEmployeeTable()">Generate Employee Table</button>
+                            <button class="btn" onclick="generateProductTable()">Generate Product Table</button>
+                            <button class="btn btn-info" onclick="generateSalesChart()">Generate Sales Data</button>
+                        </div>
+                        <div>
+                            <button class="btn btn-success" onclick="exportToCSV()">Export to CSV</button>
+                            <button class="btn btn-danger" onclick="clearTableDemo()">Clear</button>
+                        </div>
+                    </div>
+                    <div id="table-container"></div>
+                </div>
+            </div>
+
+            <!-- Performance Tips -->
+            <div class="tip">
+                <h3>🚀 Performance Tips</h3>
+                <ul>
+                    <li><strong>Use streaming:</strong> For large datasets, consider streaming parsers</li>
+                    <li><strong>Lazy loading:</strong> Load data on demand rather than all at once</li>
+                    <li><strong>Pagination:</strong> Break large datasets into smaller chunks</li>
+                    <li><strong>Caching:</strong> Cache frequently accessed data</li>
+                    <li><strong>Debouncing:</strong> Limit API calls during user input</li>
+                </ul>
+            </div>
+
+            <!-- Best Practices -->
+            <div class="highlight">
+                <h3>💡 Best Practices</h3>
+                <ul>
+                    <li><strong>Always validate data:</strong> Never trust external data sources</li>
+                    <li><strong>Handle errors gracefully:</strong> Provide meaningful error messages</li>
+                    <li><strong>Use TypeScript:</strong> For better type safety in large applications</li>
+                    <li><strong>Sanitize input:</strong> Clean data before processing</li>
+                    <li><strong>Use proper HTTP status codes:</strong> Return appropriate codes for different scenarios
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Security Considerations -->
+            <div class="warning">
+                <h3>⚠️ Security Considerations</h3>
+                <ul>
+                    <li><strong>XSS Prevention:</strong> Sanitize user input to prevent script injection</li>
+                    <li><strong>CSRF Protection:</strong> Use tokens to prevent cross-site request forgery</li>
+                    <li><strong>Rate Limiting:</strong> Implement rate limiting for API endpoints</li>
+                    <li><strong>Input Validation:</strong> Validate all input on both client and server</li>
+                    <li><strong>HTTPS Only:</strong> Always use HTTPS for sensitive data transmission</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data
+        const sampleData = [
+            { name: 'Alice', age: 28, department: 'Engineering', salary: 75000 },
+            { name: 'Bob', age: 35, department: 'Marketing', salary: 65000 },
+            { name: 'Charlie', age: 42, department: 'Engineering', salary: 85000 },
+            { name: 'Diana', age: 31, department: 'Sales', salary: 55000 },
+            { name: 'Eve', age: 27, department: 'Design', salary: 60000 }
+        ];
+
+        // JSON Demo Functions
+        function demoStringify() {
+            const obj = { name: 'John', age: 30, city: 'New York' };
+            const jsonString = JSON.stringify(obj);
+            showJSONOutput(`Object to JSON:\nOriginal: ${JSON.stringify(obj, null, 2)}\nJSON String: ${jsonString}`);
+        }
+
+        function demoParse() {
+            const jsonString = '{"name":"Jane","age":25,"city":"London"}';
+            const obj = JSON.parse(jsonString);
+            showJSONOutput(`JSON to Object:\nJSON String: ${jsonString}\nParsed Object: ${JSON.stringify(obj, null, 2)}`);
+        }
+
+        function demoPrettyPrint() {
+            const obj = { name: 'Alice', age: 28, address: { street: '123 Main St', city: 'Boston' } };
+            const prettyJSON = JSON.stringify(obj, null, 2);
+            showJSONOutput(`Pretty Print JSON:\n${prettyJSON}`);
+        }
+
+        function demoFilteredJSON() {
+            const obj = { name: 'Bob', age: 35, password: 'secret', email: 'bob@example.com' };
+            const filteredJSON = JSON.stringify(obj, ['name', 'email'], 2);
+            showJSONOutput(`Filtered JSON (only name and email):\n${filteredJSON}`);
+        }
+
+        function showJSONOutput(content) {
+            const output = document.getElementById('json-output');
+            output.style.display = 'block';
+            output.innerHTML = `<div class="fade-in"><pre>${content}</pre></div>`;
+        }
+
+        function clearJSONDemo() {
+            document.getElementById('json-output').style.display = 'none';
+        }
+
+        // Data Transformation Demo Functions
+        function demoMap() {
+            const names = sampleData.map(person => person.name);
+            const ages = sampleData.map(person => person.age);
+            showTransformOutput(`Map Transform:\nNames: ${JSON.stringify(names)}\nAges: ${JSON.stringify(ages)}`);
+        }
+
+        function demoFilter() {
+            const engineers = sampleData.filter(person => person.department === 'Engineering');
+            const youngEmployees = sampleData.filter(person => person.age < 35);
+            showTransformOutput(`Filter Results:\nEngineers: ${JSON.stringify(engineers, null, 2)}\nYoung Employees: ${JSON.stringify(youngEmployees, null, 2)}`);
+        }
+
+        function demoReduce() {
+            const totalAge = sampleData.reduce((sum, person) => sum + person.age, 0);
+            const avgAge = totalAge / sampleData.length;
+            const departmentCount = sampleData.reduce((acc, person) => {
+                acc[person.department] = (acc[person.department] || 0) + 1;
+                return acc;
+            }, {});
+            showTransformOutput(`Reduce Results:\nTotal Age: ${totalAge}\nAverage Age: ${avgAge.toFixed(1)}\nDepartment Count: ${JSON.stringify(departmentCount, null, 2)}`);
+        }
+
+        function demoChaining() {
+            const engineerNames = sampleData
+                .filter(person => person.department === 'Engineering')
+                .map(person => person.name)
+                .sort();
+
+            const highEarners = sampleData
+                .filter(person => person.salary > 70000)
+                .map(person => ({ name: person.name, salary: person.salary }))
+                .sort((a, b) => b.salary - a.salary);
+
+            showTransformOutput(`Method Chaining:\nEngineers: ${JSON.stringify(engineerNames)}\nHigh Earners: ${JSON.stringify(highEarners, null, 2)}`);
+        }
+
+        function demoGroupBy() {
+            const groupedByDepartment = sampleData.reduce((acc, person) => {
+                if (!acc[person.department]) acc[person.department] = [];
+                acc[person.department].push(person);
+                return acc;
+            }, {});
+            showTransformOutput(`Group By Department:\n${JSON.stringify(groupedByDepartment, null, 2)}`);
+        }
+
+        function showTransformOutput(content) {
+            const output = document.getElementById('transform-output');
+            output.style.display = 'block';
+            output.innerHTML = `<div class="fade-in"><pre>${content}</pre></div>`;
+        }
+
+        function clearTransformDemo() {
+            document.getElementById('transform-output').style.display = 'none';
+        }
+
+        // Validation Demo Functions
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function validatePhone(phone) {
+            const phoneRegex = /^\(\d{3}\)\s\d{3}-\d{4}$/;
+            return phoneRegex.test(phone);
+        }
+
+        function validateAge(age) {
+            return Number.isInteger(age) && age >= 0 && age <= 150;
+        }
+
+        function validateUserForm() {
+            const user = {
+                name: document.getElementById('user-name').value,
+                email: document.getElementById('user-email').value,
+                age: parseInt(document.getElementById('user-age').value),
+                phone: document.getElementById('user-phone').value
+            };
+
+            const userSchema = {
+                name: { required: true, minLength: 2, maxLength: 50 },
+                email: { required: true, validator: validateEmail },
+                age: { required: true, validator: validateAge },
+                phone: { required: false, validator: validatePhone }
+            };
+
+            const errors = validateUser(user, userSchema);
+
+            const output = document.getElementById('validation-output');
+            output.style.display = 'block';
+
+            if (errors.length === 0) {
+                output.innerHTML = `<div class="fade-in"><strong>✅ Validation Successful!</strong><br>User data: ${JSON.stringify(user, null, 2)}</div>`;
+            } else {
+                output.innerHTML = `<div class="fade-in"><strong>❌ Validation Errors:</strong><br>${errors.map(error => `• ${error}`).join('<br>')}</div>`;
+            }
+        }
+
+        function validateUser(user, schema) {
+            const errors = [];
+
+            for (const [field, rules] of Object.entries(schema)) {
+                const value = user[field];
+
+                if (rules.required && (!value || value === '' || (typeof value === 'number' && isNaN(value)))) {
+                    errors.push(`${field} is required`);
+                    continue;
+                }
+
+                if (value && rules.minLength && value.length < rules.minLength) {
+                    errors.push(`${field} must be at least ${rules.minLength} characters`);
+                }
+
+                if (value && rules.maxLength && value.length > rules.maxLength) {
+                    errors.push(`${field} must not exceed ${rules.maxLength} characters`);
+                }
+
+                if (value && rules.validator && !rules.validator(value)) {
+                    errors.push(`${field} is invalid`);
+                }
+            }
+
+            return errors;
+        }
+
+        function sanitizeUserData() {
+            const user = {
+                name: document.getElementById('user-name').value,
+                email: document.getElementById('user-email').value,
+                age: document.getElementById('user-age').value,
+                phone: document.getElementById('user-phone').value
+            };
+
+            const sanitized = sanitizeObject(user);
+
+            const output = document.getElementById('validation-output');
+            output.style.display = 'block';
+            output.innerHTML = `<div class="fade-in"><strong>🧹 Sanitized Data:</strong><br>Original: ${JSON.stringify(user, null, 2)}<br>Sanitized: ${JSON.stringify(sanitized, null, 2)}</div>`;
+        }
+
+        function sanitizeObject(obj) {
+            const sanitized = {};
+            for (const [key, value] of Object.entries(obj)) {
+                if (typeof value === 'string') {
+                    sanitized[key] = value.trim().replace(/[<>]/g, '');
+                } else if (typeof value === 'object' && value !== null) {
+                    sanitized[key] = sanitizeObject(value);
+                } else {
+                    sanitized[key] = value;
+                }
+            }
+            return sanitized;
+        }
+
+        // Object Manipulation Demo Functions
+        function demoCopyMethods() {
+            const original = {
+                name: 'John',
+                address: { street: '123 Main St', city: 'New York' },
+                hobbies: ['reading', 'swimming']
+            };
+
+            const shallowCopy = { ...original };
+            const deepCopy = JSON.parse(JSON.stringify(original));
+
+            // Modify original
+            original.address.city = 'Boston';
+            original.hobbies.push('coding');
+
+            showObjectOutput(`Copy Methods Demo:
+Original: ${JSON.stringify(original, null, 2)}
+Shallow Copy: ${JSON.stringify(shallowCopy, null, 2)}
+Deep Copy: ${JSON.stringify(deepCopy, null, 2)}`);
+        }
+
+        function demoNestedAccess() {
+            const obj = {
+                user: {
+                    profile: {
+                        name: 'Alice',
+                        contact: {
+                            email: 'alice@example.com'
+                        }
+                    }
+                }
+            };
+
+            const name = getNestedValue(obj, 'user.profile.name');
+            const email = getNestedValue(obj, 'user.profile.contact.email');
+            const missing = getNestedValue(obj, 'user.profile.missing.field');
+
+            showObjectOutput(`Nested Access Demo:
+Object: ${JSON.stringify(obj, null, 2)}
+Name: ${name}
+Email: ${email}
+Missing: ${missing}`);
+        }
+
+        function demoObjectMerging() {
+            const obj1 = { a: 1, b: { x: 1, y: 2 } };
+            const obj2 = { b: { y: 3, z: 4 }, c: 5 };
+            const merged = mergeObjects({}, obj1, obj2);
+
+            showObjectOutput(`Object Merging Demo:
+Object 1: ${JSON.stringify(obj1, null, 2)}
+Object 2: ${JSON.stringify(obj2, null, 2)}
+Merged: ${JSON.stringify(merged, null, 2)}`);
+        }
+
+        function demoDeepClone() {
+            const original = {
+                name: 'Bob',
+                date: new Date(),
+                nested: { value: 42 },
+                array: [1, 2, { nested: true }]
+            };
+
+            const cloned = deepClone(original);
+            cloned.nested.value = 100;
+            cloned.array[2].nested = false;
+
+            showObjectOutput(`Deep Clone Demo:
+Original: ${JSON.stringify(original, null, 2)}
+Cloned: ${JSON.stringify(cloned, null, 2)}`);
+        }
+
+        function getNestedValue(obj, path) {
+            return path.split('.').reduce((current, key) => current?.[key], obj);
+        }
+
+        function mergeObjects(target, ...sources) {
+            sources.forEach(source => {
+                Object.keys(source).forEach(key => {
+                    if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+                        if (!target[key]) target[key] = {};
+                        mergeObjects(target[key], source[key]);
+                    } else {
+                        target[key] = source[key];
+                    }
+                });
+            });
+            return target;
+        }
+
+        function deepClone(obj) {
+            if (obj === null || typeof obj !== 'object') return obj;
+            if (obj instanceof Date) return new Date(obj);
+            if (obj instanceof Array) return obj.map(item => deepClone(item));
+
+            const cloned = {};
+            for (const [key, value] of Object.entries(obj)) {
+                cloned[key] = deepClone(value);
+            }
+            return cloned;
+        }
+
+        function showObjectOutput(content) {
+            const output = document.getElementById('object-output');
+            output.style.display = 'block';
+            output.innerHTML = `<div class="fade-in"><pre>${content}</pre></div>`;
+        }
+
+        function clearObjectDemo() {
+            document.getElementById('object-output').style.display = 'none';
+        }
+
+        // Data Fetching Demo Functions
+        async function fetchRandomUser() {
+            try {
+                const response = await fetch('https://randomuser.me/api/');
+                const data = await response.json();
+                const user = data.results[0];
+
+                showFetchOutput(`Random User Data:
+Name: ${user.name.first} ${user.name.last}
+Email: ${user.email}
+Location: ${user.location.city}, ${user.location.country}
+Phone: ${user.phone}`);
+            } catch (error) {
+                showFetchOutput(`Error fetching random user: ${error.message}`);
+            }
+        }
+
+        async function fetchMultipleUsers() {
+            try {
+                const response = await fetch('https://randomuser.me/api/?results=3');
+                const data = await response.json();
+
+                const users = data.results.map(user => ({
+                    name: `${user.name.first} ${user.name.last}`,
+                    email: user.email,
+                    country: user.location.country
+                }));
+
+                showFetchOutput(`Multiple Users:\n${JSON.stringify(users, null, 2)}`);
+            } catch (error) {
+                showFetchOutput(`Error fetching multiple users: ${error.message}`);
+            }
+        }
+
+        async function fetchJSONPlaceholder() {
+            try {
+                const response = await fetch('https://jsonplaceholder.typicode.com/posts/1');
+                const post = await response.json();
+
+                showFetchOutput(`JSONPlaceholder Post:
+Title: ${post.title}
+Body: ${post.body}
+User ID: ${post.userId}
+Post ID: ${post.id}`);
+            } catch (error) {
+                showFetchOutput(`Error fetching from JSONPlaceholder: ${error.message}`);
+            }
+        }
+
+        function simulateAPIError() {
+            showFetchOutput(`❌ Simulated API Error:
+Status: 404 Not Found
+Message: The requested resource was not found
+Timestamp: ${new Date().toISOString()}`);
+        }
+
+        function showFetchOutput(content) {
+            const output = document.getElementById('fetch-output');
+            output.style.display = 'block';
+            output.innerHTML = `<div class="fade-in"><pre>${content}</pre></div>`;
+        }
+
+        function clearFetchDemo() {
+            document.getElementById('fetch-output').style.display = 'none';
+        }
+
+        // Table Generation Functions
+        function generateEmployeeTable() {
+            const employees = [
+                { id: 1, name: 'Alice Johnson', department: 'Engineering', salary: 75000, startDate: '2020-01-15' },
+                { id: 2, name: 'Bob Smith', department: 'Marketing', salary: 65000, startDate: '2019-03-22' },
+                { id: 3, name: 'Charlie Brown', department: 'Engineering', salary: 85000, startDate: '2018-07-10' },
+                { id: 4, name: 'Diana Prince', department: 'Sales', salary: 55000, startDate: '2021-02-28' }
+            ];
+
+            createTable(employees, 'Employee Data');
+        }
+
+        function generateProductTable() {
+            const products = [
+                { id: 101, name: 'Laptop', category: 'Electronics', price: 999.99, stock: 25 },
+                { id: 102, name: 'Smartphone', category: 'Electronics', price: 699.99, stock: 50 },
+                { id: 103, name: 'Desk Chair', category: 'Furniture', price: 199.99, stock: 15 },
+                { id: 104, name: 'Coffee Maker', category: 'Appliances', price: 79.99, stock: 30 }
+            ];
+
+            createTable(products, 'Product Inventory');
+        }
+
+        function generateSalesChart() {
+            const salesData = [
+                { month: 'January', sales: 12000, orders: 45 },
+                { month: 'February', sales: 15000, orders: 52 },
+                { month: 'March', sales: 18000, orders: 61 },
+                { month: 'April', sales: 22000, orders: 78 },
+                { month: 'May', sales: 25000, orders: 85 }
+            ];
+
+            createTable(salesData, 'Sales Data');
+        }
+
+        function createTable(data, title) {
+            const container = document.getElementById('table-container');
+
+            if (data.length === 0) {
+                container.innerHTML = '<p>No data to display</p>';
+                return;
+            }
+
+            const headers = Object.keys(data[0]);
+
+            let html = `<h3>${title}</h3>`;
+            html += '<table class="data-table">';
+
+            // Headers
+            html += '<thead><tr>';
+            headers.forEach(header => {
+                html += `<th>${header.charAt(0).toUpperCase() + header.slice(1)}</th>`;
+            });
+            html += '</tr></thead>';
+
+            // Body
+            html += '<tbody>';
+            data.forEach(row => {
+                html += '<tr>';
+                headers.forEach(header => {
+                    let value = row[header];
+                    if (typeof value === 'number' && header.includes('price')) {
+                        value = `$${value.toFixed(2)}`;
+                    } else if (typeof value === 'number' && header.includes('salary')) {
+                        value = `$${value.toLocaleString()}`;
+                    }
+                    html += `<td>${value}</td>`;
+                });
+                html += '</tr>';
+            });
+            html += '</tbody></table>';
+
+            container.innerHTML = html;
+        }
+
+        function exportToCSV() {
+            const table = document.querySelector('.data-table');
+            if (!table) {
+                alert('No table to export!');
+                return;
+            }
+
+            let csv = '';
+            const rows = table.querySelectorAll('tr');
+
+            rows.forEach(row => {
+                const cols = row.querySelectorAll('td, th');
+                const rowData = Array.from(cols).map(col => col.textContent);
+                csv += rowData.join(',') + '\n';
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'data.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function clearTableDemo() {
+            document.getElementById('table-container').innerHTML = '';
+        }
+    </script>
+</body>
+
+</html>

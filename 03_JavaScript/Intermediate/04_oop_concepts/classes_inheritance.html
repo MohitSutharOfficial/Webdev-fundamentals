@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object-Oriented Programming - Classes & Inheritance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            background: #f8f9fa;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #3498db;
+            font-size: 1.5rem;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            border-left: 4px solid #3498db;
+        }
+
+        .demo-area {
+            background: white;
+            border: 2px dashed #3498db;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            min-height: 100px;
+        }
+
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 0.25rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-success {
+            background: #27ae60;
+        }
+
+        .btn-success:hover {
+            background: #219a52;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-warning {
+            background: #f39c12;
+        }
+
+        .btn-warning:hover {
+            background: #e67e22;
+        }
+
+        .output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 1rem;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 14px;
+            margin: 1rem 0;
+            border-left: 4px solid #27ae60;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .tip {
+            background: #d4edda;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .warning {
+            background: #f8d7da;
+            border: 1px solid #e74c3c;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .animal-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+            transition: transform 0.3s ease;
+        }
+
+        .animal-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .vehicle-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏗️ Object-Oriented Programming</h1>
+            <p>Master Classes, Inheritance, and Encapsulation in JavaScript</p>
+        </div>
+
+        <div class="content">
+            <!-- Classes Basics -->
+            <div class="section">
+                <h2>1. ES6 Classes - The Foundation</h2>
+                <p>Classes provide a cleaner way to create objects and implement inheritance in JavaScript.</p>
+
+                <div class="code-block">// Basic Class Definition
+                    class Person {
+                    constructor(name, age) {
+                    this.name = name;
+                    this.age = age;
+                    }
+
+                    // Method
+                    greet() {
+                    return `Hello, I'm ${this.name} and I'm ${this.age} years old.`;
+                    }
+
+                    // Static method
+                    static getSpecies() {
+                    return 'Homo sapiens';
+                    }
+
+                    // Getter
+                    get info() {
+                    return `${this.name} (${this.age})`;
+                    }
+
+                    // Setter
+                    set name(newName) {
+                    if (typeof newName === 'string' && newName.length > 0) {
+                    this._name = newName;
+                    }
+                    }
+
+                    get name() {
+                    return this._name;
+                    }
+                    }</div>
+
+                <div class="demo-area">
+                    <h3>Class Demo</h3>
+                    <button class="btn" onclick="createPerson()">Create Person</button>
+                    <button class="btn btn-success" onclick="testStaticMethod()">Test Static Method</button>
+                    <button class="btn btn-warning" onclick="clearPersonOutput()">Clear</button>
+                    <div id="person-output" class="output" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Inheritance -->
+            <div class="section">
+                <h2>2. Inheritance with extends</h2>
+                <p>Create specialized classes that inherit properties and methods from parent classes.</p>
+
+                <div class="code-block">// Parent Class
+                    class Animal {
+                    constructor(name, species) {
+                    this.name = name;
+                    this.species = species;
+                    }
+
+                    speak() {
+                    return `${this.name} makes a sound`;
+                    }
+
+                    move() {
+                    return `${this.name} is moving`;
+                    }
+                    }
+
+                    // Child Classes
+                    class Dog extends Animal {
+                    constructor(name, breed) {
+                    super(name, 'Canis lupus'); // Call parent constructor
+                    this.breed = breed;
+                    }
+
+                    speak() {
+                    return `${this.name} barks: Woof! Woof!`;
+                    }
+
+                    fetch() {
+                    return `${this.name} fetches the ball`;
+                    }
+                    }
+
+                    class Cat extends Animal {
+                    constructor(name, breed) {
+                    super(name, 'Felis catus');
+                    this.breed = breed;
+                    }
+
+                    speak() {
+                    return `${this.name} meows: Meow!`;
+                    }
+
+                    climb() {
+                    return `${this.name} climbs the tree`;
+                    }
+                    }</div>
+
+                <div class="demo-area">
+                    <h3>Inheritance Demo</h3>
+                    <div class="grid">
+                        <div>
+                            <button class="btn" onclick="createDog()">Create Dog</button>
+                            <button class="btn" onclick="createCat()">Create Cat</button>
+                            <button class="btn btn-success" onclick="testPolymorphism()">Test Polymorphism</button>
+                        </div>
+                        <div>
+                            <button class="btn btn-danger" onclick="clearAnimals()">Clear Animals</button>
+                        </div>
+                    </div>
+                    <div id="animals-container"></div>
+                </div>
+            </div>
+
+            <!-- Encapsulation -->
+            <div class="section">
+                <h2>3. Encapsulation with Private Fields</h2>
+                <p>Use private fields and methods to hide implementation details.</p>
+
+                <div class="code-block">// Encapsulation with private fields (modern browsers)
+                    class BankAccount {
+                    // Private fields
+                    #balance = 0;
+                    #accountNumber;
+                    #pin;
+
+                    constructor(accountNumber, initialBalance = 0, pin) {
+                    this.#accountNumber = accountNumber;
+                    this.#balance = initialBalance;
+                    this.#pin = pin;
+                    }
+
+                    // Private method
+                    #validatePin(pin) {
+                    return pin === this.#pin;
+                    }
+
+                    // Public methods
+                    deposit(amount) {
+                    if (amount > 0) {
+                    this.#balance += amount;
+                    return `Deposited $${amount}. New balance: $${this.#balance}`;
+                    }
+                    return 'Invalid deposit amount';
+                    }
+
+                    withdraw(amount, pin) {
+                    if (!this.#validatePin(pin)) {
+                    return 'Invalid PIN';
+                    }
+
+                    if (amount > 0 && amount <= this.#balance) { this.#balance -=amount; return `Withdrew $${amount}.
+                        New balance: $${this.#balance}`; } return 'Invalid withdrawal amount or insufficient funds' ; }
+                        getBalance(pin) { if (!this.#validatePin(pin)) { return 'Invalid PIN - Access Denied' ; } return
+                        `Account balance: $${this.#balance}`; } get accountInfo() { return `Account:
+                        ${this.#accountNumber}`; } }</div>
+
+                        <div class="demo-area">
+                            <h3>Encapsulation Demo</h3>
+                            <div class="grid">
+                                <div>
+                                    <button class="btn" onclick="createAccount()">Create Account</button>
+                                    <button class="btn btn-success" onclick="makeDeposit()">Deposit $100</button>
+                                    <button class="btn btn-warning" onclick="makeWithdrawal()">Withdraw $50</button>
+                                </div>
+                                <div>
+                                    <button class="btn" onclick="checkBalance()">Check Balance</button>
+                                    <button class="btn btn-danger" onclick="clearAccount()">Clear</button>
+                                </div>
+                            </div>
+                            <div id="account-output" class="output" style="display: none;"></div>
+                        </div>
+                </div>
+
+                <!-- Abstract Classes and Interfaces -->
+                <div class="section">
+                    <h2>4. Abstract Classes and Interface Pattern</h2>
+                    <p>Create abstract base classes and implement interface-like patterns.</p>
+
+                    <div class="code-block">// Abstract Class Pattern
+                        class Vehicle {
+                        constructor(brand, model) {
+                        if (this.constructor === Vehicle) {
+                        throw new Error('Cannot instantiate abstract class');
+                        }
+                        this.brand = brand;
+                        this.model = model;
+                        }
+
+                        // Abstract method (must be implemented by subclasses)
+                        start() {
+                        throw new Error('start() method must be implemented');
+                        }
+
+                        // Concrete method
+                        getInfo() {
+                        return `${this.brand} ${this.model}`;
+                        }
+                        }
+
+                        class Car extends Vehicle {
+                        constructor(brand, model, doors) {
+                        super(brand, model);
+                        this.doors = doors;
+                        }
+
+                        start() {
+                        return `${this.getInfo()} car engine started`;
+                        }
+
+                        openDoors() {
+                        return `Opening ${this.doors} doors`;
+                        }
+                        }
+
+                        class Motorcycle extends Vehicle {
+                        constructor(brand, model, engineSize) {
+                        super(brand, model);
+                        this.engineSize = engineSize;
+                        }
+
+                        start() {
+                        return `${this.getInfo()} motorcycle engine roared to life`;
+                        }
+
+                        wheelie() {
+                        return `${this.getInfo()} performs a wheelie!`;
+                        }
+                        }
+
+                        // Interface-like pattern using Symbol
+                        const Flyable = {
+                        fly: Symbol('fly'),
+                        land: Symbol('land')
+                        };
+
+                        class Airplane extends Vehicle {
+                        constructor(brand, model, maxAltitude) {
+                        super(brand, model);
+                        this.maxAltitude = maxAltitude;
+                        }
+
+                        start() {
+                        return `${this.getInfo()} airplane engines started`;
+                        }
+
+                        // Implement "interface"
+                        [Flyable.fly]() {
+                        return `${this.getInfo()} is flying at ${this.maxAltitude} feet`;
+                        }
+
+                        [Flyable.land]() {
+                        return `${this.getInfo()} is landing`;
+                        }
+                        }</div>
+
+                    <div class="demo-area">
+                        <h3>Abstract Classes Demo</h3>
+                        <div class="grid">
+                            <div>
+                                <button class="btn" onclick="createVehicles()">Create Vehicles</button>
+                                <button class="btn btn-success" onclick="testAbstractClass()">Test Abstract
+                                    Class</button>
+                            </div>
+                            <div>
+                                <button class="btn btn-warning" onclick="testInterface()">Test Interface</button>
+                                <button class="btn btn-danger" onclick="clearVehicles()">Clear</button>
+                            </div>
+                        </div>
+                        <div id="vehicles-container"></div>
+                    </div>
+                </div>
+
+                <!-- Method Chaining -->
+                <div class="section">
+                    <h2>5. Method Chaining Pattern</h2>
+                    <p>Create fluent interfaces by returning 'this' from methods.</p>
+
+                    <div class="code-block">// Method Chaining Example
+                        class QueryBuilder {
+                        constructor() {
+                        this.query = '';
+                        this.conditions = [];
+                        this.orderBy = '';
+                        this.limitValue = '';
+                        }
+
+                        select(fields) {
+                        this.query = `SELECT ${fields}`;
+                        return this; // Return this for chaining
+                        }
+
+                        from(table) {
+                        this.query += ` FROM ${table}`;
+                        return this;
+                        }
+
+                        where(condition) {
+                        this.conditions.push(condition);
+                        return this;
+                        }
+
+                        and(condition) {
+                        this.conditions.push(`AND ${condition}`);
+                        return this;
+                        }
+
+                        or(condition) {
+                        this.conditions.push(`OR ${condition}`);
+                        return this;
+                        }
+
+                        order(field, direction = 'ASC') {
+                        this.orderBy = ` ORDER BY ${field} ${direction}`;
+                        return this;
+                        }
+
+                        limit(count) {
+                        this.limitValue = ` LIMIT ${count}`;
+                        return this;
+                        }
+
+                        build() {
+                        let sql = this.query;
+
+                        if (this.conditions.length > 0) {
+                        sql += ` WHERE ${this.conditions.join(' ')}`;
+                        }
+
+                        sql += this.orderBy + this.limitValue;
+
+                        return sql;
+                        }
+
+                        reset() {
+                        this.query = '';
+                        this.conditions = [];
+                        this.orderBy = '';
+                        this.limitValue = '';
+                        return this;
+                        }
+                        }</div>
+
+                    <div class="demo-area">
+                        <h3>Method Chaining Demo</h3>
+                        <button class="btn" onclick="demoMethodChaining()">Build SQL Query</button>
+                        <button class="btn btn-success" onclick="demoComplexQuery()">Build Complex Query</button>
+                        <button class="btn btn-warning" onclick="clearQueryOutput()">Clear</button>
+                        <div id="query-output" class="output" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- Best Practices -->
+                <div class="tip">
+                    <h3>🎯 OOP Best Practices</h3>
+                    <ul>
+                        <li><strong>Single Responsibility:</strong> Each class should have one reason to change</li>
+                        <li><strong>Open/Closed Principle:</strong> Open for extension, closed for modification</li>
+                        <li><strong>Liskov Substitution:</strong> Derived classes must be substitutable for base classes
+                        </li>
+                        <li><strong>Interface Segregation:</strong> Don't force classes to depend on unused methods</li>
+                        <li><strong>Dependency Inversion:</strong> Depend on abstractions, not concrete classes</li>
+                    </ul>
+                </div>
+
+                <!-- Senior Engineer Insights -->
+                <div class="highlight">
+                    <h3>💡 Senior Engineer Insights</h3>
+                    <ul>
+                        <li><strong>Composition over Inheritance:</strong> Favor object composition over class
+                            inheritance</li>
+                        <li><strong>Encapsulation:</strong> Hide internal state and expose only necessary methods</li>
+                        <li><strong>Polymorphism:</strong> Use common interfaces for different implementations</li>
+                        <li><strong>Factory Patterns:</strong> Use factory methods for complex object creation</li>
+                        <li><strong>Immutability:</strong> Consider immutable objects for better predictability</li>
+                    </ul>
+                </div>
+
+                <!-- Common Pitfalls -->
+                <div class="warning">
+                    <h3>⚠️ Common Pitfalls</h3>
+                    <ul>
+                        <li><strong>Over-inheritance:</strong> Deep inheritance hierarchies are hard to maintain</li>
+                        <li><strong>God Classes:</strong> Avoid classes that know too much or do too much</li>
+                        <li><strong>Feature Envy:</strong> Methods that use more data from another class</li>
+                        <li><strong>Inappropriate Intimacy:</strong> Classes that know too much about each other</li>
+                        <li><strong>Refused Bequest:</strong> Subclasses that don't need all parent functionality</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Global variables for demos
+            let currentAccount = null;
+            let vehicles = [];
+            let queryBuilder = new QueryBuilder();
+
+            // Person class demo
+            class Person {
+                constructor(name, age) {
+                    this.name = name;
+                    this.age = age;
+                }
+
+                greet() {
+                    return `Hello, I'm ${this.name} and I'm ${this.age} years old.`;
+                }
+
+                static getSpecies() {
+                    return 'Homo sapiens';
+                }
+
+                get info() {
+                    return `${this.name} (${this.age})`;
+                }
+            }
+
+            function createPerson() {
+                const person = new Person('Alice', 30);
+                const output = document.getElementById('person-output');
+                output.style.display = 'block';
+                output.innerHTML = `
+                <div class="fade-in">
+                    <strong>Person Created:</strong><br>
+                    ${person.greet()}<br>
+                    <strong>Info:</strong> ${person.info}
+                </div>
+            `;
+            }
+
+            function testStaticMethod() {
+                const output = document.getElementById('person-output');
+                output.style.display = 'block';
+                output.innerHTML = `
+                <div class="fade-in">
+                    <strong>Static Method Result:</strong><br>
+                    Species: ${Person.getSpecies()}
+                </div>
+            `;
+            }
+
+            function clearPersonOutput() {
+                document.getElementById('person-output').style.display = 'none';
+            }
+
+            // Animal inheritance demo
+            class Animal {
+                constructor(name, species) {
+                    this.name = name;
+                    this.species = species;
+                }
+
+                speak() {
+                    return `${this.name} makes a sound`;
+                }
+
+                move() {
+                    return `${this.name} is moving`;
+                }
+            }
+
+            class Dog extends Animal {
+                constructor(name, breed) {
+                    super(name, 'Canis lupus');
+                    this.breed = breed;
+                }
+
+                speak() {
+                    return `${this.name} barks: Woof! Woof!`;
+                }
+
+                fetch() {
+                    return `${this.name} fetches the ball`;
+                }
+            }
+
+            class Cat extends Animal {
+                constructor(name, breed) {
+                    super(name, 'Felis catus');
+                    this.breed = breed;
+                }
+
+                speak() {
+                    return `${this.name} meows: Meow!`;
+                }
+
+                climb() {
+                    return `${this.name} climbs the tree`;
+                }
+            }
+
+            function createDog() {
+                const dog = new Dog('Max', 'Golden Retriever');
+                const container = document.getElementById('animals-container');
+                const dogCard = document.createElement('div');
+                dogCard.className = 'animal-card fade-in';
+                dogCard.innerHTML = `
+                <h4>🐕 ${dog.name} (${dog.breed})</h4>
+                <p><strong>Species:</strong> ${dog.species}</p>
+                <p><strong>Sound:</strong> ${dog.speak()}</p>
+                <p><strong>Special:</strong> ${dog.fetch()}</p>
+                <p><strong>Movement:</strong> ${dog.move()}</p>
+            `;
+                container.appendChild(dogCard);
+            }
+
+            function createCat() {
+                const cat = new Cat('Whiskers', 'Persian');
+                const container = document.getElementById('animals-container');
+                const catCard = document.createElement('div');
+                catCard.className = 'animal-card fade-in';
+                catCard.innerHTML = `
+                <h4>🐱 ${cat.name} (${cat.breed})</h4>
+                <p><strong>Species:</strong> ${cat.species}</p>
+                <p><strong>Sound:</strong> ${cat.speak()}</p>
+                <p><strong>Special:</strong> ${cat.climb()}</p>
+                <p><strong>Movement:</strong> ${cat.move()}</p>
+            `;
+                container.appendChild(catCard);
+            }
+
+            function testPolymorphism() {
+                const animals = [
+                    new Dog('Buddy', 'Labrador'),
+                    new Cat('Mittens', 'Siamese'),
+                    new Dog('Rex', 'German Shepherd')
+                ];
+
+                const container = document.getElementById('animals-container');
+                const polyCard = document.createElement('div');
+                polyCard.className = 'animal-card fade-in';
+                polyCard.style.background = '#e3f2fd';
+                polyCard.innerHTML = `
+                <h4>🔄 Polymorphism Demo</h4>
+                <p><strong>All animals speaking:</strong></p>
+                ${animals.map(animal => `<p>• ${animal.speak()}</p>`).join('')}
+            `;
+                container.appendChild(polyCard);
+            }
+
+            function clearAnimals() {
+                document.getElementById('animals-container').innerHTML = '';
+            }
+
+            // Bank account encapsulation demo
+            class BankAccount {
+                #balance = 0;
+                #accountNumber;
+                #pin;
+
+                constructor(accountNumber, initialBalance = 0, pin) {
+                    this.#accountNumber = accountNumber;
+                    this.#balance = initialBalance;
+                    this.#pin = pin;
+                }
+
+                #validatePin(pin) {
+                    return pin === this.#pin;
+                }
+
+                deposit(amount) {
+                    if (amount > 0) {
+                        this.#balance += amount;
+                        return `Deposited $${amount}. New balance: $${this.#balance}`;
+                    }
+                    return 'Invalid deposit amount';
+                }
+
+                withdraw(amount, pin) {
+                    if (!this.#validatePin(pin)) {
+                        return 'Invalid PIN';
+                    }
+
+                    if (amount > 0 && amount <= this.#balance) {
+                        this.#balance -= amount;
+                        return `Withdrew $${amount}. New balance: $${this.#balance}`;
+                    }
+                    return 'Invalid withdrawal amount or insufficient funds';
+                }
+
+                getBalance(pin) {
+                    if (!this.#validatePin(pin)) {
+                        return 'Invalid PIN - Access Denied';
+                    }
+                    return `Account balance: $${this.#balance}`;
+                }
+
+                get accountInfo() {
+                    return `Account: ${this.#accountNumber}`;
+                }
+            }
+
+            function createAccount() {
+                currentAccount = new BankAccount('ACC123456', 1000, '1234');
+                const output = document.getElementById('account-output');
+                output.style.display = 'block';
+                output.innerHTML = `
+                <div class="fade-in">
+                    <strong>Account Created:</strong><br>
+                    ${currentAccount.accountInfo}<br>
+                    Initial Balance: $1000<br>
+                    PIN: 1234 (for demo purposes)
+                </div>
+            `;
+            }
+
+            function makeDeposit() {
+                if (!currentAccount) {
+                    alert('Please create an account first!');
+                    return;
+                }
+
+                const result = currentAccount.deposit(100);
+                const output = document.getElementById('account-output');
+                output.style.display = 'block';
+                output.innerHTML += `
+                <div class="fade-in">
+                    <strong>Deposit Result:</strong><br>
+                    ${result}
+                </div>
+            `;
+            }
+
+            function makeWithdrawal() {
+                if (!currentAccount) {
+                    alert('Please create an account first!');
+                    return;
+                }
+
+                const result = currentAccount.withdraw(50, '1234');
+                const output = document.getElementById('account-output');
+                output.style.display = 'block';
+                output.innerHTML += `
+                <div class="fade-in">
+                    <strong>Withdrawal Result:</strong><br>
+                    ${result}
+                </div>
+            `;
+            }
+
+            function checkBalance() {
+                if (!currentAccount) {
+                    alert('Please create an account first!');
+                    return;
+                }
+
+                const result = currentAccount.getBalance('1234');
+                const output = document.getElementById('account-output');
+                output.style.display = 'block';
+                output.innerHTML += `
+                <div class="fade-in">
+                    <strong>Balance Check:</strong><br>
+                    ${result}
+                </div>
+            `;
+            }
+
+            function clearAccount() {
+                currentAccount = null;
+                document.getElementById('account-output').style.display = 'none';
+            }
+
+            // Vehicle abstract class demo
+            class Vehicle {
+                constructor(brand, model) {
+                    if (this.constructor === Vehicle) {
+                        throw new Error('Cannot instantiate abstract class');
+                    }
+                    this.brand = brand;
+                    this.model = model;
+                }
+
+                start() {
+                    throw new Error('start() method must be implemented');
+                }
+
+                getInfo() {
+                    return `${this.brand} ${this.model}`;
+                }
+            }
+
+            class Car extends Vehicle {
+                constructor(brand, model, doors) {
+                    super(brand, model);
+                    this.doors = doors;
+                }
+
+                start() {
+                    return `${this.getInfo()} car engine started`;
+                }
+
+                openDoors() {
+                    return `Opening ${this.doors} doors`;
+                }
+            }
+
+            class Motorcycle extends Vehicle {
+                constructor(brand, model, engineSize) {
+                    super(brand, model);
+                    this.engineSize = engineSize;
+                }
+
+                start() {
+                    return `${this.getInfo()} motorcycle engine roared to life`;
+                }
+
+                wheelie() {
+                    return `${this.getInfo()} performs a wheelie!`;
+                }
+            }
+
+            const Flyable = {
+                fly: Symbol('fly'),
+                land: Symbol('land')
+            };
+
+            class Airplane extends Vehicle {
+                constructor(brand, model, maxAltitude) {
+                    super(brand, model);
+                    this.maxAltitude = maxAltitude;
+                }
+
+                start() {
+                    return `${this.getInfo()} airplane engines started`;
+                }
+
+                [Flyable.fly]() {
+                    return `${this.getInfo()} is flying at ${this.maxAltitude} feet`;
+                }
+
+                [Flyable.land]() {
+                    return `${this.getInfo()} is landing`;
+                }
+            }
+
+            function createVehicles() {
+                vehicles = [
+                    new Car('Toyota', 'Camry', 4),
+                    new Motorcycle('Harley-Davidson', 'Sportster', 883),
+                    new Airplane('Boeing', '747', 35000)
+                ];
+
+                const container = document.getElementById('vehicles-container');
+                container.innerHTML = '';
+
+                vehicles.forEach(vehicle => {
+                    const card = document.createElement('div');
+                    card.className = 'vehicle-card fade-in';
+                    card.innerHTML = `
+                    <h4>${vehicle.getInfo()}</h4>
+                    <p><strong>Type:</strong> ${vehicle.constructor.name}</p>
+                    <p><strong>Start:</strong> ${vehicle.start()}</p>
+                `;
+                    container.appendChild(card);
+                });
+            }
+
+            function testAbstractClass() {
+                try {
+                    new Vehicle('Test', 'Test');
+                } catch (error) {
+                    const container = document.getElementById('vehicles-container');
+                    const errorCard = document.createElement('div');
+                    errorCard.className = 'vehicle-card fade-in';
+                    errorCard.style.background = '#ffebee';
+                    errorCard.style.color = '#c62828';
+                    errorCard.innerHTML = `
+                    <h4>⚠️ Abstract Class Test</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p>This proves the abstract class pattern works!</p>
+                `;
+                    container.appendChild(errorCard);
+                }
+            }
+
+            function testInterface() {
+                if (vehicles.length === 0) {
+                    alert('Please create vehicles first!');
+                    return;
+                }
+
+                const airplane = vehicles.find(v => v instanceof Airplane);
+                if (airplane) {
+                    const container = document.getElementById('vehicles-container');
+                    const interfaceCard = document.createElement('div');
+                    interfaceCard.className = 'vehicle-card fade-in';
+                    interfaceCard.style.background = '#e8f5e8';
+                    interfaceCard.innerHTML = `
+                    <h4>✈️ Interface Pattern Demo</h4>
+                    <p><strong>Flying:</strong> ${airplane[Flyable.fly]()}</p>
+                    <p><strong>Landing:</strong> ${airplane[Flyable.land]()}</p>
+                `;
+                    container.appendChild(interfaceCard);
+                }
+            }
+
+            function clearVehicles() {
+                vehicles = [];
+                document.getElementById('vehicles-container').innerHTML = '';
+            }
+
+            // Method chaining demo
+            class QueryBuilder {
+                constructor() {
+                    this.query = '';
+                    this.conditions = [];
+                    this.orderBy = '';
+                    this.limitValue = '';
+                }
+
+                select(fields) {
+                    this.query = `SELECT ${fields}`;
+                    return this;
+                }
+
+                from(table) {
+                    this.query += ` FROM ${table}`;
+                    return this;
+                }
+
+                where(condition) {
+                    this.conditions.push(condition);
+                    return this;
+                }
+
+                and(condition) {
+                    this.conditions.push(`AND ${condition}`);
+                    return this;
+                }
+
+                or(condition) {
+                    this.conditions.push(`OR ${condition}`);
+                    return this;
+                }
+
+                order(field, direction = 'ASC') {
+                    this.orderBy = ` ORDER BY ${field} ${direction}`;
+                    return this;
+                }
+
+                limit(count) {
+                    this.limitValue = ` LIMIT ${count}`;
+                    return this;
+                }
+
+                build() {
+                    let sql = this.query;
+
+                    if (this.conditions.length > 0) {
+                        sql += ` WHERE ${this.conditions.join(' ')}`;
+                    }
+
+                    sql += this.orderBy + this.limitValue;
+
+                    return sql;
+                }
+
+                reset() {
+                    this.query = '';
+                    this.conditions = [];
+                    this.orderBy = '';
+                    this.limitValue = '';
+                    return this;
+                }
+            }
+
+            function demoMethodChaining() {
+                const sql = queryBuilder
+                    .reset()
+                    .select('name, email')
+                    .from('users')
+                    .where('age > 18')
+                    .and('active = true')
+                    .order('name', 'ASC')
+                    .limit(10)
+                    .build();
+
+                const output = document.getElementById('query-output');
+                output.style.display = 'block';
+                output.innerHTML = `
+                <div class="fade-in">
+                    <strong>Generated SQL:</strong><br>
+                    ${sql}
+                </div>
+            `;
+            }
+
+            function demoComplexQuery() {
+                const sql = queryBuilder
+                    .reset()
+                    .select('u.name, p.title, c.name as category')
+                    .from('users u')
+                    .where('u.age BETWEEN 25 AND 35')
+                    .and('u.status = "active"')
+                    .or('u.premium = true')
+                    .order('u.created_at', 'DESC')
+                    .limit(20)
+                    .build();
+
+                const output = document.getElementById('query-output');
+                output.style.display = 'block';
+                output.innerHTML = `
+                <div class="fade-in">
+                    <strong>Complex SQL Query:</strong><br>
+                    ${sql}
+                </div>
+            `;
+            }
+
+            function clearQueryOutput() {
+                document.getElementById('query-output').style.display = 'none';
+            }
+        </script>
+</body>
+
+</html>

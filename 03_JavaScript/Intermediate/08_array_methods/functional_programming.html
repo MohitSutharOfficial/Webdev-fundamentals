@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Methods & Functional Programming</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #16a085 0%, #27ae60 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            background: #f8f9fa;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #16a085;
+            font-size: 1.5rem;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            border-left: 4px solid #16a085;
+        }
+
+        .demo-area {
+            background: white;
+            border: 2px dashed #16a085;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            min-height: 100px;
+        }
+
+        .btn {
+            background: #16a085;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 0.25rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            background: #138d75;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-success {
+            background: #27ae60;
+        }
+
+        .btn-success:hover {
+            background: #219a52;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-info {
+            background: #3498db;
+        }
+
+        .btn-info:hover {
+            background: #2980b9;
+        }
+
+        .btn-warning {
+            background: #f39c12;
+        }
+
+        .btn-warning:hover {
+            background: #e67e22;
+        }
+
+        .output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            margin: 1rem 0;
+            border-left: 4px solid #27ae60;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .tip {
+            background: #d4edda;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .warning {
+            background: #f8d7da;
+            border: 1px solid #e74c3c;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .method-card {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .method-card h4 {
+            color: #16a085;
+            margin-bottom: 0.5rem;
+        }
+
+        .method-card .syntax {
+            background: #f8f9fa;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            margin: 0.5rem 0;
+        }
+
+        .performance-comparison {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .chain-demo {
+            background: #f3e5f5;
+            border: 1px solid #9c27b0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .data-viz {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #16a085;
+            box-shadow: 0 0 0 0.2rem rgba(22, 160, 133, 0.25);
+        }
+
+        .step-indicator {
+            background: #16a085;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 50%;
+            font-size: 12px;
+            margin-right: 0.5rem;
+            display: inline-block;
+            min-width: 25px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Array Methods & Functional Programming</h1>
+            <p>Master JavaScript's Powerful Array Methods and Functional Programming Concepts</p>
+        </div>
+
+        <div class="content">
+            <!-- Array Methods Overview -->
+            <div class="section">
+                <h2>1. Essential Array Methods</h2>
+                <p>JavaScript provides powerful array methods that enable functional programming patterns and data
+                    manipulation.</p>
+
+                <div class="code-block">// Array Methods Categories
+                    // 1. Transformation Methods
+                    const map = array.map(callback); // Transform each element
+                    const filter = array.filter(callback); // Select elements that match criteria
+                    const reduce = array.reduce(callback, initialValue); // Aggregate to single value
+
+                    // 2. Search Methods
+                    const find = array.find(callback); // Find first matching element
+                    const findIndex = array.findIndex(callback); // Find index of first match
+                    const includes = array.includes(value); // Check if value exists
+
+                    // 3. Testing Methods
+                    const some = array.some(callback); // Test if at least one element matches
+                    const every = array.every(callback); // Test if all elements match
+
+                    // 4. Iteration Methods
+                    array.forEach(callback); // Execute function for each element
+
+                    // 5. Sorting and Ordering
+                    const sorted = array.sort(compareFn); // Sort elements
+                    const reversed = array.reverse(); // Reverse order
+
+                    // 6. Utility Methods
+                    const flattened = array.flat(depth); // Flatten nested arrays
+                    const mapped = array.flatMap(callback); // Map and flatten in one step</div>
+
+                <div class="demo-area">
+                    <h3>Array Methods Quick Reference</h3>
+                    <div class="grid">
+                        <div class="method-card">
+                            <h4>map()</h4>
+                            <div class="syntax">array.map(item => transformation)</div>
+                            <p>Creates a new array with the results of calling a function for every element.</p>
+                        </div>
+                        <div class="method-card">
+                            <h4>filter()</h4>
+                            <div class="syntax">array.filter(item => condition)</div>
+                            <p>Creates a new array with elements that pass a test.</p>
+                        </div>
+                        <div class="method-card">
+                            <h4>reduce()</h4>
+                            <div class="syntax">array.reduce((acc, item) => acc + item, 0)</div>
+                            <p>Reduces the array to a single value.</p>
+                        </div>
+                        <div class="method-card">
+                            <h4>find()</h4>
+                            <div class="syntax">array.find(item => condition)</div>
+                            <p>Returns the first element that satisfies the condition.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map Method -->
+            <div class="section">
+                <h2>2. map() - Data Transformation</h2>
+                <p>The map() method creates a new array by transforming each element of the original array.</p>
+
+                <div class="code-block">// Basic map examples
+                    const numbers = [1, 2, 3, 4, 5];
+                    const doubled = numbers.map(n => n * 2);
+                    console.log(doubled); // [2, 4, 6, 8, 10]
+
+                    const users = [
+                    { name: 'Alice', age: 25 },
+                    { name: 'Bob', age: 30 },
+                    { name: 'Charlie', age: 35 }
+                    ];
+
+                    // Extract specific properties
+                    const names = users.map(user => user.name);
+                    const ages = users.map(user => user.age);
+
+                    // Transform objects
+                    const userProfiles = users.map(user => ({
+                    ...user,
+                    isAdult: user.age >= 18,
+                    displayName: user.name.toUpperCase()
+                    }));
+
+                    // Complex transformations
+                    const products = [
+                    { name: 'Laptop', price: 1000, category: 'Electronics' },
+                    { name: 'Book', price: 15, category: 'Education' },
+                    { name: 'Phone', price: 600, category: 'Electronics' }
+                    ];
+
+                    const formattedProducts = products.map(product => ({
+                    ...product,
+                    formattedPrice: `$${product.price.toFixed(2)}`,
+                    slug: product.name.toLowerCase().replace(/\s+/g, '-'),
+                    isExpensive: product.price > 500
+                    }));</div>
+
+                <div class="demo-area">
+                    <h3>Map Method Demo</h3>
+                    <div class="grid">
+                        <div>
+                            <button class="btn" onclick="demoBasicMap()">Basic Map</button>
+                            <button class="btn" onclick="demoObjectMap()">Object Mapping</button>
+                            <button class="btn" onclick="demoComplexMap()">Complex Transformation</button>
+                        </div>
+                        <div>
+                            <button class="btn btn-info" onclick="demoMapChaining()">Map Chaining</button>
+                            <button class="btn btn-danger" onclick="clearMapDemo()">Clear</button>
+                        </div>
+                    </div>
+                    <div id="map-output" class="output" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Filter Method -->
+            <div class="section">
+                <h2>3. filter() - Data Filtering</h2>
+                <p>The filter() method creates a new array with elements that pass a test implemented by a provided
+                    function.</p>
+
+                <div class="code-block">// Basic filter examples
+                    const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+                    const evens = numbers.filter(n => n % 2 === 0);
+                    const greaterThanFive = numbers.filter(n => n > 5);
+
+                    const users = [
+                    { name: 'Alice', age: 25, active: true },
+                    { name: 'Bob', age: 17, active: false },
+                    { name: 'Charlie', age: 35, active: true },
+                    { name: 'Diana', age: 28, active: false }
+                    ];
+
+                    // Filter by single condition
+                    const adults = users.filter(user => user.age >= 18);
+                    const activeUsers = users.filter(user => user.active);
+
+                    // Filter by multiple conditions
+                    const activeAdults = users.filter(user => user.age >= 18 && user.active);
+
+                    // Complex filtering
+                    const products = [
+                    { name: 'Laptop', price: 1000, category: 'Electronics', inStock: true },
+                    { name: 'Book', price: 15, category: 'Education', inStock: false },
+                    { name: 'Phone', price: 600, category: 'Electronics', inStock: true },
+                    { name: 'Tablet', price: 300, category: 'Electronics', inStock: true }
+                    ];
+
+                    const availableElectronics = products.filter(product =>
+                    product.category === 'Electronics' &&
+                    product.inStock &&
+                    product.price < 800 ); // Filter with custom functions const isPrime=n=> {
+                        if (n <= 1) return false; for (let i=2; i <=Math.sqrt(n); i++) { if (n % i===0) return false; }
+                            return true; }; const primeNumbers=numbers.filter(isPrime);</div>
+
+                            <div class="demo-area">
+                                <h3>Filter Method Demo</h3>
+                                <div class="grid">
+                                    <div>
+                                        <button class="btn" onclick="demoBasicFilter()">Basic Filter</button>
+                                        <button class="btn" onclick="demoObjectFilter()">Object Filtering</button>
+                                        <button class="btn" onclick="demoComplexFilter()">Complex Filtering</button>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-info" onclick="demoFilterChaining()">Filter
+                                            Chaining</button>
+                                        <button class="btn btn-danger" onclick="clearFilterDemo()">Clear</button>
+                                    </div>
+                                </div>
+                                <div id="filter-output" class="output" style="display: none;"></div>
+                            </div>
+                </div>
+
+                <!-- Reduce Method -->
+                <div class="section">
+                    <h2>4. reduce() - Data Aggregation</h2>
+                    <p>The reduce() method executes a reducer function on each element, resulting in a single output
+                        value.</p>
+
+                    <div class="code-block">// Basic reduce examples
+                        const numbers = [1, 2, 3, 4, 5];
+                        const sum = numbers.reduce((acc, curr) => acc + curr, 0);
+                        const product = numbers.reduce((acc, curr) => acc * curr, 1);
+                        const max = numbers.reduce((acc, curr) => Math.max(acc, curr), -Infinity);
+
+                        // Object aggregation
+                        const orders = [
+                        { id: 1, amount: 250, customer: 'Alice' },
+                        { id: 2, amount: 180, customer: 'Bob' },
+                        { id: 3, amount: 320, customer: 'Alice' },
+                        { id: 4, amount: 150, customer: 'Charlie' }
+                        ];
+
+                        // Sum by customer
+                        const customerTotals = orders.reduce((acc, order) => {
+                        acc[order.customer] = (acc[order.customer] || 0) + order.amount;
+                        return acc;
+                        }, {});
+
+                        // Group by customer
+                        const customerOrders = orders.reduce((acc, order) => {
+                        if (!acc[order.customer]) acc[order.customer] = [];
+                        acc[order.customer].push(order);
+                        return acc;
+                        }, {});
+
+                        // Complex transformations
+                        const inventory = [
+                        { product: 'Laptop', quantity: 10, price: 1000 },
+                        { product: 'Mouse', quantity: 50, price: 25 },
+                        { product: 'Keyboard', quantity: 30, price: 75 }
+                        ];
+
+                        const inventoryStats = inventory.reduce((acc, item) => {
+                        acc.totalValue += item.quantity * item.price;
+                        acc.totalItems += item.quantity;
+                        acc.products.push(item.product);
+                        return acc;
+                        }, { totalValue: 0, totalItems: 0, products: [] });
+
+                        // Flattening arrays
+                        const nestedArrays = [[1, 2], [3, 4], [5, 6]];
+                        const flattened = nestedArrays.reduce((acc, curr) => acc.concat(curr), []);
+
+                        // Creating lookup tables
+                        const users = [
+                        { id: 1, name: 'Alice', email: 'alice@example.com' },
+                        { id: 2, name: 'Bob', email: 'bob@example.com' },
+                        { id: 3, name: 'Charlie', email: 'charlie@example.com' }
+                        ];
+
+                        const userLookup = users.reduce((acc, user) => {
+                        acc[user.id] = user;
+                        return acc;
+                        }, {});</div>
+
+                    <div class="demo-area">
+                        <h3>Reduce Method Demo</h3>
+                        <div class="grid">
+                            <div>
+                                <button class="btn" onclick="demoBasicReduce()">Basic Reduce</button>
+                                <button class="btn" onclick="demoObjectReduce()">Object Aggregation</button>
+                                <button class="btn" onclick="demoComplexReduce()">Complex Reduce</button>
+                            </div>
+                            <div>
+                                <button class="btn btn-info" onclick="demoGroupingReduce()">Grouping Data</button>
+                                <button class="btn btn-danger" onclick="clearReduceDemo()">Clear</button>
+                            </div>
+                        </div>
+                        <div id="reduce-output" class="output" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- Method Chaining -->
+                <div class="section">
+                    <h2>5. Method Chaining - Functional Pipeline</h2>
+                    <p>Combine multiple array methods to create powerful data processing pipelines.</p>
+
+                    <div class="code-block">// Method chaining examples
+                        const sales = [
+                        { product: 'Laptop', amount: 1200, region: 'North', quarter: 'Q1' },
+                        { product: 'Phone', amount: 800, region: 'South', quarter: 'Q1' },
+                        { product: 'Tablet', amount: 600, region: 'North', quarter: 'Q2' },
+                        { product: 'Laptop', amount: 1500, region: 'East', quarter: 'Q2' },
+                        { product: 'Phone', amount: 900, region: 'West', quarter: 'Q1' }
+                        ];
+
+                        // Complex data processing pipeline
+                        const topProducts = sales
+                        .filter(sale => sale.amount > 700) // Filter high-value sales
+                        .map(sale => ({ // Transform data
+                        ...sale,
+                        category: sale.product.includes('Laptop') ? 'Computer' : 'Mobile'
+                        }))
+                        .reduce((acc, sale) => { // Group by product
+                        if (!acc[sale.product]) acc[sale.product] = [];
+                        acc[sale.product].push(sale);
+                        return acc;
+                        }, {});
+
+                        // Multi-step analysis
+                        const regionAnalysis = sales
+                        .filter(sale => sale.quarter === 'Q1')
+                        .map(sale => ({ region: sale.region, amount: sale.amount }))
+                        .reduce((acc, sale) => {
+                        acc[sale.region] = (acc[sale.region] || 0) + sale.amount;
+                        return acc;
+                        }, {});
+
+                        // Advanced chaining with custom functions
+                        const processUserData = (users) => {
+                        return users
+                        .filter(user => user.active)
+                        .map(user => ({
+                        ...user,
+                        fullName: `${user.firstName} ${user.lastName}`,
+                        age: new Date().getFullYear() - user.birthYear
+                        }))
+                        .filter(user => user.age >= 18)
+                        .sort((a, b) => a.age - b.age)
+                        .slice(0, 10);
+                        };
+
+                        // Functional composition
+                        const compose = (...fns) => (value) => fns.reduceRight((acc, fn) => fn(acc), value);
+
+                        const processNumbers = compose(
+                        nums => nums.filter(n => n > 0),
+                        nums => nums.map(n => n * 2),
+                        nums => nums.reduce((sum, n) => sum + n, 0)
+                        );
+
+                        // Pipeline operator simulation
+                        const pipeline = (data, ...operations) => {
+                        return operations.reduce((result, operation) => operation(result), data);
+                        };
+
+                        const result = pipeline(
+                        [1, 2, 3, 4, 5],
+                        arr => arr.filter(n => n % 2 === 0),
+                        arr => arr.map(n => n * 3),
+                        arr => arr.reduce((sum, n) => sum + n, 0)
+                        );</div>
+
+                    <div class="demo-area">
+                        <h3>Method Chaining Demo</h3>
+                        <div class="chain-demo">
+                            <div class="grid">
+                                <div>
+                                    <button class="btn" onclick="demoBasicChaining()">Basic Chaining</button>
+                                    <button class="btn" onclick="demoComplexChaining()">Complex Pipeline</button>
+                                    <button class="btn" onclick="demoDataAnalysis()">Data Analysis</button>
+                                </div>
+                                <div>
+                                    <button class="btn btn-info" onclick="demoFunctionalComposition()">Functional
+                                        Composition</button>
+                                    <button class="btn btn-danger" onclick="clearChainingDemo()">Clear</button>
+                                </div>
+                            </div>
+                            <div id="chaining-output" class="output" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Array Methods -->
+                <div class="section">
+                    <h2>6. Advanced Array Methods</h2>
+                    <p>Explore more specialized array methods for specific use cases.</p>
+
+                    <div class="code-block">// Advanced array methods
+                        const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+                        // some() - test if at least one element passes the test
+                        const hasEven = data.some(n => n % 2 === 0);
+                        const hasNegative = data.some(n => n < 0); // every() - test if all elements pass the test const
+                            allPositive=data.every(n=> n > 0);
+                            const allEven = data.every(n => n % 2 === 0);
+
+                            // find() - find first element that matches
+                            const firstEven = data.find(n => n % 2 === 0);
+                            const firstGreaterThan5 = data.find(n => n > 5);
+
+                            // findIndex() - find index of first matching element
+                            const firstEvenIndex = data.findIndex(n => n % 2 === 0);
+
+                            // includes() - check if array includes a value
+                            const hasValue5 = data.includes(5);
+                            const hasValue15 = data.includes(15);
+
+                            // flat() - flatten nested arrays
+                            const nested = [[1, 2], [3, 4], [5, [6, 7]]];
+                            const flattened = nested.flat();
+                            const deepFlattened = nested.flat(2);
+
+                            // flatMap() - map and flatten in one step
+                            const words = ['hello', 'world'];
+                            const letters = words.flatMap(word => word.split(''));
+
+                            // Array.from() - create array from array-like objects
+                            const arrayFromString = Array.from('hello');
+                            const arrayFromSet = Array.from(new Set([1, 2, 3, 3, 4]));
+                            const arrayWithCallback = Array.from({length: 5}, (_, i) => i * 2);
+
+                            // Advanced find operations
+                            const users = [
+                            { id: 1, name: 'Alice', role: 'admin', active: true },
+                            { id: 2, name: 'Bob', role: 'user', active: false },
+                            { id: 3, name: 'Charlie', role: 'moderator', active: true }
+                            ];
+
+                            const admin = users.find(user => user.role === 'admin');
+                            const activeUsers = users.filter(user => user.active);
+                            const hasInactiveUser = users.some(user => !user.active);
+                            const allUsersHaveId = users.every(user => user.id);
+
+                            // Custom array methods
+                            Array.prototype.groupBy = function(keyFn) {
+                            return this.reduce((acc, item) => {
+                            const key = keyFn(item);
+                            if (!acc[key]) acc[key] = [];
+                            acc[key].push(item);
+                            return acc;
+                            }, {});
+                            };
+
+                            Array.prototype.unique = function() {
+                            return [...new Set(this)];
+                            };
+
+                            Array.prototype.sortBy = function(keyFn) {
+                            return this.sort((a, b) => {
+                            const aVal = keyFn(a);
+                            const bVal = keyFn(b);
+                            if (aVal < bVal) return -1; if (aVal> bVal) return 1;
+                                return 0;
+                                });
+                                };</div>
+
+                    <div class="demo-area">
+                        <h3>Advanced Array Methods Demo</h3>
+                        <div class="grid">
+                            <div>
+                                <button class="btn" onclick="demoTestingMethods()">Testing Methods</button>
+                                <button class="btn" onclick="demoSearchMethods()">Search Methods</button>
+                                <button class="btn" onclick="demoFlatMethods()">Flat Methods</button>
+                            </div>
+                            <div>
+                                <button class="btn btn-info" onclick="demoArrayFrom()">Array.from()</button>
+                                <button class="btn btn-success" onclick="demoCustomMethods()">Custom Methods</button>
+                                <button class="btn btn-danger" onclick="clearAdvancedDemo()">Clear</button>
+                            </div>
+                        </div>
+                        <div id="advanced-output" class="output" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- Performance Comparison -->
+                <div class="section">
+                    <h2>7. Performance Comparison</h2>
+                    <p>Compare the performance of different array methods and traditional loops.</p>
+
+                    <div class="demo-area">
+                        <h3>Performance Testing</h3>
+                        <div class="performance-comparison">
+                            <div class="grid">
+                                <div>
+                                    <div class="form-group">
+                                        <label for="array-size">Array Size:</label>
+                                        <input type="number" class="form-control" id="array-size" value="100000"
+                                            min="1000" max="1000000">
+                                    </div>
+                                    <button class="btn" onclick="runPerformanceTest()">Run Performance Test</button>
+                                    <button class="btn btn-info" onclick="runMemoryTest()">Memory Usage Test</button>
+                                </div>
+                                <div>
+                                    <div id="performance-results" class="output" style="display: none;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Practical Applications -->
+                <div class="section">
+                    <h2>8. Practical Applications</h2>
+                    <p>Real-world examples of using array methods in modern JavaScript applications.</p>
+
+                    <div class="demo-area">
+                        <h3>Data Processing Examples</h3>
+                        <div class="data-viz">
+                            <div class="grid">
+                                <div>
+                                    <button class="btn" onclick="demoDataVisualization()">Data Visualization</button>
+                                    <button class="btn" onclick="demoFormProcessing()">Form Processing</button>
+                                    <button class="btn" onclick="demoAPIDataProcessing()">API Data Processing</button>
+                                </div>
+                                <div>
+                                    <button class="btn btn-info" onclick="demoSearchAndFilter()">Search &
+                                        Filter</button>
+                                    <button class="btn btn-danger" onclick="clearPracticalDemo()">Clear</button>
+                                </div>
+                            </div>
+                            <div id="practical-output" class="output" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Best Practices -->
+                <div class="tip">
+                    <h3>🎯 Best Practices</h3>
+                    <ul>
+                        <li><strong>Immutability:</strong> Array methods return new arrays - don't mutate original data
+                        </li>
+                        <li><strong>Method Chaining:</strong> Chain methods for readable data transformation pipelines
+                        </li>
+                        <li><strong>Performance:</strong> Consider traditional loops for very large datasets</li>
+                        <li><strong>Readability:</strong> Use descriptive variable names and break complex chains</li>
+                        <li><strong>Error Handling:</strong> Always validate data before processing</li>
+                    </ul>
+                </div>
+
+                <!-- Senior Engineer Insights -->
+                <div class="highlight">
+                    <h3>💡 Senior Engineer Insights</h3>
+                    <ul>
+                        <li><strong>Functional Programming:</strong> Embrace immutable operations and pure functions
+                        </li>
+                        <li><strong>Composition:</strong> Build complex operations from simple, reusable functions</li>
+                        <li><strong>Type Safety:</strong> Use TypeScript for better type checking in array operations
+                        </li>
+                        <li><strong>Performance Monitoring:</strong> Profile array operations in production environments
+                        </li>
+                        <li><strong>Custom Utilities:</strong> Create reusable utility functions for common operations
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Common Pitfalls -->
+                <div class="warning">
+                    <h3>⚠️ Common Pitfalls</h3>
+                    <ul>
+                        <li><strong>Mutation:</strong> Don't mutate arrays during iteration with forEach</li>
+                        <li><strong>Memory Leaks:</strong> Be careful with closures that capture large objects</li>
+                        <li><strong>Performance:</strong> Avoid unnecessary array method chaining on large datasets</li>
+                        <li><strong>Null/Undefined:</strong> Always check for null/undefined before calling methods</li>
+                        <li><strong>Async Operations:</strong> Use Promise.all() for parallel async operations in maps
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Sample data for demos
+            const sampleNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+            const sampleUsers = [
+                { id: 1, name: 'Alice', age: 25, active: true, department: 'Engineering' },
+                { id: 2, name: 'Bob', age: 17, active: false, department: 'Marketing' },
+                { id: 3, name: 'Charlie', age: 35, active: true, department: 'Engineering' },
+                { id: 4, name: 'Diana', age: 28, active: false, department: 'Sales' },
+                { id: 5, name: 'Eve', age: 22, active: true, department: 'Design' }
+            ];
+
+            // Map method demos
+            function demoBasicMap() {
+                const doubled = sampleNumbers.map(n => n * 2);
+                const squared = sampleNumbers.map(n => n * n);
+
+                showMapOutput(`Basic Map Examples:
+Original: ${JSON.stringify(sampleNumbers)}
+Doubled: ${JSON.stringify(doubled)}
+Squared: ${JSON.stringify(squared)}`);
+            }
+
+            function demoObjectMap() {
+                const names = sampleUsers.map(user => user.name);
+                const ages = sampleUsers.map(user => user.age);
+
+                showMapOutput(`Object Mapping:
+Names: ${JSON.stringify(names)}
+Ages: ${JSON.stringify(ages)}`);
+            }
+
+            function demoComplexMap() {
+                const transformed = sampleUsers.map(user => ({
+                    ...user,
+                    isAdult: user.age >= 18,
+                    displayName: user.name.toUpperCase(),
+                    ageGroup: user.age < 20 ? 'Teen' : user.age < 30 ? 'Young Adult' : 'Adult'
+                }));
+
+                showMapOutput(`Complex Transformation:
+${JSON.stringify(transformed, null, 2)}`);
+            }
+
+            function demoMapChaining() {
+                const result = sampleNumbers
+                    .map(n => n * 2)
+                    .map(n => n + 1)
+                    .map(n => ({ value: n, isEven: n % 2 === 0 }));
+
+                showMapOutput(`Map Chaining:
+Original: ${JSON.stringify(sampleNumbers)}
+Result: ${JSON.stringify(result, null, 2)}`);
+            }
+
+            function showMapOutput(content) {
+                const output = document.getElementById('map-output');
+                output.style.display = 'block';
+                output.innerHTML = `<div class="fade-in"><pre>${content}</pre></div>`;
+            }
+
+            function clearMapDemo() {
+                document.getElementById('map-output').style.display = 'none';
+            }
+
+            // Filter method demos
+            function demoBasicFilter() {
+                const evens = sampleNumbers.filter(n => n % 2 === 0);
+                const greaterThan5 = sampleNumbers.filter(n => n > 5);
+
+                showFilterOutput(`Basic Filter Examples:
+Original: ${JSON.stringify(sampleNumbers)}
+Evens: ${JSON.stringify(evens)}
+Greater than 5: ${JSON.stringify(greaterThan5)}`);
+            }
+
+            function demoObjectFilter() {
+                const adults = sampleUsers.filter(user => user.age >= 18);
+                const activeUsers = sampleUsers.filter(user => user.active);
+
+                showFilterOutput(`Object Filtering:
+Adults: ${JSON.stringify(adults.map(u => u.name))}
+Active Users: ${JSON.stringify(activeUsers.map(u => u.name))}`);
+            }
+
+            function demoComplexFilter() {
+                const activeAdults = sampleUsers.filter(user => user.age >= 18 && user.active);
+                const engineers = sampleUsers.filter(user => user.department === 'Engineering');
+
+                showFilterOutput(`Complex Filtering:
+Active Adults: ${JSON.stringify(activeAdults.map(u => u.name))}
+Engineers: ${JSON.stringify(engineers.map(u => u.name))}`);
+            }
+
+            function demoFilterChaining() {
+                const result = sampleNumbers
+                    .filter(n => n > 3)
+                    .filter(n => n % 2 === 0)
+                    .filter(n => n < 10);
+
+                showFilterOutput(`Filter Chaining:
+Original: ${JSON.stringify(sampleNumbers)}
+> 3, even, < 10: ${JSON.stringify(result)}`);
+            }
+
+            function showFilterOutput(content) {
+                const output = document.getElementById('filter-output');
+                output.style.display = 'block';
+                output.innerHTML = `<div class="fade-in"><pre>${content}</pre></div>`;
+            }
+
+            function clearFilterDemo() {
+                document.getElementById('filter-output').style.display = 'none';
+            }
+
+            // Reduce method demos
+            function demoBasicReduce() {
+                const sum = sampleNumbers.reduce((acc, n) => acc + n, 0);
+                const product = sampleNumbers.reduce((acc, n) => acc * n, 1);
+                const max = sampleNumbers.reduce((acc, n) => Math.max(acc, n), -Infinity);
+
+                showReduceOutput(`Basic Reduce Examples:
+Array: ${JSON.stringify(sampleNumbers)}
+Sum: ${sum}
+Product: ${product}
+Max: ${max}`);
+            }
+
+            function demoObjectReduce() {
+                const ageSum = sampleUsers.reduce((acc, user) => acc + user.age, 0);
+                const avgAge = ageSum / sampleUsers.length;
+
+                showReduceOutput(`Object Reduce:
+Total Age: ${ageSum}
+Average Age: ${avgAge.toFixed(1)}`);
+            }
+
+            function demoComplexReduce() {
+                const stats = sampleUsers.reduce((acc, user) => {
+                    acc.totalAge += user.age;
+                    acc.count += 1;
+                    acc.activeCount += user.active ? 1 : 0;
+                    if (!acc.departments[user.department]) {
+                        acc.departments[user.department] = 0;
+                    }
+                    acc.departments[user.department] += 1;
+                    return acc;
+                }, { totalAge: 0, count: 0, activeCount: 0, departments: {} });
+
+                showReduceOutput(`Complex Reduce:
+${JSON.stringify(stats, null, 2)}`);
+            }
+
+            function demoGroupingReduce() {
+                const groupedByDepartment = sampleUsers.reduce((acc, user) => {
+                    if (!acc[user.department]) acc[user.department] = [];
+                    acc[user.department].push(user.name);
+                    return acc;
+                }, {});
+
+                showReduceOutput(`Grouping by Department:
+${JSON.stringify(groupedByDepartment, null, 2)}`);
+            }
+
+            function showReduceOutput(content) {
+                const output = document.getElementById('reduce-output');
+                output.style.display = 'block';
+                output.innerHTML = `<div class="fade-in"><pre>${content}</pre></div>`;
+            }
+
+            function clearReduceDemo() {
+                document.getElementById('reduce-output').style.display = 'none';
+            }
+
+            // Method chaining demos
+            function demoBasicChaining() {
+                const result = sampleNumbers
+                    .filter(n => n > 3)
+                    .map(n => n * 2)
+                    .reduce((acc, n) => acc + n, 0);
+
+                showChainingOutput(`Basic Chaining:
+${JSON.stringify(sampleNumbers)} → filter(>3) → map(*2) → reduce(sum)
+Result: ${result}`);
+            }
+
+            function demoComplexChaining() {
+                const result = sampleUsers
+                    .filter(user => user.active)
+                    .map(user => ({ ...user, ageGroup: user.age < 25 ? 'Young' : 'Mature' }))
+                    .reduce((acc, user) => {
+                        if (!acc[user.ageGroup]) acc[user.ageGroup] = [];
+                        acc[user.ageGroup].push(user.name);
+                        return acc;
+                    }, {});
+
+                showChainingOutput(`Complex Chaining:
+Active users → Add age group → Group by age
+${JSON.stringify(result, null, 2)}`);
+            }
+
+            function demoDataAnalysis() {
+                const sales = [
+                    { product: 'Laptop', amount: 1200, region: 'North' },
+                    { product: 'Phone', amount: 800, region: 'South' },
+                    { product: 'Tablet', amount: 600, region: 'North' },
+                    { product: 'Laptop', amount: 1500, region: 'East' }
+                ];
+
+                const analysis = sales
+                    .filter(sale => sale.amount > 700)
+                    .map(sale => ({ ...sale, category: sale.product === 'Laptop' ? 'Computer' : 'Mobile' }))
+                    .reduce((acc, sale) => {
+                        acc.totalRevenue += sale.amount;
+                        acc.regions.add(sale.region);
+                        if (!acc.categories[sale.category]) acc.categories[sale.category] = 0;
+                        acc.categories[sale.category] += sale.amount;
+                        return acc;
+                    }, { totalRevenue: 0, regions: new Set(), categories: {} });
+
+                analysis.regions = Array.from(analysis.regions);
+
+                showChainingOutput(`Data Analysis Pipeline:
+${JSON.stringify(analysis, null, 2)}`);
+            }
+
+            function demoFunctionalComposition() {
+                const compose = (...fns) => (value) => fns.reduceRight((acc, fn) => fn(acc), value);
+
+                const processData = compose(
+                    arr => arr.filter(n => n > 2),
+                    arr => arr.map(n => n * 2),
+                    arr => arr.reduce((sum, n) => sum + n, 0)
+                );
+
+                const result = processData(sampleNumbers);
+
+                showChainingOutput(`Functional Composition:
+Input: ${JSON.stringify(sampleNumbers)}
+Process: filter(>2) → map(*2) → reduce(sum)
+Result: ${result}`);
+            }
+
+            function showChainingOutput(content) {
+                const output = document.getElementById('chaining-output');
+                output.style.display = 'block';
+                output.innerHTML = `<div class="fade-in"><pre>${content}</pre></div>`;
+            }
+
+            function clearChainingDemo() {
+                document.getElementById('chaining-output').style.display = 'none';
+            }
+
+            // Advanced array methods demos
+            function demoTestingMethods() {
+                const hasEven = sampleNumbers.some(n => n % 2 === 0);
+                const allPositive = sampleNumbers.every(n => n > 0);
+                const hasNegative = sampleNumbers.some(n => n < 0);
+                const allLessThan20 = sampleNumbers.every(n => n < 20);
+
+                showAdvancedOutput(`Testing Methods:
+Array: ${JSON.stringify(sampleNumbers)}
+Has even: ${hasEven}
+All positive: ${allPositive}
+Has negative: ${hasNegative}
+All less than 20: ${allLessThan20}`);
+            }
+
+            function demoSearchMethods() {
+                const firstEven = sampleNumbers.find(n => n % 2 === 0);
+                const firstEvenIndex = sampleNumbers.findIndex(n => n % 2 === 0);
+                const includes5 = sampleNumbers.includes(5);
+                const includes15 = sampleNumbers.includes(15);
+
+                const admin = sampleUsers.find(user => user.department === 'Engineering');
+
+                showAdvancedOutput(`Search Methods:
+First even: ${firstEven}
+First even index: ${firstEvenIndex}
+Includes 5: ${includes5}
+Includes 15: ${includes15}
+First engineer: ${admin ? admin.name : 'None'}`);
+            }
+
+            function demoFlatMethods() {
+                const nested = [[1, 2], [3, 4], [5, [6, 7]]];
+                const flattened = nested.flat();
+                const deepFlattened = nested.flat(2);
+
+                const words = ['hello', 'world'];
+                const letters = words.flatMap(word => word.split(''));
+
+                showAdvancedOutput(`Flat Methods:
+Nested: ${JSON.stringify(nested)}
+Flat: ${JSON.stringify(flattened)}
+Deep flat: ${JSON.stringify(deepFlattened)}
+Words to letters: ${JSON.stringify(letters)}`);
+            }
+
+            function demoArrayFrom() {
+                const arrayFromString = Array.from('hello');
+                const arrayFromSet = Array.from(new Set([1, 2, 3, 3, 4]));
+                const arrayWithCallback = Array.from({ length: 5 }, (_, i) => i * 2);
+
+                showAdvancedOutput(`Array.from Examples:
+From string: ${JSON.stringify(arrayFromString)}
+From set: ${JSON.stringify(arrayFromSet)}
+With callback: ${JSON.stringify(arrayWithCallback)}`);
+            }
+
+            function demoCustomMethods() {
+                // Add custom methods for demo
+                Array.prototype.groupBy = function (keyFn) {
+                    return this.reduce((acc, item) => {
+                        const key = keyFn(item);
+                        if (!acc[key]) acc[key] = [];
+                        acc[key].push(item);
+                        return acc;
+                    }, {});
+                };
+
+                Array.prototype.unique = function () {
+                    return [...new Set(this)];
+                };
+
+                const duplicates = [1, 2, 2, 3, 3, 3, 4, 5];
+                const unique = duplicates.unique();
+
+                const grouped = sampleUsers.groupBy(user => user.department);
+
+                showAdvancedOutput(`Custom Methods:
+Unique from ${JSON.stringify(duplicates)}: ${JSON.stringify(unique)}
+Grouped by department: ${JSON.stringify(grouped, null, 2)}`);
+            }
+
+            function showAdvancedOutput(content) {
+                const output = document.getElementById('advanced-output');
+                output.style.display = 'block';
+                output.innerHTML = `<div class="fade-in"><pre>${content}</pre></div>`;
+            }
+
+            function clearAdvancedDemo() {
+                document.getElementById('advanced-output').style.display = 'none';
+            }
+
+            // Performance testing
+            function runPerformanceTest() {
+                const arraySize = parseInt(document.getElementById('array-size').value);
+                const testArray = Array.from({ length: arraySize }, (_, i) => i);
+
+                const tests = [
+                    {
+                        name: 'Traditional For Loop',
+                        fn: () => {
+                            const result = [];
+                            for (let i = 0; i < testArray.length; i++) {
+                                if (testArray[i] % 2 === 0) {
+                                    result.push(testArray[i] * 2);
+                                }
+                            }
+                            return result;
+                        }
+                    },
+                    {
+                        name: 'Array Methods Chain',
+                        fn: () => testArray.filter(n => n % 2 === 0).map(n => n * 2)
+                    },
+                    {
+                        name: 'Reduce',
+                        fn: () => testArray.reduce((acc, n) => {
+                            if (n % 2 === 0) acc.push(n * 2);
+                            return acc;
+                        }, [])
+                    },
+                    {
+                        name: 'forEach',
+                        fn: () => {
+                            const result = [];
+                            testArray.forEach(n => {
+                                if (n % 2 === 0) result.push(n * 2);
+                            });
+                            return result;
+                        }
+                    }
+                ];
+
+                const results = tests.map(test => {
+                    const start = performance.now();
+                    const result = test.fn();
+                    const end = performance.now();
+                    return {
+                        name: test.name,
+                        time: (end - start).toFixed(2),
+                        resultLength: result.length
+                    };
+                });
+
+                const output = document.getElementById('performance-results');
+                output.style.display = 'block';
+                output.innerHTML = `
+                <div class="fade-in">
+                    <h4>Performance Test Results (Array Size: ${arraySize})</h4>
+                    ${results.map(r => `<p>${r.name}: ${r.time}ms (${r.resultLength} results)</p>`).join('')}
+                </div>
+            `;
+            }
+
+            function runMemoryTest() {
+                const arraySize = parseInt(document.getElementById('array-size').value);
+                const testArray = Array.from({ length: arraySize }, (_, i) => ({ id: i, value: i * 2 }));
+
+                const output = document.getElementById('performance-results');
+                output.style.display = 'block';
+                output.innerHTML = `
+                <div class="fade-in">
+                    <h4>Memory Usage Test (Array Size: ${arraySize})</h4>
+                    <p>Original array: ~${(JSON.stringify(testArray).length / 1024).toFixed(2)} KB</p>
+                    <p>Mapped array: ~${(JSON.stringify(testArray.map(item => item.value)).length / 1024).toFixed(2)} KB</p>
+                    <p>Filtered array: ~${(JSON.stringify(testArray.filter(item => item.id % 2 === 0)).length / 1024).toFixed(2)} KB</p>
+                    <p>Note: Actual memory usage may vary based on browser implementation</p>
+                </div>
+            `;
+            }
+
+            // Practical applications
+            function demoDataVisualization() {
+                const salesData = [
+                    { month: 'Jan', sales: 12000, region: 'North' },
+                    { month: 'Feb', sales: 15000, region: 'North' },
+                    { month: 'Mar', sales: 18000, region: 'South' },
+                    { month: 'Apr', sales: 22000, region: 'South' },
+                    { month: 'May', sales: 25000, region: 'East' }
+                ];
+
+                const chartData = salesData
+                    .map(item => ({ ...item, quarter: item.month <= 'Mar' ? 'Q1' : 'Q2' }))
+                    .reduce((acc, item) => {
+                        if (!acc[item.quarter]) acc[item.quarter] = 0;
+                        acc[item.quarter] += item.sales;
+                        return acc;
+                    }, {});
+
+                showPracticalOutput(`Data Visualization Processing:
+Raw Data: ${JSON.stringify(salesData, null, 2)}
+Chart Data: ${JSON.stringify(chartData, null, 2)}`);
+            }
+
+            function demoFormProcessing() {
+                const formData = [
+                    { field: 'email', value: 'user@example.com', required: true },
+                    { field: 'name', value: '', required: true },
+                    { field: 'age', value: '25', required: false },
+                    { field: 'phone', value: '123-456-7890', required: false }
+                ];
+
+                const validation = formData
+                    .filter(field => field.required)
+                    .map(field => ({
+                        field: field.field,
+                        valid: field.value.trim() !== '',
+                        value: field.value
+                    }))
+                    .reduce((acc, field) => {
+                        acc.isValid = acc.isValid && field.valid;
+                        if (!field.valid) acc.errors.push(`${field.field} is required`);
+                        return acc;
+                    }, { isValid: true, errors: [] });
+
+                showPracticalOutput(`Form Processing:
+Validation Result: ${JSON.stringify(validation, null, 2)}`);
+            }
+
+            function demoAPIDataProcessing() {
+                const apiResponse = {
+                    users: [
+                        { id: 1, name: 'Alice', posts: [{ id: 1, title: 'Post 1' }] },
+                        { id: 2, name: 'Bob', posts: [{ id: 2, title: 'Post 2' }, { id: 3, title: 'Post 3' }] }
+                    ]
+                };
+
+                const processedData = apiResponse.users
+                    .map(user => ({
+                        ...user,
+                        postCount: user.posts.length,
+                        firstPost: user.posts[0]?.title || 'No posts'
+                    }))
+                    .filter(user => user.postCount > 0)
+                    .sort((a, b) => b.postCount - a.postCount);
+
+                showPracticalOutput(`API Data Processing:
+Processed: ${JSON.stringify(processedData, null, 2)}`);
+            }
+
+            function demoSearchAndFilter() {
+                const products = [
+                    { name: 'Laptop Pro', price: 1200, category: 'Electronics', tags: ['computer', 'work'] },
+                    { name: 'Smartphone X', price: 800, category: 'Electronics', tags: ['mobile', 'communication'] },
+                    { name: 'Coffee Maker', price: 150, category: 'Appliances', tags: ['kitchen', 'beverage'] },
+                    { name: 'Desk Chair', price: 300, category: 'Furniture', tags: ['office', 'comfort'] }
+                ];
+
+                const searchTerm = 'pro';
+                const maxPrice = 1000;
+
+                const searchResults = products
+                    .filter(product =>
+                        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        product.tags.some(tag => tag.includes(searchTerm.toLowerCase()))
+                    )
+                    .filter(product => product.price <= maxPrice)
+                    .map(product => ({
+                        ...product,
+                        matchScore: product.name.toLowerCase().includes(searchTerm.toLowerCase()) ? 2 : 1
+                    }))
+                    .sort((a, b) => b.matchScore - a.matchScore);
+
+                showPracticalOutput(`Search & Filter:
+Search: "${searchTerm}", Max Price: $${maxPrice}
+Results: ${JSON.stringify(searchResults, null, 2)}`);
+            }
+
+            function showPracticalOutput(content) {
+                const output = document.getElementById('practical-output');
+                output.style.display = 'block';
+                output.innerHTML = `<div class="fade-in"><pre>${content}</pre></div>`;
+            }
+
+            function clearPracticalDemo() {
+                document.getElementById('practical-output').style.display = 'none';
+            }
+        </script>
+</body>
+
+</html>

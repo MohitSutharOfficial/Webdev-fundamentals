@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Calculator - JavaScript Project</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .calculator-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #e9ecef;
+        }
+
+        .calculator {
+            background: #333;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 350px;
+            margin: 0 auto;
+        }
+
+        .calculator-display {
+            width: 100%;
+            height: 80px;
+            background: #1a1a1a;
+            color: white;
+            font-size: 2em;
+            text-align: right;
+            padding: 0 20px;
+            border: none;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .calculator-display:focus {
+            outline: none;
+            background: #2a2a2a;
+        }
+
+        .calculator-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .btn {
+            height: 60px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-number {
+            background: #666;
+        }
+
+        .btn-operator {
+            background: #ff9500;
+        }
+
+        .btn-equals {
+            background: #ff9500;
+            grid-column: span 2;
+        }
+
+        .btn-clear {
+            background: #a6a6a6;
+            color: #333;
+        }
+
+        .btn-zero {
+            grid-column: span 2;
+        }
+
+        .history {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #e9ecef;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .history h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .history-item {
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+            font-family: 'Courier New', monospace;
+        }
+
+        .concepts-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #e9ecef;
+        }
+
+        .concepts-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .concept-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .concept-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .concept-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .code-example {
+            background: #1a1a1a;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+
+        .advanced-features {
+            margin-top: 30px;
+            padding: 20px;
+            background: #e8f4f8;
+            border-radius: 10px;
+        }
+
+        .feature-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .feature-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s ease;
+        }
+
+        .feature-btn:hover {
+            background: #5a67d8;
+        }
+
+        .memory-display {
+            background: #333;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .calculator {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧮 Interactive Calculator</h1>
+            <p>A comprehensive JavaScript calculator demonstrating functions, event handling, and DOM manipulation</p>
+        </div>
+
+        <div class="main-content">
+            <div class="calculator-section">
+                <h2>Calculator</h2>
+                <div class="calculator">
+                    <input type="text" id="display" class="calculator-display" readonly>
+                    <div class="calculator-buttons">
+                        <button class="btn btn-clear" onclick="clearDisplay()">C</button>
+                        <button class="btn btn-clear" onclick="clearEntry()">CE</button>
+                        <button class="btn btn-operator" onclick="deleteLast()">⌫</button>
+                        <button class="btn btn-operator" onclick="appendToDisplay('/')">/</button>
+
+                        <button class="btn btn-number" onclick="appendToDisplay('7')">7</button>
+                        <button class="btn btn-number" onclick="appendToDisplay('8')">8</button>
+                        <button class="btn btn-number" onclick="appendToDisplay('9')">9</button>
+                        <button class="btn btn-operator" onclick="appendToDisplay('*')">×</button>
+
+                        <button class="btn btn-number" onclick="appendToDisplay('4')">4</button>
+                        <button class="btn btn-number" onclick="appendToDisplay('5')">5</button>
+                        <button class="btn btn-number" onclick="appendToDisplay('6')">6</button>
+                        <button class="btn btn-operator" onclick="appendToDisplay('-')">-</button>
+
+                        <button class="btn btn-number" onclick="appendToDisplay('1')">1</button>
+                        <button class="btn btn-number" onclick="appendToDisplay('2')">2</button>
+                        <button class="btn btn-number" onclick="appendToDisplay('3')">3</button>
+                        <button class="btn btn-operator" onclick="appendToDisplay('+')">+</button>
+
+                        <button class="btn btn-number btn-zero" onclick="appendToDisplay('0')">0</button>
+                        <button class="btn btn-number" onclick="appendToDisplay('.')">.</button>
+                        <button class="btn btn-equals" onclick="calculate()">=</button>
+                    </div>
+                </div>
+
+                <div class="history">
+                    <h3>Calculation History</h3>
+                    <div id="history-list"></div>
+                </div>
+
+                <div class="advanced-features">
+                    <h3>Advanced Features</h3>
+                    <div class="feature-buttons">
+                        <button class="feature-btn" onclick="calculateSquareRoot()">√</button>
+                        <button class="feature-btn" onclick="calculateSquare()">x²</button>
+                        <button class="feature-btn" onclick="calculatePercentage()">%</button>
+                        <button class="feature-btn" onclick="memoryStore()">MS</button>
+                        <button class="feature-btn" onclick="memoryRecall()">MR</button>
+                        <button class="feature-btn" onclick="memoryClear()">MC</button>
+                    </div>
+                    <div class="memory-display" id="memory-display">Memory: 0</div>
+                </div>
+            </div>
+
+            <div class="concepts-section">
+                <h2>JavaScript Concepts Demonstrated</h2>
+
+                <div class="concept-card">
+                    <h3>1. Event Handling</h3>
+                    <p>This calculator uses onclick events to handle button clicks. Each button triggers a specific
+                        function when clicked.</p>
+                    <div class="code-example">
+                        &lt;button onclick="appendToDisplay('7')"&gt;7&lt;/button&gt;
+                        &lt;button onclick="calculate()"&gt;=&lt;/button&gt;</div>
+                </div>
+
+                <div class="concept-card">
+                    <h3>2. DOM Manipulation</h3>
+                    <p>We manipulate the DOM to update the display, add history items, and show memory values.</p>
+                    <div class="code-example">
+                        // Getting elements
+                        const display = document.getElementById('display');
+
+                        // Updating content
+                        display.value = result;
+                        historyList.innerHTML += historyItem;</div>
+                </div>
+
+                <div class="concept-card">
+                    <h3>3. Functions and Parameters</h3>
+                    <p>Multiple functions handle different calculator operations, demonstrating parameter passing and
+                        return values.</p>
+                    <div class="code-example">
+                        function appendToDisplay(value) {
+                        display.value += value;
+                        }
+
+                        function performCalculation(expression) {
+                        try {
+                        return eval(expression);
+                        } catch (error) {
+                        return 'Error';
+                        }
+                        }</div>
+                </div>
+
+                <div class="concept-card">
+                    <h3>4. Error Handling</h3>
+                    <p>The calculator includes try-catch blocks to handle invalid calculations gracefully.</p>
+                    <div class="code-example">
+                        try {
+                        result = eval(expression);
+                        if (!isFinite(result)) {
+                        throw new Error('Invalid calculation');
+                        }
+                        } catch (error) {
+                        result = 'Error';
+                        showError('Invalid calculation');
+                        }</div>
+                </div>
+
+                <div class="concept-card">
+                    <h3>5. String Manipulation</h3>
+                    <p>Various string methods are used to process and format calculations.</p>
+                    <div class="code-example">
+                        // String methods used
+                        expression.slice(0, -1); // Remove last character
+                        expression.replace('*', '×'); // Replace for display
+                        parseFloat(value).toFixed(2); // Format numbers</div>
+                </div>
+
+                <div class="concept-card">
+                    <h3>6. Conditional Logic</h3>
+                    <p>If-else statements control calculator behavior based on different conditions.</p>
+                    <div class="code-example">
+                        if (display.value === '' || display.value === '0') {
+                        display.value = value;
+                        } else {
+                        display.value += value;
+                        }</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Calculator state
+        let currentDisplay = '';
+        let calculationHistory = [];
+        let memoryValue = 0;
+        let lastResult = 0;
+
+        // DOM elements
+        const display = document.getElementById('display');
+        const historyList = document.getElementById('history-list');
+        const memoryDisplay = document.getElementById('memory-display');
+
+        // Initialize calculator
+        function initializeCalculator() {
+            clearDisplay();
+            updateMemoryDisplay();
+            loadHistory();
+
+            // Add keyboard support
+            document.addEventListener('keydown', handleKeyboardInput);
+        }
+
+        // Basic calculator functions
+        function appendToDisplay(value) {
+            const currentValue = display.value;
+
+            // Handle first input
+            if (currentValue === '0' && value !== '.') {
+                display.value = value;
+            } else if (currentValue === 'Error') {
+                display.value = value;
+            } else {
+                display.value += value;
+            }
+
+            // Prevent multiple decimal points
+            if (value === '.' && currentValue.includes('.')) {
+                display.value = currentValue;
+            }
+        }
+
+        function clearDisplay() {
+            display.value = '0';
+        }
+
+        function clearEntry() {
+            display.value = '0';
+        }
+
+        function deleteLast() {
+            const currentValue = display.value;
+            if (currentValue.length > 1) {
+                display.value = currentValue.slice(0, -1);
+            } else {
+                display.value = '0';
+            }
+        }
+
+        function calculate() {
+            try {
+                const expression = display.value;
+                if (expression === '0' || expression === '') {
+                    return;
+                }
+
+                // Replace display symbols with actual operators
+                let processedExpression = expression.replace(/×/g, '*').replace(/÷/g, '/');
+
+                // Evaluate the expression
+                let result = eval(processedExpression);
+
+                // Handle special cases
+                if (!isFinite(result)) {
+                    throw new Error('Invalid calculation');
+                }
+
+                // Format result
+                if (result % 1 !== 0) {
+                    result = parseFloat(result.toFixed(10));
+                }
+
+                // Update display
+                display.value = result;
+                lastResult = result;
+
+                // Add to history
+                addToHistory(expression, result);
+
+            } catch (error) {
+                display.value = 'Error';
+                showError('Invalid calculation');
+            }
+        }
+
+        // Advanced calculator functions
+        function calculateSquareRoot() {
+            try {
+                const value = parseFloat(display.value);
+                if (value < 0) {
+                    throw new Error('Cannot calculate square root of negative number');
+                }
+                const result = Math.sqrt(value);
+                display.value = result;
+                addToHistory(`√${value}`, result);
+            } catch (error) {
+                display.value = 'Error';
+                showError('Invalid square root calculation');
+            }
+        }
+
+        function calculateSquare() {
+            try {
+                const value = parseFloat(display.value);
+                const result = Math.pow(value, 2);
+                display.value = result;
+                addToHistory(`${value}²`, result);
+            } catch (error) {
+                display.value = 'Error';
+                showError('Invalid square calculation');
+            }
+        }
+
+        function calculatePercentage() {
+            try {
+                const value = parseFloat(display.value);
+                const result = value / 100;
+                display.value = result;
+                addToHistory(`${value}%`, result);
+            } catch (error) {
+                display.value = 'Error';
+                showError('Invalid percentage calculation');
+            }
+        }
+
+        // Memory functions
+        function memoryStore() {
+            try {
+                memoryValue = parseFloat(display.value) || 0;
+                updateMemoryDisplay();
+                showMessage('Value stored in memory');
+            } catch (error) {
+                showError('Error storing value in memory');
+            }
+        }
+
+        function memoryRecall() {
+            display.value = memoryValue;
+            showMessage('Memory value recalled');
+        }
+
+        function memoryClear() {
+            memoryValue = 0;
+            updateMemoryDisplay();
+            showMessage('Memory cleared');
+        }
+
+        function updateMemoryDisplay() {
+            memoryDisplay.textContent = `Memory: ${memoryValue}`;
+        }
+
+        // History functions
+        function addToHistory(expression, result) {
+            const historyItem = {
+                expression: expression,
+                result: result,
+                timestamp: new Date().toLocaleTimeString()
+            };
+
+            calculationHistory.unshift(historyItem);
+
+            // Keep only last 10 calculations
+            if (calculationHistory.length > 10) {
+                calculationHistory = calculationHistory.slice(0, 10);
+            }
+
+            updateHistoryDisplay();
+            saveHistory();
+        }
+
+        function updateHistoryDisplay() {
+            historyList.innerHTML = '';
+            calculationHistory.forEach(item => {
+                const historyElement = document.createElement('div');
+                historyElement.className = 'history-item';
+                historyElement.innerHTML = `
+                    <div>${item.expression} = ${item.result}</div>
+                    <small style="color: #666;">${item.timestamp}</small>
+                `;
+                historyList.appendChild(historyElement);
+            });
+        }
+
+        function saveHistory() {
+            try {
+                localStorage.setItem('calculatorHistory', JSON.stringify(calculationHistory));
+            } catch (error) {
+                console.error('Error saving history:', error);
+            }
+        }
+
+        function loadHistory() {
+            try {
+                const saved = localStorage.getItem('calculatorHistory');
+                if (saved) {
+                    calculationHistory = JSON.parse(saved);
+                    updateHistoryDisplay();
+                }
+            } catch (error) {
+                console.error('Error loading history:', error);
+            }
+        }
+
+        // Keyboard support
+        function handleKeyboardInput(event) {
+            const key = event.key;
+
+            // Numbers and decimal point
+            if (/[0-9.]/.test(key)) {
+                appendToDisplay(key);
+            }
+            // Operators
+            else if (key === '+' || key === '-' || key === '*' || key === '/') {
+                appendToDisplay(key);
+            }
+            // Enter or equals
+            else if (key === 'Enter' || key === '=') {
+                event.preventDefault();
+                calculate();
+            }
+            // Escape or clear
+            else if (key === 'Escape' || key === 'c' || key === 'C') {
+                clearDisplay();
+            }
+            // Backspace
+            else if (key === 'Backspace') {
+                deleteLast();
+            }
+        }
+
+        // Utility functions
+        function showError(message) {
+            console.error(message);
+            // Could be enhanced with visual error display
+        }
+
+        function showMessage(message) {
+            console.log(message);
+            // Could be enhanced with visual message display
+        }
+
+        // Calculator class demonstration (OOP approach)
+        class ScientificCalculator {
+            constructor() {
+                this.memory = 0;
+                this.history = [];
+            }
+
+            // Trigonometric functions
+            sin(value) {
+                return Math.sin(value * Math.PI / 180);
+            }
+
+            cos(value) {
+                return Math.cos(value * Math.PI / 180);
+            }
+
+            tan(value) {
+                return Math.tan(value * Math.PI / 180);
+            }
+
+            // Logarithmic functions
+            log(value) {
+                return Math.log10(value);
+            }
+
+            ln(value) {
+                return Math.log(value);
+            }
+
+            // Power functions
+            power(base, exponent) {
+                return Math.pow(base, exponent);
+            }
+
+            factorial(n) {
+                if (n < 0) return NaN;
+                if (n === 0 || n === 1) return 1;
+                let result = 1;
+                for (let i = 2; i <= n; i++) {
+                    result *= i;
+                }
+                return result;
+            }
+        }
+
+        // Initialize the calculator when page loads
+        window.addEventListener('load', initializeCalculator);
+
+        // Demonstrate different JavaScript patterns
+
+        // 1. Closure example
+        const createCounter = (function () {
+            let count = 0;
+            return function () {
+                count++;
+                console.log(`Calculator used ${count} times`);
+                return count;
+            };
+        })();
+
+        // 2. Arrow function example
+        const formatNumber = (num) => {
+            return Number(num).toLocaleString();
+        };
+
+        // 3. Higher-order function example
+        const withErrorHandling = (func) => {
+            return function (...args) {
+                try {
+                    return func.apply(this, args);
+                } catch (error) {
+                    console.error('Error in function:', error);
+                    return 'Error';
+                }
+            };
+        };
+
+        // 4. Async function example (for future API calls)
+        const fetchExchangeRate = async (currency) => {
+            try {
+                // Placeholder for API call
+                console.log(`Fetching exchange rate for ${currency}`);
+                return Promise.resolve(1.0);
+            } catch (error) {
+                console.error('Error fetching exchange rate:', error);
+                return 1.0;
+            }
+        };
+
+        // 5. Object destructuring example
+        const { sin, cos, tan, log } = Math;
+
+        console.log('🧮 Interactive Calculator loaded successfully!');
+        console.log('📚 This calculator demonstrates:');
+        console.log('• Event handling and DOM manipulation');
+        console.log('• Functions and parameters');
+        console.log('• Error handling with try-catch');
+        console.log('• String manipulation and formatting');
+        console.log('• Conditional logic and control flow');
+        console.log('• Local storage for data persistence');
+        console.log('• Object-oriented programming concepts');
+        console.log('• Modern JavaScript features (ES6+)');
+    </script>
+</body>
+
+</html>

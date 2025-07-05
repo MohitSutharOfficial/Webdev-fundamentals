@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Execution Context & Call Stack</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.3em;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+            overflow-x: auto;
+            border-left: 4px solid #667eea;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #e17055;
+        }
+
+        .demo-container {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .demo-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .output {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-family: monospace;
+            min-height: 50px;
+            border: 2px solid #2d3748;
+            text-align: left;
+        }
+
+        .execution-stack {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border: 2px solid #42a5f5;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .stack-frame {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .stack-frame::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 10px solid #667eea;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background: white;
+            border-radius: 0 8px 8px 8px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .concept-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .concept-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .concept-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .tip {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffecb5;
+            color: #856404;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .phase-diagram {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .phase {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #ffeaa7;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .concept-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>🧠 Execution Context & Call Stack</h1>
+            <p>Master how JavaScript executes code: understanding contexts, scopes, and the call stack</p>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h2>🎯 What is Execution Context?</h2>
+
+                <p>An execution context is the environment in which JavaScript code is evaluated and executed. It
+                    contains all the information needed to run a piece of code.</p>
+
+                <div class="concept-grid">
+                    <div class="concept-card">
+                        <h3>🌐 Global Execution Context</h3>
+                        <p>The default context where code runs when it's not inside any function. Creates the global
+                            object (window in browsers) and sets up the global scope.</p>
+                    </div>
+
+                    <div class="concept-card">
+                        <h3>🔧 Function Execution Context</h3>
+                        <p>Created whenever a function is invoked. Each function call gets its own execution context
+                            with its own scope and variables.</p>
+                    </div>
+
+                    <div class="concept-card">
+                        <h3>📝 Eval Execution Context</h3>
+                        <p>Created when code is executed inside an eval() function. Generally avoided in modern
+                            JavaScript due to security and performance concerns.</p>
+                    </div>
+                </div>
+
+                <div class="phase-diagram">
+                    <h3>📋 Execution Context Phases</h3>
+                    <div class="phase">
+                        <strong>1. Creation Phase:</strong> Variables and functions are declared, 'this' is bound, scope
+                        is established
+                    </div>
+                    <div class="phase">
+                        <strong>2. Execution Phase:</strong> Code is executed line by line, variables are assigned
+                        values
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📚 Execution Context Components</h2>
+
+                <div class="code-block">
+                    // Execution Context Structure
+                    {
+                    // Variable Environment
+                    variableEnvironment: {
+                    environmentRecord: {
+                    // var declarations, function declarations
+                    myVar: undefined,
+                    myFunction: &lt;Function Object&gt;
+                    },
+                    outer: &lt;Reference to outer environment&gt;
+                    },
+
+                    // Lexical Environment
+                    lexicalEnvironment: {
+                    environmentRecord: {
+                    // let, const declarations, function parameters
+                    myLet: &lt;uninitialized&gt;,
+                    myConst: &lt;uninitialized&gt;
+                    },
+                    outer: &lt;Reference to outer environment&gt;
+                    },
+
+                    // This Binding
+                    thisBinding: &lt;Object or undefined&gt;
+                    }
+                </div>
+
+                <div class="tabs">
+                    <button class="tab active" onclick="showTab('variable-env')">Variable Environment</button>
+                    <button class="tab" onclick="showTab('lexical-env')">Lexical Environment</button>
+                    <button class="tab" onclick="showTab('this-binding')">This Binding</button>
+                </div>
+
+                <div id="variable-env" class="tab-content active">
+                    <h3>Variable Environment</h3>
+                    <div class="code-block">
+                        // Variable Environment handles var and function declarations
+                        function example() {
+                        console.log(myVar); // undefined (not error due to hoisting)
+                        console.log(myFunc); // [Function: myFunc]
+
+                        var myVar = "Hello";
+
+                        function myFunc() {
+                        return "I'm hoisted!";
+                        }
+
+                        console.log(myVar); // "Hello"
+                        }
+
+                        // During creation phase:
+                        // myVar is declared and initialized with undefined
+                        // myFunc is declared and fully defined
+                    </div>
+                </div>
+
+                <div id="lexical-env" class="tab-content">
+                    <h3>Lexical Environment</h3>
+                    <div class="code-block">
+                        // Lexical Environment handles let, const, and parameters
+                        function example(param) {
+                        // console.log(myLet); // ReferenceError: Cannot access before initialization
+                        // console.log(myConst); // ReferenceError: Cannot access before initialization
+
+                        let myLet = "I'm let";
+                        const myConst = "I'm const";
+
+                        console.log(param); // Available immediately
+                        console.log(myLet); // "I'm let"
+                        console.log(myConst); // "I'm const"
+                        }
+
+                        // During creation phase:
+                        // param is declared and initialized
+                        // myLet and myConst are declared but not initialized (Temporal Dead Zone)
+                    </div>
+                </div>
+
+                <div id="this-binding" class="tab-content">
+                    <h3>This Binding</h3>
+                    <div class="code-block">
+                        // This binding depends on how function is called
+
+                        // Global context
+                        console.log(this); // Window object in browser, global in Node.js
+
+                        // Function context
+                        function regularFunction() {
+                        console.log(this); // Window (non-strict) or undefined (strict mode)
+                        }
+
+                        const obj = {
+                        name: "MyObject",
+                        method: function() {
+                        console.log(this); // obj
+                        console.log(this.name); // "MyObject"
+                        },
+                        arrowMethod: () => {
+                        console.log(this); // Lexical this (from outer scope)
+                        }
+                        };
+
+                        // Call, apply, bind
+                        regularFunction.call(obj); // this = obj
+                        regularFunction.apply(obj); // this = obj
+                        const boundFunction = regularFunction.bind(obj); // this = obj when called
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📬 The Call Stack</h2>
+
+                <p>The call stack is a data structure that tracks function calls. It follows the LIFO (Last In, First
+                    Out) principle.</p>
+
+                <div class="execution-stack">
+                    <h3>📊 Call Stack Visualization</h3>
+                    <div class="stack-frame">third() - Current Execution</div>
+                    <div class="stack-frame">second() - Waiting</div>
+                    <div class="stack-frame">first() - Waiting</div>
+                    <div class="stack-frame">main() - Waiting</div>
+                    <div class="stack-frame">Global Context - Base</div>
+                </div>
+
+                <div class="code-block">
+                    // Call stack example
+                    function first() {
+                    console.log("In first()");
+                    second();
+                    console.log("Back in first()");
+                    }
+
+                    function second() {
+                    console.log("In second()");
+                    third();
+                    console.log("Back in second()");
+                    }
+
+                    function third() {
+                    console.log("In third()");
+                    // Stack trace here would show: third() → second() → first() → global
+                    }
+
+                    first(); // Start the chain
+
+                    /* Execution flow:
+                    1. Global context created
+                    2. first() pushed to stack
+                    3. second() pushed to stack
+                    4. third() pushed to stack
+                    5. third() completes, popped from stack
+                    6. second() completes, popped from stack
+                    7. first() completes, popped from stack
+                    8. Back to global context
+                    */
+                </div>
+
+                <div class="demo-container">
+                    <div class="demo-title">🔍 Call Stack Demo</div>
+                    <button class="btn" onclick="runCallStackDemo()">Trace Call Stack</button>
+                    <div id="stack-output" class="output"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🎭 Hoisting Explained</h2>
+
+                <p>Hoisting is a JavaScript mechanism where variable and function declarations are moved to the top of
+                    their scope during the creation phase.</p>
+
+                <div class="code-block">
+                    // What you write:
+                    console.log(myVar); // undefined
+                    console.log(myFunction()); // "Hello from hoisted function!"
+
+                    var myVar = "Hello";
+
+                    function myFunction() {
+                    return "Hello from hoisted function!";
+                    }
+
+                    // What JavaScript "sees" (conceptually):
+                    var myVar; // Declaration hoisted, initialized with undefined
+                    function myFunction() { // Function declaration fully hoisted
+                    return "Hello from hoisted function!";
+                    }
+
+                    console.log(myVar); // undefined
+                    console.log(myFunction()); // "Hello from hoisted function!"
+
+                    myVar = "Hello"; // Assignment stays in place
+                </div>
+
+                <div class="concept-grid">
+                    <div class="concept-card">
+                        <h3>🔹 var Hoisting</h3>
+                        <div class="code-block">
+                            console.log(x); // undefined
+                            var x = 5;
+                            console.log(x); // 5
+
+                            // Equivalent to:
+                            // var x;
+                            // console.log(x);
+                            // x = 5;
+                            // console.log(x);
+                        </div>
+                    </div>
+
+                    <div class="concept-card">
+                        <h3>🔸 let/const Hoisting</h3>
+                        <div class="code-block">
+                            // console.log(y); // ReferenceError
+                            let y = 10;
+
+                            // console.log(z); // ReferenceError
+                            const z = 20;
+
+                            // Hoisted but in Temporal Dead Zone
+                            // Cannot access before initialization
+                        </div>
+                    </div>
+
+                    <div class="concept-card">
+                        <h3>⚡ Function Hoisting</h3>
+                        <div class="code-block">
+                            sayHello(); // "Hello!" - works
+
+                            function sayHello() {
+                            console.log("Hello!");
+                            }
+
+                            // vs function expressions:
+                            // sayGoodbye(); // TypeError
+                            var sayGoodbye = function() {
+                            console.log("Goodbye!");
+                            };
+                        </div>
+                    </div>
+                </div>
+
+                <div class="demo-container">
+                    <div class="demo-title">🎪 Hoisting Demo</div>
+                    <button class="btn" onclick="runHoistingDemo()">Demonstrate Hoisting</button>
+                    <div id="hoisting-output" class="output"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🌍 Scope Chain in Detail</h2>
+
+                <p>The scope chain is how JavaScript resolves variable names. It's determined by where functions are
+                    defined (lexical scoping), not where they're called.</p>
+
+                <div class="code-block">
+                    // Scope chain example
+                    let globalVar = "Global";
+
+                    function outerFunction() {
+                    let outerVar = "Outer";
+
+                    function middleFunction() {
+                    let middleVar = "Middle";
+
+                    function innerFunction() {
+                    let innerVar = "Inner";
+
+                    // Scope chain: inner → middle → outer → global
+                    console.log(innerVar); // "Inner" - found in current scope
+                    console.log(middleVar); // "Middle" - found in outer scope
+                    console.log(outerVar); // "Outer" - found in outer scope
+                    console.log(globalVar); // "Global" - found in global scope
+
+                    // If variable not found in any scope: ReferenceError
+                    // console.log(nonExistent); // ReferenceError
+                    }
+
+                    return innerFunction;
+                    }
+
+                    return middleFunction;
+                    }
+
+                    const fn = outerFunction()();
+                    fn(); // Demonstrates closure + scope chain
+                </div>
+
+                <div class="tip">
+                    <strong>💡 Lexical Scoping:</strong> Functions can access variables from their parent scope even
+                    after the parent function has finished executing. This is how closures work!
+                </div>
+
+                <div class="demo-container">
+                    <div class="demo-title">🔗 Scope Chain Demo</div>
+                    <button class="btn" onclick="runScopeChainDemo()">Trace Scope Chain</button>
+                    <div id="scope-output" class="output"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>⚡ Stack Overflow & Recursion</h2>
+
+                <p>The call stack has a limited size. Too many function calls without returning can cause a stack
+                    overflow.</p>
+
+                <div class="code-block">
+                    // Stack overflow example (don't run this!)
+                    function infiniteRecursion() {
+                    return infiniteRecursion(); // No base case!
+                    }
+                    // infiniteRecursion(); // RangeError: Maximum call stack size exceeded
+
+                    // Proper recursion with base case
+                    function factorial(n) {
+                    // Base case - stops recursion
+                    if (n <= 1) { return 1; } // Recursive case return n * factorial(n - 1); }
+                        console.log(factorial(5)); // 120 // Tail call optimization (not yet widely supported) function
+                        factorialTailCall(n, accumulator=1) { if (n <=1) { return accumulator; } return
+                        factorialTailCall(n - 1, n * accumulator); } </div>
+
+                        <div class="warning">
+                            <strong>⚠️ Stack Limits:</strong> Different JavaScript engines have different stack size
+                            limits. Chrome typically allows ~10,000-15,000 calls before stack overflow.
+                        </div>
+
+                        <div class="demo-container">
+                            <div class="demo-title">🔄 Safe Recursion Demo</div>
+                            <button class="btn" onclick="runRecursionDemo()">Test Recursion</button>
+                            <div id="recursion-output" class="output"></div>
+                        </div>
+                </div>
+
+                <div class="card">
+                    <h2>🔬 Practical Applications</h2>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h3>🐛 Debugging</h3>
+                            <p>Understanding the call stack helps debug errors. Stack traces show the execution path
+                                that led to an error.</p>
+                            <div class="code-block">
+                                function problematicFunction() {
+                                throw new Error("Something went wrong!");
+                                }
+
+                                function callerFunction() {
+                                problematicFunction();
+                                }
+
+                                try {
+                                callerFunction();
+                                } catch (error) {
+                                console.log(error.stack);
+                                // Shows: problematicFunction → callerFunction → global
+                                }
+                            </div>
+                        </div>
+
+                        <div class="concept-card">
+                            <h3>⚡ Performance</h3>
+                            <p>Deep call stacks can impact performance. Consider iterative solutions for deep recursion.
+                            </p>
+                            <div class="code-block">
+                                // Recursive (can cause stack overflow)
+                                function fibRecursive(n) {
+                                if (n <= 1) return n; return fibRecursive(n - 1) + fibRecursive(n - 2); } // Iterative
+                                    (stack-safe) function fibIterative(n) { if (n <=1) return n; let a=0, b=1; for (let
+                                    i=2; i <=n; i++) { [a, b]=[b, a + b]; } return b; } </div>
+                            </div>
+
+                            <div class="concept-card">
+                                <h3>🧪 Testing</h3>
+                                <p>Mock functions and spies often use the call stack to determine how functions are
+                                    called.</p>
+                                <div class="code-block">
+                                    // Getting caller information
+                                    function trackCalls() {
+                                    const stack = new Error().stack;
+                                    console.log("Called from:", stack.split('\n')[2]);
+                                    }
+
+                                    function testFunction() {
+                                    trackCalls(); // Will show it was called from testFunction
+                                    }
+
+                                    testFunction();
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2>🎯 Best Practices</h2>
+
+                        <div class="success">
+                            <h3>✅ Do:</h3>
+                            <ul>
+                                <li>Use let/const to avoid hoisting confusion</li>
+                                <li>Initialize variables before use</li>
+                                <li>Keep function call depth reasonable</li>
+                                <li>Use proper error handling to prevent stack unwinding</li>
+                                <li>Understand closure behavior for memory management</li>
+                            </ul>
+                        </div>
+
+                        <div class="warning">
+                            <h3>❌ Avoid:</h3>
+                            <ul>
+                                <li>Relying on var hoisting behavior</li>
+                                <li>Deep recursion without tail call optimization</li>
+                                <li>Infinite recursion without base cases</li>
+                                <li>Accessing variables in Temporal Dead Zone</li>
+                                <li>Creating unnecessary closure chains</li>
+                            </ul>
+                        </div>
+
+                        <div class="demo-container">
+                            <div class="demo-title">🧪 Complete Demo</div>
+                            <button class="btn" onclick="runCompleteDemo()">Run All Concepts</button>
+                            <div id="complete-output" class="output"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <h3>🚀 Key Takeaways</h3>
+                    <p>
+                        <strong>Execution Context:</strong> Every piece of JavaScript code runs in an execution context
+                        with its own scope and 'this' binding.<br>
+                        <strong>Call Stack:</strong> JavaScript uses a stack to manage function calls, enabling function
+                        composition and recursion.<br>
+                        <strong>Hoisting:</strong> Variable and function declarations are processed before code
+                        execution begins.<br>
+                        <strong>Scope Chain:</strong> JavaScript resolves variables by walking up the scope chain from
+                        inner to outer scopes.<br>
+                        <strong>Memory Management:</strong> Understanding execution contexts helps write more efficient
+                        and memory-conscious code.
+                    </p>
+                </div>
+            </div>
+
+            <script>
+                // Tab functionality
+                function showTab(tabName) {
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+
+                    document.querySelectorAll('.tab').forEach(tab => {
+                        tab.classList.remove('active');
+                    });
+
+                    document.getElementById(tabName).classList.add('active');
+                    event.target.classList.add('active');
+                }
+
+                // Call stack demonstration
+                function runCallStackDemo() {
+                    const output = document.getElementById('stack-output');
+                    let stackTrace = [];
+
+                    function third() {
+                        stackTrace.push('Entering third()');
+                        stackTrace.push('Call stack: third() → second() → first() → global');
+                        stackTrace.push('Exiting third()');
+                    }
+
+                    function second() {
+                        stackTrace.push('Entering second()');
+                        third();
+                        stackTrace.push('Back in second()');
+                        stackTrace.push('Exiting second()');
+                    }
+
+                    function first() {
+                        stackTrace.push('Entering first()');
+                        second();
+                        stackTrace.push('Back in first()');
+                        stackTrace.push('Exiting first()');
+                    }
+
+                    stackTrace.push('Starting execution...');
+                    first();
+                    stackTrace.push('Execution complete!');
+
+                    output.textContent = stackTrace.join('\n');
+                }
+
+                // Hoisting demonstration
+                function runHoistingDemo() {
+                    const output = document.getElementById('hoisting-output');
+                    let results = [];
+
+                    // Simulate hoisting behavior
+                    results.push('=== VAR HOISTING ===');
+                    results.push('console.log(hoistedVar): undefined (not error)');
+                    results.push('var hoistedVar = "Hello"');
+                    results.push('console.log(hoistedVar): "Hello"');
+                    results.push('');
+
+                    results.push('=== FUNCTION HOISTING ===');
+                    results.push('hoistedFunction(): "I\'m hoisted!" (works before declaration)');
+                    results.push('');
+
+                    results.push('=== LET/CONST HOISTING ===');
+                    results.push('console.log(letVar): ReferenceError (Temporal Dead Zone)');
+                    results.push('let letVar = "Hello"');
+                    results.push('console.log(letVar): "Hello"');
+
+                    function hoistedFunction() {
+                        return "I'm hoisted!";
+                    }
+
+                    output.textContent = results.join('\n');
+                }
+
+                // Scope chain demonstration
+                function runScopeChainDemo() {
+                    const output = document.getElementById('scope-output');
+                    let results = [];
+
+                    let globalVar = "Global";
+
+                    function outerFunction() {
+                        let outerVar = "Outer";
+
+                        function innerFunction() {
+                            let innerVar = "Inner";
+
+                            results.push('Variable resolution in innerFunction:');
+                            results.push(`innerVar: "${innerVar}" (found in current scope)`);
+                            results.push(`outerVar: "${outerVar}" (found in outer scope)`);
+                            results.push(`globalVar: "${globalVar}" (found in global scope)`);
+                            results.push('');
+                            results.push('Scope chain: inner → outer → global');
+                        }
+
+                        return innerFunction;
+                    }
+
+                    const inner = outerFunction();
+                    inner();
+
+                    output.textContent = results.join('\n');
+                }
+
+                // Recursion demonstration
+                function runRecursionDemo() {
+                    const output = document.getElementById('recursion-output');
+                    let results = [];
+
+                    function factorial(n, depth = 0) {
+                        results.push(`${'  '.repeat(depth)}factorial(${n}) called`);
+
+                        if (n <= 1) {
+                            results.push(`${'  '.repeat(depth)}Base case reached: returning 1`);
+                            return 1;
+                        }
+
+                        const result = n * factorial(n - 1, depth + 1);
+                        results.push(`${'  '.repeat(depth)}factorial(${n}) returning ${result}`);
+                        return result;
+                    }
+
+                    results.push('Computing factorial(4):');
+                    results.push('');
+                    const result = factorial(4);
+                    results.push('');
+                    results.push(`Final result: ${result}`);
+
+                    output.textContent = results.join('\n');
+                }
+
+                // Complete demonstration
+                function runCompleteDemo() {
+                    const output = document.getElementById('complete-output');
+                    let results = [];
+
+                    results.push('=== EXECUTION CONTEXT LIFECYCLE ===');
+                    results.push('1. Creation Phase:');
+                    results.push('   - Variables declared (var = undefined, let/const = uninitialized)');
+                    results.push('   - Functions fully hoisted');
+                    results.push('   - Scope chain established');
+                    results.push('   - "this" binding determined');
+                    results.push('');
+                    results.push('2. Execution Phase:');
+                    results.push('   - Code executed line by line');
+                    results.push('   - Variable assignments performed');
+                    results.push('   - Function calls create new execution contexts');
+                    results.push('');
+
+                    // Demonstrate context creation
+                    function contextExample() {
+                        results.push('=== FUNCTION EXECUTION CONTEXT ===');
+                        results.push('Function contextExample() creates new context:');
+                        results.push('- Local scope with access to outer scope');
+                        results.push('- "this" binding (depends on call method)');
+                        results.push('- Arguments object available');
+                        return 'Context demonstration complete';
+                    }
+
+                    const result = contextExample();
+                    results.push(result);
+
+                    output.textContent = results.join('\n');
+                }
+
+                // Initialize page
+                document.addEventListener('DOMContentLoaded', function () {
+                    console.log('Execution Context & Call Stack guide loaded');
+                });
+            </script>
+</body>
+
+</html>

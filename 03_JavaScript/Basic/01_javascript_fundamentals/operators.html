@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -267,1240 +268,1220 @@
             .content-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .hero h1 {
                 font-size: 2.5em;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="hero">
             <h1>JavaScript Operators</h1>
-            <p>Master all JavaScript operators: arithmetic, comparison, logical, and advanced operators for powerful programming</p>
+            <p>Master all JavaScript operators: arithmetic, comparison, logical, and advanced operators for powerful
+                programming</p>
         </div>
 
         <div class="content-grid">
             <div class="card">
                 <h2>🔢 Arithmetic Operators</h2>
-                
+
                 <h3>Basic Arithmetic</h3>
                 <div class="code-block" data-language="JavaScript">
-// Addition
-let sum = 5 + 3;        // 8
-let concat = "Hello" + " World";  // "Hello World"
+                    // Addition
+                    let sum = 5 + 3; // 8
+                    let concat = "Hello" + " World"; // "Hello World"
 
-// Subtraction
-let diff = 10 - 4;      // 6
+                    // Subtraction
+                    let diff = 10 - 4; // 6
 
-// Multiplication
-let product = 6 * 7;    // 42
+                    // Multiplication
+                    let product = 6 * 7; // 42
 
-// Division
-let quotient = 15 / 3;  // 5
-let decimal = 10 / 3;   // 3.333...
+                    // Division
+                    let quotient = 15 / 3; // 5
+                    let decimal = 10 / 3; // 3.333...
 
-// Modulus (remainder)
-let remainder = 17 % 5; // 2
+                    // Modulus (remainder)
+                    let remainder = 17 % 5; // 2
 
-// Exponentiation (ES2016)
-let power = 2 ** 3;     // 8
-let sqrt = 9 ** 0.5;    // 3
+                    // Exponentiation (ES2016)
+                    let power = 2 ** 3; // 8
+                    let sqrt = 9 ** 0.5; // 3
 
-// Unary operators
-let x = 5;
-let negX = -x;          // -5
-let posX = +x;          // 5 (convert to number)
-let str = "42";
-let num = +str;         // 42 (string to number)
+                    // Unary operators
+                    let x = 5;
+                    let negX = -x; // -5
+                    let posX = +x; // 5 (convert to number)
+                    let str = "42";
+                    let num = +str; // 42 (string to number)
                 </div>
 
                 <h3>Increment and Decrement</h3>
                 <div class="code-block" data-language="JavaScript">
-let counter = 10;
+                    let counter = 10;
 
-// Pre-increment (increment first, then return)
-let preInc = ++counter;  // counter = 11, preInc = 11
+                    // Pre-increment (increment first, then return)
+                    let preInc = ++counter; // counter = 11, preInc = 11
 
-// Post-increment (return first, then increment)
-let postInc = counter++; // postInc = 11, counter = 12
+                    // Post-increment (return first, then increment)
+                    let postInc = counter++; // postInc = 11, counter = 12
 
-// Pre-decrement
-let preDec = --counter;  // counter = 11, preDec = 11
+                    // Pre-decrement
+                    let preDec = --counter; // counter = 11, preDec = 11
 
-// Post-decrement
-let postDec = counter--; // postDec = 11, counter = 10
+                    // Post-decrement
+                    let postDec = counter--; // postDec = 11, counter = 10
 
-// Common use cases
-for (let i = 0; i < 10; i++) {
-    console.log(i);
-}
+                    // Common use cases
+                    for (let i = 0; i < 10; i++) { console.log(i); } let items=['a', 'b' , 'c' ]; let index=0; while
+                        (index < items.length) { console.log(items[index]); index++; } // Be careful with expressions
+                        let a=5; let result=a++ + ++a; // 5 + 7=12 (a becomes 7) console.log(a); // 7 </div>
 
-let items = ['a', 'b', 'c'];
-let index = 0;
-while (index < items.length) {
-    console.log(items[index]);
-    index++;
-}
+                        <div class="calculator">
+                            <h3>Interactive Calculator</h3>
+                            <input type="number" id="num1" placeholder="Enter number" value="5">
+                            <input type="number" id="num2" placeholder="Enter number" value="3">
+                            <br><br>
+                            <button onclick="calculate('+')">+</button>
+                            <button onclick="calculate('-')">-</button>
+                            <button onclick="calculate('*')">×</button>
+                            <button onclick="calculate('/')">/</button>
+                            <button onclick="calculate('%')">%</button>
+                            <button onclick="calculate('**')">**</button>
+                            <div class="result" id="result">Result: 8</div>
+                        </div>
 
-// Be careful with expressions
-let a = 5;
-let result = a++ + ++a;  // 5 + 7 = 12 (a becomes 7)
-console.log(a);          // 7
+                        <div class="demo-container">
+                            <div class="demo-title">🔢 Arithmetic Demo</div>
+                            <button onclick="runArithmeticDemo()">Run Arithmetic Examples</button>
+                            <div id="arithmetic-output" class="output" style="display: none;"></div>
+                        </div>
                 </div>
 
-                <div class="calculator">
-                    <h3>Interactive Calculator</h3>
-                    <input type="number" id="num1" placeholder="Enter number" value="5">
-                    <input type="number" id="num2" placeholder="Enter number" value="3">
-                    <br><br>
-                    <button onclick="calculate('+')">+</button>
-                    <button onclick="calculate('-')">-</button>
-                    <button onclick="calculate('*')">×</button>
-                    <button onclick="calculate('/')">/</button>
-                    <button onclick="calculate('%')">%</button>
-                    <button onclick="calculate('**')">**</button>
-                    <div class="result" id="result">Result: 8</div>
+                <div class="card">
+                    <h2>🔍 Comparison Operators</h2>
+
+                    <h3>Basic Comparisons</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // Equality operators
+                        console.log(5 == 5); // true (loose equality)
+                        console.log(5 == "5"); // true (type conversion)
+                        console.log(5 === 5); // true (strict equality)
+                        console.log(5 === "5"); // false (no type conversion)
+
+                        // Inequality operators
+                        console.log(5 != 3); // true (loose inequality)
+                        console.log(5 != "5"); // false (type conversion)
+                        console.log(5 !== 3); // true (strict inequality)
+                        console.log(5 !== "5"); // true (no type conversion)
+
+                        // Relational operators
+                        console.log(10 > 5); // true
+                        console.log(10 >= 10); // true
+                        console.log(5 < 10); // true console.log(5 <=5); // true // String comparisons
+                            console.log("apple" < "banana" ); // true (lexicographic) console.log("10"> "9"); // false
+                            (string comparison)
+                            console.log("10" > 9); // true (number comparison)
+
+                            // Special values
+                            console.log(null == undefined); // true
+                            console.log(null === undefined); // false
+                            console.log(NaN == NaN); // false
+                            console.log(NaN === NaN); // false
+                    </div>
+
+                    <h3>Type Coercion in Comparisons</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // Surprising results with type coercion
+                        console.log("" == 0); // true
+                        console.log("0" == 0); // true
+                        console.log(false == 0); // true
+                        console.log(null == 0); // false
+                        console.log(undefined == 0); // false
+
+                        // Arrays and objects
+                        console.log([1, 2] == "1,2"); // true
+                        console.log([1, 2] === "1,2"); // false
+                        console.log({} == {}); // false (different objects)
+                        console.log({} === {}); // false (different objects)
+
+                        // Best practices
+                        function safeEquals(a, b) {
+                        return a === b;
+                        }
+
+                        function safeCompare(a, b) {
+                        // Convert to same type first
+                        if (typeof a !== typeof b) {
+                        return false;
+                        }
+                        return a === b;
+                        }
+
+                        // Object comparison
+                        function deepEqual(obj1, obj2) {
+                        if (obj1 === obj2) return true;
+
+                        if (obj1 == null || obj2 == null) return false;
+
+                        if (typeof obj1 !== typeof obj2) return false;
+
+                        const keys1 = Object.keys(obj1);
+                        const keys2 = Object.keys(obj2);
+
+                        if (keys1.length !== keys2.length) return false;
+
+                        for (let key of keys1) {
+                        if (!keys2.includes(key)) return false;
+                        if (!deepEqual(obj1[key], obj2[key])) return false;
+                        }
+
+                        return true;
+                        }
+                    </div>
+
+                    <table class="operator-table">
+                        <thead>
+                            <tr>
+                                <th>Operator</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>==</td>
+                                <td>Loose equality</td>
+                                <td>5 == "5"</td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td>===</td>
+                                <td>Strict equality</td>
+                                <td>5 === "5"</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td>!=</td>
+                                <td>Loose inequality</td>
+                                <td>5 != "3"</td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td>!==</td>
+                                <td>Strict inequality</td>
+                                <td>5 !== "5"</td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td>></td>
+                                <td>Greater than</td>
+                                <td>10 > 5</td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td>>=</td>
+                                <td>Greater than or equal</td>
+                                <td>10 >= 10</td>
+                                <td>true</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="demo-container">
+                        <div class="demo-title">🔍 Comparison Demo</div>
+                        <button onclick="runComparisonDemo()">Run Comparison Examples</button>
+                        <div id="comparison-output" class="output" style="display: none;"></div>
+                    </div>
                 </div>
 
-                <div class="demo-container">
-                    <div class="demo-title">🔢 Arithmetic Demo</div>
-                    <button onclick="runArithmeticDemo()">Run Arithmetic Examples</button>
-                    <div id="arithmetic-output" class="output" style="display: none;"></div>
+                <div class="card">
+                    <h2>🧠 Logical Operators</h2>
+
+                    <h3>Boolean Logic</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // AND operator (&&)
+                        console.log(true && true); // true
+                        console.log(true && false); // false
+                        console.log(false && true); // false
+                        console.log(false && false); // false
+
+                        // OR operator (||)
+                        console.log(true || true); // true
+                        console.log(true || false); // true
+                        console.log(false || true); // true
+                        console.log(false || false); // false
+
+                        // NOT operator (!)
+                        console.log(!true); // false
+                        console.log(!false); // true
+                        console.log(!!true); // true (double negation)
+
+                        // Practical examples
+                        let age = 25;
+                        let hasLicense = true;
+
+                        // Can drive if age >= 18 AND has license
+                        let canDrive = age >= 18 && hasLicense;
+
+                        // Can enter if age >= 21 OR has special permission
+                        let hasPermission = false;
+                        let canEnter = age >= 21 || hasPermission;
+
+                        // User is NOT admin
+                        let isAdmin = false;
+                        let isRegularUser = !isAdmin;
+                    </div>
+
+                    <h3>Short-Circuit Evaluation</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // AND short-circuit (stops at first falsy)
+                        let result1 = false && console.log("This won't run");
+                        let result2 = true && console.log("This will run");
+
+                        // OR short-circuit (stops at first truthy)
+                        let result3 = true || console.log("This won't run");
+                        let result4 = false || console.log("This will run");
+
+                        // Practical applications
+                        function getUserName(user) {
+                        return user && user.name && user.name.first;
+                        }
+
+                        function getDefaultValue(value) {
+                        return value || "default";
+                        }
+
+                        // Conditional assignment
+                        let config = getConfig() || defaultConfig;
+                        let userName = user && user.name || "Anonymous";
+
+                        // Guard clauses
+                        function processOrder(order) {
+                        if (!order) {
+                        console.log("No order provided");
+                        return;
+                        }
+
+                        if (!order.items || order.items.length === 0) {
+                        console.log("Order has no items");
+                        return;
+                        }
+
+                        // Process order...
+                        }
+
+                        // Nullish coalescing operator (??)
+                        let value1 = null ?? "default"; // "default"
+                        let value2 = undefined ?? "default"; // "default"
+                        let value3 = 0 ?? "default"; // 0
+                        let value4 = "" ?? "default"; // ""
+                        let value5 = false ?? "default"; // false
+
+                        // Logical assignment operators (ES2021)
+                        let x = 5;
+                        x &&= 10; // x = x && 10 (if x is truthy, set to 10)
+                        x ||= 20; // x = x || 20 (if x is falsy, set to 20)
+                        x ??= 30; // x = x ?? 30 (if x is nullish, set to 30)
+                    </div>
+
+                    <h3>Truthiness and Falsiness</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // Falsy values
+                        console.log(Boolean(false)); // false
+                        console.log(Boolean(0)); // false
+                        console.log(Boolean(-0)); // false
+                        console.log(Boolean(0n)); // false (BigInt)
+                        console.log(Boolean("")); // false
+                        console.log(Boolean(null)); // false
+                        console.log(Boolean(undefined)); // false
+                        console.log(Boolean(NaN)); // false
+
+                        // Everything else is truthy
+                        console.log(Boolean(true)); // true
+                        console.log(Boolean(1)); // true
+                        console.log(Boolean(-1)); // true
+                        console.log(Boolean("hello")); // true
+                        console.log(Boolean(" ")); // true (space is truthy)
+                        console.log(Boolean([])); // true (empty array)
+                        console.log(Boolean({})); // true (empty object)
+                        console.log(Boolean(function(){})); // true
+
+                        // Practical use
+                        function isValidInput(input) {
+                        return input && input.trim().length > 0;
+                        }
+
+                        function hasValue(val) {
+                        return val !== null && val !== undefined && val !== "";
+                        }
+
+                        // Converting to boolean
+                        let str = "hello";
+                        let bool1 = Boolean(str); // true
+                        let bool2 = !!str; // true
+                        let bool3 = str ? true : false; // true
+                    </div>
+
+                    <div class="demo-container">
+                        <div class="demo-title">🧠 Logical Demo</div>
+                        <button onclick="runLogicalDemo()">Run Logical Examples</button>
+                        <div id="logical-output" class="output" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>🔧 Assignment Operators</h2>
+
+                    <h3>Basic Assignment</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // Simple assignment
+                        let x = 5;
+                        let y = x; // y gets value of x
+
+                        // Multiple assignment
+                        let a, b, c;
+                        a = b = c = 10; // All get value 10
+
+                        // Compound assignment operators
+                        let num = 10;
+                        num += 5; // num = num + 5 (15)
+                        num -= 3; // num = num - 3 (12)
+                        num *= 2; // num = num * 2 (24)
+                        num /= 4; // num = num / 4 (6)
+                        num %= 4; // num = num % 4 (2)
+                        num **= 3; // num = num ** 3 (8)
+
+                        // String concatenation assignment
+                        let greeting = "Hello";
+                        greeting += " World"; // "Hello World"
+                        greeting += "!"; // "Hello World!"
+
+                        // Array assignment
+                        let arr = [1, 2, 3];
+                        arr[0] = 10; // [10, 2, 3]
+                        arr[arr.length] = 4; // [10, 2, 3, 4]
+
+                        // Object assignment
+                        let person = {};
+                        person.name = "John";
+                        person["age"] = 30;
+                        person.city = "New York";
+                    </div>
+
+                    <h3>Destructuring Assignment</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // Array destructuring
+                        let [first, second, third] = [1, 2, 3];
+                        console.log(first); // 1
+                        console.log(second); // 2
+                        console.log(third); // 3
+
+                        // Skip elements
+                        let [one, , three] = [1, 2, 3];
+                        console.log(one); // 1
+                        console.log(three); // 3
+
+                        // Rest elements
+                        let [head, ...tail] = [1, 2, 3, 4, 5];
+                        console.log(head); // 1
+                        console.log(tail); // [2, 3, 4, 5]
+
+                        // Object destructuring
+                        let {name, age, city} = {
+                        name: "Alice",
+                        age: 25,
+                        city: "Boston"
+                        };
+                        console.log(name); // "Alice"
+                        console.log(age); // 25
+                        console.log(city); // "Boston"
+
+                        // Rename variables
+                        let {name: fullName, age: years} = {
+                        name: "Bob",
+                        age: 30
+                        };
+                        console.log(fullName); // "Bob"
+                        console.log(years); // 30
+
+                        // Default values
+                        let {x = 10, y = 20} = {x: 5};
+                        console.log(x); // 5
+                        console.log(y); // 20
+
+                        // Nested destructuring
+                        let {user: {name: userName, profile: {email}}} = {
+                        user: {
+                        name: "Charlie",
+                        profile: {
+                        email: "charlie@example.com"
+                        }
+                        }
+                        };
+                        console.log(userName); // "Charlie"
+                        console.log(email); // "charlie@example.com"
+                    </div>
+
+                    <h3>Advanced Assignment Patterns</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // Swapping variables
+                        let a = 5, b = 10;
+                        [a, b] = [b, a];
+                        console.log(a); // 10
+                        console.log(b); // 5
+
+                        // Function parameter destructuring
+                        function greet({name, age = 18}) {
+                        console.log(`Hello ${name}, you are ${age} years old`);
+                        }
+                        greet({name: "Alice", age: 25});
+
+                        // Return multiple values
+                        function getCoordinates() {
+                        return [10, 20];
+                        }
+                        let [x, y] = getCoordinates();
+
+                        // Computed property names
+                        let prop = "dynamicKey";
+                        let obj = {
+                        [prop]: "value"
+                        };
+                        console.log(obj.dynamicKey); // "value"
+
+                        // Conditional assignment
+                        let score = 85;
+                        let grade = score >= 90 ? "A" :
+                        score >= 80 ? "B" :
+                        score >= 70 ? "C" : "F";
+
+                        // Nullish assignment
+                        let config = null;
+                        config ??= {theme: "dark", lang: "en"};
+                        console.log(config); // {theme: "dark", lang: "en"}
+
+                        // Logical assignment
+                        let user = {name: "John"};
+                        user.role ||= "guest"; // Set role if not set
+                        user.permissions &&= ["read"]; // Update permissions if exists
+                        console.log(user.role); // "guest"
+                    </div>
+
+                    <div class="demo-container">
+                        <div class="demo-title">🔧 Assignment Demo</div>
+                        <button onclick="runAssignmentDemo()">Run Assignment Examples</button>
+                        <div id="assignment-output" class="output" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>🔀 Bitwise Operators</h2>
+
+                    <h3>Binary Operations</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // Bitwise AND (&)
+                        console.log(5 & 3); // 1 (101 & 011 = 001)
+                        console.log(12 & 8); // 8 (1100 & 1000 = 1000)
+
+                        // Bitwise OR (|)
+                        console.log(5 | 3); // 7 (101 | 011 = 111)
+                        console.log(12 | 8); // 12 (1100 | 1000 = 1100)
+
+                        // Bitwise XOR (^)
+                        console.log(5 ^ 3); // 6 (101 ^ 011 = 110)
+                        console.log(12 ^ 8); // 4 (1100 ^ 1000 = 0100)
+
+                        // Bitwise NOT (~)
+                        console.log(~5); // -6 (inverts all bits)
+                        console.log(~0); // -1
+
+                        // Left shift (<<) console.log(5 << 1); // 10 (101 << 1=1010) console.log(3 << 2); // 12 (11 <<
+                            2=1100) // Right shift (>>)
+                            console.log(10 >> 1); // 5 (1010 >> 1 = 101)
+                            console.log(12 >> 2); // 3 (1100 >> 2 = 11)
+
+                            // Unsigned right shift (>>>)
+                            console.log(-5 >>> 1); // 2147483645 (treats as unsigned)
+                            console.log(12 >>> 2); // 3 (same as >> for positive numbers)
+                    </div>
+
+                    <h3>Practical Applications</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // Checking if number is even or odd
+                        function isEven(num) {
+                        return (num & 1) === 0;
+                        }
+                        console.log(isEven(4)); // true
+                        console.log(isEven(5)); // false
+
+                        // Multiplying/dividing by powers of 2
+                        function multiplyBy2(num) {
+                        return num << 1; } function divideBy2(num) { return num>> 1;
+                            }
+                            console.log(multiplyBy2(5)); // 10
+                            console.log(divideBy2(10)); // 5
+
+                            // Swapping variables without temp
+                            function swap(a, b) {
+                            a = a ^ b;
+                            b = a ^ b;
+                            a = a ^ b;
+                            return [a, b];
+                            }
+                            console.log(swap(5, 3)); // [3, 5]
+
+                            // Checking if power of 2
+                            function isPowerOf2(num) {
+                            return num > 0 && (num & (num - 1)) === 0;
+                            }
+                            console.log(isPowerOf2(8)); // true
+                            console.log(isPowerOf2(6)); // false
+
+                            // Toggling bits (flags)
+                            let flags = 0;
+                            const FLAG_A = 1; // 001
+                            const FLAG_B = 2; // 010
+                            const FLAG_C = 4; // 100
+
+                            // Set flags
+                            flags |= FLAG_A; // Set flag A
+                            flags |= FLAG_C; // Set flag C
+
+                            // Check flags
+                            console.log(flags & FLAG_A ? "A is set" : "A is not set");
+                            console.log(flags & FLAG_B ? "B is set" : "B is not set");
+
+                            // Clear flags
+                            flags &= ~FLAG_A; // Clear flag A
+
+                            // Toggle flags
+                            flags ^= FLAG_B; // Toggle flag B
+                    </div>
+
+                    <div class="demo-container">
+                        <div class="demo-title">🔀 Bitwise Demo</div>
+                        <button onclick="runBitwiseDemo()">Run Bitwise Examples</button>
+                        <div id="bitwise-output" class="output" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>🎯 Special Operators</h2>
+
+                    <h3>Ternary Operator</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // Basic ternary operator
+                        let age = 20;
+                        let status = age >= 18 ? "adult" : "minor";
+                        console.log(status); // "adult"
+
+                        // Nested ternary
+                        let score = 85;
+                        let grade = score >= 90 ? "A" :
+                        score >= 80 ? "B" :
+                        score >= 70 ? "C" :
+                        score >= 60 ? "D" : "F";
+                        console.log(grade); // "B"
+
+                        // With function calls
+                        function getWeather() {
+                        return Math.random() > 0.5 ? "sunny" : "cloudy";
+                        }
+                        let activity = getWeather() === "sunny" ? "go outside" : "stay inside";
+
+                        // Complex conditions
+                        let user = {name: "John", age: 25, isAdmin: false};
+                        let message = user.isAdmin ?
+                        `Welcome admin ${user.name}` :
+                        user.age >= 18 ?
+                        `Welcome ${user.name}` :
+                        `Hi ${user.name}, you're too young`;
+
+                        // Ternary with assignment
+                        let items = [];
+                        items.length > 0 ? items.push("new") : items = ["first"];
+                    </div>
+
+                    <h3>typeof Operator</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // Basic typeof usage
+                        console.log(typeof 42); // "number"
+                        console.log(typeof "hello"); // "string"
+                        console.log(typeof true); // "boolean"
+                        console.log(typeof undefined); // "undefined"
+                        console.log(typeof null); // "object" (this is a bug in JS)
+                        console.log(typeof {}); // "object"
+                        console.log(typeof []); // "object"
+                        console.log(typeof function(){}); // "function"
+                        console.log(typeof Symbol()); // "symbol"
+                        console.log(typeof 123n); // "bigint"
+
+                        // Type checking functions
+                        function isNumber(value) {
+                        return typeof value === "number" && !isNaN(value);
+                        }
+
+                        function isString(value) {
+                        return typeof value === "string";
+                        }
+
+                        function isFunction(value) {
+                        return typeof value === "function";
+                        }
+
+                        function isArray(value) {
+                        return Array.isArray(value);
+                        }
+
+                        function isObject(value) {
+                        return typeof value === "object" && value !== null && !Array.isArray(value);
+                        }
+
+                        // Safe property access
+                        function safeAccess(obj, prop) {
+                        return typeof obj === "object" && obj !== null ? obj[prop] : undefined;
+                        }
+
+                        // Feature detection
+                        if (typeof localStorage !== "undefined") {
+                        localStorage.setItem("key", "value");
+                        }
+
+                        if (typeof fetch !== "undefined") {
+                        fetch("/api/data").then(response => response.json());
+                        }
+                    </div>
+
+                    <h3>instanceof Operator</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // Basic instanceof usage
+                        let date = new Date();
+                        let arr = [1, 2, 3];
+                        let obj = {};
+
+                        console.log(date instanceof Date); // true
+                        console.log(arr instanceof Array); // true
+                        console.log(obj instanceof Object); // true
+                        console.log(arr instanceof Object); // true (arrays are objects)
+
+                        // Custom constructors
+                        function Person(name) {
+                        this.name = name;
+                        }
+                        let person = new Person("Alice");
+                        console.log(person instanceof Person); // true
+                        console.log(person instanceof Object); // true
+
+                        // Class inheritance
+                        class Animal {
+                        constructor(name) {
+                        this.name = name;
+                        }
+                        }
+                        class Dog extends Animal {
+                        constructor(name, breed) {
+                        super(name);
+                        this.breed = breed;
+                        }
+                        }
+                        let dog = new Dog("Buddy", "Golden Retriever");
+                        console.log(dog instanceof Dog); // true
+                        console.log(dog instanceof Animal); // true
+                        console.log(dog instanceof Object); // true
+
+                        // Checking built-in types
+                        function getType(value) {
+                        if (value instanceof Array) return "array";
+                        if (value instanceof Date) return "date";
+                        if (value instanceof RegExp) return "regex";
+                        if (value instanceof Error) return "error";
+                        return typeof value;
+                        }
+
+                        // Polymorphism example
+                        function processShape(shape) {
+                        if (shape instanceof Circle) {
+                        return Math.PI * shape.radius ** 2;
+                        } else if (shape instanceof Rectangle) {
+                        return shape.width * shape.height;
+                        }
+                        throw new Error("Unknown shape type");
+                        }
+                    </div>
+
+                    <h3>in Operator</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // Check if property exists
+                        let person = {name: "John", age: 30};
+                        console.log("name" in person); // true
+                        console.log("height" in person); // false
+
+                        // Array indices
+                        let arr = [1, 2, 3];
+                        console.log(0 in arr); // true
+                        console.log(3 in arr); // false
+
+                        // Prototype chain
+                        console.log("toString" in person); // true (inherited)
+                        console.log("hasOwnProperty" in person); // true (inherited)
+
+                        // hasOwnProperty vs in
+                        console.log(person.hasOwnProperty("name")); // true
+                        console.log(person.hasOwnProperty("toString")); // false
+
+                        // Safe property checking
+                        function hasProperty(obj, prop) {
+                        return obj != null && prop in obj;
+                        }
+
+                        // Feature detection
+                        if ("serviceWorker" in navigator) {
+                        navigator.serviceWorker.register("/sw.js");
+                        }
+
+                        if ("geolocation" in navigator) {
+                        navigator.geolocation.getCurrentPosition(success, error);
+                        }
+
+                        // Object introspection
+                        function describeObject(obj) {
+                        const props = [];
+                        for (let prop in obj) {
+                        if (obj.hasOwnProperty(prop)) {
+                        props.push(`${prop}: ${typeof obj[prop]}`);
+                        }
+                        }
+                        return props.join(", ");
+                        }
+                    </div>
+
+                    <div class="demo-container">
+                        <div class="demo-title">🎯 Special Operators Demo</div>
+                        <button onclick="runSpecialDemo()">Run Special Operators</button>
+                        <div id="special-output" class="output" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>📏 Operator Precedence</h2>
+
+                    <h3>Precedence Order</h3>
+                    <div class="precedence-chart">
+                        <div class="precedence-level">
+                            <div class="precedence-number">1</div>
+                            <div><strong>Grouping:</strong> ( )</div>
+                        </div>
+                        <div class="precedence-level">
+                            <div class="precedence-number">2</div>
+                            <div><strong>Member Access:</strong> . []</div>
+                        </div>
+                        <div class="precedence-level">
+                            <div class="precedence-number">3</div>
+                            <div><strong>Function Call:</strong> ()</div>
+                        </div>
+                        <div class="precedence-level">
+                            <div class="precedence-number">4</div>
+                            <div><strong>Postfix:</strong> ++ --</div>
+                        </div>
+                        <div class="precedence-level">
+                            <div class="precedence-number">5</div>
+                            <div><strong>Prefix:</strong> ++ -- ! ~ + -</div>
+                        </div>
+                        <div class="precedence-level">
+                            <div class="precedence-number">6</div>
+                            <div><strong>Multiplication:</strong> * / %</div>
+                        </div>
+                        <div class="precedence-level">
+                            <div class="precedence-number">7</div>
+                            <div><strong>Addition:</strong> + -</div>
+                        </div>
+                        <div class="precedence-level">
+                            <div class="precedence-number">8</div>
+                            <div><strong>Shift:</strong>
+                                <<>> >>>
+                            </div>
+                        </div>
+                        <div class="precedence-level">
+                            <div class="precedence-number">9</div>
+                            <div><strong>Relational:</strong>
+                                <>
+                                    <=>= instanceof
+                            </div>
+                        </div>
+                        <div class="precedence-level">
+                            <div class="precedence-number">10</div>
+                            <div><strong>Equality:</strong> == != === !==</div>
+                        </div>
+                        <div class="precedence-level">
+                            <div class="precedence-number">11</div>
+                            <div><strong>Logical AND:</strong> &&</div>
+                        </div>
+                        <div class="precedence-level">
+                            <div class="precedence-number">12</div>
+                            <div><strong>Logical OR:</strong> ||</div>
+                        </div>
+                        <div class="precedence-level">
+                            <div class="precedence-number">13</div>
+                            <div><strong>Ternary:</strong> ?:</div>
+                        </div>
+                        <div class="precedence-level">
+                            <div class="precedence-number">14</div>
+                            <div><strong>Assignment:</strong> = += -= *= /=</div>
+                        </div>
+                    </div>
+
+                    <h3>Precedence Examples</h3>
+                    <div class="code-block" data-language="JavaScript">
+                        // Without parentheses
+                        console.log(2 + 3 * 4); // 14 (not 20)
+                        console.log(10 - 5 * 2); // 0 (not 10)
+                        console.log(true || false && false); // true
+
+                        // With parentheses for clarity
+                        console.log((2 + 3) * 4); // 20
+                        console.log(10 - (5 * 2)); // 0
+                        console.log((true || false) && false); // false
+
+                        // Complex expressions
+                        let a = 5, b = 10, c = 15;
+                        let result1 = a + b * c / 5; // 5 + (10 * 15) / 5 = 35
+                        let result2 = (a + b) * c / 5; // (5 + 10) * 15 / 5 = 45
+
+                        // Logical operator precedence
+                        let x = true, y = false, z = true;
+                        console.log(x || y && z); // true (y && z first)
+                        console.log((x || y) && z); // true
+
+                        // Assignment precedence
+                        let num = 5;
+                        console.log(num += 3 * 2); // 11 (3 * 2 first, then +=)
+
+                        // Comparison precedence
+                        console.log(5 > 3 && 2 < 4); // true (comparisons first) console.log(5> 3 && 2 < 4 || false); //
+                                true // Common mistakes // Wrong: 5 < x < 10 (doesn't work as expected) // Right: x> 5
+                                && x < 10 // Function call precedence function getValue() { console.log("Function
+                                    called"); return 5; } console.log(getValue() + 3 * 2); // Function called first,
+                                    then 5 + 6=11 </div>
+
+                                    <div class="demo-container">
+                                        <div class="demo-title">📏 Precedence Demo</div>
+                                        <button onclick="runPrecedenceDemo()">Run Precedence Examples</button>
+                                        <div id="precedence-output" class="output" style="display: none;"></div>
+                                    </div>
+                    </div>
+                </div>
+
+                <div class="best-practices">
+                    <h3>🎯 Operator Best Practices</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                        <div>
+                            <h4>Comparison</h4>
+                            <ul>
+                                <li>Always use strict equality (===) over loose equality (==)</li>
+                                <li>Use Object.is() for NaN and -0 comparisons</li>
+                                <li>Be aware of type coercion in comparisons</li>
+                                <li>Use explicit type conversion when needed</li>
+                                <li>Avoid comparing different types without conversion</li>
+                                <li>Use helper functions for complex comparisons</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>Logical</h4>
+                            <ul>
+                                <li>Use parentheses to clarify complex logical expressions</li>
+                                <li>Leverage short-circuit evaluation for performance</li>
+                                <li>Use nullish coalescing (??) for default values</li>
+                                <li>Avoid deeply nested ternary operators</li>
+                                <li>Use logical assignment operators when appropriate</li>
+                                <li>Be explicit about truthy/falsy conversions</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>General</h4>
+                            <ul>
+                                <li>Use parentheses to make precedence clear</li>
+                                <li>Avoid overly complex expressions</li>
+                                <li>Use meaningful variable names</li>
+                                <li>Comment complex operator combinations</li>
+                                <li>Consider readability over brevity</li>
+                                <li>Use linters to catch common mistakes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <h3>🚀 Modern Operator Features</h3>
+                    <p>
+                        <strong>Nullish Coalescing (??):</strong> Returns right operand when left is null or
+                        undefined.<br>
+                        <strong>Optional Chaining (?.):</strong> Safely access nested properties without errors.<br>
+                        <strong>Logical Assignment:</strong> Combine logical operators with assignment (&&=, ||=,
+                        ??=).<br>
+                        <strong>Pipeline Operator (|>):</strong> Proposal for functional programming style (future
+                        feature).<br>
+                        <strong>Exponentiation (**):</strong> Cleaner syntax for mathematical powers.
+                    </p>
                 </div>
             </div>
 
-            <div class="card">
-                <h2>🔍 Comparison Operators</h2>
-                
-                <h3>Basic Comparisons</h3>
-                <div class="code-block" data-language="JavaScript">
-// Equality operators
-console.log(5 == 5);    // true  (loose equality)
-console.log(5 == "5");  // true  (type conversion)
-console.log(5 === 5);   // true  (strict equality)
-console.log(5 === "5"); // false (no type conversion)
-
-// Inequality operators
-console.log(5 != 3);    // true  (loose inequality)
-console.log(5 != "5");  // false (type conversion)
-console.log(5 !== 3);   // true  (strict inequality)
-console.log(5 !== "5"); // true  (no type conversion)
-
-// Relational operators
-console.log(10 > 5);    // true
-console.log(10 >= 10);  // true
-console.log(5 < 10);    // true
-console.log(5 <= 5);    // true
-
-// String comparisons
-console.log("apple" < "banana"); // true (lexicographic)
-console.log("10" > "9");         // false (string comparison)
-console.log("10" > 9);           // true (number comparison)
-
-// Special values
-console.log(null == undefined);  // true
-console.log(null === undefined); // false
-console.log(NaN == NaN);         // false
-console.log(NaN === NaN);        // false
-                </div>
-
-                <h3>Type Coercion in Comparisons</h3>
-                <div class="code-block" data-language="JavaScript">
-// Surprising results with type coercion
-console.log("" == 0);        // true
-console.log("0" == 0);       // true
-console.log(false == 0);     // true
-console.log(null == 0);      // false
-console.log(undefined == 0); // false
-
-// Arrays and objects
-console.log([1, 2] == "1,2"); // true
-console.log([1, 2] === "1,2"); // false
-console.log({} == {});         // false (different objects)
-console.log({} === {});        // false (different objects)
-
-// Best practices
-function safeEquals(a, b) {
-    return a === b;
-}
-
-function safeCompare(a, b) {
-    // Convert to same type first
-    if (typeof a !== typeof b) {
-        return false;
-    }
-    return a === b;
-}
-
-// Object comparison
-function deepEqual(obj1, obj2) {
-    if (obj1 === obj2) return true;
-    
-    if (obj1 == null || obj2 == null) return false;
-    
-    if (typeof obj1 !== typeof obj2) return false;
-    
-    const keys1 = Object.keys(obj1);
-    const keys2 = Object.keys(obj2);
-    
-    if (keys1.length !== keys2.length) return false;
-    
-    for (let key of keys1) {
-        if (!keys2.includes(key)) return false;
-        if (!deepEqual(obj1[key], obj2[key])) return false;
-    }
-    
-    return true;
-}
-                </div>
-
-                <table class="operator-table">
-                    <thead>
-                        <tr>
-                            <th>Operator</th>
-                            <th>Description</th>
-                            <th>Example</th>
-                            <th>Result</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>==</td>
-                            <td>Loose equality</td>
-                            <td>5 == "5"</td>
-                            <td>true</td>
-                        </tr>
-                        <tr>
-                            <td>===</td>
-                            <td>Strict equality</td>
-                            <td>5 === "5"</td>
-                            <td>false</td>
-                        </tr>
-                        <tr>
-                            <td>!=</td>
-                            <td>Loose inequality</td>
-                            <td>5 != "3"</td>
-                            <td>true</td>
-                        </tr>
-                        <tr>
-                            <td>!==</td>
-                            <td>Strict inequality</td>
-                            <td>5 !== "5"</td>
-                            <td>true</td>
-                        </tr>
-                        <tr>
-                            <td>></td>
-                            <td>Greater than</td>
-                            <td>10 > 5</td>
-                            <td>true</td>
-                        </tr>
-                        <tr>
-                            <td>>=</td>
-                            <td>Greater than or equal</td>
-                            <td>10 >= 10</td>
-                            <td>true</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="demo-container">
-                    <div class="demo-title">🔍 Comparison Demo</div>
-                    <button onclick="runComparisonDemo()">Run Comparison Examples</button>
-                    <div id="comparison-output" class="output" style="display: none;"></div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>🧠 Logical Operators</h2>
-                
-                <h3>Boolean Logic</h3>
-                <div class="code-block" data-language="JavaScript">
-// AND operator (&&)
-console.log(true && true);   // true
-console.log(true && false);  // false
-console.log(false && true);  // false
-console.log(false && false); // false
-
-// OR operator (||)
-console.log(true || true);   // true
-console.log(true || false);  // true
-console.log(false || true);  // true
-console.log(false || false); // false
-
-// NOT operator (!)
-console.log(!true);  // false
-console.log(!false); // true
-console.log(!!true); // true (double negation)
-
-// Practical examples
-let age = 25;
-let hasLicense = true;
-
-// Can drive if age >= 18 AND has license
-let canDrive = age >= 18 && hasLicense;
-
-// Can enter if age >= 21 OR has special permission
-let hasPermission = false;
-let canEnter = age >= 21 || hasPermission;
-
-// User is NOT admin
-let isAdmin = false;
-let isRegularUser = !isAdmin;
-                </div>
-
-                <h3>Short-Circuit Evaluation</h3>
-                <div class="code-block" data-language="JavaScript">
-// AND short-circuit (stops at first falsy)
-let result1 = false && console.log("This won't run");
-let result2 = true && console.log("This will run");
-
-// OR short-circuit (stops at first truthy)
-let result3 = true || console.log("This won't run");
-let result4 = false || console.log("This will run");
-
-// Practical applications
-function getUserName(user) {
-    return user && user.name && user.name.first;
-}
-
-function getDefaultValue(value) {
-    return value || "default";
-}
-
-// Conditional assignment
-let config = getConfig() || defaultConfig;
-let userName = user && user.name || "Anonymous";
-
-// Guard clauses
-function processOrder(order) {
-    if (!order) {
-        console.log("No order provided");
-        return;
-    }
-    
-    if (!order.items || order.items.length === 0) {
-        console.log("Order has no items");
-        return;
-    }
-    
-    // Process order...
-}
-
-// Nullish coalescing operator (??)
-let value1 = null ?? "default";        // "default"
-let value2 = undefined ?? "default";   // "default"
-let value3 = 0 ?? "default";          // 0
-let value4 = "" ?? "default";         // ""
-let value5 = false ?? "default";      // false
-
-// Logical assignment operators (ES2021)
-let x = 5;
-x &&= 10;  // x = x && 10 (if x is truthy, set to 10)
-x ||= 20;  // x = x || 20 (if x is falsy, set to 20)
-x ??= 30;  // x = x ?? 30 (if x is nullish, set to 30)
-                </div>
-
-                <h3>Truthiness and Falsiness</h3>
-                <div class="code-block" data-language="JavaScript">
-// Falsy values
-console.log(Boolean(false));     // false
-console.log(Boolean(0));         // false
-console.log(Boolean(-0));        // false
-console.log(Boolean(0n));        // false (BigInt)
-console.log(Boolean(""));        // false
-console.log(Boolean(null));      // false
-console.log(Boolean(undefined)); // false
-console.log(Boolean(NaN));       // false
-
-// Everything else is truthy
-console.log(Boolean(true));      // true
-console.log(Boolean(1));         // true
-console.log(Boolean(-1));        // true
-console.log(Boolean("hello"));   // true
-console.log(Boolean(" "));       // true (space is truthy)
-console.log(Boolean([]));        // true (empty array)
-console.log(Boolean({}));        // true (empty object)
-console.log(Boolean(function(){})); // true
-
-// Practical use
-function isValidInput(input) {
-    return input && input.trim().length > 0;
-}
-
-function hasValue(val) {
-    return val !== null && val !== undefined && val !== "";
-}
-
-// Converting to boolean
-let str = "hello";
-let bool1 = Boolean(str);  // true
-let bool2 = !!str;         // true
-let bool3 = str ? true : false; // true
-                </div>
-
-                <div class="demo-container">
-                    <div class="demo-title">🧠 Logical Demo</div>
-                    <button onclick="runLogicalDemo()">Run Logical Examples</button>
-                    <div id="logical-output" class="output" style="display: none;"></div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>🔧 Assignment Operators</h2>
-                
-                <h3>Basic Assignment</h3>
-                <div class="code-block" data-language="JavaScript">
-// Simple assignment
-let x = 5;
-let y = x;  // y gets value of x
-
-// Multiple assignment
-let a, b, c;
-a = b = c = 10;  // All get value 10
-
-// Compound assignment operators
-let num = 10;
-num += 5;   // num = num + 5  (15)
-num -= 3;   // num = num - 3  (12)
-num *= 2;   // num = num * 2  (24)
-num /= 4;   // num = num / 4  (6)
-num %= 4;   // num = num % 4  (2)
-num **= 3;  // num = num ** 3 (8)
-
-// String concatenation assignment
-let greeting = "Hello";
-greeting += " World";  // "Hello World"
-greeting += "!";       // "Hello World!"
-
-// Array assignment
-let arr = [1, 2, 3];
-arr[0] = 10;           // [10, 2, 3]
-arr[arr.length] = 4;   // [10, 2, 3, 4]
-
-// Object assignment
-let person = {};
-person.name = "John";
-person["age"] = 30;
-person.city = "New York";
-                </div>
-
-                <h3>Destructuring Assignment</h3>
-                <div class="code-block" data-language="JavaScript">
-// Array destructuring
-let [first, second, third] = [1, 2, 3];
-console.log(first);  // 1
-console.log(second); // 2
-console.log(third);  // 3
-
-// Skip elements
-let [one, , three] = [1, 2, 3];
-console.log(one);   // 1
-console.log(three); // 3
-
-// Rest elements
-let [head, ...tail] = [1, 2, 3, 4, 5];
-console.log(head); // 1
-console.log(tail); // [2, 3, 4, 5]
-
-// Object destructuring
-let {name, age, city} = {
-    name: "Alice",
-    age: 25,
-    city: "Boston"
-};
-console.log(name); // "Alice"
-console.log(age);  // 25
-console.log(city); // "Boston"
-
-// Rename variables
-let {name: fullName, age: years} = {
-    name: "Bob",
-    age: 30
-};
-console.log(fullName); // "Bob"
-console.log(years);    // 30
-
-// Default values
-let {x = 10, y = 20} = {x: 5};
-console.log(x); // 5
-console.log(y); // 20
-
-// Nested destructuring
-let {user: {name: userName, profile: {email}}} = {
-    user: {
-        name: "Charlie",
-        profile: {
-            email: "charlie@example.com"
-        }
-    }
-};
-console.log(userName); // "Charlie"
-console.log(email);    // "charlie@example.com"
-                </div>
-
-                <h3>Advanced Assignment Patterns</h3>
-                <div class="code-block" data-language="JavaScript">
-// Swapping variables
-let a = 5, b = 10;
-[a, b] = [b, a];
-console.log(a); // 10
-console.log(b); // 5
-
-// Function parameter destructuring
-function greet({name, age = 18}) {
-    console.log(`Hello ${name}, you are ${age} years old`);
-}
-greet({name: "Alice", age: 25});
-
-// Return multiple values
-function getCoordinates() {
-    return [10, 20];
-}
-let [x, y] = getCoordinates();
-
-// Computed property names
-let prop = "dynamicKey";
-let obj = {
-    [prop]: "value"
-};
-console.log(obj.dynamicKey); // "value"
-
-// Conditional assignment
-let score = 85;
-let grade = score >= 90 ? "A" : 
-            score >= 80 ? "B" : 
-            score >= 70 ? "C" : "F";
-
-// Nullish assignment
-let config = null;
-config ??= {theme: "dark", lang: "en"};
-console.log(config); // {theme: "dark", lang: "en"}
-
-// Logical assignment
-let user = {name: "John"};
-user.role ||= "guest";        // Set role if not set
-user.permissions &&= ["read"]; // Update permissions if exists
-console.log(user.role);       // "guest"
-                </div>
-
-                <div class="demo-container">
-                    <div class="demo-title">🔧 Assignment Demo</div>
-                    <button onclick="runAssignmentDemo()">Run Assignment Examples</button>
-                    <div id="assignment-output" class="output" style="display: none;"></div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>🔀 Bitwise Operators</h2>
-                
-                <h3>Binary Operations</h3>
-                <div class="code-block" data-language="JavaScript">
-// Bitwise AND (&)
-console.log(5 & 3);     // 1 (101 & 011 = 001)
-console.log(12 & 8);    // 8 (1100 & 1000 = 1000)
-
-// Bitwise OR (|)
-console.log(5 | 3);     // 7 (101 | 011 = 111)
-console.log(12 | 8);    // 12 (1100 | 1000 = 1100)
-
-// Bitwise XOR (^)
-console.log(5 ^ 3);     // 6 (101 ^ 011 = 110)
-console.log(12 ^ 8);    // 4 (1100 ^ 1000 = 0100)
-
-// Bitwise NOT (~)
-console.log(~5);        // -6 (inverts all bits)
-console.log(~0);        // -1
-
-// Left shift (<<)
-console.log(5 << 1);    // 10 (101 << 1 = 1010)
-console.log(3 << 2);    // 12 (11 << 2 = 1100)
-
-// Right shift (>>)
-console.log(10 >> 1);   // 5 (1010 >> 1 = 101)
-console.log(12 >> 2);   // 3 (1100 >> 2 = 11)
-
-// Unsigned right shift (>>>)
-console.log(-5 >>> 1);  // 2147483645 (treats as unsigned)
-console.log(12 >>> 2);  // 3 (same as >> for positive numbers)
-                </div>
-
-                <h3>Practical Applications</h3>
-                <div class="code-block" data-language="JavaScript">
-// Checking if number is even or odd
-function isEven(num) {
-    return (num & 1) === 0;
-}
-console.log(isEven(4));  // true
-console.log(isEven(5));  // false
-
-// Multiplying/dividing by powers of 2
-function multiplyBy2(num) {
-    return num << 1;
-}
-function divideBy2(num) {
-    return num >> 1;
-}
-console.log(multiplyBy2(5)); // 10
-console.log(divideBy2(10));  // 5
-
-// Swapping variables without temp
-function swap(a, b) {
-    a = a ^ b;
-    b = a ^ b;
-    a = a ^ b;
-    return [a, b];
-}
-console.log(swap(5, 3)); // [3, 5]
-
-// Checking if power of 2
-function isPowerOf2(num) {
-    return num > 0 && (num & (num - 1)) === 0;
-}
-console.log(isPowerOf2(8));  // true
-console.log(isPowerOf2(6));  // false
-
-// Toggling bits (flags)
-let flags = 0;
-const FLAG_A = 1;     // 001
-const FLAG_B = 2;     // 010
-const FLAG_C = 4;     // 100
-
-// Set flags
-flags |= FLAG_A;      // Set flag A
-flags |= FLAG_C;      // Set flag C
-
-// Check flags
-console.log(flags & FLAG_A ? "A is set" : "A is not set");
-console.log(flags & FLAG_B ? "B is set" : "B is not set");
-
-// Clear flags
-flags &= ~FLAG_A;     // Clear flag A
-
-// Toggle flags
-flags ^= FLAG_B;      // Toggle flag B
-                </div>
-
-                <div class="demo-container">
-                    <div class="demo-title">🔀 Bitwise Demo</div>
-                    <button onclick="runBitwiseDemo()">Run Bitwise Examples</button>
-                    <div id="bitwise-output" class="output" style="display: none;"></div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>🎯 Special Operators</h2>
-                
-                <h3>Ternary Operator</h3>
-                <div class="code-block" data-language="JavaScript">
-// Basic ternary operator
-let age = 20;
-let status = age >= 18 ? "adult" : "minor";
-console.log(status); // "adult"
-
-// Nested ternary
-let score = 85;
-let grade = score >= 90 ? "A" :
-            score >= 80 ? "B" :
-            score >= 70 ? "C" :
-            score >= 60 ? "D" : "F";
-console.log(grade); // "B"
-
-// With function calls
-function getWeather() {
-    return Math.random() > 0.5 ? "sunny" : "cloudy";
-}
-let activity = getWeather() === "sunny" ? "go outside" : "stay inside";
-
-// Complex conditions
-let user = {name: "John", age: 25, isAdmin: false};
-let message = user.isAdmin ? 
-    `Welcome admin ${user.name}` : 
-    user.age >= 18 ? 
-        `Welcome ${user.name}` : 
-        `Hi ${user.name}, you're too young`;
-
-// Ternary with assignment
-let items = [];
-items.length > 0 ? items.push("new") : items = ["first"];
-                </div>
-
-                <h3>typeof Operator</h3>
-                <div class="code-block" data-language="JavaScript">
-// Basic typeof usage
-console.log(typeof 42);         // "number"
-console.log(typeof "hello");    // "string"
-console.log(typeof true);       // "boolean"
-console.log(typeof undefined);  // "undefined"
-console.log(typeof null);       // "object" (this is a bug in JS)
-console.log(typeof {});         // "object"
-console.log(typeof []);         // "object"
-console.log(typeof function(){}); // "function"
-console.log(typeof Symbol());   // "symbol"
-console.log(typeof 123n);       // "bigint"
-
-// Type checking functions
-function isNumber(value) {
-    return typeof value === "number" && !isNaN(value);
-}
-
-function isString(value) {
-    return typeof value === "string";
-}
-
-function isFunction(value) {
-    return typeof value === "function";
-}
-
-function isArray(value) {
-    return Array.isArray(value);
-}
-
-function isObject(value) {
-    return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-
-// Safe property access
-function safeAccess(obj, prop) {
-    return typeof obj === "object" && obj !== null ? obj[prop] : undefined;
-}
-
-// Feature detection
-if (typeof localStorage !== "undefined") {
-    localStorage.setItem("key", "value");
-}
-
-if (typeof fetch !== "undefined") {
-    fetch("/api/data").then(response => response.json());
-}
-                </div>
-
-                <h3>instanceof Operator</h3>
-                <div class="code-block" data-language="JavaScript">
-// Basic instanceof usage
-let date = new Date();
-let arr = [1, 2, 3];
-let obj = {};
-
-console.log(date instanceof Date);    // true
-console.log(arr instanceof Array);    // true
-console.log(obj instanceof Object);   // true
-console.log(arr instanceof Object);   // true (arrays are objects)
-
-// Custom constructors
-function Person(name) {
-    this.name = name;
-}
-let person = new Person("Alice");
-console.log(person instanceof Person); // true
-console.log(person instanceof Object); // true
-
-// Class inheritance
-class Animal {
-    constructor(name) {
-        this.name = name;
-    }
-}
-class Dog extends Animal {
-    constructor(name, breed) {
-        super(name);
-        this.breed = breed;
-    }
-}
-let dog = new Dog("Buddy", "Golden Retriever");
-console.log(dog instanceof Dog);     // true
-console.log(dog instanceof Animal);  // true
-console.log(dog instanceof Object);  // true
-
-// Checking built-in types
-function getType(value) {
-    if (value instanceof Array) return "array";
-    if (value instanceof Date) return "date";
-    if (value instanceof RegExp) return "regex";
-    if (value instanceof Error) return "error";
-    return typeof value;
-}
-
-// Polymorphism example
-function processShape(shape) {
-    if (shape instanceof Circle) {
-        return Math.PI * shape.radius ** 2;
-    } else if (shape instanceof Rectangle) {
-        return shape.width * shape.height;
-    }
-    throw new Error("Unknown shape type");
-}
-                </div>
-
-                <h3>in Operator</h3>
-                <div class="code-block" data-language="JavaScript">
-// Check if property exists
-let person = {name: "John", age: 30};
-console.log("name" in person);    // true
-console.log("height" in person);  // false
-
-// Array indices
-let arr = [1, 2, 3];
-console.log(0 in arr);  // true
-console.log(3 in arr);  // false
-
-// Prototype chain
-console.log("toString" in person);  // true (inherited)
-console.log("hasOwnProperty" in person);  // true (inherited)
-
-// hasOwnProperty vs in
-console.log(person.hasOwnProperty("name"));     // true
-console.log(person.hasOwnProperty("toString")); // false
-
-// Safe property checking
-function hasProperty(obj, prop) {
-    return obj != null && prop in obj;
-}
-
-// Feature detection
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js");
-}
-
-if ("geolocation" in navigator) {
-    navigator.geolocation.getCurrentPosition(success, error);
-}
-
-// Object introspection
-function describeObject(obj) {
-    const props = [];
-    for (let prop in obj) {
-        if (obj.hasOwnProperty(prop)) {
-            props.push(`${prop}: ${typeof obj[prop]}`);
-        }
-    }
-    return props.join(", ");
-}
-                </div>
-
-                <div class="demo-container">
-                    <div class="demo-title">🎯 Special Operators Demo</div>
-                    <button onclick="runSpecialDemo()">Run Special Operators</button>
-                    <div id="special-output" class="output" style="display: none;"></div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>📏 Operator Precedence</h2>
-                
-                <h3>Precedence Order</h3>
-                <div class="precedence-chart">
-                    <div class="precedence-level">
-                        <div class="precedence-number">1</div>
-                        <div><strong>Grouping:</strong> ( )</div>
-                    </div>
-                    <div class="precedence-level">
-                        <div class="precedence-number">2</div>
-                        <div><strong>Member Access:</strong> . []</div>
-                    </div>
-                    <div class="precedence-level">
-                        <div class="precedence-number">3</div>
-                        <div><strong>Function Call:</strong> ()</div>
-                    </div>
-                    <div class="precedence-level">
-                        <div class="precedence-number">4</div>
-                        <div><strong>Postfix:</strong> ++ --</div>
-                    </div>
-                    <div class="precedence-level">
-                        <div class="precedence-number">5</div>
-                        <div><strong>Prefix:</strong> ++ -- ! ~ + -</div>
-                    </div>
-                    <div class="precedence-level">
-                        <div class="precedence-number">6</div>
-                        <div><strong>Multiplication:</strong> * / %</div>
-                    </div>
-                    <div class="precedence-level">
-                        <div class="precedence-number">7</div>
-                        <div><strong>Addition:</strong> + -</div>
-                    </div>
-                    <div class="precedence-level">
-                        <div class="precedence-number">8</div>
-                        <div><strong>Shift:</strong> << >> >>></div>
-                    </div>
-                    <div class="precedence-level">
-                        <div class="precedence-number">9</div>
-                        <div><strong>Relational:</strong> < > <= >= instanceof</div>
-                    </div>
-                    <div class="precedence-level">
-                        <div class="precedence-number">10</div>
-                        <div><strong>Equality:</strong> == != === !==</div>
-                    </div>
-                    <div class="precedence-level">
-                        <div class="precedence-number">11</div>
-                        <div><strong>Logical AND:</strong> &&</div>
-                    </div>
-                    <div class="precedence-level">
-                        <div class="precedence-number">12</div>
-                        <div><strong>Logical OR:</strong> ||</div>
-                    </div>
-                    <div class="precedence-level">
-                        <div class="precedence-number">13</div>
-                        <div><strong>Ternary:</strong> ?:</div>
-                    </div>
-                    <div class="precedence-level">
-                        <div class="precedence-number">14</div>
-                        <div><strong>Assignment:</strong> = += -= *= /=</div>
-                    </div>
-                </div>
-
-                <h3>Precedence Examples</h3>
-                <div class="code-block" data-language="JavaScript">
-// Without parentheses
-console.log(2 + 3 * 4);        // 14 (not 20)
-console.log(10 - 5 * 2);       // 0 (not 10)
-console.log(true || false && false); // true
-
-// With parentheses for clarity
-console.log((2 + 3) * 4);      // 20
-console.log(10 - (5 * 2));     // 0
-console.log((true || false) && false); // false
-
-// Complex expressions
-let a = 5, b = 10, c = 15;
-let result1 = a + b * c / 5;   // 5 + (10 * 15) / 5 = 35
-let result2 = (a + b) * c / 5; // (5 + 10) * 15 / 5 = 45
-
-// Logical operator precedence
-let x = true, y = false, z = true;
-console.log(x || y && z);      // true (y && z first)
-console.log((x || y) && z);    // true
-
-// Assignment precedence
-let num = 5;
-console.log(num += 3 * 2);     // 11 (3 * 2 first, then +=)
-
-// Comparison precedence
-console.log(5 > 3 && 2 < 4);   // true (comparisons first)
-console.log(5 > 3 && 2 < 4 || false); // true
-
-// Common mistakes
-// Wrong: 5 < x < 10 (doesn't work as expected)
-// Right: x > 5 && x < 10
-
-// Function call precedence
-function getValue() {
-    console.log("Function called");
-    return 5;
-}
-console.log(getValue() + 3 * 2); // Function called first, then 5 + 6 = 11
-                </div>
-
-                <div class="demo-container">
-                    <div class="demo-title">📏 Precedence Demo</div>
-                    <button onclick="runPrecedenceDemo()">Run Precedence Examples</button>
-                    <div id="precedence-output" class="output" style="display: none;"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="best-practices">
-            <h3>🎯 Operator Best Practices</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-                <div>
-                    <h4>Comparison</h4>
-                    <ul>
-                        <li>Always use strict equality (===) over loose equality (==)</li>
-                        <li>Use Object.is() for NaN and -0 comparisons</li>
-                        <li>Be aware of type coercion in comparisons</li>
-                        <li>Use explicit type conversion when needed</li>
-                        <li>Avoid comparing different types without conversion</li>
-                        <li>Use helper functions for complex comparisons</li>
-                    </ul>
-                </div>
-                <div>
-                    <h4>Logical</h4>
-                    <ul>
-                        <li>Use parentheses to clarify complex logical expressions</li>
-                        <li>Leverage short-circuit evaluation for performance</li>
-                        <li>Use nullish coalescing (??) for default values</li>
-                        <li>Avoid deeply nested ternary operators</li>
-                        <li>Use logical assignment operators when appropriate</li>
-                        <li>Be explicit about truthy/falsy conversions</li>
-                    </ul>
-                </div>
-                <div>
-                    <h4>General</h4>
-                    <ul>
-                        <li>Use parentheses to make precedence clear</li>
-                        <li>Avoid overly complex expressions</li>
-                        <li>Use meaningful variable names</li>
-                        <li>Comment complex operator combinations</li>
-                        <li>Consider readability over brevity</li>
-                        <li>Use linters to catch common mistakes</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="highlight">
-            <h3>🚀 Modern Operator Features</h3>
-            <p>
-                <strong>Nullish Coalescing (??):</strong> Returns right operand when left is null or undefined.<br>
-                <strong>Optional Chaining (?.):</strong> Safely access nested properties without errors.<br>
-                <strong>Logical Assignment:</strong> Combine logical operators with assignment (&&=, ||=, ??=).<br>
-                <strong>Pipeline Operator (|>):</strong> Proposal for functional programming style (future feature).<br>
-                <strong>Exponentiation (**):</strong> Cleaner syntax for mathematical powers.
-            </p>
-        </div>
-    </div>
-
-    <script>
-        // Calculator functionality
-        function calculate(operator) {
-            const num1 = parseFloat(document.getElementById('num1').value) || 0;
-            const num2 = parseFloat(document.getElementById('num2').value) || 0;
-            let result;
-            
-            switch (operator) {
-                case '+':
-                    result = num1 + num2;
-                    break;
-                case '-':
-                    result = num1 - num2;
-                    break;
-                case '*':
-                    result = num1 * num2;
-                    break;
-                case '/':
-                    result = num2 !== 0 ? num1 / num2 : 'Error: Division by zero';
-                    break;
-                case '%':
-                    result = num2 !== 0 ? num1 % num2 : 'Error: Division by zero';
-                    break;
-                case '**':
-                    result = num1 ** num2;
-                    break;
-                default:
-                    result = 'Error: Unknown operator';
-            }
-            
-            document.getElementById('result').textContent = `Result: ${result}`;
-        }
-
-        // Arithmetic demo
-        function runArithmeticDemo() {
-            const output = document.getElementById('arithmetic-output');
-            output.style.display = 'block';
-            
-            let result = '';
-            
-            // Basic arithmetic
-            result += 'Basic Arithmetic:\n';
-            result += `5 + 3 = ${5 + 3}\n`;
-            result += `10 - 4 = ${10 - 4}\n`;
-            result += `6 * 7 = ${6 * 7}\n`;
-            result += `15 / 3 = ${15 / 3}\n`;
-            result += `17 % 5 = ${17 % 5}\n`;
-            result += `2 ** 3 = ${2 ** 3}\n\n`;
-            
-            // String operations
-            result += 'String Operations:\n';
-            result += `"Hello" + " World" = "${"Hello" + " World"}"\n`;
-            result += `"5" + 3 = ${"5" + 3}\n`;
-            result += `+"42" = ${+"42"}\n\n`;
-            
-            // Increment/decrement
-            let counter = 5;
-            result += 'Increment/Decrement:\n';
-            result += `counter = ${counter}\n`;
-            result += `++counter = ${++counter}\n`;
-            result += `counter++ = ${counter++}\n`;
-            result += `counter = ${counter}\n`;
-            
-            output.textContent = result;
-        }
-
-        // Comparison demo
-        function runComparisonDemo() {
-            const output = document.getElementById('comparison-output');
-            output.style.display = 'block';
-            
-            let result = '';
-            
-            result += 'Equality Comparisons:\n';
-            result += `5 == 5: ${5 == 5}\n`;
-            result += `5 == "5": ${5 == "5"}\n`;
-            result += `5 === 5: ${5 === 5}\n`;
-            result += `5 === "5": ${5 === "5"}\n\n`;
-            
-            result += 'Relational Comparisons:\n';
-            result += `10 > 5: ${10 > 5}\n`;
-            result += `10 >= 10: ${10 >= 10}\n`;
-            result += `"apple" < "banana": ${"apple" < "banana"}\n`;
-            result += `"10" > "9": ${"10" > "9"}\n\n`;
-            
-            result += 'Special Cases:\n';
-            result += `null == undefined: ${null == undefined}\n`;
-            result += `null === undefined: ${null === undefined}\n`;
-            result += `NaN == NaN: ${NaN == NaN}\n`;
-            result += `NaN === NaN: ${NaN === NaN}\n`;
-            
-            output.textContent = result;
-        }
-
-        // Logical demo
-        function runLogicalDemo() {
-            const output = document.getElementById('logical-output');
-            output.style.display = 'block';
-            
-            let result = '';
-            
-            result += 'Boolean Logic:\n';
-            result += `true && true: ${true && true}\n`;
-            result += `true && false: ${true && false}\n`;
-            result += `true || false: ${true || false}\n`;
-            result += `false || false: ${false || false}\n`;
-            result += `!true: ${!true}\n`;
-            result += `!false: ${!false}\n\n`;
-            
-            result += 'Truthiness:\n';
-            result += `Boolean(0): ${Boolean(0)}\n`;
-            result += `Boolean(""): ${Boolean("")}\n`;
-            result += `Boolean(null): ${Boolean(null)}\n`;
-            result += `Boolean(undefined): ${Boolean(undefined)}\n`;
-            result += `Boolean([]): ${Boolean([])}\n`;
-            result += `Boolean({}): ${Boolean({})}\n\n`;
-            
-            result += 'Short-circuit Evaluation:\n';
-            result += `false && "won't execute": ${false && "won't execute"}\n`;
-            result += `true || "won't execute": ${true || "won't execute"}\n`;
-            result += `"" || "default": ${"" || "default"}\n`;
-            result += `null ?? "default": ${null ?? "default"}\n`;
-            
-            output.textContent = result;
-        }
-
-        // Assignment demo
-        function runAssignmentDemo() {
-            const output = document.getElementById('assignment-output');
-            output.style.display = 'block';
-            
-            let result = '';
-            
-            result += 'Assignment Operators:\n';
-            let x = 10;
-            result += `x = ${x}\n`;
-            x += 5;
-            result += `x += 5: ${x}\n`;
-            x -= 3;
-            result += `x -= 3: ${x}\n`;
-            x *= 2;
-            result += `x *= 2: ${x}\n`;
-            x /= 4;
-            result += `x /= 4: ${x}\n\n`;
-            
-            result += 'Destructuring:\n';
-            let [a, b, c] = [1, 2, 3];
-            result += `[a, b, c] = [1, 2, 3]\n`;
-            result += `a = ${a}, b = ${b}, c = ${c}\n`;
-            
-            let {name, age} = {name: "John", age: 30};
-            result += `{name, age} = {name: "John", age: 30}\n`;
-            result += `name = ${name}, age = ${age}\n\n`;
-            
-            result += 'Logical Assignment:\n';
-            let value = null;
-            value ??= "default";
-            result += `value ??= "default": ${value}\n`;
-            
-            output.textContent = result;
-        }
-
-        // Bitwise demo
-        function runBitwiseDemo() {
-            const output = document.getElementById('bitwise-output');
-            output.style.display = 'block';
-            
-            let result = '';
-            
-            result += 'Bitwise Operations:\n';
-            result += `5 & 3: ${5 & 3} (101 & 011 = 001)\n`;
-            result += `5 | 3: ${5 | 3} (101 | 011 = 111)\n`;
-            result += `5 ^ 3: ${5 ^ 3} (101 ^ 011 = 110)\n`;
-            result += `~5: ${~5} (invert bits)\n`;
-            result += `5 << 1: ${5 << 1} (101 << 1 = 1010)\n`;
-            result += `10 >> 1: ${10 >> 1} (1010 >> 1 = 101)\n\n`;
-            
-            result += 'Practical Applications:\n';
-            result += `isEven(4): ${(4 & 1) === 0}\n`;
-            result += `isEven(5): ${(5 & 1) === 0}\n`;
-            result += `multiplyBy2(5): ${5 << 1}\n`;
-            result += `divideBy2(10): ${10 >> 1}\n`;
-            result += `isPowerOf2(8): ${8 > 0 && (8 & (8 - 1)) === 0}\n`;
-            result += `isPowerOf2(6): ${6 > 0 && (6 & (6 - 1)) === 0}\n`;
-            
-            output.textContent = result;
-        }
-
-        // Special operators demo
-        function runSpecialDemo() {
-            const output = document.getElementById('special-output');
-            output.style.display = 'block';
-            
-            let result = '';
-            
-            result += 'typeof Operator:\n';
-            result += `typeof 42: ${typeof 42}\n`;
-            result += `typeof "hello": ${typeof "hello"}\n`;
-            result += `typeof true: ${typeof true}\n`;
-            result += `typeof undefined: ${typeof undefined}\n`;
-            result += `typeof null: ${typeof null}\n`;
-            result += `typeof {}: ${typeof {}}\n`;
-            result += `typeof []: ${typeof []}\n`;
-            result += `typeof function(){}: ${typeof function(){}}\n\n`;
-            
-            result += 'instanceof Operator:\n';
-            let date = new Date();
-            let arr = [1, 2, 3];
-            result += `new Date() instanceof Date: ${date instanceof Date}\n`;
-            result += `[1,2,3] instanceof Array: ${arr instanceof Array}\n`;
-            result += `[1,2,3] instanceof Object: ${arr instanceof Object}\n\n`;
-            
-            result += 'in Operator:\n';
-            let person = {name: "John", age: 30};
-            result += `"name" in person: ${"name" in person}\n`;
-            result += `"height" in person: ${"height" in person}\n`;
-            result += `"toString" in person: ${"toString" in person}\n`;
-            
-            output.textContent = result;
-        }
-
-        // Precedence demo
-        function runPrecedenceDemo() {
-            const output = document.getElementById('precedence-output');
-            output.style.display = 'block';
-            
-            let result = '';
-            
-            result += 'Operator Precedence Examples:\n';
-            result += `2 + 3 * 4 = ${2 + 3 * 4} (multiplication first)\n`;
-            result += `(2 + 3) * 4 = ${(2 + 3) * 4} (parentheses first)\n`;
-            result += `10 - 5 * 2 = ${10 - 5 * 2} (multiplication first)\n`;
-            result += `true || false && false = ${true || false && false} (AND first)\n`;
-            result += `(true || false) && false = ${(true || false) && false}\n\n`;
-            
-            result += 'Complex Expressions:\n';
-            let a = 5, b = 10, c = 15;
-            result += `a + b * c / 5 = ${a + b * c / 5} (${a} + ${b} * ${c} / 5)\n`;
-            result += `(a + b) * c / 5 = ${(a + b) * c / 5} ((${a} + ${b}) * ${c} / 5)\n`;
-            
-            result += `\nComparison Precedence:\n`;
-            result += `5 > 3 && 2 < 4 = ${5 > 3 && 2 < 4} (comparisons first)\n`;
-            result += `5 > 3 && 2 < 4 || false = ${5 > 3 && 2 < 4 || false}\n`;
-            
-            output.textContent = result;
-        }
-
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('JavaScript Operators guide loaded');
-        });
-    </script>
+            <script>
+                // Calculator functionality
+                function calculate(operator) {
+                    const num1 = parseFloat(document.getElementById('num1').value) || 0;
+                    const num2 = parseFloat(document.getElementById('num2').value) || 0;
+                    let result;
+
+                    switch (operator) {
+                        case '+':
+                            result = num1 + num2;
+                            break;
+                        case '-':
+                            result = num1 - num2;
+                            break;
+                        case '*':
+                            result = num1 * num2;
+                            break;
+                        case '/':
+                            result = num2 !== 0 ? num1 / num2 : 'Error: Division by zero';
+                            break;
+                        case '%':
+                            result = num2 !== 0 ? num1 % num2 : 'Error: Division by zero';
+                            break;
+                        case '**':
+                            result = num1 ** num2;
+                            break;
+                        default:
+                            result = 'Error: Unknown operator';
+                    }
+
+                    document.getElementById('result').textContent = `Result: ${result}`;
+                }
+
+                // Arithmetic demo
+                function runArithmeticDemo() {
+                    const output = document.getElementById('arithmetic-output');
+                    output.style.display = 'block';
+
+                    let result = '';
+
+                    // Basic arithmetic
+                    result += 'Basic Arithmetic:\n';
+                    result += `5 + 3 = ${5 + 3}\n`;
+                    result += `10 - 4 = ${10 - 4}\n`;
+                    result += `6 * 7 = ${6 * 7}\n`;
+                    result += `15 / 3 = ${15 / 3}\n`;
+                    result += `17 % 5 = ${17 % 5}\n`;
+                    result += `2 ** 3 = ${2 ** 3}\n\n`;
+
+                    // String operations
+                    result += 'String Operations:\n';
+                    result += `"Hello" + " World" = "${"Hello" + " World"}"\n`;
+                    result += `"5" + 3 = ${"5" + 3}\n`;
+                    result += `+"42" = ${+"42"}\n\n`;
+
+                    // Increment/decrement
+                    let counter = 5;
+                    result += 'Increment/Decrement:\n';
+                    result += `counter = ${counter}\n`;
+                    result += `++counter = ${++counter}\n`;
+                    result += `counter++ = ${counter++}\n`;
+                    result += `counter = ${counter}\n`;
+
+                    output.textContent = result;
+                }
+
+                // Comparison demo
+                function runComparisonDemo() {
+                    const output = document.getElementById('comparison-output');
+                    output.style.display = 'block';
+
+                    let result = '';
+
+                    result += 'Equality Comparisons:\n';
+                    result += `5 == 5: ${5 == 5}\n`;
+                    result += `5 == "5": ${5 == "5"}\n`;
+                    result += `5 === 5: ${5 === 5}\n`;
+                    result += `5 === "5": ${5 === "5"}\n\n`;
+
+                    result += 'Relational Comparisons:\n';
+                    result += `10 > 5: ${10 > 5}\n`;
+                    result += `10 >= 10: ${10 >= 10}\n`;
+                    result += `"apple" < "banana": ${"apple" < "banana"}\n`;
+                    result += `"10" > "9": ${"10" > "9"}\n\n`;
+
+                    result += 'Special Cases:\n';
+                    result += `null == undefined: ${null == undefined}\n`;
+                    result += `null === undefined: ${null === undefined}\n`;
+                    result += `NaN == NaN: ${NaN == NaN}\n`;
+                    result += `NaN === NaN: ${NaN === NaN}\n`;
+
+                    output.textContent = result;
+                }
+
+                // Logical demo
+                function runLogicalDemo() {
+                    const output = document.getElementById('logical-output');
+                    output.style.display = 'block';
+
+                    let result = '';
+
+                    result += 'Boolean Logic:\n';
+                    result += `true && true: ${true && true}\n`;
+                    result += `true && false: ${true && false}\n`;
+                    result += `true || false: ${true || false}\n`;
+                    result += `false || false: ${false || false}\n`;
+                    result += `!true: ${!true}\n`;
+                    result += `!false: ${!false}\n\n`;
+
+                    result += 'Truthiness:\n';
+                    result += `Boolean(0): ${Boolean(0)}\n`;
+                    result += `Boolean(""): ${Boolean("")}\n`;
+                    result += `Boolean(null): ${Boolean(null)}\n`;
+                    result += `Boolean(undefined): ${Boolean(undefined)}\n`;
+                    result += `Boolean([]): ${Boolean([])}\n`;
+                    result += `Boolean({}): ${Boolean({})}\n\n`;
+
+                    result += 'Short-circuit Evaluation:\n';
+                    result += `false && "won't execute": ${false && "won't execute"}\n`;
+                    result += `true || "won't execute": ${true || "won't execute"}\n`;
+                    result += `"" || "default": ${"" || "default"}\n`;
+                    result += `null ?? "default": ${null ?? "default"}\n`;
+
+                    output.textContent = result;
+                }
+
+                // Assignment demo
+                function runAssignmentDemo() {
+                    const output = document.getElementById('assignment-output');
+                    output.style.display = 'block';
+
+                    let result = '';
+
+                    result += 'Assignment Operators:\n';
+                    let x = 10;
+                    result += `x = ${x}\n`;
+                    x += 5;
+                    result += `x += 5: ${x}\n`;
+                    x -= 3;
+                    result += `x -= 3: ${x}\n`;
+                    x *= 2;
+                    result += `x *= 2: ${x}\n`;
+                    x /= 4;
+                    result += `x /= 4: ${x}\n\n`;
+
+                    result += 'Destructuring:\n';
+                    let [a, b, c] = [1, 2, 3];
+                    result += `[a, b, c] = [1, 2, 3]\n`;
+                    result += `a = ${a}, b = ${b}, c = ${c}\n`;
+
+                    let { name, age } = { name: "John", age: 30 };
+                    result += `{name, age} = {name: "John", age: 30}\n`;
+                    result += `name = ${name}, age = ${age}\n\n`;
+
+                    result += 'Logical Assignment:\n';
+                    let value = null;
+                    value ??= "default";
+                    result += `value ??= "default": ${value}\n`;
+
+                    output.textContent = result;
+                }
+
+                // Bitwise demo
+                function runBitwiseDemo() {
+                    const output = document.getElementById('bitwise-output');
+                    output.style.display = 'block';
+
+                    let result = '';
+
+                    result += 'Bitwise Operations:\n';
+                    result += `5 & 3: ${5 & 3} (101 & 011 = 001)\n`;
+                    result += `5 | 3: ${5 | 3} (101 | 011 = 111)\n`;
+                    result += `5 ^ 3: ${5 ^ 3} (101 ^ 011 = 110)\n`;
+                    result += `~5: ${~5} (invert bits)\n`;
+                    result += `5 << 1: ${5 << 1} (101 << 1 = 1010)\n`;
+                    result += `10 >> 1: ${10 >> 1} (1010 >> 1 = 101)\n\n`;
+
+                    result += 'Practical Applications:\n';
+                    result += `isEven(4): ${(4 & 1) === 0}\n`;
+                    result += `isEven(5): ${(5 & 1) === 0}\n`;
+                    result += `multiplyBy2(5): ${5 << 1}\n`;
+                    result += `divideBy2(10): ${10 >> 1}\n`;
+                    result += `isPowerOf2(8): ${8 > 0 && (8 & (8 - 1)) === 0}\n`;
+                    result += `isPowerOf2(6): ${6 > 0 && (6 & (6 - 1)) === 0}\n`;
+
+                    output.textContent = result;
+                }
+
+                // Special operators demo
+                function runSpecialDemo() {
+                    const output = document.getElementById('special-output');
+                    output.style.display = 'block';
+
+                    let result = '';
+
+                    result += 'typeof Operator:\n';
+                    result += `typeof 42: ${typeof 42}\n`;
+                    result += `typeof "hello": ${typeof "hello"}\n`;
+                    result += `typeof true: ${typeof true}\n`;
+                    result += `typeof undefined: ${typeof undefined}\n`;
+                    result += `typeof null: ${typeof null}\n`;
+                    result += `typeof {}: ${typeof {}}\n`;
+                    result += `typeof []: ${typeof []}\n`;
+                    result += `typeof function(){}: ${typeof function () { }}\n\n`;
+
+                    result += 'instanceof Operator:\n';
+                    let date = new Date();
+                    let arr = [1, 2, 3];
+                    result += `new Date() instanceof Date: ${date instanceof Date}\n`;
+                    result += `[1,2,3] instanceof Array: ${arr instanceof Array}\n`;
+                    result += `[1,2,3] instanceof Object: ${arr instanceof Object}\n\n`;
+
+                    result += 'in Operator:\n';
+                    let person = { name: "John", age: 30 };
+                    result += `"name" in person: ${"name" in person}\n`;
+                    result += `"height" in person: ${"height" in person}\n`;
+                    result += `"toString" in person: ${"toString" in person}\n`;
+
+                    output.textContent = result;
+                }
+
+                // Precedence demo
+                function runPrecedenceDemo() {
+                    const output = document.getElementById('precedence-output');
+                    output.style.display = 'block';
+
+                    let result = '';
+
+                    result += 'Operator Precedence Examples:\n';
+                    result += `2 + 3 * 4 = ${2 + 3 * 4} (multiplication first)\n`;
+                    result += `(2 + 3) * 4 = ${(2 + 3) * 4} (parentheses first)\n`;
+                    result += `10 - 5 * 2 = ${10 - 5 * 2} (multiplication first)\n`;
+                    result += `true || false && false = ${true || false && false} (AND first)\n`;
+                    result += `(true || false) && false = ${(true || false) && false}\n\n`;
+
+                    result += 'Complex Expressions:\n';
+                    let a = 5, b = 10, c = 15;
+                    result += `a + b * c / 5 = ${a + b * c / 5} (${a} + ${b} * ${c} / 5)\n`;
+                    result += `(a + b) * c / 5 = ${(a + b) * c / 5} ((${a} + ${b}) * ${c} / 5)\n`;
+
+                    result += `\nComparison Precedence:\n`;
+                    result += `5 > 3 && 2 < 4 = ${5 > 3 && 2 < 4} (comparisons first)\n`;
+                    result += `5 > 3 && 2 < 4 || false = ${5 > 3 && 2 < 4 || false}\n`;
+
+                    output.textContent = result;
+                }
+
+                // Initialize page
+                document.addEventListener('DOMContentLoaded', function () {
+                    console.log('JavaScript Operators guide loaded');
+                });
+            </script>
 </body>
+
 </html>

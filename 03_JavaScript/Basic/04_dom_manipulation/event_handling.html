@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Handling - JavaScript Fundamentals</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            padding: 40px;
+        }
+
+        .demo-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid #e9ecef;
+        }
+
+        .demo-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .event-demo {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .event-demo:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .event-demo h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+
+        .interactive-area {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px dashed #dee2e6;
+            margin: 10px 0;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .interactive-area:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+        }
+
+        .interactive-area.active {
+            background: #d4edda;
+            border-color: #28a745;
+            border-style: solid;
+        }
+
+        .event-log {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 15px;
+            border: 1px solid #333;
+        }
+
+        .form-demo {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group input.error {
+            border-color: #dc3545;
+        }
+
+        .form-group input.success {
+            border-color: #28a745;
+        }
+
+        .keyboard-demo {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+        }
+
+        .key-display {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 10px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+        }
+
+        .mouse-tracker {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .mouse-trail {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #667eea;
+            opacity: 0.7;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .drag-demo {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+        }
+
+        .draggable-item {
+            background: #667eea;
+            color: white;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: move;
+            display: inline-block;
+            user-select: none;
+            transition: all 0.3s ease;
+        }
+
+        .draggable-item:hover {
+            background: #5a67d8;
+            transform: scale(1.05);
+        }
+
+        .draggable-item.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+        }
+
+        .drop-zone {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px 0;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone.drag-over {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .custom-context-menu {
+            position: fixed;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+            min-width: 150px;
+        }
+
+        .context-menu-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+
+        .context-menu-item:hover {
+            background: #f8f9fa;
+        }
+
+        .context-menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .gesture-demo {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+            text-align: center;
+        }
+
+        .gesture-area {
+            background: #f8f9fa;
+            height: 150px;
+            border-radius: 10px;
+            border: 2px dashed #dee2e6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            color: #666;
+            margin: 10px 0;
+        }
+
+        .touch-point {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #667eea;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .concept-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .concept-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .concept-card p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .code-example {
+            background: #1a1a1a;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .event-bubbling-demo {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+        }
+
+        .bubble-container {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #2196f3;
+            margin: 10px 0;
+        }
+
+        .bubble-child {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #ff9800;
+            margin: 10px 0;
+        }
+
+        .bubble-grandchild {
+            background: #f3e5f5;
+            padding: 10px;
+            border-radius: 5px;
+            border: 2px solid #9c27b0;
+            cursor: pointer;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ Event Handling</h1>
+            <p>Master JavaScript event handling - from basic clicks to complex interactions</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Basic Events Column -->
+            <div class="demo-section">
+                <h2>Basic Events</h2>
+
+                <div class="event-demo">
+                    <h3>Click Events</h3>
+                    <button class="btn" onclick="handleClick(event)">Click Me!</button>
+                    <button class="btn btn-secondary" id="dynamicBtn">Dynamic Handler</button>
+                    <div class="interactive-area" onclick="handleAreaClick(event)">
+                        Click anywhere in this area
+                    </div>
+                </div>
+
+                <div class="event-demo">
+                    <h3>Mouse Events</h3>
+                    <div class="mouse-tracker" id="mouseTracker">
+                        <p>Move your mouse here to see tracking</p>
+                        <div style="position: absolute; bottom: 10px; left: 10px; font-size: 0.8em;">
+                            Coordinates: <span id="mouseCoords">0, 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="event-demo">
+                    <h3>Double Click & Right Click</h3>
+                    <button class="btn btn-success" ondblclick="handleDoubleClick(event)">Double Click</button>
+                    <div class="interactive-area" oncontextmenu="handleRightClick(event)">
+                        Right-click for custom menu
+                    </div>
+                </div>
+
+                <div class="event-log" id="basicEventLog">
+                    Basic event log will appear here...
+                </div>
+            </div>
+
+            <!-- Form & Input Events Column -->
+            <div class="demo-section">
+                <h2>Form & Input Events</h2>
+
+                <div class="form-demo">
+                    <h3>Form Validation</h3>
+                    <form id="demoForm" onsubmit="handleFormSubmit(event)">
+                        <div class="form-group">
+                            <label for="nameInput">Name:</label>
+                            <input type="text" id="nameInput" placeholder="Enter your name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="emailInput">Email:</label>
+                            <input type="email" id="emailInput" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ageInput">Age:</label>
+                            <input type="number" id="ageInput" min="1" max="120" placeholder="Enter your age">
+                        </div>
+                        <div class="form-group">
+                            <label for="countrySelect">Country:</label>
+                            <select id="countrySelect">
+                                <option value="">Select a country</option>
+                                <option value="us">United States</option>
+                                <option value="uk">United Kingdom</option>
+                                <option value="ca">Canada</option>
+                                <option value="au">Australia</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn">Submit Form</button>
+                        <button type="reset" class="btn btn-secondary">Reset Form</button>
+                    </form>
+                </div>
+
+                <div class="keyboard-demo">
+                    <h3>Keyboard Events</h3>
+                    <p>Focus here and press any key:</p>
+                    <div class="key-display" id="keyDisplay" tabindex="0">
+                        Press a key...
+                    </div>
+                    <p>Key info: <span id="keyInfo">-</span></p>
+                </div>
+
+                <div class="event-log" id="formEventLog">
+                    Form event log will appear here...
+                </div>
+            </div>
+
+            <!-- Advanced Events Column -->
+            <div class="demo-section">
+                <h2>Advanced Events</h2>
+
+                <div class="drag-demo">
+                    <h3>Drag & Drop</h3>
+                    <div class="draggable-item" draggable="true" data-item="item1">Item 1</div>
+                    <div class="draggable-item" draggable="true" data-item="item2">Item 2</div>
+                    <div class="draggable-item" draggable="true" data-item="item3">Item 3</div>
+
+                    <div class="drop-zone" id="dropZone">
+                        Drop items here
+                    </div>
+                </div>
+
+                <div class="event-bubbling-demo">
+                    <h3>Event Bubbling</h3>
+                    <div class="bubble-container" onclick="handleBubbleClick(event, 'container')">
+                        Container (Click me)
+                        <div class="bubble-child" onclick="handleBubbleClick(event, 'child')">
+                            Child (Click me)
+                            <div class="bubble-grandchild" onclick="handleBubbleClick(event, 'grandchild')">
+                                Grandchild (Click me)
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-warning" onclick="toggleBubbling()">Toggle Bubbling</button>
+                </div>
+
+                <div class="gesture-demo">
+                    <h3>Touch & Gesture Events</h3>
+                    <div class="gesture-area" id="gestureArea">
+                        Touch and swipe here (mobile)
+                    </div>
+                    <p>Gesture: <span id="gestureInfo">None</span></p>
+                </div>
+
+                <div class="event-log" id="advancedEventLog">
+                    Advanced event log will appear here...
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Context Menu -->
+        <div class="custom-context-menu" id="customContextMenu">
+            <div class="context-menu-item" onclick="contextMenuAction('copy')">Copy</div>
+            <div class="context-menu-item" onclick="contextMenuAction('paste')">Paste</div>
+            <div class="context-menu-item" onclick="contextMenuAction('delete')">Delete</div>
+            <div class="context-menu-item" onclick="contextMenuAction('properties')">Properties</div>
+        </div>
+
+        <!-- Concepts Section -->
+        <div style="padding: 40px; background: #f8f9fa;">
+            <h2>Key Concepts</h2>
+            <div class="concept-card">
+                <h3>1. Event Listeners</h3>
+                <p>Three ways to attach event handlers:</p>
+                <div class="code-example">
+                    // 1. HTML attribute
+                    &lt;button onclick="handleClick()"&gt;Click Me&lt;/button&gt;
+
+                    // 2. DOM property
+                    button.onclick = function() {
+                    console.log('Button clicked!');
+                    };
+
+                    // 3. addEventListener (recommended)
+                    button.addEventListener('click', function(event) {
+                    console.log('Button clicked!', event);
+                    });
+
+                    // Multiple listeners
+                    button.addEventListener('click', handler1);
+                    button.addEventListener('click', handler2);</div>
+            </div>
+
+            <div class="concept-card">
+                <h3>2. Event Object</h3>
+                <p>Every event handler receives an event object with useful properties:</p>
+                <div class="code-example">
+                    function handleClick(event) {
+                    console.log('Event type:', event.type);
+                    console.log('Target element:', event.target);
+                    console.log('Current target:', event.currentTarget);
+                    console.log('Mouse position:', event.clientX, event.clientY);
+                    console.log('Key pressed:', event.key);
+                    console.log('Modifier keys:', event.ctrlKey, event.shiftKey);
+
+                    // Prevent default behavior
+                    event.preventDefault();
+
+                    // Stop event bubbling
+                    event.stopPropagation();
+                    }</div>
+            </div>
+
+            <div class="concept-card">
+                <h3>3. Event Bubbling & Capturing</h3>
+                <p>Events travel through the DOM tree in two phases:</p>
+                <div class="code-example">
+                    // Event bubbling (default) - from target to root
+                    element.addEventListener('click', handler);
+
+                    // Event capturing - from root to target
+                    element.addEventListener('click', handler, true);
+
+                    // Using options object
+                    element.addEventListener('click', handler, {
+                    capture: true, // Use capturing phase
+                    once: true, // Run only once
+                    passive: true // Never calls preventDefault()
+                    });
+
+                    // Stop propagation
+                    function handler(event) {
+                    event.stopPropagation(); // Stop bubbling
+                    event.stopImmediatePropagation(); // Stop all handlers
+                    }</div>
+            </div>
+
+            <div class="concept-card">
+                <h3>4. Event Delegation</h3>
+                <p>Handle events for multiple elements efficiently:</p>
+                <div class="code-example">
+                    // Instead of adding listeners to each button
+                    document.querySelectorAll('.button').forEach(btn => {
+                    btn.addEventListener('click', handleClick);
+                    });
+
+                    // Use delegation on parent element
+                    document.getElementById('container').addEventListener('click', function(event) {
+                    if (event.target.matches('.button')) {
+                    handleClick(event);
+                    }
+                    });
+
+                    // Handle dynamic elements
+                    document.addEventListener('click', function(event) {
+                    if (event.target.classList.contains('dynamic-button')) {
+                    console.log('Dynamic button clicked!');
+                    }
+                    });</div>
+            </div>
+
+            <div class="concept-card">
+                <h3>5. Custom Events</h3>
+                <p>Create and dispatch your own events:</p>
+                <div class="code-example">
+                    // Create custom event
+                    const customEvent = new CustomEvent('myCustomEvent', {
+                    detail: { message: 'Hello from custom event!' },
+                    bubbles: true,
+                    cancelable: true
+                    });
+
+                    // Listen for custom event
+                    element.addEventListener('myCustomEvent', function(event) {
+                    console.log('Custom event received:', event.detail.message);
+                    });
+
+                    // Dispatch custom event
+                    element.dispatchEvent(customEvent);
+
+                    // Event with data
+                    const dataEvent = new CustomEvent('dataUpdate', {
+                    detail: {
+                    oldValue: 'old',
+                    newValue: 'new',
+                    timestamp: Date.now()
+                    }
+                    });
+
+                    element.dispatchEvent(dataEvent);</div>
+            </div>
+
+            <div class="concept-card">
+                <h3>6. Performance Optimization</h3>
+                <p>Best practices for efficient event handling:</p>
+                <div class="code-example">
+                    // Debounce frequent events
+                    function debounce(func, wait) {
+                    let timeout;
+                    return function executedFunction(...args) {
+                    const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                    };
+                    }
+
+                    // Throttle events
+                    function throttle(func, limit) {
+                    let inThrottle;
+                    return function() {
+                    const args = arguments;
+                    const context = this;
+                    if (!inThrottle) {
+                    func.apply(context, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                    }
+                    }
+                    }
+
+                    // Usage
+                    window.addEventListener('resize', debounce(handleResize, 250));
+                    window.addEventListener('scroll', throttle(handleScroll, 100));</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let eventCounter = 0;
+        let allowBubbling = true;
+        let mouseTrail = [];
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        // Initialize the demo
+        function init() {
+            console.log('⚡ Event Handling Demo initialized!');
+
+            // Setup event listeners
+            setupEventListeners();
+
+            // Log initial message
+            logEvent('basicEventLog', 'Event handling demo ready!', 'info');
+            logEvent('formEventLog', 'Form validation demo ready!', 'info');
+            logEvent('advancedEventLog', 'Advanced events demo ready!', 'info');
+        }
+
+        // Setup all event listeners
+        function setupEventListeners() {
+            // Dynamic button click
+            document.getElementById('dynamicBtn').addEventListener('click', function (event) {
+                handleDynamicClick(event);
+            });
+
+            // Form input events
+            const nameInput = document.getElementById('nameInput');
+            const emailInput = document.getElementById('emailInput');
+            const ageInput = document.getElementById('ageInput');
+            const countrySelect = document.getElementById('countrySelect');
+
+            // Input validation events
+            nameInput.addEventListener('input', validateName);
+            nameInput.addEventListener('blur', validateName);
+            emailInput.addEventListener('input', validateEmail);
+            emailInput.addEventListener('blur', validateEmail);
+            ageInput.addEventListener('input', validateAge);
+            countrySelect.addEventListener('change', validateCountry);
+
+            // Form events
+            document.getElementById('demoForm').addEventListener('reset', function (event) {
+                logEvent('formEventLog', 'Form reset', 'info');
+                // Clear validation states
+                setTimeout(() => {
+                    document.querySelectorAll('.form-group input, .form-group select').forEach(el => {
+                        el.classList.remove('error', 'success');
+                    });
+                }, 100);
+            });
+
+            // Keyboard events
+            const keyDisplay = document.getElementById('keyDisplay');
+            keyDisplay.addEventListener('keydown', handleKeyDown);
+            keyDisplay.addEventListener('keyup', handleKeyUp);
+            keyDisplay.addEventListener('keypress', handleKeyPress);
+
+            // Mouse tracking
+            const mouseTracker = document.getElementById('mouseTracker');
+            mouseTracker.addEventListener('mousemove', handleMouseMove);
+            mouseTracker.addEventListener('mouseenter', handleMouseEnter);
+            mouseTracker.addEventListener('mouseleave', handleMouseLeave);
+
+            // Drag and drop
+            setupDragAndDrop();
+
+            // Touch events
+            setupTouchEvents();
+
+            // Window events
+            window.addEventListener('resize', debounce(handleResize, 250));
+            window.addEventListener('scroll', throttle(handleScroll, 100));
+
+            // Hide context menu on click
+            document.addEventListener('click', hideContextMenu);
+
+            // Prevent default context menu on our demo area
+            document.addEventListener('contextmenu', function (event) {
+                if (event.target.classList.contains('interactive-area')) {
+                    event.preventDefault();
+                }
+            });
+        }
+
+        // Basic event handlers
+        function handleClick(event) {
+            eventCounter++;
+            logEvent('basicEventLog', `Button clicked! (Count: ${eventCounter})`, 'success');
+
+            // Add visual feedback
+            event.target.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                event.target.style.transform = 'scale(1)';
+            }, 150);
+        }
+
+        function handleDynamicClick(event) {
+            const messages = [
+                'Dynamic event handler triggered!',
+                'JavaScript event listeners are powerful!',
+                'This handler was added with addEventListener',
+                'Event object contains useful information'
+            ];
+
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            logEvent('basicEventLog', randomMessage, 'info');
+
+            // Show event details
+            logEvent('basicEventLog', `Target: ${event.target.tagName}, Type: ${event.type}`, 'detail');
+        }
+
+        function handleAreaClick(event) {
+            const rect = event.target.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            logEvent('basicEventLog', `Area clicked at (${Math.round(x)}, ${Math.round(y)})`, 'info');
+
+            // Add temporary visual effect
+            event.target.classList.add('active');
+            setTimeout(() => {
+                event.target.classList.remove('active');
+            }, 300);
+        }
+
+        function handleDoubleClick(event) {
+            logEvent('basicEventLog', 'Double click detected!', 'success');
+
+            // Prevent text selection
+            event.preventDefault();
+
+            // Visual feedback
+            event.target.style.backgroundColor = '#218838';
+            setTimeout(() => {
+                event.target.style.backgroundColor = '#28a745';
+            }, 200);
+        }
+
+        function handleRightClick(event) {
+            event.preventDefault();
+
+            const contextMenu = document.getElementById('customContextMenu');
+            contextMenu.style.display = 'block';
+            contextMenu.style.left = event.pageX + 'px';
+            contextMenu.style.top = event.pageY + 'px';
+
+            logEvent('basicEventLog', 'Right click - custom context menu shown', 'info');
+        }
+
+        // Mouse event handlers
+        function handleMouseMove(event) {
+            const rect = event.target.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            document.getElementById('mouseCoords').textContent = `${Math.round(x)}, ${Math.round(y)}`;
+
+            // Create mouse trail
+            createMouseTrail(x, y, event.target);
+        }
+
+        function handleMouseEnter(event) {
+            logEvent('basicEventLog', 'Mouse entered tracking area', 'info');
+            event.target.style.backgroundColor = '#e9ecef';
+        }
+
+        function handleMouseLeave(event) {
+            logEvent('basicEventLog', 'Mouse left tracking area', 'info');
+            event.target.style.backgroundColor = 'white';
+
+            // Clear mouse trail
+            clearMouseTrail();
+        }
+
+        function createMouseTrail(x, y, container) {
+            const trail = document.createElement('div');
+            trail.className = 'mouse-trail';
+            trail.style.left = (x - 5) + 'px';
+            trail.style.top = (y - 5) + 'px';
+
+            container.appendChild(trail);
+
+            // Remove after animation
+            setTimeout(() => {
+                if (trail.parentNode) {
+                    trail.parentNode.removeChild(trail);
+                }
+            }, 1000);
+
+            // Limit number of trails
+            const trails = container.querySelectorAll('.mouse-trail');
+            if (trails.length > 20) {
+                trails[0].remove();
+            }
+        }
+
+        function clearMouseTrail() {
+            document.querySelectorAll('.mouse-trail').forEach(trail => {
+                trail.remove();
+            });
+        }
+
+        // Keyboard event handlers
+        function handleKeyDown(event) {
+            const keyInfo = `Key: ${event.key}, Code: ${event.code}, KeyCode: ${event.keyCode}`;
+            document.getElementById('keyDisplay').textContent = event.key;
+            document.getElementById('keyInfo').textContent = keyInfo;
+
+            logEvent('formEventLog', `Key down: ${event.key}`, 'info');
+
+            // Special key handling
+            if (event.ctrlKey && event.key === 'Enter') {
+                logEvent('formEventLog', 'Ctrl+Enter shortcut detected!', 'success');
+            }
+        }
+
+        function handleKeyUp(event) {
+            logEvent('formEventLog', `Key up: ${event.key}`, 'detail');
+        }
+
+        function handleKeyPress(event) {
+            logEvent('formEventLog', `Key press: ${event.key}`, 'detail');
+        }
+
+        // Form validation handlers
+        function validateName(event) {
+            const value = event.target.value.trim();
+            const isValid = value.length >= 2;
+
+            event.target.classList.toggle('error', !isValid && value.length > 0);
+            event.target.classList.toggle('success', isValid);
+
+            if (event.type === 'blur' && !isValid && value.length > 0) {
+                logEvent('formEventLog', 'Name validation failed', 'error');
+            } else if (isValid) {
+                logEvent('formEventLog', 'Name validation passed', 'success');
+            }
+        }
+
+        function validateEmail(event) {
+            const value = event.target.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const isValid = emailRegex.test(value);
+
+            event.target.classList.toggle('error', !isValid && value.length > 0);
+            event.target.classList.toggle('success', isValid);
+
+            if (event.type === 'blur' && !isValid && value.length > 0) {
+                logEvent('formEventLog', 'Email validation failed', 'error');
+            } else if (isValid) {
+                logEvent('formEventLog', 'Email validation passed', 'success');
+            }
+        }
+
+        function validateAge(event) {
+            const value = parseInt(event.target.value);
+            const isValid = value >= 1 && value <= 120;
+
+            event.target.classList.toggle('error', !isValid && event.target.value !== '');
+            event.target.classList.toggle('success', isValid);
+
+            if (isValid) {
+                logEvent('formEventLog', 'Age validation passed', 'success');
+            }
+        }
+
+        function validateCountry(event) {
+            const isValid = event.target.value !== '';
+
+            event.target.classList.toggle('error', !isValid);
+            event.target.classList.toggle('success', isValid);
+
+            if (isValid) {
+                logEvent('formEventLog', `Country selected: ${event.target.value}`, 'success');
+            }
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+
+            // Validate all fields
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData);
+
+            logEvent('formEventLog', 'Form submitted!', 'success');
+            logEvent('formEventLog', `Data: ${JSON.stringify(data)}`, 'info');
+
+            // Show success message
+            alert('Form submitted successfully! Check the console for details.');
+        }
+
+        // Drag and drop handlers
+        function setupDragAndDrop() {
+            const draggableItems = document.querySelectorAll('.draggable-item');
+            const dropZone = document.getElementById('dropZone');
+
+            draggableItems.forEach(item => {
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragend', handleDragEnd);
+            });
+
+            dropZone.addEventListener('dragover', handleDragOver);
+            dropZone.addEventListener('dragenter', handleDragEnter);
+            dropZone.addEventListener('dragleave', handleDragLeave);
+            dropZone.addEventListener('drop', handleDrop);
+        }
+
+        function handleDragStart(event) {
+            event.dataTransfer.setData('text/plain', event.target.dataset.item);
+            event.target.classList.add('dragging');
+
+            logEvent('advancedEventLog', `Drag started: ${event.target.dataset.item}`, 'info');
+        }
+
+        function handleDragEnd(event) {
+            event.target.classList.remove('dragging');
+            logEvent('advancedEventLog', 'Drag ended', 'info');
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+        }
+
+        function handleDragEnter(event) {
+            event.preventDefault();
+            event.target.classList.add('drag-over');
+        }
+
+        function handleDragLeave(event) {
+            event.target.classList.remove('drag-over');
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+
+            const draggedItem = event.dataTransfer.getData('text/plain');
+            event.target.classList.remove('drag-over');
+
+            logEvent('advancedEventLog', `Item dropped: ${draggedItem}`, 'success');
+
+            // Visual feedback
+            event.target.textContent = `Dropped: ${draggedItem}`;
+            setTimeout(() => {
+                event.target.textContent = 'Drop items here';
+            }, 2000);
+        }
+
+        // Event bubbling demonstration
+        function handleBubbleClick(event, level) {
+            const message = `${level} clicked (${event.target.className})`;
+            logEvent('advancedEventLog', message, 'info');
+
+            if (!allowBubbling) {
+                event.stopPropagation();
+                logEvent('advancedEventLog', 'Event bubbling stopped', 'warning');
+            }
+        }
+
+        function toggleBubbling() {
+            allowBubbling = !allowBubbling;
+            const status = allowBubbling ? 'enabled' : 'disabled';
+            logEvent('advancedEventLog', `Event bubbling ${status}`, 'info');
+        }
+
+        // Touch event handlers
+        function setupTouchEvents() {
+            const gestureArea = document.getElementById('gestureArea');
+
+            gestureArea.addEventListener('touchstart', handleTouchStart, { passive: false });
+            gestureArea.addEventListener('touchmove', handleTouchMove, { passive: false });
+            gestureArea.addEventListener('touchend', handleTouchEnd, { passive: false });
+        }
+
+        function handleTouchStart(event) {
+            if (event.touches.length === 1) {
+                touchStartX = event.touches[0].clientX;
+                touchStartY = event.touches[0].clientY;
+
+                logEvent('advancedEventLog', 'Touch started', 'info');
+                document.getElementById('gestureInfo').textContent = 'Touch started';
+            }
+        }
+
+        function handleTouchMove(event) {
+            event.preventDefault();
+
+            if (event.touches.length === 1) {
+                const touchX = event.touches[0].clientX;
+                const touchY = event.touches[0].clientY;
+
+                const deltaX = touchX - touchStartX;
+                const deltaY = touchY - touchStartY;
+
+                document.getElementById('gestureInfo').textContent = `Moving: ${Math.round(deltaX)}, ${Math.round(deltaY)}`;
+            }
+        }
+
+        function handleTouchEnd(event) {
+            if (event.changedTouches.length === 1) {
+                const touchEndX = event.changedTouches[0].clientX;
+                const touchEndY = event.changedTouches[0].clientY;
+
+                const deltaX = touchEndX - touchStartX;
+                const deltaY = touchEndY - touchStartY;
+
+                // Detect swipe gestures
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    if (deltaX > 50) {
+                        logEvent('advancedEventLog', 'Swipe right detected', 'success');
+                        document.getElementById('gestureInfo').textContent = 'Swipe Right';
+                    } else if (deltaX < -50) {
+                        logEvent('advancedEventLog', 'Swipe left detected', 'success');
+                        document.getElementById('gestureInfo').textContent = 'Swipe Left';
+                    }
+                } else {
+                    if (deltaY > 50) {
+                        logEvent('advancedEventLog', 'Swipe down detected', 'success');
+                        document.getElementById('gestureInfo').textContent = 'Swipe Down';
+                    } else if (deltaY < -50) {
+                        logEvent('advancedEventLog', 'Swipe up detected', 'success');
+                        document.getElementById('gestureInfo').textContent = 'Swipe Up';
+                    }
+                }
+
+                setTimeout(() => {
+                    document.getElementById('gestureInfo').textContent = 'None';
+                }, 2000);
+            }
+        }
+
+        // Context menu handlers
+        function contextMenuAction(action) {
+            logEvent('basicEventLog', `Context menu action: ${action}`, 'info');
+            hideContextMenu();
+        }
+
+        function hideContextMenu() {
+            document.getElementById('customContextMenu').style.display = 'none';
+        }
+
+        // Window event handlers
+        function handleResize(event) {
+            logEvent('advancedEventLog', `Window resized: ${window.innerWidth}x${window.innerHeight}`, 'info');
+        }
+
+        function handleScroll(event) {
+            logEvent('advancedEventLog', `Page scrolled: ${Math.round(window.pageYOffset)}px`, 'detail');
+        }
+
+        // Utility functions
+        function logEvent(logId, message, type = 'info') {
+            const log = document.getElementById(logId);
+            const timestamp = new Date().toLocaleTimeString();
+            const colors = {
+                info: '#00ff00',
+                success: '#00ff00',
+                error: '#ff0000',
+                warning: '#ffff00',
+                detail: '#00ffff'
+            };
+
+            const logEntry = document.createElement('div');
+            logEntry.style.color = colors[type] || '#00ff00';
+            logEntry.textContent = `[${timestamp}] ${message}`;
+
+            log.appendChild(logEntry);
+            log.scrollTop = log.scrollHeight;
+
+            // Keep only last 20 entries
+            while (log.children.length > 20) {
+                log.removeChild(log.firstChild);
+            }
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        function throttle(func, limit) {
+            let inThrottle;
+            return function () {
+                const args = arguments;
+                const context = this;
+                if (!inThrottle) {
+                    func.apply(context, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                }
+            }
+        }
+
+        // Custom event demonstration
+        function createCustomEvent() {
+            const customEvent = new CustomEvent('demoCustomEvent', {
+                detail: {
+                    message: 'Hello from custom event!',
+                    timestamp: Date.now()
+                },
+                bubbles: true,
+                cancelable: true
+            });
+
+            document.dispatchEvent(customEvent);
+        }
+
+        // Listen for custom events
+        document.addEventListener('demoCustomEvent', function (event) {
+            logEvent('advancedEventLog', `Custom event received: ${event.detail.message}`, 'success');
+        });
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Add demo object to global scope
+        window.eventHandlingDemo = {
+            createCustomEvent,
+            toggleBubbling,
+            logEvent,
+            debounce,
+            throttle,
+            eventCounter,
+            allowBubbling
+        };
+
+        console.log('⚡ Event Handling Demo loaded!');
+        console.log('📚 This demo teaches:');
+        console.log('• Basic event handling methods');
+        console.log('• Event object properties and methods');
+        console.log('• Form validation and input events');
+        console.log('• Mouse and keyboard events');
+        console.log('• Touch and gesture events');
+        console.log('• Drag and drop functionality');
+        console.log('• Event bubbling and capturing');
+        console.log('• Event delegation patterns');
+        console.log('• Custom events creation');
+        console.log('• Performance optimization');
+        console.log('💡 Try the eventHandlingDemo object in console!');
+    </script>
+</body>
+
+</html>

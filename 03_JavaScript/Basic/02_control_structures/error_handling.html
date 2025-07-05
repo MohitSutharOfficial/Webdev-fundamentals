@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Error Handling - Basic Level</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #ff6b6b;
+        }
+
+        .section h2 {
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .code-example {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-example::before {
+            content: "JavaScript";
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: #ff6b6b;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.8em;
+        }
+
+        .keyword {
+            color: #ff79c6;
+        }
+
+        .string {
+            color: #50fa7b;
+        }
+
+        .number {
+            color: #ffb86c;
+        }
+
+        .comment {
+            color: #6272a4;
+        }
+
+        .function {
+            color: #8be9fd;
+        }
+
+        .demo-container {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .demo-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .output {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-family: monospace;
+            min-height: 50px;
+            border: 2px solid #2d3748;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffecb5;
+            color: #856404;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .error-type {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .best-practices {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .best-practices h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .best-practices ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .best-practices li {
+            background: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .best-practices li::before {
+            content: "✓";
+            color: #48bb78;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .navigation {
+            background: #2d3748;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .nav-button {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background: white;
+            color: #2d3748;
+            transform: translateY(-2px);
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚨 JavaScript Error Handling</h1>
+            <p>Master the art of handling errors gracefully in JavaScript</p>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 80%"></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2>🎯 Learning Objectives</h2>
+                <ul>
+                    <li>Understand different types of JavaScript errors</li>
+                    <li>Learn try-catch-finally statement</li>
+                    <li>Master error throwing and custom errors</li>
+                    <li>Implement proper error handling strategies</li>
+                    <li>Debug common error scenarios</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>🔍 Types of JavaScript Errors</h2>
+
+                <h3>1. Syntax Errors</h3>
+                <p>Occur when the code violates JavaScript syntax rules.</p>
+                <div class="code-example">
+                    <span class="comment">// Syntax Error Examples</span>
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Hello
+                        World"</span> <span class="comment">// Missing closing parenthesis</span>
+
+                    <span class="keyword">if</span> (<span class="keyword">true</span>) {
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span
+                        class="string">"Hello"</span>);
+                    <span class="comment">// Missing closing brace</span>
+
+                    <span class="keyword">let</span> 123name = <span class="string">"invalid"</span>; <span
+                        class="comment">// Variable names can't start with numbers</span>
+                </div>
+
+                <h3>2. Runtime Errors</h3>
+                <p>Occur during code execution when something goes wrong.</p>
+                <div class="code-example">
+                    <span class="comment">// Runtime Error Examples</span>
+                    <span class="keyword">let</span> undefinedVariable;
+                    <span class="keyword">console</span>.<span class="function">log</span>(undefinedVariable.<span
+                        class="function">length</span>); <span class="comment">// TypeError</span>
+
+                    <span class="keyword">let</span> numbers = [<span class="number">1</span>, <span
+                        class="number">2</span>, <span class="number">3</span>];
+                    <span class="keyword">console</span>.<span class="function">log</span>(numbers[<span
+                        class="number">10</span>].<span class="function">toString</span>()); <span class="comment">//
+                        TypeError</span>
+
+                    <span class="function">nonExistentFunction</span>(); <span class="comment">// ReferenceError</span>
+                </div>
+
+                <h3>3. Logical Errors</h3>
+                <p>Code runs without errors but produces incorrect results.</p>
+                <div class="code-example">
+                    <span class="comment">// Logical Error Example</span>
+                    <span class="keyword">function</span> <span class="function">calculateArea</span>(width, height) {
+                    <span class="keyword">return</span> width + height; <span class="comment">// Should be width *
+                        height</span>
+                    }
+
+                    <span class="keyword">let</span> area = <span class="function">calculateArea</span>(<span
+                        class="number">5</span>, <span class="number">3</span>);
+                    <span class="keyword">console</span>.<span class="function">log</span>(area); <span
+                        class="comment">// Returns 8 instead of 15</span>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🛡️ Try-Catch-Finally Statement</h2>
+
+                <h3>Basic Try-Catch</h3>
+                <div class="code-example">
+                    <span class="keyword">try</span> {
+                    <span class="comment">// Code that might throw an error</span>
+                    <span class="keyword">let</span> result = <span class="number">10</span> / <span
+                        class="number">0</span>;
+                    <span class="keyword">console</span>.<span class="function">log</span>(result);
+
+                    <span class="keyword">let</span> data = <span class="function">JSON</span>.<span
+                        class="function">parse</span>(<span class="string">"invalid json"</span>);
+                    } <span class="keyword">catch</span> (error) {
+                    <span class="comment">// Handle the error</span>
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"An
+                        error occurred:"</span>, error.<span class="function">message</span>);
+                    }
+                </div>
+
+                <h3>Try-Catch-Finally</h3>
+                <div class="code-example">
+                    <span class="keyword">try</span> {
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span
+                        class="string">"Attempting risky operation..."</span>);
+                    <span class="keyword">let</span> data = <span class="function">JSON</span>.<span
+                        class="function">parse</span>(<span class="string">'{"name": "John"}'</span>);
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span
+                        class="string">"Success:"</span>, data);
+                    } <span class="keyword">catch</span> (error) {
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Error
+                        caught:"</span>, error.<span class="function">message</span>);
+                    } <span class="keyword">finally</span> {
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"This
+                        always runs, error or not"</span>);
+                    }
+                </div>
+
+                <div class="demo-container">
+                    <h3>🎮 Interactive Demo: Try-Catch-Finally</h3>
+                    <button class="demo-button" onclick="demonstrateTryCatch()">Try Valid JSON</button>
+                    <button class="demo-button" onclick="demonstrateError()">Try Invalid JSON</button>
+                    <button class="demo-button" onclick="demonstrateFinally()">Test Finally Block</button>
+                    <div class="output" id="tryCatchOutput">Click a button to see try-catch in action!</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🎯 Throwing Custom Errors</h2>
+
+                <h3>Using throw Statement</h3>
+                <div class="code-example">
+                    <span class="keyword">function</span> <span class="function">divide</span>(a, b) {
+                    <span class="keyword">if</span> (b === <span class="number">0</span>) {
+                    <span class="keyword">throw</span> <span class="keyword">new</span> <span
+                        class="function">Error</span>(<span class="string">"Division by zero is not allowed"</span>);
+                    }
+                    <span class="keyword">return</span> a / b;
+                    }
+
+                    <span class="keyword">try</span> {
+                    <span class="keyword">let</span> result = <span class="function">divide</span>(<span
+                        class="number">10</span>, <span class="number">0</span>);
+                    } <span class="keyword">catch</span> (error) {
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Caught
+                        error:"</span>, error.<span class="function">message</span>);
+                    }
+                </div>
+
+                <h3>Custom Error Types</h3>
+                <div class="code-example">
+                    <span class="keyword">class</span> <span class="function">ValidationError</span> <span
+                        class="keyword">extends</span> <span class="function">Error</span> {
+                    <span class="function">constructor</span>(message) {
+                    <span class="keyword">super</span>(message);
+                    <span class="keyword">this</span>.<span class="function">name</span> = <span
+                        class="string">"ValidationError"</span>;
+                    }
+                    }
+
+                    <span class="keyword">function</span> <span class="function">validateAge</span>(age) {
+                    <span class="keyword">if</span> (age < <span class="number">0</span>) {
+                        <span class="keyword">throw</span> <span class="keyword">new</span> <span
+                            class="function">ValidationError</span>(<span class="string">"Age cannot be
+                            negative"</span>);
+                        }
+                        <span class="keyword">if</span> (age > <span class="number">150</span>) {
+                        <span class="keyword">throw</span> <span class="keyword">new</span> <span
+                            class="function">ValidationError</span>(<span class="string">"Age seems
+                            unrealistic"</span>);
+                        }
+                        <span class="keyword">return</span> <span class="keyword">true</span>;
+                        }
+                </div>
+
+                <div class="demo-container">
+                    <h3>🎮 Interactive Demo: Custom Errors</h3>
+                    <input type="number" id="ageInput" placeholder="Enter age"
+                        style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; margin: 5px;">
+                    <button class="demo-button" onclick="testCustomError()">Validate Age</button>
+                    <div class="output" id="customErrorOutput">Enter an age and click validate!</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📊 Common Error Types</h2>
+
+                <div class="error-type">
+                    <h3>ReferenceError</h3>
+                    <p>Occurs when trying to access a variable that doesn't exist.</p>
+                    <div class="code-example">
+                        <span class="keyword">console</span>.<span class="function">log</span>(nonExistentVariable);
+                        <span class="comment">// ReferenceError</span>
+                    </div>
+                </div>
+
+                <div class="error-type">
+                    <h3>TypeError</h3>
+                    <p>Occurs when a value is not of the expected type.</p>
+                    <div class="code-example">
+                        <span class="keyword">let</span> num = <span class="number">42</span>;
+                        num.<span class="function">toUpperCase</span>(); <span class="comment">// TypeError:
+                            num.toUpperCase is not a function</span>
+                    </div>
+                </div>
+
+                <div class="error-type">
+                    <h3>SyntaxError</h3>
+                    <p>Occurs when JavaScript code has invalid syntax.</p>
+                    <div class="code-example">
+                        <span class="function">JSON</span>.<span class="function">parse</span>(<span
+                            class="string">"invalid json"</span>); <span class="comment">// SyntaxError</span>
+                    </div>
+                </div>
+
+                <div class="error-type">
+                    <h3>RangeError</h3>
+                    <p>Occurs when a number is outside the allowable range.</p>
+                    <div class="code-example">
+                        <span class="keyword">let</span> arr = <span class="keyword">new</span> <span
+                            class="function">Array</span>(-<span class="number">1</span>); <span class="comment">//
+                            RangeError: Invalid array length</span>
+                    </div>
+                </div>
+
+                <div class="demo-container">
+                    <h3>🎮 Interactive Demo: Error Types</h3>
+                    <button class="demo-button" onclick="demonstrateReferenceError()">ReferenceError</button>
+                    <button class="demo-button" onclick="demonstrateTypeError()">TypeError</button>
+                    <button class="demo-button" onclick="demonstrateRangeError()">RangeError</button>
+                    <div class="output" id="errorTypesOutput">Click a button to see different error types!</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔧 Error Handling Strategies</h2>
+
+                <h3>1. Defensive Programming</h3>
+                <div class="code-example">
+                    <span class="keyword">function</span> <span class="function">safeAccess</span>(obj, property) {
+                    <span class="comment">// Check if object exists and has the property</span>
+                    <span class="keyword">if</span> (obj && obj.<span class="function">hasOwnProperty</span>(property))
+                    {
+                    <span class="keyword">return</span> obj[property];
+                    }
+                    <span class="keyword">return</span> <span class="keyword">undefined</span>;
+                    }
+
+                    <span class="keyword">let</span> user = { name: <span class="string">"John"</span> };
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span
+                        class="function">safeAccess</span>(user, <span class="string">"name"</span>)); <span
+                        class="comment">// "John"</span>
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span
+                        class="function">safeAccess</span>(user, <span class="string">"age"</span>)); <span
+                        class="comment">// undefined</span>
+                </div>
+
+                <h3>2. Input Validation</h3>
+                <div class="code-example">
+                    <span class="keyword">function</span> <span class="function">calculateSquare</span>(num) {
+                    <span class="comment">// Validate input type</span>
+                    <span class="keyword">if</span> (<span class="keyword">typeof</span> num !== <span
+                        class="string">"number"</span>) {
+                    <span class="keyword">throw</span> <span class="keyword">new</span> <span
+                        class="function">TypeError</span>(<span class="string">"Expected a number"</span>);
+                    }
+
+                    <span class="comment">// Validate input range</span>
+                    <span class="keyword">if</span> (num < <span class="number">0</span>) {
+                        <span class="keyword">throw</span> <span class="keyword">new</span> <span
+                            class="function">RangeError</span>(<span class="string">"Number must be positive"</span>);
+                        }
+
+                        <span class="keyword">return</span> num * num;
+                        }
+                </div>
+
+                <h3>3. Graceful Degradation</h3>
+                <div class="code-example">
+                    <span class="keyword">function</span> <span class="function">loadUserData</span>(userId) {
+                    <span class="keyword">try</span> {
+                    <span class="comment">// Attempt to load from localStorage</span>
+                    <span class="keyword">let</span> userData = <span class="function">localStorage</span>.<span
+                        class="function">getItem</span>(<span class="string">`user_${userId}`</span>);
+                    <span class="keyword">return</span> <span class="function">JSON</span>.<span
+                        class="function">parse</span>(userData);
+                    } <span class="keyword">catch</span> (error) {
+                    <span class="comment">// Fallback to default user data</span>
+                    <span class="keyword">console</span>.<span class="function">warn</span>(<span class="string">"Failed
+                        to load user data, using defaults"</span>);
+                    <span class="keyword">return</span> { name: <span class="string">"Guest"</span>, preferences: {} };
+                    }
+                    }
+                </div>
+
+                <div class="demo-container">
+                    <h3>🎮 Interactive Demo: Error Handling Strategies</h3>
+                    <button class="demo-button" onclick="demonstrateDefensiveProgramming()">Defensive
+                        Programming</button>
+                    <button class="demo-button" onclick="demonstrateInputValidation()">Input Validation</button>
+                    <button class="demo-button" onclick="demonstrateGracefulDegradation()">Graceful Degradation</button>
+                    <div class="output" id="strategiesOutput">Click a button to see error handling strategies!</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🐛 Debugging Techniques</h2>
+
+                <h3>1. Console Debugging</h3>
+                <div class="code-example">
+                    <span class="keyword">function</span> <span class="function">debugFunction</span>(data) {
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span
+                        class="string">"Function started with data:"</span>, data);
+
+                    <span class="keyword">try</span> {
+                    <span class="keyword">let</span> result = <span class="function">processData</span>(data);
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span
+                        class="string">"Processing successful:"</span>, result);
+                    <span class="keyword">return</span> result;
+                    } <span class="keyword">catch</span> (error) {
+                    <span class="keyword">console</span>.<span class="function">error</span>(<span class="string">"Error
+                        in debugFunction:"</span>, error);
+                    <span class="keyword">console</span>.<span class="function">trace</span>(); <span class="comment">//
+                        Show stack trace</span>
+                    <span class="keyword">throw</span> error;
+                    }
+                    }
+                </div>
+
+                <h3>2. Error Object Properties</h3>
+                <div class="code-example">
+                    <span class="keyword">try</span> {
+                    <span class="keyword">throw</span> <span class="keyword">new</span> <span
+                        class="function">Error</span>(<span class="string">"Something went wrong"</span>);
+                    } <span class="keyword">catch</span> (error) {
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Error
+                        name:"</span>, error.<span class="function">name</span>);
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Error
+                        message:"</span>, error.<span class="function">message</span>);
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Error
+                        stack:"</span>, error.<span class="function">stack</span>);
+                    }
+                </div>
+
+                <div class="demo-container">
+                    <h3>🎮 Interactive Demo: Debugging</h3>
+                    <button class="demo-button" onclick="demonstrateDebugging()">Debug Function</button>
+                    <button class="demo-button" onclick="demonstrateErrorObject()">Error Object</button>
+                    <div class="output" id="debuggingOutput">Click a button to see debugging techniques!</div>
+                </div>
+            </div>
+
+            <div class="best-practices">
+                <h3>🌟 Error Handling Best Practices</h3>
+                <ul>
+                    <li>Always validate input parameters in functions</li>
+                    <li>Use specific error types for different scenarios</li>
+                    <li>Provide meaningful error messages</li>
+                    <li>Handle errors at the appropriate level</li>
+                    <li>Use finally blocks for cleanup operations</li>
+                    <li>Don't suppress errors without proper handling</li>
+                    <li>Log errors for debugging purposes</li>
+                    <li>Consider user experience when displaying errors</li>
+                    <li>Test error scenarios thoroughly</li>
+                    <li>Use defensive programming techniques</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>🎯 Practice Exercises</h2>
+
+                <div class="warning">
+                    <strong>Exercise 1:</strong> Write a function that safely divides two numbers and handles division
+                    by zero.
+                </div>
+
+                <div class="warning">
+                    <strong>Exercise 2:</strong> Create a function that validates email addresses and throws appropriate
+                    errors.
+                </div>
+
+                <div class="warning">
+                    <strong>Exercise 3:</strong> Build a simple calculator that handles all possible errors gracefully.
+                </div>
+
+                <div class="demo-container">
+                    <h3>🎮 Interactive Exercise: Safe Calculator</h3>
+                    <input type="number" id="num1" placeholder="First number"
+                        style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; margin: 5px;">
+                    <select id="operation"
+                        style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; margin: 5px;">
+                        <option value="+">+</option>
+                        <option value="-">-</option>
+                        <option value="*">*</option>
+                        <option value="/">/</option>
+                    </select>
+                    <input type="number" id="num2" placeholder="Second number"
+                        style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; margin: 5px;">
+                    <button class="demo-button" onclick="calculateSafely()">Calculate</button>
+                    <div class="output" id="calculatorOutput">Enter numbers and click calculate!</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <h3>🧭 Navigation</h3>
+            <a href="../01_javascript_fundamentals/variables_datatypes.html" class="nav-button">← Previous:
+                Variables</a>
+            <a href="loops.html" class="nav-button">Next: Loops →</a>
+        </div>
+    </div>
+
+    <script>
+        // Interactive demos
+        function demonstrateTryCatch() {
+            const output = document.getElementById('tryCatchOutput');
+            output.innerHTML = '';
+
+            try {
+                const jsonData = '{"name": "John", "age": 30}';
+                const parsed = JSON.parse(jsonData);
+                output.innerHTML += `✅ Success: ${JSON.stringify(parsed)}<br>`;
+            } catch (error) {
+                output.innerHTML += `❌ Error: ${error.message}<br>`;
+            } finally {
+                output.innerHTML += `🔄 Finally block executed<br>`;
+            }
+        }
+
+        function demonstrateError() {
+            const output = document.getElementById('tryCatchOutput');
+            output.innerHTML = '';
+
+            try {
+                const invalidJson = '{"name": "John", "age":}';
+                const parsed = JSON.parse(invalidJson);
+                output.innerHTML += `✅ Success: ${JSON.stringify(parsed)}<br>`;
+            } catch (error) {
+                output.innerHTML += `❌ Error caught: ${error.message}<br>`;
+            } finally {
+                output.innerHTML += `🔄 Finally block always runs<br>`;
+            }
+        }
+
+        function demonstrateFinally() {
+            const output = document.getElementById('tryCatchOutput');
+            output.innerHTML = '';
+
+            let resource = null;
+            try {
+                resource = "Resource opened";
+                output.innerHTML += `📖 ${resource}<br>`;
+                // Simulate an error
+                throw new Error("Something went wrong");
+            } catch (error) {
+                output.innerHTML += `❌ Error: ${error.message}<br>`;
+            } finally {
+                if (resource) {
+                    output.innerHTML += `🔒 Resource cleanup completed<br>`;
+                }
+                output.innerHTML += `✨ Finally block ensures cleanup<br>`;
+            }
+        }
+
+        function testCustomError() {
+            const output = document.getElementById('customErrorOutput');
+            const age = document.getElementById('ageInput').value;
+
+            output.innerHTML = '';
+
+            try {
+                if (age === '') {
+                    throw new Error("Please enter an age");
+                }
+
+                const numAge = parseInt(age);
+
+                if (numAge < 0) {
+                    throw new Error("Age cannot be negative");
+                }
+
+                if (numAge > 150) {
+                    throw new Error("Age seems unrealistic");
+                }
+
+                output.innerHTML = `✅ Valid age: ${numAge} years old`;
+            } catch (error) {
+                output.innerHTML = `❌ Validation Error: ${error.message}`;
+            }
+        }
+
+        function demonstrateReferenceError() {
+            const output = document.getElementById('errorTypesOutput');
+
+            try {
+                console.log(nonExistentVariable);
+            } catch (error) {
+                output.innerHTML = `❌ ${error.name}: ${error.message}`;
+            }
+        }
+
+        function demonstrateTypeError() {
+            const output = document.getElementById('errorTypesOutput');
+
+            try {
+                const num = 42;
+                num.toUpperCase();
+            } catch (error) {
+                output.innerHTML = `❌ ${error.name}: ${error.message}`;
+            }
+        }
+
+        function demonstrateRangeError() {
+            const output = document.getElementById('errorTypesOutput');
+
+            try {
+                const arr = new Array(-1);
+            } catch (error) {
+                output.innerHTML = `❌ ${error.name}: ${error.message}`;
+            }
+        }
+
+        function demonstrateDefensiveProgramming() {
+            const output = document.getElementById('strategiesOutput');
+
+            function safeAccess(obj, property) {
+                if (obj && obj.hasOwnProperty(property)) {
+                    return obj[property];
+                }
+                return undefined;
+            }
+
+            const user = { name: "John" };
+            const name = safeAccess(user, "name");
+            const age = safeAccess(user, "age");
+
+            output.innerHTML = `
+                🛡️ Defensive Programming:<br>
+                Name: ${name}<br>
+                Age: ${age || "Not provided"}<br>
+                No errors thrown!
+            `;
+        }
+
+        function demonstrateInputValidation() {
+            const output = document.getElementById('strategiesOutput');
+
+            function validateNumber(num) {
+                if (typeof num !== "number") {
+                    throw new TypeError("Expected a number");
+                }
+                if (num < 0) {
+                    throw new RangeError("Number must be positive");
+                }
+                return num * num;
+            }
+
+            try {
+                const result = validateNumber(5);
+                output.innerHTML = `✅ Input validation passed: ${result}`;
+            } catch (error) {
+                output.innerHTML = `❌ Validation failed: ${error.message}`;
+            }
+        }
+
+        function demonstrateGracefulDegradation() {
+            const output = document.getElementById('strategiesOutput');
+
+            function loadConfig() {
+                try {
+                    // Simulate loading from storage
+                    const config = JSON.parse('invalid json');
+                    return config;
+                } catch (error) {
+                    console.warn("Failed to load config, using defaults");
+                    return { theme: "light", language: "en" };
+                }
+            }
+
+            const config = loadConfig();
+            output.innerHTML = `
+                🎨 Graceful Degradation:<br>
+                Loaded default config:<br>
+                Theme: ${config.theme}<br>
+                Language: ${config.language}
+            `;
+        }
+
+        function demonstrateDebugging() {
+            const output = document.getElementById('debuggingOutput');
+
+            function debugExample(data) {
+                console.log("Debug: Function started with:", data);
+
+                try {
+                    if (!data) {
+                        throw new Error("No data provided");
+                    }
+                    const result = data.toUpperCase();
+                    console.log("Debug: Processing successful:", result);
+                    return result;
+                } catch (error) {
+                    console.error("Debug: Error occurred:", error.message);
+                    console.trace();
+                    throw error;
+                }
+            }
+
+            try {
+                const result = debugExample("hello world");
+                output.innerHTML = `🐛 Debug successful: ${result}<br>Check console for debug logs`;
+            } catch (error) {
+                output.innerHTML = `❌ Debug caught error: ${error.message}`;
+            }
+        }
+
+        function demonstrateErrorObject() {
+            const output = document.getElementById('debuggingOutput');
+
+            try {
+                throw new Error("Custom error for demonstration");
+            } catch (error) {
+                output.innerHTML = `
+                    🔍 Error Object Properties:<br>
+                    Name: ${error.name}<br>
+                    Message: ${error.message}<br>
+                    Stack: ${error.stack.split('\n')[0]}...
+                `;
+            }
+        }
+
+        function calculateSafely() {
+            const output = document.getElementById('calculatorOutput');
+            const num1 = parseFloat(document.getElementById('num1').value);
+            const num2 = parseFloat(document.getElementById('num2').value);
+            const operation = document.getElementById('operation').value;
+
+            output.innerHTML = '';
+
+            try {
+                // Validate inputs
+                if (isNaN(num1) || isNaN(num2)) {
+                    throw new Error("Please enter valid numbers");
+                }
+
+                let result;
+                switch (operation) {
+                    case '+':
+                        result = num1 + num2;
+                        break;
+                    case '-':
+                        result = num1 - num2;
+                        break;
+                    case '*':
+                        result = num1 * num2;
+                        break;
+                    case '/':
+                        if (num2 === 0) {
+                            throw new Error("Division by zero is not allowed");
+                        }
+                        result = num1 / num2;
+                        break;
+                    default:
+                        throw new Error("Invalid operation");
+                }
+
+                output.innerHTML = `✅ Result: ${num1} ${operation} ${num2} = ${result}`;
+
+            } catch (error) {
+                output.innerHTML = `❌ Calculator Error: ${error.message}`;
+            }
+        }
+
+        // Initialize progress bar animation
+        window.addEventListener('load', function () {
+            const progressBar = document.querySelector('.progress-fill');
+            setTimeout(() => {
+                progressBar.style.width = '100%';
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>

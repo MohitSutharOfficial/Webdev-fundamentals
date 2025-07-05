@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async/Await - Complete Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.3em;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 30px 0;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-section h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 2.2em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .content-section h3 {
+            color: #2d3748;
+            margin: 30px 0 15px 0;
+            font-size: 1.5em;
+        }
+
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            position: relative;
+            border-left: 4px solid #667eea;
+        }
+
+        .code-block::before {
+            content: "JavaScript";
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 0.8em;
+            color: #a0aec0;
+        }
+
+        .interactive-demo {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            color: white;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .demo-controls button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .demo-controls button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .demo-controls button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .demo-controls input {
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 1em;
+        }
+
+        .result-display {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-family: 'Courier New', monospace;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .best-practices {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            color: #2d3748;
+        }
+
+        .best-practices h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .best-practices ul {
+            padding-left: 20px;
+        }
+
+        .best-practices li {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .loading-indicator {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .syntax-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .syntax-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .syntax-card h4 {
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .execution-flow {
+            background: #f8f9fa;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .execution-flow h4 {
+            color: #4a5568;
+            margin-bottom: 15px;
+        }
+
+        .execution-step {
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 10px;
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .execution-step::before {
+            content: counter(step-counter);
+            counter-increment: step-counter;
+            position: absolute;
+            left: -10px;
+            top: -5px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .execution-flow {
+            counter-reset: step-counter;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .demo-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .syntax-comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>Async/Await</h1>
+            <p>Write cleaner asynchronous code - Making promises look like synchronous code</p>
+        </div>
+
+        <div class="content-section">
+            <h2>🎯 What is Async/Await?</h2>
+            <p>Async/await is syntactic sugar built on top of Promises. It allows you to write asynchronous code that
+                looks and behaves like synchronous code, making it easier to read and maintain.</p>
+
+            <div class="syntax-comparison">
+                <div class="syntax-card">
+                    <h4>❌ Promise Chains</h4>
+                    <div class="code-block">
+                        fetchUser(1)
+                        .then(user => {
+                        return fetchPosts(user.id);
+                        })
+                        .then(posts => {
+                        return fetchComments(posts[0].id);
+                        })
+                        .then(comments => {
+                        console.log(comments);
+                        })
+                        .catch(error => {
+                        console.error(error);
+                        });
+                    </div>
+                </div>
+
+                <div class="syntax-card">
+                    <h4>✅ Async/Await</h4>
+                    <div class="code-block">
+                        async function loadData() {
+                        try {
+                        const user = await fetchUser(1);
+                        const posts = await fetchPosts(user.id);
+                        const comments = await fetchComments(posts[0].id);
+                        console.log(comments);
+                        } catch (error) {
+                        console.error(error);
+                        }
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <h3>Key Benefits</h3>
+            <ul>
+                <li><strong>Readability:</strong> Code reads like synchronous code</li>
+                <li><strong>Error Handling:</strong> Use try/catch blocks instead of .catch()</li>
+                <li><strong>Debugging:</strong> Better stack traces and debugging experience</li>
+                <li><strong>Less Nesting:</strong> Avoid callback hell and promise chains</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🔧 Basic Async/Await Syntax</h2>
+
+            <h3>Async Functions</h3>
+            <div class="code-block">
+                // Function declaration
+                async function fetchData() {
+                return "Hello, World!";
+                }
+
+                // Function expression
+                const fetchData2 = async function() {
+                return "Hello, World!";
+                };
+
+                // Arrow function
+                const fetchData3 = async () => {
+                return "Hello, World!";
+                };
+
+                // Method in object
+                const api = {
+                async getData() {
+                return "Hello, World!";
+                }
+                };
+
+                // Method in class
+                class ApiClient {
+                async getData() {
+                return "Hello, World!";
+                }
+                }
+
+                // All async functions return Promises
+                console.log(fetchData()); // Promise {<resolved>: "Hello, World!"}
+                    fetchData().then(result => console.log(result)); // "Hello, World!"
+            </div>
+
+            <h3>Await Keyword</h3>
+            <div class="code-block">
+                // await can only be used inside async functions
+                async function example() {
+                // Wait for promise to resolve
+                const result = await Promise.resolve("Hello");
+                console.log(result); // "Hello"
+
+                // Wait for another async operation
+                const data = await fetch('/api/data');
+                const json = await data.json();
+
+                // await pauses execution until promise resolves
+                const user = await fetchUser(1);
+                console.log(user.name); // Access resolved value directly
+                }
+
+                // ❌ This won't work - await outside async function
+                // const result = await fetchUser(1); // SyntaxError
+            </div>
+
+            <h3>Return Values</h3>
+            <div class="code-block">
+                // Async functions always return Promises
+                async function returnsString() {
+                return "Hello"; // Wrapped in Promise.resolve()
+                }
+
+                async function returnsPromise() {
+                return Promise.resolve("Hello"); // Already a promise
+                }
+
+                async function returnsValue() {
+                const value = await Promise.resolve(42);
+                return value * 2; // Returns Promise<number>
+                    }
+
+                    // Usage
+                    returnsString().then(str => console.log(str)); // "Hello"
+                    returnsPromise().then(str => console.log(str)); // "Hello"
+                    returnsValue().then(num => console.log(num)); // 84
+            </div>
+
+            <div class="interactive-demo">
+                <h3>🎮 Interactive Async/Await Demo</h3>
+                <div class="demo-controls">
+                    <input type="number" id="asyncDelay" placeholder="Delay (ms)" value="1000" min="100" max="5000">
+                    <button onclick="demonstrateBasicAsync()">Basic Async</button>
+                    <button onclick="demonstrateAwait()">Await Example</button>
+                    <button onclick="demonstrateSequential()">Sequential Operations</button>
+                </div>
+                <div class="result-display" id="asyncResult">
+                    Click a button to see async/await in action...
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🚨 Error Handling</h2>
+            <p>Error handling with async/await is more intuitive than with promise chains. You can use try/catch blocks
+                just like with synchronous code.</p>
+
+            <h3>Basic Error Handling</h3>
+            <div class="code-block">
+                async function handleErrors() {
+                try {
+                const user = await fetchUser(1);
+                const posts = await fetchPosts(user.id);
+                const comments = await fetchComments(posts[0].id);
+
+                console.log('Success:', comments);
+                } catch (error) {
+                console.error('Error occurred:', error.message);
+                // Handle the error appropriately
+                }
+                }
+
+                // Multiple try/catch blocks for granular error handling
+                async function granularErrorHandling() {
+                let user;
+                let posts;
+
+                try {
+                user = await fetchUser(1);
+                console.log('User loaded:', user.name);
+                } catch (error) {
+                console.error('Failed to load user:', error.message);
+                return; // Exit early
+                }
+
+                try {
+                posts = await fetchPosts(user.id);
+                console.log('Posts loaded:', posts.length);
+                } catch (error) {
+                console.error('Failed to load posts:', error.message);
+                posts = []; // Use default value
+                }
+
+                // Continue with posts (empty array if failed)
+                console.log('Processing posts:', posts);
+                }
+            </div>
+
+            <h3>Error Propagation</h3>
+            <div class="code-block">
+                // Errors bubble up automatically
+                async function innerFunction() {
+                throw new Error('Something went wrong');
+                }
+
+                async function middleFunction() {
+                await innerFunction(); // Error propagates up
+                }
+
+                async function outerFunction() {
+                try {
+                await middleFunction();
+                } catch (error) {
+                console.error('Caught error:', error.message); // "Something went wrong"
+                }
+                }
+
+                // Multiple error sources
+                async function multipleErrors() {
+                try {
+                await Promise.reject('First error');
+                await Promise.reject('Second error'); // Won't execute
+                } catch (error) {
+                console.error('First error caught:', error); // "First error"
+                }
+
+                try {
+                await Promise.reject('Third error');
+                } catch (error) {
+                console.error('Second error caught:', error); // "Third error"
+                }
+                }
+            </div>
+
+            <h3>Advanced Error Handling Patterns</h3>
+            <div class="code-block">
+                // Retry with exponential backoff
+                async function retryWithBackoff(fn, maxRetries = 3, baseDelay = 1000) {
+                for (let i = 0; i < maxRetries; i++) { try { return await fn(); } catch (error) { if (i===maxRetries -
+                    1) { throw error; // Last attempt failed } const delay=baseDelay * Math.pow(2, i);
+                    console.log(`Attempt ${i + 1} failed, retrying in ${delay}ms...`); await new Promise(resolve=>
+                    setTimeout(resolve, delay));
+                    }
+                    }
+                    }
+
+                    // Timeout wrapper
+                    async function withTimeout(promise, timeoutMs) {
+                    const timeoutPromise = new Promise((_, reject) => {
+                    setTimeout(() => reject(new Error('Operation timed out')), timeoutMs);
+                    });
+
+                    return Promise.race([promise, timeoutPromise]);
+                    }
+
+                    // Safe wrapper that never throws
+                    async function safeAsync(fn) {
+                    try {
+                    const result = await fn();
+                    return { success: true, data: result, error: null };
+                    } catch (error) {
+                    return { success: false, data: null, error: error.message };
+                    }
+                    }
+
+                    // Usage examples
+                    async function example() {
+                    // Retry failed operations
+                    const data = await retryWithBackoff(() => fetchUnreliableData());
+
+                    // Add timeout to operations
+                    const userWithTimeout = await withTimeout(fetchUser(1), 5000);
+
+                    // Safe operations that don't throw
+                    const { success, data, error } = await safeAsync(() => fetchUser(1));
+                    if (success) {
+                    console.log('User:', data);
+                    } else {
+                    console.error('Error:', error);
+                    }
+                    }
+            </div>
+
+            <div class="interactive-demo">
+                <h3>🎮 Interactive Error Handling</h3>
+                <div class="demo-controls">
+                    <button onclick="demonstrateBasicError()">Basic Error</button>
+                    <button onclick="demonstrateErrorPropagation()">Error Propagation</button>
+                    <button onclick="demonstrateRetry()">Retry Pattern</button>
+                    <button onclick="demonstrateTimeout()">Timeout Pattern</button>
+                </div>
+                <div class="result-display" id="errorResult">
+                    Error handling results will appear here...
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔄 Parallel vs Sequential Execution</h2>
+            <p>Understanding when operations run in parallel vs sequentially is crucial for performance.</p>
+
+            <h3>Sequential Execution</h3>
+            <div class="code-block">
+                // Operations run one after another
+                async function sequential() {
+                console.log('Starting sequential operations...');
+
+                const user = await fetchUser(1); // Wait for user
+                const posts = await fetchPosts(user.id); // Then wait for posts
+                const profile = await fetchProfile(user.id); // Then wait for profile
+
+                console.log('All done!');
+                // Total time: sum of all operation times
+                }
+
+                // Real-world example: Processing items in order
+                async function processItemsSequentially(items) {
+                const results = [];
+
+                for (const item of items) {
+                const result = await processItem(item); // Wait for each item
+                results.push(result);
+                }
+
+                return results;
+                }
+            </div>
+
+            <h3>Parallel Execution</h3>
+            <div class="code-block">
+                // Operations run simultaneously
+                async function parallel() {
+                console.log('Starting parallel operations...');
+
+                // Start all operations at once
+                const userPromise = fetchUser(1);
+                const postsPromise = fetchPosts(1);
+                const profilePromise = fetchProfile(1);
+
+                // Wait for all to complete
+                const [user, posts, profile] = await Promise.all([
+                userPromise,
+                postsPromise,
+                profilePromise
+                ]);
+
+                console.log('All done!');
+                // Total time: longest operation time
+                }
+
+                // Using Promise.all with async/await
+                async function parallelWithPromiseAll() {
+                const results = await Promise.all([
+                fetchUser(1),
+                fetchUser(2),
+                fetchUser(3)
+                ]);
+
+                return results;
+                }
+
+                // Processing items in parallel
+                async function processItemsParallel(items) {
+                const promises = items.map(item => processItem(item));
+                return await Promise.all(promises);
+                }
+            </div>
+
+            <h3>Mixed Patterns</h3>
+            <div class="code-block">
+                // Combine sequential and parallel patterns
+                async function mixedExecution() {
+                // Step 1: Get user data
+                const user = await fetchUser(1);
+
+                // Step 2: Fetch posts and profile in parallel
+                const [posts, profile] = await Promise.all([
+                fetchPosts(user.id),
+                fetchProfile(user.id)
+                ]);
+
+                // Step 3: Process posts sequentially (order matters)
+                const processedPosts = [];
+                for (const post of posts) {
+                const processed = await processPost(post);
+                processedPosts.push(processed);
+                }
+
+                return { user, profile, posts: processedPosts };
+                }
+
+                // Controlled concurrency
+                async function processWithConcurrency(items, concurrency = 3) {
+                const results = [];
+
+                for (let i = 0; i < items.length; i +=concurrency) { const batch=items.slice(i, i + concurrency); const
+                    batchResults=await Promise.all( batch.map(item=> processItem(item))
+                    );
+                    results.push(...batchResults);
+                    }
+
+                    return results;
+                    }
+            </div>
+
+            <div class="interactive-demo">
+                <h3>🎮 Interactive Execution Patterns</h3>
+                <div class="demo-controls">
+                    <button onclick="demonstrateSequential()">Sequential</button>
+                    <button onclick="demonstrateParallel()">Parallel</button>
+                    <button onclick="demonstrateMixed()">Mixed Pattern</button>
+                    <button onclick="demonstrateConcurrency()">Controlled Concurrency</button>
+                </div>
+                <div class="result-display" id="executionResult">
+                    Execution pattern results will appear here...
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔄 Async/Await vs Promises Comparison</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Promises</th>
+                        <th>Async/Await</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Syntax</strong></td>
+                        <td><code>.then().catch()</code></td>
+                        <td><code>try/catch</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Readability</strong></td>
+                        <td>Chain-like, can be complex</td>
+                        <td>Linear, like synchronous code</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Error Handling</strong></td>
+                        <td><code>.catch()</code> for each chain</td>
+                        <td>Single <code>try/catch</code> block</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Debugging</strong></td>
+                        <td>Complex stack traces</td>
+                        <td>Clear, linear stack traces</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Conditional Logic</strong></td>
+                        <td>Nested chains</td>
+                        <td>Standard if/else</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Loops</strong></td>
+                        <td>Complex with Promise.all</td>
+                        <td>Standard for/while loops</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>When to Use Each</h3>
+            <div class="execution-flow">
+                <h4>Use Promises When:</h4>
+                <div class="execution-step">Working with libraries that return promises</div>
+                <div class="execution-step">Need fine-grained control over promise chains</div>
+                <div class="execution-step">Working with older JavaScript environments</div>
+                <div class="execution-step">Creating utility functions that return promises</div>
+            </div>
+
+            <div class="execution-flow">
+                <h4>Use Async/Await When:</h4>
+                <div class="execution-step">Writing new asynchronous code</div>
+                <div class="execution-step">Need better readability and maintainability</div>
+                <div class="execution-step">Complex error handling scenarios</div>
+                <div class="execution-step">Working with loops and conditional logic</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🚀 Real-world Examples</h2>
+
+            <h3>1. API Data Fetching</h3>
+            <div class="code-block">
+                // Complete user dashboard data loading
+                async function loadUserDashboard(userId) {
+                try {
+                // Step 1: Authenticate and get user
+                const user = await authenticate(userId);
+
+                // Step 2: Load dashboard data in parallel
+                const [profile, notifications, settings, recent] = await Promise.all([
+                fetchUserProfile(user.id),
+                fetchNotifications(user.id),
+                fetchUserSettings(user.id),
+                fetchRecentActivity(user.id)
+                ]);
+
+                // Step 3: Process notifications sequentially (order matters)
+                const processedNotifications = [];
+                for (const notification of notifications) {
+                const processed = await processNotification(notification);
+                processedNotifications.push(processed);
+                }
+
+                return {
+                user,
+                profile,
+                notifications: processedNotifications,
+                settings,
+                recent
+                };
+                } catch (error) {
+                console.error('Dashboard loading failed:', error);
+                throw new Error('Failed to load dashboard data');
+                }
+                }
+            </div>
+
+            <h3>2. File Processing Pipeline</h3>
+            <div class="code-block">
+                // Process multiple files with validation and transformation
+                async function processFiles(filePaths) {
+                const results = [];
+
+                for (const filePath of filePaths) {
+                try {
+                // Sequential processing for each file
+                const content = await readFile(filePath);
+                const validated = await validateContent(content);
+                const transformed = await transformData(validated);
+                const saved = await saveProcessedData(transformed);
+
+                results.push({
+                file: filePath,
+                success: true,
+                result: saved
+                });
+                } catch (error) {
+                results.push({
+                file: filePath,
+                success: false,
+                error: error.message
+                });
+                }
+                }
+
+                return results;
+                }
+
+                // Parallel file processing with controlled concurrency
+                async function processFilesParallel(filePaths, concurrency = 3) {
+                const processFile = async (filePath) => {
+                try {
+                const content = await readFile(filePath);
+                const validated = await validateContent(content);
+                const transformed = await transformData(validated);
+                const saved = await saveProcessedData(transformed);
+
+                return { file: filePath, success: true, result: saved };
+                } catch (error) {
+                return { file: filePath, success: false, error: error.message };
+                }
+                };
+
+                const results = [];
+                for (let i = 0; i < filePaths.length; i +=concurrency) { const batch=filePaths.slice(i, i +
+                    concurrency); const batchResults=await Promise.all( batch.map(processFile) );
+                    results.push(...batchResults); } return results; } </div>
+
+                    <h3>3. Database Operations</h3>
+                    <div class="code-block">
+                        // Complex database transaction with async/await
+                        async function transferMoney(fromAccountId, toAccountId, amount) {
+                        const transaction = await db.beginTransaction();
+
+                        try {
+                        // Step 1: Lock and validate accounts
+                        const fromAccount = await db.lockAccount(fromAccountId);
+                        const toAccount = await db.lockAccount(toAccountId);
+
+                        if (fromAccount.balance < amount) { throw new Error('Insufficient funds'); } // Step 2: Perform
+                            transfer await db.updateAccountBalance(fromAccountId, -amount); await
+                            db.updateAccountBalance(toAccountId, amount); // Step 3: Log transaction await
+                            db.logTransaction({ from: fromAccountId, to: toAccountId, amount, timestamp: new Date() });
+                            // Step 4: Commit transaction await transaction.commit(); return { success: true,
+                            transactionId: transaction.id }; } catch (error) { await transaction.rollback(); throw
+                            error; } } </div>
+
+                            <div class="interactive-demo">
+                                <h3>🎮 Interactive Real-world Examples</h3>
+                                <div class="demo-controls">
+                                    <button onclick="demonstrateDashboard()">Dashboard Loading</button>
+                                    <button onclick="demonstrateFileProcessing()">File Processing</button>
+                                    <button onclick="demonstrateDataPipeline()">Data Pipeline</button>
+                                    <button onclick="demonstrateApiChaining()">API Chaining</button>
+                                </div>
+                                <div class="result-display" id="realWorldResult">
+                                    Real-world example results will appear here...
+                                </div>
+                            </div>
+                    </div>
+
+                    <div class="best-practices">
+                        <h3>✅ Best Practices</h3>
+                        <ul>
+                            <li><strong>Always use try/catch:</strong> Never leave async functions without error
+                                handling</li>
+                            <li><strong>Return await only when necessary:</strong> <code>return await</code> vs
+                                <code>return</code></li>
+                            <li><strong>Use Promise.all for parallel operations:</strong> Don't await in loops unless
+                                sequential</li>
+                            <li><strong>Handle errors at the right level:</strong> Catch errors where you can handle
+                                them</li>
+                            <li><strong>Use async/await consistently:</strong> Don't mix with .then() unless necessary
+                            </li>
+                            <li><strong>Consider performance:</strong> Parallel vs sequential execution</li>
+                            <li><strong>Add timeouts to prevent hanging:</strong> Use Promise.race for timeouts</li>
+                            <li><strong>Use descriptive error messages:</strong> Make debugging easier</li>
+                        </ul>
+                    </div>
+
+                    <div class="content-section">
+                        <h2>⚠️ Common Pitfalls</h2>
+
+                        <h3>1. Awaiting in Loops</h3>
+                        <div class="code-block">
+                            // ❌ Wrong: Sequential execution in loop
+                            async function processItemsBad(items) {
+                            const results = [];
+                            for (const item of items) {
+                            const result = await processItem(item); // Waits for each item
+                            results.push(result);
+                            }
+                            return results; // Very slow!
+                            }
+
+                            // ✅ Good: Parallel execution
+                            async function processItemsGood(items) {
+                            const promises = items.map(item => processItem(item));
+                            return await Promise.all(promises); // Much faster!
+                            }
+                        </div>
+
+                        <h3>2. Forgetting to Await</h3>
+                        <div class="code-block">
+                            // ❌ Wrong: Forgot to await
+                            async function forgotAwait() {
+                            const user = fetchUser(1); // Returns a Promise, not the user!
+                            console.log(user.name); // Error: Cannot read property 'name' of undefined
+                            }
+
+                            // ✅ Good: Proper await
+                            async function properAwait() {
+                            const user = await fetchUser(1);
+                            console.log(user.name); // Works correctly
+                            }
+                        </div>
+
+                        <h3>3. Not Handling Errors</h3>
+                        <div class="code-block">
+                            // ❌ Wrong: No error handling
+                            async function noErrorHandling() {
+                            const user = await fetchUser(1); // Could throw an error
+                            const posts = await fetchPosts(user.id); // Could throw an error
+                            return posts;
+                            }
+
+                            // ✅ Good: Proper error handling
+                            async function properErrorHandling() {
+                            try {
+                            const user = await fetchUser(1);
+                            const posts = await fetchPosts(user.id);
+                            return posts;
+                            } catch (error) {
+                            console.error('Error loading data:', error);
+                            throw error; // Re-throw if needed
+                            }
+                            }
+                        </div>
+
+                        <h3>4. Using async Without await</h3>
+                        <div class="code-block">
+                            // ❌ Wrong: Async function without await
+                            async function unnecessaryAsync() {
+                            return "Hello World"; // No async operations
+                            }
+
+                            // ✅ Good: Regular function
+                            function regularFunction() {
+                            return "Hello World";
+                            }
+
+                            // ✅ Good: Async when needed
+                            async function needsAsync() {
+                            const data = await fetchData();
+                            return data;
+                            }
+                        </div>
+                    </div>
+            </div>
+
+            <script>
+                // Utility functions for demos
+                function delay(ms) {
+                    return new Promise(resolve => setTimeout(resolve, ms));
+                }
+
+                function simulateAsyncOperation(name, ms, shouldFail = false) {
+                    return new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                            if (shouldFail) {
+                                reject(new Error(`${name} failed`));
+                            } else {
+                                resolve(`${name} completed in ${ms}ms`);
+                            }
+                        }, ms);
+                    });
+                }
+
+                async function demonstrateBasicAsync() {
+                    const delayMs = parseInt(document.getElementById('asyncDelay').value) || 1000;
+                    const resultDiv = document.getElementById('asyncResult');
+
+                    resultDiv.innerHTML = `<div class="loading-indicator"></div> Running basic async function...`;
+
+                    async function basicAsync() {
+                        await delay(delayMs);
+                        return `Basic async operation completed after ${delayMs}ms`;
+                    }
+
+                    try {
+                        const result = await basicAsync();
+                        resultDiv.innerHTML = `
+                    <h4>✅ Basic Async Success</h4>
+                    <p><strong>Result:</strong> ${result}</p>
+                    <p><strong>Note:</strong> Function paused for ${delayMs}ms then returned</p>
+                `;
+                    } catch (error) {
+                        resultDiv.innerHTML = `
+                    <h4>❌ Basic Async Error</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+                    }
+                }
+
+                async function demonstrateAwait() {
+                    const delayMs = parseInt(document.getElementById('asyncDelay').value) || 1000;
+                    const resultDiv = document.getElementById('asyncResult');
+
+                    resultDiv.innerHTML = `<div class="loading-indicator"></div> Demonstrating await...`;
+
+                    async function awaitExample() {
+                        const step1 = await simulateAsyncOperation('Step 1', delayMs / 2);
+                        const step2 = await simulateAsyncOperation('Step 2', delayMs / 2);
+                        const step3 = await simulateAsyncOperation('Step 3', delayMs / 2);
+
+                        return [step1, step2, step3];
+                    }
+
+                    try {
+                        const results = await awaitExample();
+                        resultDiv.innerHTML = `
+                    <h4>✅ Await Example Success</h4>
+                    ${results.map((result, i) => `<p><strong>Step ${i + 1}:</strong> ${result}</p>`).join('')}
+                    <p><strong>Total time:</strong> ~${delayMs * 1.5}ms (sequential)</p>
+                `;
+                    } catch (error) {
+                        resultDiv.innerHTML = `
+                    <h4>❌ Await Example Error</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+                    }
+                }
+
+                async function demonstrateBasicError() {
+                    const resultDiv = document.getElementById('errorResult');
+                    resultDiv.innerHTML = `<div class="loading-indicator"></div> Testing error handling...`;
+
+                    async function errorExample() {
+                        try {
+                            await simulateAsyncOperation('Operation 1', 500);
+                            await simulateAsyncOperation('Operation 2', 500, true); // This will fail
+                            await simulateAsyncOperation('Operation 3', 500); // Won't execute
+                        } catch (error) {
+                            throw new Error(`Caught error: ${error.message}`);
+                        }
+                    }
+
+                    try {
+                        await errorExample();
+                        resultDiv.innerHTML = `<h4>✅ Unexpected Success</h4>`;
+                    } catch (error) {
+                        resultDiv.innerHTML = `
+                    <h4>❌ Error Caught Successfully</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>Note:</strong> Operation 3 was skipped after Operation 2 failed</p>
+                `;
+                    }
+                }
+
+                async function demonstrateErrorPropagation() {
+                    const resultDiv = document.getElementById('errorResult');
+                    resultDiv.innerHTML = `<div class="loading-indicator"></div> Testing error propagation...`;
+
+                    async function innerFunction() {
+                        await delay(200);
+                        throw new Error('Inner function error');
+                    }
+
+                    async function middleFunction() {
+                        await delay(200);
+                        await innerFunction(); // Error propagates
+                    }
+
+                    async function outerFunction() {
+                        try {
+                            await middleFunction();
+                        } catch (error) {
+                            return `Outer function caught: ${error.message}`;
+                        }
+                    }
+
+                    try {
+                        const result = await outerFunction();
+                        resultDiv.innerHTML = `
+                    <h4>✅ Error Propagation Success</h4>
+                    <p><strong>Result:</strong> ${result}</p>
+                    <p><strong>Note:</strong> Error bubbled up from inner → middle → outer</p>
+                `;
+                    } catch (error) {
+                        resultDiv.innerHTML = `
+                    <h4>❌ Unexpected Error</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+                    }
+                }
+
+                async function demonstrateSequential() {
+                    const resultDiv = document.getElementById('executionResult');
+                    resultDiv.innerHTML = `<div class="loading-indicator"></div> Running sequential operations...`;
+
+                    const startTime = Date.now();
+
+                    async function sequentialExample() {
+                        const results = [];
+
+                        // Each operation waits for the previous one
+                        const result1 = await simulateAsyncOperation('Task 1', 500);
+                        results.push(result1);
+
+                        const result2 = await simulateAsyncOperation('Task 2', 500);
+                        results.push(result2);
+
+                        const result3 = await simulateAsyncOperation('Task 3', 500);
+                        results.push(result3);
+
+                        return results;
+                    }
+
+                    try {
+                        const results = await sequentialExample();
+                        const totalTime = Date.now() - startTime;
+
+                        resultDiv.innerHTML = `
+                    <h4>✅ Sequential Execution Complete</h4>
+                    ${results.map((result, i) => `<p><strong>Task ${i + 1}:</strong> ${result}</p>`).join('')}
+                    <p><strong>Total time:</strong> ${totalTime}ms</p>
+                    <p><strong>Note:</strong> Tasks ran one after another</p>
+                `;
+                    } catch (error) {
+                        resultDiv.innerHTML = `
+                    <h4>❌ Sequential Execution Error</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+                    }
+                }
+
+                async function demonstrateParallel() {
+                    const resultDiv = document.getElementById('executionResult');
+                    resultDiv.innerHTML = `<div class="loading-indicator"></div> Running parallel operations...`;
+
+                    const startTime = Date.now();
+
+                    async function parallelExample() {
+                        // All operations start at the same time
+                        const results = await Promise.all([
+                            simulateAsyncOperation('Task 1', 500),
+                            simulateAsyncOperation('Task 2', 500),
+                            simulateAsyncOperation('Task 3', 500)
+                        ]);
+
+                        return results;
+                    }
+
+                    try {
+                        const results = await parallelExample();
+                        const totalTime = Date.now() - startTime;
+
+                        resultDiv.innerHTML = `
+                    <h4>✅ Parallel Execution Complete</h4>
+                    ${results.map((result, i) => `<p><strong>Task ${i + 1}:</strong> ${result}</p>`).join('')}
+                    <p><strong>Total time:</strong> ${totalTime}ms</p>
+                    <p><strong>Note:</strong> Tasks ran simultaneously</p>
+                `;
+                    } catch (error) {
+                        resultDiv.innerHTML = `
+                    <h4>❌ Parallel Execution Error</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+                    }
+                }
+
+                async function demonstrateDashboard() {
+                    const resultDiv = document.getElementById('realWorldResult');
+                    resultDiv.innerHTML = `<div class="loading-indicator"></div> Loading dashboard data...`;
+
+                    async function loadDashboard() {
+                        // Simulate user authentication
+                        const user = await simulateAsyncOperation('User Auth', 300);
+
+                        // Load dashboard data in parallel
+                        const [profile, notifications, settings] = await Promise.all([
+                            simulateAsyncOperation('Profile', 500),
+                            simulateAsyncOperation('Notifications', 400),
+                            simulateAsyncOperation('Settings', 300)
+                        ]);
+
+                        return { user, profile, notifications, settings };
+                    }
+
+                    try {
+                        const dashboard = await loadDashboard();
+                        resultDiv.innerHTML = `
+                    <h4>✅ Dashboard Loaded Successfully</h4>
+                    <p><strong>User:</strong> ${dashboard.user}</p>
+                    <p><strong>Profile:</strong> ${dashboard.profile}</p>
+                    <p><strong>Notifications:</strong> ${dashboard.notifications}</p>
+                    <p><strong>Settings:</strong> ${dashboard.settings}</p>
+                    <p><strong>Note:</strong> Auth ran first, then parallel data loading</p>
+                `;
+                    } catch (error) {
+                        resultDiv.innerHTML = `
+                    <h4>❌ Dashboard Loading Failed</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+                    }
+                }
+
+                async function demonstrateFileProcessing() {
+                    const resultDiv = document.getElementById('realWorldResult');
+                    resultDiv.innerHTML = `<div class="loading-indicator"></div> Processing files...`;
+
+                    async function processFiles() {
+                        const files = ['file1.txt', 'file2.txt', 'file3.txt'];
+                        const results = [];
+
+                        for (const file of files) {
+                            try {
+                                const content = await simulateAsyncOperation(`Read ${file}`, 200);
+                                const processed = await simulateAsyncOperation(`Process ${file}`, 300);
+                                results.push({ file, success: true, result: processed });
+                            } catch (error) {
+                                results.push({ file, success: false, error: error.message });
+                            }
+                        }
+
+                        return results;
+                    }
+
+                    try {
+                        const results = await processFiles();
+                        let html = '<h4>✅ File Processing Complete</h4>';
+                        results.forEach(result => {
+                            if (result.success) {
+                                html += `<p>✅ ${result.file}: ${result.result}</p>`;
+                            } else {
+                                html += `<p>❌ ${result.file}: ${result.error}</p>`;
+                            }
+                        });
+                        html += '<p><strong>Note:</strong> Files processed sequentially</p>';
+                        resultDiv.innerHTML = html;
+                    } catch (error) {
+                        resultDiv.innerHTML = `
+                    <h4>❌ File Processing Failed</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+                    }
+                }
+
+                async function demonstrateRetry() {
+                    const resultDiv = document.getElementById('errorResult');
+                    resultDiv.innerHTML = `<div class="loading-indicator"></div> Testing retry pattern...`;
+
+                    let attempts = 0;
+
+                    async function unreliableOperation() {
+                        attempts++;
+                        if (attempts < 3) {
+                            throw new Error(`Attempt ${attempts} failed`);
+                        }
+                        return `Success on attempt ${attempts}`;
+                    }
+
+                    async function retryOperation(fn, maxRetries = 3) {
+                        for (let i = 0; i < maxRetries; i++) {
+                            try {
+                                return await fn();
+                            } catch (error) {
+                                if (i === maxRetries - 1) throw error;
+                                await delay(500); // Wait before retry
+                            }
+                        }
+                    }
+
+                    try {
+                        const result = await retryOperation(unreliableOperation);
+                        resultDiv.innerHTML = `
+                    <h4>✅ Retry Pattern Success</h4>
+                    <p><strong>Result:</strong> ${result}</p>
+                    <p><strong>Total attempts:</strong> ${attempts}</p>
+                    <p><strong>Note:</strong> Operation succeeded after retries</p>
+                `;
+                    } catch (error) {
+                        resultDiv.innerHTML = `
+                    <h4>❌ Retry Pattern Failed</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>Attempts:</strong> ${attempts}</p>
+                `;
+                    }
+                }
+
+                async function demonstrateTimeout() {
+                    const resultDiv = document.getElementById('errorResult');
+                    resultDiv.innerHTML = `<div class="loading-indicator"></div> Testing timeout pattern...`;
+
+                    async function withTimeout(promise, ms) {
+                        const timeout = new Promise((_, reject) => {
+                            setTimeout(() => reject(new Error('Operation timed out')), ms);
+                        });
+
+                        return Promise.race([promise, timeout]);
+                    }
+
+                    try {
+                        // This will timeout after 1 second
+                        const result = await withTimeout(
+                            simulateAsyncOperation('Slow Operation', 2000),
+                            1000
+                        );
+
+                        resultDiv.innerHTML = `
+                    <h4>✅ Timeout Pattern Success</h4>
+                    <p><strong>Result:</strong> ${result}</p>
+                `;
+                    } catch (error) {
+                        resultDiv.innerHTML = `
+                    <h4>⏰ Timeout Pattern Triggered</h4>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>Note:</strong> Operation was cancelled after 1 second</p>
+                `;
+                    }
+                }
+
+                // Initialize with default demonstrations
+                document.addEventListener('DOMContentLoaded', function () {
+                    demonstrateBasicAsync();
+                    demonstrateBasicError();
+                    demonstrateSequential();
+                    demonstrateDashboard();
+                });
+            </script>
+</body>
+
+</html>

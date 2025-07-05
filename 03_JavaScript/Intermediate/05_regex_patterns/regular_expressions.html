@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regular Expressions - Pattern Matching Master Class</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            background: #f8f9fa;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #e74c3c;
+            font-size: 1.5rem;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .demo-area {
+            background: white;
+            border: 2px dashed #e74c3c;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            min-height: 100px;
+        }
+
+        .btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 0.25rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-success {
+            background: #27ae60;
+        }
+
+        .btn-success:hover {
+            background: #219a52;
+        }
+
+        .btn-warning {
+            background: #f39c12;
+        }
+
+        .btn-warning:hover {
+            background: #e67e22;
+        }
+
+        .btn-info {
+            background: #3498db;
+        }
+
+        .btn-info:hover {
+            background: #2980b9;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25);
+        }
+
+        .output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            margin: 1rem 0;
+            border-left: 4px solid #27ae60;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .tip {
+            background: #d4edda;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .warning {
+            background: #f8d7da;
+            border: 1px solid #e74c3c;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .regex-tester {
+            border: 2px solid #e74c3c;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            background: #fff;
+        }
+
+        .match-highlight {
+            background: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .no-match {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .table th,
+        .table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .table th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Regular Expressions</h1>
+            <p>Master Pattern Matching and Text Processing</p>
+        </div>
+
+        <div class="content">
+            <!-- RegEx Basics -->
+            <div class="section">
+                <h2>1. Regular Expression Fundamentals</h2>
+                <p>Regular expressions are patterns used to match character combinations in strings.</p>
+
+                <div class="code-block">// Creating Regular Expressions
+                    // Method 1: RegExp constructor
+                    const regex1 = new RegExp('hello', 'i'); // case-insensitive
+
+                    // Method 2: Literal notation (recommended)
+                    const regex2 = /hello/i;
+
+                    // Basic pattern matching
+                    const text = "Hello, World!";
+                    console.log(regex1.test(text)); // true
+                    console.log(regex2.exec(text)); // ["Hello", index: 0, input: "Hello, World!", groups: undefined]
+
+                    // String methods with regex
+                    console.log(text.match(/hello/i)); // ["Hello"]
+                    console.log(text.replace(/hello/i, 'Hi')); // "Hi, World!"
+                    console.log(text.search(/world/i)); // 7
+                    console.log(text.split(/,\s*/)); // ["Hello", "World!"]</div>
+
+                <div class="demo-area">
+                    <h3>Basic RegEx Demo</h3>
+                    <div class="grid">
+                        <div>
+                            <div class="form-group">
+                                <label for="basic-pattern">Pattern:</label>
+                                <input type="text" class="form-control" id="basic-pattern" value="hello"
+                                    placeholder="Enter regex pattern">
+                            </div>
+                            <div class="form-group">
+                                <label for="basic-text">Text to search:</label>
+                                <textarea class="form-control" id="basic-text" rows="3"
+                                    placeholder="Enter text to search">Hello, World! This is a hello world example.</textarea>
+                            </div>
+                            <button class="btn" onclick="testBasicRegex()">Test Pattern</button>
+                            <button class="btn btn-warning" onclick="clearBasicResults()">Clear</button>
+                        </div>
+                        <div>
+                            <div id="basic-results" class="output" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Character Classes -->
+            <div class="section">
+                <h2>2. Character Classes and Quantifiers</h2>
+                <p>Use character classes to match specific types of characters and quantifiers to specify how many.</p>
+
+                <div class="code-block">// Character Classes
+                    \d // Matches any digit (0-9)
+                    \w // Matches any word character (a-z, A-Z, 0-9, _)
+                    \s // Matches any whitespace character
+                    \D // Matches any non-digit
+                    \W // Matches any non-word character
+                    \S // Matches any non-whitespace character
+                    . // Matches any character except newline
+
+                    // Custom character classes
+                    [abc] // Matches a, b, or c
+                    [a-z] // Matches any lowercase letter
+                    [A-Z] // Matches any uppercase letter
+                    [0-9] // Matches any digit
+                    [^abc] // Matches anything except a, b, or c
+
+                    // Quantifiers
+                    * // 0 or more
+                    + // 1 or more
+                    ? // 0 or 1
+                    {n} // Exactly n times
+                    {n,} // n or more times
+                    {n,m} // Between n and m times
+
+                    // Examples
+                    const phoneRegex = /\d{3}-\d{3}-\d{4}/; // 123-456-7890
+                    const emailRegex = /\w+@\w+\.\w+/; // simple email
+                    const wordRegex = /\w+/g; // all words</div>
+
+                <div class="demo-area">
+                    <h3>Character Classes Demo</h3>
+                    <div class="grid">
+                        <div>
+                            <button class="btn" onclick="testDigits()">Test Digits (\d+)</button>
+                            <button class="btn" onclick="testWords()">Test Words (\w+)</button>
+                            <button class="btn" onclick="testEmail()">Test Email Pattern</button>
+                            <button class="btn" onclick="testPhone()">Test Phone Pattern</button>
+                        </div>
+                        <div>
+                            <div id="character-results" class="output" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Anchors and Boundaries -->
+            <div class="section">
+                <h2>3. Anchors and Word Boundaries</h2>
+                <p>Use anchors to match positions in the text rather than characters.</p>
+
+                <div class="code-block">// Anchors
+                    ^ // Start of string/line
+                    $ // End of string/line
+                    \b // Word boundary
+                    \B // Non-word boundary
+
+                    // Examples
+                    /^Hello/ // Matches "Hello" at start of string
+                    /world$/ // Matches "world" at end of string
+                    /\bcat\b/ // Matches "cat" as a whole word
+                    /\Bcat\B/ // Matches "cat" inside other words
+
+                    // Practical examples
+                    const startsWith = /^https?:\/\//; // URLs starting with http:// or https://
+                    const endsWith = /\.(jpg|png|gif)$/i; // Image file extensions
+                    const wholeWord = /\bJavaScript\b/; // "JavaScript" as complete word</div>
+
+                <div class="demo-area">
+                    <h3>Anchors Demo</h3>
+                    <div class="regex-tester">
+                        <div class="form-group">
+                            <label for="anchor-text">Test Text:</label>
+                            <textarea class="form-control" id="anchor-text" rows="4">Hello world!
+This is a JavaScript tutorial.
+JavaScript is everywhere.
+Learn JavaScript today.</textarea>
+                        </div>
+                        <div class="grid">
+                            <div>
+                                <button class="btn" onclick="testStartAnchor()">Test ^ (Start)</button>
+                                <button class="btn" onclick="testEndAnchor()">Test $ (End)</button>
+                            </div>
+                            <div>
+                                <button class="btn" onclick="testWordBoundary()">Test \b (Word Boundary)</button>
+                                <button class="btn btn-warning" onclick="clearAnchorResults()">Clear</button>
+                            </div>
+                        </div>
+                        <div id="anchor-results" class="output" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Groups and Capturing -->
+            <div class="section">
+                <h2>4. Groups and Capturing</h2>
+                <p>Use groups to capture parts of matches and apply operations to specific parts.</p>
+
+                <div class="code-block">// Capturing Groups
+                    (pattern) // Capturing group
+                    (?:pattern) // Non-capturing group
+                    (?&lt;name&gt;pattern) // Named capturing group
+
+                    // Examples
+                    const dateRegex = /(\d{4})-(\d{2})-(\d{2})/; // Captures year, month, day
+                    const match = "2023-12-25".match(dateRegex);
+                    console.log(match[0]); // "2023-12-25" (full match)
+                    console.log(match[1]); // "2023" (first group)
+                    console.log(match[2]); // "12" (second group)
+                    console.log(match[3]); // "25" (third group)
+
+                    // Named groups
+                    const namedDateRegex = /(?&lt;year&gt;\d{4})-(?&lt;month&gt;\d{2})-(?&lt;day&gt;\d{2})/;
+                    const namedMatch = "2023-12-25".match(namedDateRegex);
+                    console.log(namedMatch.groups.year); // "2023"
+                    console.log(namedMatch.groups.month); // "12"
+                    console.log(namedMatch.groups.day); // "25"
+
+                    // Backreferences
+                    const duplicateRegex = /(\w+)\s+\1/; // Matches duplicate words
+                    console.log(duplicateRegex.test("hello hello")); // true</div>
+
+                <div class="demo-area">
+                    <h3>Groups and Capturing Demo</h3>
+                    <div class="grid">
+                        <div>
+                            <div class="form-group">
+                                <label for="group-text">Test Text:</label>
+                                <textarea class="form-control" id="group-text" rows="4">Date: 2023-12-25
+Email: john.doe@example.com
+Phone: (555) 123-4567
+Time: 14:30:45</textarea>
+                            </div>
+                            <button class="btn" onclick="testDateGroups()">Extract Dates</button>
+                            <button class="btn" onclick="testEmailGroups()">Extract Email Parts</button>
+                            <button class="btn" onclick="testPhoneGroups()">Extract Phone Parts</button>
+                        </div>
+                        <div>
+                            <div id="groups-results" class="output" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lookahead and Lookbehind -->
+            <div class="section">
+                <h2>5. Lookahead and Lookbehind</h2>
+                <p>Advanced assertions that match based on what comes before or after a pattern.</p>
+
+                <div class="code-block">// Lookahead Assertions
+                    (?=pattern) // Positive lookahead
+                    (?!pattern) // Negative lookahead
+
+                    // Lookbehind Assertions (ES2018+)
+                    (?&lt;=pattern) // Positive lookbehind
+                    (?&lt;!pattern) // Negative lookbehind
+
+                    // Examples
+                    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+                    // Must contain: lowercase, uppercase, digit, special char, min 8 chars
+
+                    const notFollowedBy = /\d+(?!\d)/; // Numbers not followed by another digit
+                    const followedBy = /\d+(?=px)/; // Numbers followed by "px"
+
+                    // Lookbehind examples
+                    const afterDollar = /(?&lt;=\$)\d+/; // Numbers after dollar sign
+                    const notAfterDollar = /(?&lt;!\$)\d+/; // Numbers not after dollar sign</div>
+
+                <div class="demo-area">
+                    <h3>Lookahead/Lookbehind Demo</h3>
+                    <div class="grid">
+                        <div>
+                            <div class="form-group">
+                                <label for="password-input">Test Password:</label>
+                                <input type="text" class="form-control" id="password-input"
+                                    placeholder="Enter password to validate">
+                            </div>
+                            <button class="btn" onclick="validatePassword()">Validate Password</button>
+                            <button class="btn btn-info" onclick="testLookahead()">Test Lookahead Examples</button>
+                        </div>
+                        <div>
+                            <div id="lookahead-results" class="output" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Practical Examples -->
+            <div class="section">
+                <h2>6. Practical Applications</h2>
+                <p>Real-world examples of regular expressions in action.</p>
+
+                <div class="demo-area">
+                    <h3>RegEx Validator Tool</h3>
+                    <div class="grid">
+                        <div>
+                            <div class="form-group">
+                                <label for="validator-pattern">Regular Expression:</label>
+                                <input type="text" class="form-control" id="validator-pattern"
+                                    placeholder="Enter regex pattern">
+                            </div>
+                            <div class="form-group">
+                                <label for="validator-flags">Flags:</label>
+                                <input type="text" class="form-control" id="validator-flags"
+                                    placeholder="g, i, m, s, u, y">
+                            </div>
+                            <div class="form-group">
+                                <label for="validator-text">Test Text:</label>
+                                <textarea class="form-control" id="validator-text" rows="5"
+                                    placeholder="Enter text to test against pattern"></textarea>
+                            </div>
+                            <button class="btn" onclick="runValidator()">Test Pattern</button>
+                            <button class="btn btn-success" onclick="loadExample('email')">Load Email Example</button>
+                            <button class="btn btn-success" onclick="loadExample('phone')">Load Phone Example</button>
+                            <button class="btn btn-success" onclick="loadExample('url')">Load URL Example</button>
+                        </div>
+                        <div>
+                            <div id="validator-results" class="output" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Common Patterns -->
+            <div class="section">
+                <h2>7. Common Regular Expression Patterns</h2>
+                <p>A collection of frequently used patterns for validation and extraction.</p>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Pattern</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>/^\w+@\w+\.\w+$/</code></td>
+                            <td>Basic email validation</td>
+                            <td>user@example.com</td>
+                        </tr>
+                        <tr>
+                            <td><code>/^\d{3}-\d{3}-\d{4}$/</code></td>
+                            <td>US phone number</td>
+                            <td>123-456-7890</td>
+                        </tr>
+                        <tr>
+                            <td><code>/^https?:\/\/[\w\.-]+\.\w+/</code></td>
+                            <td>URL validation</td>
+                            <td>https://example.com</td>
+                        </tr>
+                        <tr>
+                            <td><code>/^\d{4}-\d{2}-\d{2}$/</code></td>
+                            <td>Date (YYYY-MM-DD)</td>
+                            <td>2023-12-25</td>
+                        </tr>
+                        <tr>
+                            <td><code>/^[A-Z]{2}\d{2}[A-Z]{2}$/</code></td>
+                            <td>License plate</td>
+                            <td>AB12CD</td>
+                        </tr>
+                        <tr>
+                            <td><code>/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/</code></td>
+                            <td>Hex color code</td>
+                            <td>#FF5733 or #F73</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="demo-area">
+                    <h3>Pattern Tester</h3>
+                    <button class="btn" onclick="testCommonPatterns()">Test All Common Patterns</button>
+                    <button class="btn btn-warning" onclick="clearCommonResults()">Clear</button>
+                    <div id="common-results" class="output" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Performance Tips -->
+            <div class="tip">
+                <h3>🚀 Performance Tips</h3>
+                <ul>
+                    <li><strong>Compile once, use many:</strong> Store regex patterns in variables for repeated use</li>
+                    <li><strong>Use specific character classes:</strong> \d is faster than [0-9]</li>
+                    <li><strong>Avoid excessive backtracking:</strong> Be careful with nested quantifiers</li>
+                    <li><strong>Use non-capturing groups:</strong> (?:pattern) when you don't need the capture</li>
+                    <li><strong>Anchor your patterns:</strong> Use ^ and $ to avoid unnecessary searching</li>
+                </ul>
+            </div>
+
+            <!-- Best Practices -->
+            <div class="highlight">
+                <h3>💡 Best Practices</h3>
+                <ul>
+                    <li><strong>Start simple:</strong> Build complex patterns incrementally</li>
+                    <li><strong>Test thoroughly:</strong> Use multiple test cases including edge cases</li>
+                    <li><strong>Comment complex patterns:</strong> Use the x flag for verbose patterns</li>
+                    <li><strong>Validate user input:</strong> Always sanitize data before processing</li>
+                    <li><strong>Consider alternatives:</strong> Sometimes string methods are simpler</li>
+                </ul>
+            </div>
+
+            <!-- Common Pitfalls -->
+            <div class="warning">
+                <h3>⚠️ Common Pitfalls</h3>
+                <ul>
+                    <li><strong>Catastrophic backtracking:</strong> Avoid patterns like (a+)+b</li>
+                    <li><strong>Greedy vs lazy matching:</strong> Understand the difference between + and +?</li>
+                    <li><strong>Escaping special characters:</strong> Remember to escape . [ ] { } ( ) * + ? ^ $ | \
+                    </li>
+                    <li><strong>Case sensitivity:</strong> Use the i flag for case-insensitive matching</li>
+                    <li><strong>Multiline matching:</strong> Use m flag for ^ and $ to match line boundaries</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Basic regex testing
+        function testBasicRegex() {
+            const pattern = document.getElementById('basic-pattern').value;
+            const text = document.getElementById('basic-text').value;
+            const results = document.getElementById('basic-results');
+
+            try {
+                const regex = new RegExp(pattern, 'gi');
+                const matches = text.match(regex);
+                const testResult = regex.test(text);
+
+                results.style.display = 'block';
+                results.innerHTML = `
+                    <div class="fade-in">
+                        <strong>Pattern:</strong> /${pattern}/gi<br>
+                        <strong>Test Result:</strong> ${testResult}<br>
+                        <strong>Matches:</strong> ${matches ? matches.join(', ') : 'None'}<br>
+                        <strong>Match Count:</strong> ${matches ? matches.length : 0}<br>
+                        <strong>Highlighted Text:</strong><br>
+                        ${highlightMatches(text, regex)}
+                    </div>
+                `;
+            } catch (error) {
+                results.style.display = 'block';
+                results.innerHTML = `<div class="no-match">Error: ${error.message}</div>`;
+            }
+        }
+
+        function highlightMatches(text, regex) {
+            return text.replace(regex, '<span class="match-highlight">$&</span>');
+        }
+
+        function clearBasicResults() {
+            document.getElementById('basic-results').style.display = 'none';
+        }
+
+        // Character classes testing
+        function testDigits() {
+            const text = "I have 123 apples and 456 oranges. Total: 579 fruits.";
+            const regex = /\d+/g;
+            const matches = text.match(regex);
+
+            showCharacterResults('Digits (\\d+)', regex, text, matches);
+        }
+
+        function testWords() {
+            const text = "Hello world! This is a test_string with numbers123 and symbols@#$";
+            const regex = /\w+/g;
+            const matches = text.match(regex);
+
+            showCharacterResults('Words (\\w+)', regex, text, matches);
+        }
+
+        function testEmail() {
+            const text = "Contact us at info@example.com or support@test.org for help.";
+            const regex = /\w+@\w+\.\w+/g;
+            const matches = text.match(regex);
+
+            showCharacterResults('Email Pattern', regex, text, matches);
+        }
+
+        function testPhone() {
+            const text = "Call us at 123-456-7890 or 987-654-3210 for assistance.";
+            const regex = /\d{3}-\d{3}-\d{4}/g;
+            const matches = text.match(regex);
+
+            showCharacterResults('Phone Pattern', regex, text, matches);
+        }
+
+        function showCharacterResults(title, regex, text, matches) {
+            const results = document.getElementById('character-results');
+            results.style.display = 'block';
+            results.innerHTML = `
+                <div class="fade-in">
+                    <strong>${title}:</strong> ${regex}<br>
+                    <strong>Text:</strong> ${text}<br>
+                    <strong>Matches:</strong> ${matches ? matches.join(', ') : 'None'}<br>
+                    <strong>Highlighted:</strong><br>
+                    ${highlightMatches(text, regex)}
+                </div>
+            `;
+        }
+
+        // Anchors testing
+        function testStartAnchor() {
+            const text = document.getElementById('anchor-text').value;
+            const regex = /^Hello/gm;
+            const matches = text.match(regex);
+
+            showAnchorResults('Start Anchor (^Hello)', regex, text, matches);
+        }
+
+        function testEndAnchor() {
+            const text = document.getElementById('anchor-text').value;
+            const regex = /today\.$/gm;
+            const matches = text.match(regex);
+
+            showAnchorResults('End Anchor (today.$)', regex, text, matches);
+        }
+
+        function testWordBoundary() {
+            const text = document.getElementById('anchor-text').value;
+            const regex = /\bJavaScript\b/g;
+            const matches = text.match(regex);
+
+            showAnchorResults('Word Boundary (\\bJavaScript\\b)', regex, text, matches);
+        }
+
+        function showAnchorResults(title, regex, text, matches) {
+            const results = document.getElementById('anchor-results');
+            results.style.display = 'block';
+            results.innerHTML = `
+                <div class="fade-in">
+                    <strong>${title}:</strong> ${regex}<br>
+                    <strong>Matches:</strong> ${matches ? matches.join(', ') : 'None'}<br>
+                    <strong>Highlighted:</strong><br>
+                    ${highlightMatches(text, regex)}
+                </div>
+            `;
+        }
+
+        function clearAnchorResults() {
+            document.getElementById('anchor-results').style.display = 'none';
+        }
+
+        // Groups testing
+        function testDateGroups() {
+            const text = document.getElementById('group-text').value;
+            const regex = /(\d{4})-(\d{2})-(\d{2})/g;
+            const matches = [...text.matchAll(regex)];
+
+            let result = '<strong>Date Groups:</strong><br>';
+            matches.forEach((match, index) => {
+                result += `Match ${index + 1}: Full="${match[0]}", Year="${match[1]}", Month="${match[2]}", Day="${match[3]}"<br>`;
+            });
+
+            showGroupResults(result);
+        }
+
+        function testEmailGroups() {
+            const text = document.getElementById('group-text').value;
+            const regex = /(\w+)\.(\w+)@(\w+)\.(\w+)/g;
+            const matches = [...text.matchAll(regex)];
+
+            let result = '<strong>Email Groups:</strong><br>';
+            matches.forEach((match, index) => {
+                result += `Match ${index + 1}: Full="${match[0]}", First="${match[1]}", Last="${match[2]}", Domain="${match[3]}", TLD="${match[4]}"<br>`;
+            });
+
+            showGroupResults(result);
+        }
+
+        function testPhoneGroups() {
+            const text = document.getElementById('group-text').value;
+            const regex = /\((\d{3})\)\s(\d{3})-(\d{4})/g;
+            const matches = [...text.matchAll(regex)];
+
+            let result = '<strong>Phone Groups:</strong><br>';
+            matches.forEach((match, index) => {
+                result += `Match ${index + 1}: Full="${match[0]}", Area="${match[1]}", Exchange="${match[2]}", Number="${match[3]}"<br>`;
+            });
+
+            showGroupResults(result);
+        }
+
+        function showGroupResults(content) {
+            const results = document.getElementById('groups-results');
+            results.style.display = 'block';
+            results.innerHTML = `<div class="fade-in">${content}</div>`;
+        }
+
+        // Lookahead testing
+        function validatePassword() {
+            const password = document.getElementById('password-input').value;
+            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+            const isValid = regex.test(password);
+            const checks = {
+                length: password.length >= 8,
+                lowercase: /[a-z]/.test(password),
+                uppercase: /[A-Z]/.test(password),
+                digit: /\d/.test(password),
+                special: /[@$!%*?&]/.test(password)
+            };
+
+            const results = document.getElementById('lookahead-results');
+            results.style.display = 'block';
+            results.innerHTML = `
+                <div class="fade-in">
+                    <strong>Password Validation:</strong><br>
+                    <strong>Password:</strong> ${password}<br>
+                    <strong>Valid:</strong> ${isValid ? '✅' : '❌'}<br>
+                    <strong>Requirements:</strong><br>
+                    • Length ≥ 8: ${checks.length ? '✅' : '❌'}<br>
+                    • Lowercase: ${checks.lowercase ? '✅' : '❌'}<br>
+                    • Uppercase: ${checks.uppercase ? '✅' : '❌'}<br>
+                    • Digit: ${checks.digit ? '✅' : '❌'}<br>
+                    • Special char: ${checks.special ? '✅' : '❌'}
+                </div>
+            `;
+        }
+
+        function testLookahead() {
+            const text = "Price: $50, Cost: 30px, Width: 100, Height: 200px";
+            const results = document.getElementById('lookahead-results');
+
+            const afterDollar = text.match(/(?<=\$)\d+/g);
+            const beforePx = text.match(/\d+(?=px)/g);
+            const notBeforePx = text.match(/\d+(?!px)/g);
+
+            results.style.display = 'block';
+            results.innerHTML = `
+                <div class="fade-in">
+                    <strong>Lookahead/Lookbehind Examples:</strong><br>
+                    <strong>Text:</strong> ${text}<br>
+                    <strong>After $:</strong> ${afterDollar ? afterDollar.join(', ') : 'None'}<br>
+                    <strong>Before px:</strong> ${beforePx ? beforePx.join(', ') : 'None'}<br>
+                    <strong>Not before px:</strong> ${notBeforePx ? notBeforePx.join(', ') : 'None'}
+                </div>
+            `;
+        }
+
+        // Validator tool
+        function runValidator() {
+            const pattern = document.getElementById('validator-pattern').value;
+            const flags = document.getElementById('validator-flags').value;
+            const text = document.getElementById('validator-text').value;
+            const results = document.getElementById('validator-results');
+
+            try {
+                const regex = new RegExp(pattern, flags);
+                const matches = flags.includes('g') ? [...text.matchAll(regex)] : text.match(regex);
+                const testResult = regex.test(text);
+
+                results.style.display = 'block';
+                results.innerHTML = `
+                    <div class="fade-in">
+                        <strong>Pattern:</strong> /${pattern}/${flags}<br>
+                        <strong>Test Result:</strong> ${testResult}<br>
+                        <strong>Matches:</strong> ${matches ? matches.length : 0}<br>
+                        <strong>Match Details:</strong><br>
+                        ${formatMatches(matches)}<br>
+                        <strong>Highlighted Text:</strong><br>
+                        ${highlightMatches(text, regex)}
+                    </div>
+                `;
+            } catch (error) {
+                results.style.display = 'block';
+                results.innerHTML = `<div class="no-match">Error: ${error.message}</div>`;
+            }
+        }
+
+        function formatMatches(matches) {
+            if (!matches || matches.length === 0) return 'None';
+
+            if (Array.isArray(matches[0])) {
+                return matches.map((match, index) =>
+                    `${index + 1}. "${match[0]}" at position ${match.index}`
+                ).join('<br>');
+            } else {
+                return `1. "${matches[0]}" at position ${matches.index}`;
+            }
+        }
+
+        function loadExample(type) {
+            const examples = {
+                email: {
+                    pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$',
+                    flags: 'i',
+                    text: 'Valid: user@example.com, test.email+tag@domain.co.uk\nInvalid: user@, @domain.com, user.domain.com'
+                },
+                phone: {
+                    pattern: '^\\(?\\d{3}\\)?[-\\s]?\\d{3}[-\\s]?\\d{4}$',
+                    flags: 'gm',
+                    text: '(555) 123-4567\n555-123-4567\n555 123 4567\n5551234567'
+                },
+                url: {
+                    pattern: '^https?:\\/\\/[\\w\\.-]+\\.[a-zA-Z]{2,}(?:\\/[\\w\\.-]*)*\\/?$',
+                    flags: 'i',
+                    text: 'https://example.com\nhttp://sub.domain.org/path\nhttps://site.com/path/to/page.html'
+                }
+            };
+
+            const example = examples[type];
+            document.getElementById('validator-pattern').value = example.pattern;
+            document.getElementById('validator-flags').value = example.flags;
+            document.getElementById('validator-text').value = example.text;
+        }
+
+        // Common patterns testing
+        function testCommonPatterns() {
+            const patterns = [
+                { name: 'Email', regex: /^\w+@\w+\.\w+$/, test: 'user@example.com' },
+                { name: 'Phone', regex: /^\d{3}-\d{3}-\d{4}$/, test: '123-456-7890' },
+                { name: 'URL', regex: /^https?:\/\/[\w\.-]+\.\w+/, test: 'https://example.com' },
+                { name: 'Date', regex: /^\d{4}-\d{2}-\d{2}$/, test: '2023-12-25' },
+                { name: 'License Plate', regex: /^[A-Z]{2}\d{2}[A-Z]{2}$/, test: 'AB12CD' },
+                { name: 'Hex Color', regex: /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, test: '#FF5733' }
+            ];
+
+            let result = '<strong>Common Patterns Test:</strong><br>';
+            patterns.forEach(pattern => {
+                const isValid = pattern.regex.test(pattern.test);
+                result += `${pattern.name}: ${pattern.regex} → ${isValid ? '✅' : '❌'} (${pattern.test})<br>`;
+            });
+
+            const results = document.getElementById('common-results');
+            results.style.display = 'block';
+            results.innerHTML = `<div class="fade-in">${result}</div>`;
+        }
+
+        function clearCommonResults() {
+            document.getElementById('common-results').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>

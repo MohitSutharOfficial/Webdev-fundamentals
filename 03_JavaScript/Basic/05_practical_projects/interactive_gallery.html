@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Image Gallery - JavaScript Project</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .controls {
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .control-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .control-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .control-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .control-btn.active {
+            background: #4c51bf;
+            transform: translateY(-2px);
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+            font-size: 1.2em;
+        }
+
+        .gallery-container {
+            padding: 40px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .gallery-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .gallery-item-info {
+            padding: 20px;
+        }
+
+        .gallery-item-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .gallery-item-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .gallery-item-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .lightbox-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .lightbox-info {
+            padding: 20px;
+            background: white;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .lightbox-nav:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .lightbox-prev {
+            left: 20px;
+        }
+
+        .lightbox-next {
+            right: 20px;
+        }
+
+        .concepts-section {
+            background: #f8f9fa;
+            padding: 40px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .concepts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .concept-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .concept-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .concept-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .code-example {
+            background: #1a1a1a;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e9ecef;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            min-width: 150px;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .control-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .concepts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🖼️ Interactive Image Gallery</h1>
+            <p>A dynamic gallery demonstrating JavaScript DOM manipulation, event handling, and modern web APIs</p>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <button class="control-btn active" onclick="showAll()">All Images</button>
+                <button class="control-btn" onclick="filterByCategory('nature')">Nature</button>
+                <button class="control-btn" onclick="filterByCategory('technology')">Technology</button>
+                <button class="control-btn" onclick="filterByCategory('architecture')">Architecture</button>
+                <button class="control-btn" onclick="filterByCategory('people')">People</button>
+                <button class="control-btn" onclick="toggleSlideshow()">Slideshow</button>
+            </div>
+
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search images..."
+                    oninput="searchImages()">
+                <span class="search-icon">🔍</span>
+            </div>
+        </div>
+
+        <div class="gallery-container">
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalImages">0</div>
+                    <div class="stat-label">Total Images</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="visibleImages">0</div>
+                    <div class="stat-label">Visible Images</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="viewedImages">0</div>
+                    <div class="stat-label">Viewed Images</div>
+                </div>
+            </div>
+
+            <div class="loading" id="loadingIndicator">
+                <div class="loading-spinner"></div>
+                <p>Loading amazing images...</p>
+            </div>
+
+            <div class="gallery-grid" id="galleryGrid"></div>
+        </div>
+
+        <div class="lightbox" id="lightbox">
+            <div class="lightbox-content">
+                <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+                <button class="lightbox-nav lightbox-prev" onclick="previousImage()">&laquo;</button>
+                <button class="lightbox-nav lightbox-next" onclick="nextImage()">&raquo;</button>
+                <img class="lightbox-image" id="lightboxImage" src="" alt="">
+                <div class="lightbox-info">
+                    <h3 id="lightboxTitle"></h3>
+                    <p id="lightboxDescription"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="concepts-section">
+            <h2>JavaScript Concepts Demonstrated</h2>
+            <div class="concepts-grid">
+                <div class="concept-card">
+                    <h3>1. Array Methods & Functional Programming</h3>
+                    <p>Using filter(), map(), and forEach() to manipulate image collections dynamically.</p>
+                    <div class="code-example">
+                        // Filter images by category
+                        const filtered = images.filter(img =>
+                        img.category === category
+                        );
+
+                        // Map images to HTML elements
+                        const imageElements = images.map(img =>
+                        createImageElement(img)
+                        );</div>
+                </div>
+
+                <div class="concept-card">
+                    <h3>2. Event Handling & Event Delegation</h3>
+                    <p>Handling clicks, keyboard events, and using event delegation for dynamic content.</p>
+                    <div class="code-example">
+                        // Event delegation for gallery items
+                        galleryGrid.addEventListener('click', (e) => {
+                        if (e.target.closest('.gallery-item')) {
+                        const index = e.target.dataset.index;
+                        openLightbox(index);
+                        }
+                        });
+
+                        // Keyboard navigation
+                        document.addEventListener('keydown', handleKeyPress);</div>
+                </div>
+
+                <div class="concept-card">
+                    <h3>3. DOM Manipulation & Template Literals</h3>
+                    <p>Creating dynamic HTML content using template literals and DOM methods.</p>
+                    <div class="code-example">
+                        function createImageElement(image, index) {
+                        return `
+                        &lt;div class="gallery-item" data-index="${index}"&gt;
+                        &lt;img src="${image.src}" alt="${image.title}"&gt;
+                        &lt;div class="gallery-item-info"&gt;
+                        &lt;h3&gt;${image.title}&lt;/h3&gt;
+                        &lt;p&gt;${image.description}&lt;/p&gt;
+                        &lt;/div&gt;
+                        &lt;/div&gt;
+                        `;
+                        }</div>
+                </div>
+
+                <div class="concept-card">
+                    <h3>4. Local Storage & Data Persistence</h3>
+                    <p>Storing user preferences and viewed images in local storage.</p>
+                    <div class="code-example">
+                        // Save viewed images
+                        function saveViewedImages() {
+                        localStorage.setItem('viewedImages',
+                        JSON.stringify(viewedImages)
+                        );
+                        }
+
+                        // Load preferences
+                        function loadUserPreferences() {
+                        const saved = localStorage.getItem('preferences');
+                        return saved ? JSON.parse(saved) : {};
+                        }</div>
+                </div>
+
+                <div class="concept-card">
+                    <h3>5. Asynchronous Programming</h3>
+                    <p>Using Promises and async/await for loading images and handling delays.</p>
+                    <div class="code-example">
+                        async function loadImages() {
+                        try {
+                        showLoading();
+                        const images = await fetchImages();
+                        await delay(1000); // Simulate loading
+                        renderImages(images);
+                        } catch (error) {
+                        showError('Failed to load images');
+                        } finally {
+                        hideLoading();
+                        }
+                        }</div>
+                </div>
+
+                <div class="concept-card">
+                    <h3>6. Object-Oriented Programming</h3>
+                    <p>Using classes to organize gallery functionality and image management.</p>
+                    <div class="code-example">
+                        class ImageGallery {
+                        constructor(container) {
+                        this.container = container;
+                        this.images = [];
+                        this.currentIndex = 0;
+                        this.viewedImages = new Set();
+                        }
+
+                        addImage(image) {
+                        this.images.push(image);
+                        this.render();
+                        }
+
+                        filterByCategory(category) {
+                        return this.images.filter(img =>
+                        img.category === category
+                        );
+                        }
+                        }</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Gallery data and state
+        let images = [];
+        let filteredImages = [];
+        let currentImageIndex = 0;
+        let viewedImages = new Set();
+        let slideshowInterval = null;
+        let isSlideshow = false;
+
+        // Sample image data (in a real app, this would come from an API)
+        const sampleImages = [
+            {
+                id: 1,
+                src: 'https://picsum.photos/400/300?random=1',
+                title: 'Mountain Landscape',
+                description: 'Beautiful mountain scenery with pristine lakes and forests.',
+                category: 'nature',
+                tags: ['mountains', 'landscape', 'nature', 'scenic']
+            },
+            {
+                id: 2,
+                src: 'https://picsum.photos/400/300?random=2',
+                title: 'Modern Architecture',
+                description: 'Contemporary building design with clean lines and glass.',
+                category: 'architecture',
+                tags: ['modern', 'building', 'architecture', 'design']
+            },
+            {
+                id: 3,
+                src: 'https://picsum.photos/400/300?random=3',
+                title: 'Technology Hub',
+                description: 'Cutting-edge technology and innovation center.',
+                category: 'technology',
+                tags: ['technology', 'innovation', 'digital', 'modern']
+            },
+            {
+                id: 4,
+                src: 'https://picsum.photos/400/300?random=4',
+                title: 'Forest Path',
+                description: 'Serene walking path through dense woodland.',
+                category: 'nature',
+                tags: ['forest', 'path', 'trees', 'peaceful']
+            },
+            {
+                id: 5,
+                src: 'https://picsum.photos/400/300?random=5',
+                title: 'City Skyline',
+                description: 'Impressive urban skyline at golden hour.',
+                category: 'architecture',
+                tags: ['city', 'skyline', 'urban', 'buildings']
+            },
+            {
+                id: 6,
+                src: 'https://picsum.photos/400/300?random=6',
+                title: 'Portrait Session',
+                description: 'Professional portrait photography in natural light.',
+                category: 'people',
+                tags: ['portrait', 'people', 'photography', 'professional']
+            },
+            {
+                id: 7,
+                src: 'https://picsum.photos/400/300?random=7',
+                title: 'Ocean Waves',
+                description: 'Powerful ocean waves crashing on rocky shore.',
+                category: 'nature',
+                tags: ['ocean', 'waves', 'water', 'coastal']
+            },
+            {
+                id: 8,
+                src: 'https://picsum.photos/400/300?random=8',
+                title: 'Smart Device',
+                description: 'Latest smartphone with advanced features.',
+                category: 'technology',
+                tags: ['smartphone', 'device', 'technology', 'mobile']
+            },
+            {
+                id: 9,
+                src: 'https://picsum.photos/400/300?random=9',
+                title: 'Historic Building',
+                description: 'Beautiful historic architecture with ornate details.',
+                category: 'architecture',
+                tags: ['historic', 'ornate', 'classical', 'heritage']
+            },
+            {
+                id: 10,
+                src: 'https://picsum.photos/400/300?random=10',
+                title: 'Team Meeting',
+                description: 'Collaborative team working on creative projects.',
+                category: 'people',
+                tags: ['team', 'collaboration', 'work', 'creative']
+            },
+            {
+                id: 11,
+                src: 'https://picsum.photos/400/300?random=11',
+                title: 'Desert Sunset',
+                description: 'Stunning sunset over vast desert landscape.',
+                category: 'nature',
+                tags: ['desert', 'sunset', 'landscape', 'dramatic']
+            },
+            {
+                id: 12,
+                src: 'https://picsum.photos/400/300?random=12',
+                title: 'Data Center',
+                description: 'High-tech data center with server infrastructure.',
+                category: 'technology',
+                tags: ['datacenter', 'servers', 'infrastructure', 'computing']
+            }
+        ];
+
+        // DOM elements
+        const galleryGrid = document.getElementById('galleryGrid');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImage = document.getElementById('lightboxImage');
+        const lightboxTitle = document.getElementById('lightboxTitle');
+        const lightboxDescription = document.getElementById('lightboxDescription');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const searchInput = document.getElementById('searchInput');
+        const totalImagesEl = document.getElementById('totalImages');
+        const visibleImagesEl = document.getElementById('visibleImages');
+        const viewedImagesEl = document.getElementById('viewedImages');
+
+        // Initialize gallery
+        async function initializeGallery() {
+            console.log('🖼️ Initializing Interactive Gallery...');
+
+            try {
+                showLoading();
+                await loadImages();
+                loadUserPreferences();
+                setupEventListeners();
+
+                console.log('✅ Gallery initialized successfully!');
+            } catch (error) {
+                console.error('❌ Error initializing gallery:', error);
+                showError('Failed to initialize gallery');
+            }
+        }
+
+        // Load images (simulating API call)
+        async function loadImages() {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    images = [...sampleImages];
+                    filteredImages = [...images];
+                    renderImages();
+                    updateStats();
+                    hideLoading();
+                    resolve(images);
+                }, 1500);
+            });
+        }
+
+        // Render images to gallery
+        function renderImages() {
+            if (filteredImages.length === 0) {
+                galleryGrid.innerHTML = '<p style="text-align: center; color: #666; grid-column: 1 / -1;">No images found matching your criteria.</p>';
+                return;
+            }
+
+            const imageElements = filteredImages.map((image, index) => {
+                return createImageElement(image, index);
+            }).join('');
+
+            galleryGrid.innerHTML = imageElements;
+
+            // Add click handlers for images
+            setupImageClickHandlers();
+        }
+
+        // Create individual image element
+        function createImageElement(image, index) {
+            const tagsHtml = image.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+
+            return `
+                <div class="gallery-item" data-index="${index}" data-id="${image.id}">
+                    <img src="${image.src}" alt="${image.title}" loading="lazy">
+                    <div class="gallery-item-info">
+                        <div class="gallery-item-title">${image.title}</div>
+                        <div class="gallery-item-description">${image.description}</div>
+                        <div class="gallery-item-tags">
+                            ${tagsHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Setup image click handlers
+        function setupImageClickHandlers() {
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            galleryItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    const index = parseInt(e.currentTarget.dataset.index);
+                    const imageId = parseInt(e.currentTarget.dataset.id);
+                    openLightbox(index);
+                    markAsViewed(imageId);
+                });
+            });
+        }
+
+        // Filter functions
+        function showAll() {
+            filteredImages = [...images];
+            renderImages();
+            updateStats();
+            updateActiveButton(event.target);
+        }
+
+        function filterByCategory(category) {
+            filteredImages = images.filter(image => image.category === category);
+            renderImages();
+            updateStats();
+            updateActiveButton(event.target);
+        }
+
+        function updateActiveButton(activeButton) {
+            document.querySelectorAll('.control-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            activeButton.classList.add('active');
+        }
+
+        // Search functionality
+        function searchImages() {
+            const searchTerm = searchInput.value.toLowerCase();
+
+            if (searchTerm === '') {
+                filteredImages = [...images];
+            } else {
+                filteredImages = images.filter(image => {
+                    return image.title.toLowerCase().includes(searchTerm) ||
+                        image.description.toLowerCase().includes(searchTerm) ||
+                        image.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+                });
+            }
+
+            renderImages();
+            updateStats();
+        }
+
+        // Lightbox functionality
+        function openLightbox(index) {
+            currentImageIndex = index;
+            const image = filteredImages[index];
+
+            lightboxImage.src = image.src;
+            lightboxImage.alt = image.title;
+            lightboxTitle.textContent = image.title;
+            lightboxDescription.textContent = image.description;
+
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            // Add keyboard navigation
+            document.addEventListener('keydown', handleLightboxKeyboard);
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            document.removeEventListener('keydown', handleLightboxKeyboard);
+        }
+
+        function nextImage() {
+            if (currentImageIndex < filteredImages.length - 1) {
+                currentImageIndex++;
+                const image = filteredImages[currentImageIndex];
+                lightboxImage.src = image.src;
+                lightboxTitle.textContent = image.title;
+                lightboxDescription.textContent = image.description;
+                markAsViewed(image.id);
+            }
+        }
+
+        function previousImage() {
+            if (currentImageIndex > 0) {
+                currentImageIndex--;
+                const image = filteredImages[currentImageIndex];
+                lightboxImage.src = image.src;
+                lightboxTitle.textContent = image.title;
+                lightboxDescription.textContent = image.description;
+                markAsViewed(image.id);
+            }
+        }
+
+        function handleLightboxKeyboard(e) {
+            switch (e.key) {
+                case 'Escape':
+                    closeLightbox();
+                    break;
+                case 'ArrowRight':
+                    nextImage();
+                    break;
+                case 'ArrowLeft':
+                    previousImage();
+                    break;
+            }
+        }
+
+        // Slideshow functionality
+        function toggleSlideshow() {
+            if (isSlideshow) {
+                stopSlideshow();
+            } else {
+                startSlideshow();
+            }
+        }
+
+        function startSlideshow() {
+            isSlideshow = true;
+            currentImageIndex = 0;
+            openLightbox(currentImageIndex);
+
+            slideshowInterval = setInterval(() => {
+                if (currentImageIndex < filteredImages.length - 1) {
+                    nextImage();
+                } else {
+                    currentImageIndex = 0;
+                    const image = filteredImages[currentImageIndex];
+                    lightboxImage.src = image.src;
+                    lightboxTitle.textContent = image.title;
+                    lightboxDescription.textContent = image.description;
+                }
+            }, 3000);
+        }
+
+        function stopSlideshow() {
+            isSlideshow = false;
+            if (slideshowInterval) {
+                clearInterval(slideshowInterval);
+                slideshowInterval = null;
+            }
+        }
+
+        // User preferences and viewed images
+        function markAsViewed(imageId) {
+            viewedImages.add(imageId);
+            updateStats();
+            saveViewedImages();
+        }
+
+        function saveViewedImages() {
+            try {
+                localStorage.setItem('galleryViewedImages', JSON.stringify([...viewedImages]));
+            } catch (error) {
+                console.error('Error saving viewed images:', error);
+            }
+        }
+
+        function loadUserPreferences() {
+            try {
+                const saved = localStorage.getItem('galleryViewedImages');
+                if (saved) {
+                    const viewedArray = JSON.parse(saved);
+                    viewedImages = new Set(viewedArray);
+                }
+            } catch (error) {
+                console.error('Error loading user preferences:', error);
+            }
+        }
+
+        // Statistics
+        function updateStats() {
+            totalImagesEl.textContent = images.length;
+            visibleImagesEl.textContent = filteredImages.length;
+            viewedImagesEl.textContent = viewedImages.size;
+        }
+
+        // Loading states
+        function showLoading() {
+            loadingIndicator.style.display = 'block';
+            galleryGrid.style.display = 'none';
+        }
+
+        function hideLoading() {
+            loadingIndicator.style.display = 'none';
+            galleryGrid.style.display = 'grid';
+        }
+
+        function showError(message) {
+            galleryGrid.innerHTML = `
+                <div style="text-align: center; color: #dc3545; grid-column: 1 / -1;">
+                    <h3>Error</h3>
+                    <p>${message}</p>
+                </div>
+            `;
+        }
+
+        // Event listeners
+        function setupEventListeners() {
+            // Close lightbox when clicking outside
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox) {
+                    closeLightbox();
+                }
+            });
+
+            // Search input with debounce
+            let searchTimeout;
+            searchInput.addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(searchImages, 300);
+            });
+
+            // Intersection Observer for lazy loading
+            const imageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        if (img.dataset.src) {
+                            img.src = img.dataset.src;
+                            img.removeAttribute('data-src');
+                            imageObserver.unobserve(img);
+                        }
+                    }
+                });
+            });
+
+            // Observe all images for lazy loading
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+
+        // Gallery class demonstration (OOP approach)
+        class AdvancedGallery {
+            constructor(container, options = {}) {
+                this.container = container;
+                this.options = {
+                    autoplay: false,
+                    interval: 3000,
+                    showThumbnails: true,
+                    enableKeyboard: true,
+                    ...options
+                };
+                this.images = [];
+                this.currentIndex = 0;
+                this.isPlaying = false;
+                this.init();
+            }
+
+            init() {
+                this.createElements();
+                this.bindEvents();
+                console.log('Advanced Gallery initialized');
+            }
+
+            addImage(image) {
+                this.images.push(image);
+                this.render();
+            }
+
+            removeImage(id) {
+                this.images = this.images.filter(img => img.id !== id);
+                this.render();
+            }
+
+            play() {
+                if (!this.isPlaying) {
+                    this.isPlaying = true;
+                    this.interval = setInterval(() => {
+                        this.next();
+                    }, this.options.interval);
+                }
+            }
+
+            pause() {
+                if (this.isPlaying) {
+                    this.isPlaying = false;
+                    clearInterval(this.interval);
+                }
+            }
+
+            next() {
+                this.currentIndex = (this.currentIndex + 1) % this.images.length;
+                this.showImage(this.currentIndex);
+            }
+
+            previous() {
+                this.currentIndex = this.currentIndex > 0 ? this.currentIndex - 1 : this.images.length - 1;
+                this.showImage(this.currentIndex);
+            }
+
+            showImage(index) {
+                if (this.images[index]) {
+                    this.currentIndex = index;
+                    // Implementation for showing image
+                    console.log(`Showing image ${index}: ${this.images[index].title}`);
+                }
+            }
+
+            createElements() {
+                // Create gallery DOM structure
+                this.container.innerHTML = `
+                    <div class="advanced-gallery">
+                        <div class="gallery-main"></div>
+                        <div class="gallery-thumbnails"></div>
+                        <div class="gallery-controls"></div>
+                    </div>
+                `;
+            }
+
+            bindEvents() {
+                if (this.options.enableKeyboard) {
+                    document.addEventListener('keydown', (e) => {
+                        if (e.key === 'ArrowRight') this.next();
+                        if (e.key === 'ArrowLeft') this.previous();
+                        if (e.key === ' ') {
+                            e.preventDefault();
+                            this.isPlaying ? this.pause() : this.play();
+                        }
+                    });
+                }
+            }
+
+            render() {
+                // Render gallery images
+                console.log(`Rendering ${this.images.length} images`);
+            }
+        }
+
+        // Utility functions
+        const utils = {
+            debounce: (func, wait) => {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            },
+
+            throttle: (func, limit) => {
+                let lastFunc;
+                let lastRan;
+                return function (...args) {
+                    if (!lastRan) {
+                        func(...args);
+                        lastRan = Date.now();
+                    } else {
+                        clearTimeout(lastFunc);
+                        lastFunc = setTimeout(() => {
+                            if ((Date.now() - lastRan) >= limit) {
+                                func(...args);
+                                lastRan = Date.now();
+                            }
+                        }, limit - (Date.now() - lastRan));
+                    }
+                };
+            },
+
+            shuffle: (array) => {
+                const shuffled = [...array];
+                for (let i = shuffled.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                }
+                return shuffled;
+            },
+
+            createImageUrl: (width, height, category) => {
+                return `https://picsum.photos/${width}/${height}?random=${Date.now()}`;
+            }
+        };
+
+        // Initialize gallery when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initializeGallery);
+
+        // Performance monitoring
+        const performanceMonitor = {
+            startTime: Date.now(),
+
+            logLoadTime: () => {
+                const loadTime = Date.now() - performanceMonitor.startTime;
+                console.log(`📊 Gallery loaded in ${loadTime}ms`);
+            },
+
+            measureFunction: (fn, name) => {
+                return function (...args) {
+                    const start = performance.now();
+                    const result = fn.apply(this, args);
+                    const end = performance.now();
+                    console.log(`⏱️ ${name} took ${end - start}ms`);
+                    return result;
+                };
+            }
+        };
+
+        // Log performance when gallery loads
+        window.addEventListener('load', performanceMonitor.logLoadTime);
+
+        console.log('🖼️ Interactive Gallery loaded successfully!');
+        console.log('📚 This gallery demonstrates:');
+        console.log('• Dynamic DOM manipulation and template literals');
+        console.log('• Event handling and event delegation');
+        console.log('• Array methods and functional programming');
+        console.log('• Local storage for data persistence');
+        console.log('• Asynchronous programming with Promises');
+        console.log('• Object-oriented programming with classes');
+        console.log('• Modern JavaScript features (ES6+)');
+        console.log('• Performance optimization techniques');
+        console.log('• Responsive design and mobile support');
+        console.log('• Accessibility features and keyboard navigation');
+    </script>
+</body>
+
+</html>

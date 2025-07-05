@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Content Modification - JavaScript Fundamentals</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 40px;
+        }
+
+        .demo-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #e9ecef;
+        }
+
+        .demo-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .control-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .control-group input,
+        .control-group select,
+        .control-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+        }
+
+        .control-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .control-group input:focus,
+        .control-group select:focus,
+        .control-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .demo-elements {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            min-height: 400px;
+            border: 2px dashed #e9ecef;
+        }
+
+        .demo-elements h3 {
+            color: #333;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+
+        .target-element {
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .target-element:hover {
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+        }
+
+        .modified {
+            background: #d4edda !important;
+            border-color: #28a745 !important;
+            transform: scale(1.02);
+        }
+
+        .error {
+            background: #f8d7da !important;
+            border-color: #dc3545 !important;
+        }
+
+        .highlighted {
+            background: #fff3cd !important;
+            border-color: #ffc107 !important;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+        }
+
+        .output {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 15px;
+            border: 1px solid #333;
+        }
+
+        .concept-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .concept-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .concept-card p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .code-example {
+            background: #1a1a1a;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .method-tabs {
+            display: flex;
+            background: #e9ecef;
+            border-radius: 10px;
+            padding: 5px;
+            margin-bottom: 20px;
+        }
+
+        .method-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            background: transparent;
+            border: none;
+            font-size: 0.9em;
+        }
+
+        .method-tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .method-tab:hover {
+            background: #5a67d8;
+            color: white;
+        }
+
+        .method-content {
+            display: none;
+        }
+
+        .method-content.active {
+            display: block;
+        }
+
+        .attribute-builder {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .attribute-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .attribute-item {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .style-demo {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 1px solid #e9ecef;
+        }
+
+        .style-demo h4 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .style-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .style-control {
+            text-align: center;
+        }
+
+        .style-control input[type="range"] {
+            width: 100%;
+        }
+
+        .style-control label {
+            display: block;
+            font-size: 0.8em;
+            margin-bottom: 5px;
+        }
+
+        .dynamic-list {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 1px solid #e9ecef;
+        }
+
+        .list-item {
+            padding: 10px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-item button {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        .list-item button:hover {
+            background: #c82333;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .method-tabs {
+                flex-direction: column;
+            }
+
+            .style-controls {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✏️ DOM Content Modification</h1>
+            <p>Learn to dynamically modify HTML content, attributes, and styles with JavaScript</p>
+        </div>
+
+        <div class="main-content">
+            <div class="demo-section">
+                <h2>Interactive Demo</h2>
+
+                <div class="method-tabs">
+                    <button class="method-tab active" onclick="showMethodTab('content')">Content</button>
+                    <button class="method-tab" onclick="showMethodTab('attributes')">Attributes</button>
+                    <button class="method-tab" onclick="showMethodTab('styles')">Styles</button>
+                    <button class="method-tab" onclick="showMethodTab('classes')">Classes</button>
+                </div>
+
+                <div id="content-tab" class="method-content active">
+                    <div class="control-panel">
+                        <div class="control-group">
+                            <label for="targetSelector">Target Element:</label>
+                            <select id="targetSelector">
+                                <option value="#text-target">Text Element</option>
+                                <option value="#html-target">HTML Element</option>
+                                <option value="#input-target">Input Element</option>
+                                <option value="#list-target">List Element</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="contentType">Content Type:</label>
+                            <select id="contentType">
+                                <option value="textContent">Text Content</option>
+                                <option value="innerHTML">Inner HTML</option>
+                                <option value="outerHTML">Outer HTML</option>
+                                <option value="innerText">Inner Text</option>
+                                <option value="value">Value (for inputs)</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="newContent">New Content:</label>
+                            <textarea id="newContent" placeholder="Enter new content here..."></textarea>
+                        </div>
+
+                        <button class="btn" onclick="modifyContent()">Modify Content</button>
+                        <button class="btn btn-secondary" onclick="getContent()">Get Content</button>
+                        <button class="btn btn-danger" onclick="resetContent()">Reset</button>
+                    </div>
+                </div>
+
+                <div id="attributes-tab" class="method-content">
+                    <div class="control-panel">
+                        <div class="control-group">
+                            <label for="attrTarget">Target Element:</label>
+                            <select id="attrTarget">
+                                <option value="#attr-target">Demo Element</option>
+                                <option value="#link-target">Link Element</option>
+                                <option value="#img-target">Image Element</option>
+                                <option value="#input-target">Input Element</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="attrName">Attribute Name:</label>
+                            <input type="text" id="attrName" placeholder="e.g., class, id, data-custom">
+                        </div>
+
+                        <div class="control-group">
+                            <label for="attrValue">Attribute Value:</label>
+                            <input type="text" id="attrValue" placeholder="Enter attribute value">
+                        </div>
+
+                        <button class="btn" onclick="setAttribute()">Set Attribute</button>
+                        <button class="btn btn-secondary" onclick="getAttribute()">Get Attribute</button>
+                        <button class="btn btn-danger" onclick="removeAttribute()">Remove Attribute</button>
+                    </div>
+                </div>
+
+                <div id="styles-tab" class="method-content">
+                    <div class="control-panel">
+                        <div class="control-group">
+                            <label for="styleTarget">Target Element:</label>
+                            <select id="styleTarget">
+                                <option value="#style-target">Style Demo Element</option>
+                                <option value="#text-target">Text Element</option>
+                                <option value="#html-target">HTML Element</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="styleProperty">CSS Property:</label>
+                            <input type="text" id="styleProperty" placeholder="e.g., color, backgroundColor, fontSize">
+                        </div>
+
+                        <div class="control-group">
+                            <label for="styleValue">CSS Value:</label>
+                            <input type="text" id="styleValue" placeholder="e.g., red, #ff0000, 16px">
+                        </div>
+
+                        <button class="btn" onclick="setStyle()">Set Style</button>
+                        <button class="btn btn-secondary" onclick="getStyle()">Get Style</button>
+                        <button class="btn btn-danger" onclick="removeStyle()">Remove Style</button>
+                    </div>
+                </div>
+
+                <div id="classes-tab" class="method-content">
+                    <div class="control-panel">
+                        <div class="control-group">
+                            <label for="classTarget">Target Element:</label>
+                            <select id="classTarget">
+                                <option value="#class-target">Class Demo Element</option>
+                                <option value="#text-target">Text Element</option>
+                                <option value="#html-target">HTML Element</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="className">Class Name:</label>
+                            <input type="text" id="className" placeholder="e.g., highlighted, active, custom-class">
+                        </div>
+
+                        <button class="btn" onclick="addClass()">Add Class</button>
+                        <button class="btn btn-secondary" onclick="removeClass()">Remove Class</button>
+                        <button class="btn" onclick="toggleClass()">Toggle Class</button>
+                        <button class="btn btn-secondary" onclick="hasClass()">Check Class</button>
+                    </div>
+                </div>
+
+                <div class="demo-elements" id="demoElements">
+                    <h3>Target Elements</h3>
+
+                    <div class="target-element" id="text-target">
+                        <strong>Text Target:</strong> This is sample text content that can be modified.
+                    </div>
+
+                    <div class="target-element" id="html-target">
+                        <strong>HTML Target:</strong> <em>This element contains HTML</em> <span
+                            style="color: blue;">formatting</span>.
+                    </div>
+
+                    <div class="target-element" id="input-target">
+                        <strong>Input Target:</strong> <input type="text" value="Sample input value"
+                            style="margin-left: 10px;">
+                    </div>
+
+                    <div class="target-element" id="list-target">
+                        <strong>List Target:</strong>
+                        <ul>
+                            <li>Item 1</li>
+                            <li>Item 2</li>
+                            <li>Item 3</li>
+                        </ul>
+                    </div>
+
+                    <div class="target-element" id="attr-target" data-original="true">
+                        <strong>Attribute Target:</strong> Element with custom attributes.
+                    </div>
+
+                    <div class="target-element" id="link-target">
+                        <strong>Link Target:</strong> <a href="#" id="demo-link">Sample Link</a>
+                    </div>
+
+                    <div class="target-element" id="img-target">
+                        <strong>Image Target:</strong> <img src="https://via.placeholder.com/100x50" alt="Sample Image"
+                            style="margin-left: 10px;">
+                    </div>
+
+                    <div class="target-element" id="style-target">
+                        <strong>Style Target:</strong> Element for style modifications.
+                    </div>
+
+                    <div class="target-element" id="class-target" class="original-class">
+                        <strong>Class Target:</strong> Element for class modifications.
+                    </div>
+                </div>
+
+                <div class="output" id="output">
+                    Welcome to DOM Content Modification Demo!
+                    Select a method tab and start modifying elements.
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h2>Advanced Features</h2>
+
+                <div class="style-demo">
+                    <h4>Interactive Style Controls</h4>
+                    <div class="style-controls">
+                        <div class="style-control">
+                            <label>Font Size</label>
+                            <input type="range" min="12" max="30" value="16"
+                                oninput="updateStyleDemo('fontSize', this.value + 'px')">
+                        </div>
+                        <div class="style-control">
+                            <label>Opacity</label>
+                            <input type="range" min="0" max="1" step="0.1" value="1"
+                                oninput="updateStyleDemo('opacity', this.value)">
+                        </div>
+                        <div class="style-control">
+                            <label>Border Radius</label>
+                            <input type="range" min="0" max="20" value="8"
+                                oninput="updateStyleDemo('borderRadius', this.value + 'px')">
+                        </div>
+                        <div class="style-control">
+                            <label>Padding</label>
+                            <input type="range" min="5" max="30" value="15"
+                                oninput="updateStyleDemo('padding', this.value + 'px')">
+                        </div>
+                    </div>
+                    <div id="style-demo-target" class="target-element">
+                        This element's styles are controlled by the sliders above.
+                    </div>
+                </div>
+
+                <div class="attribute-builder">
+                    <h4>Common Attributes</h4>
+                    <div class="attribute-list">
+                        <div class="attribute-item">id="unique-id"</div>
+                        <div class="attribute-item">class="class-name"</div>
+                        <div class="attribute-item">data-custom="value"</div>
+                        <div class="attribute-item">title="tooltip text"</div>
+                        <div class="attribute-item">style="color: red;"</div>
+                        <div class="attribute-item">href="https://example.com"</div>
+                        <div class="attribute-item">src="image.jpg"</div>
+                        <div class="attribute-item">alt="alternative text"</div>
+                        <div class="attribute-item">disabled</div>
+                        <div class="attribute-item">hidden</div>
+                        <div class="attribute-item">required</div>
+                        <div class="attribute-item">placeholder="hint text"</div>
+                    </div>
+                </div>
+
+                <div class="dynamic-list">
+                    <h4>Dynamic List Management</h4>
+                    <div class="control-group">
+                        <input type="text" id="listItemInput" placeholder="Enter new item...">
+                        <button class="btn" onclick="addListItem()">Add Item</button>
+                        <button class="btn btn-danger" onclick="clearList()">Clear All</button>
+                    </div>
+                    <div id="dynamicList"></div>
+                </div>
+            </div>
+        </div>
+
+        <div style="padding: 40px; background: #f8f9fa;">
+            <h2>Key Concepts</h2>
+            <div class="concept-card">
+                <h3>1. Content Modification Methods</h3>
+                <p>Different ways to modify element content:</p>
+                <div class="code-example">
+                    // Text content (safe from XSS)
+                    element.textContent = 'Safe text content';
+
+                    // HTML content (can execute scripts)
+                    element.innerHTML = '&lt;strong&gt;Bold text&lt;/strong&gt;';
+
+                    // Full element replacement
+                    element.outerHTML = '&lt;div class="new"&gt;New element&lt;/div&gt;';
+
+                    // Visible text only
+                    element.innerText = 'Visible text only';
+
+                    // Form element values
+                    inputElement.value = 'New input value';</div>
+            </div>
+
+            <div class="concept-card">
+                <h3>2. Attribute Manipulation</h3>
+                <p>Working with element attributes:</p>
+                <div class="code-example">
+                    // Set attribute
+                    element.setAttribute('data-id', '123');
+
+                    // Get attribute
+                    const value = element.getAttribute('data-id');
+
+                    // Remove attribute
+                    element.removeAttribute('data-id');
+
+                    // Check if attribute exists
+                    if (element.hasAttribute('data-id')) {
+                    console.log('Attribute exists');
+                    }
+
+                    // Direct property access
+                    element.id = 'new-id';
+                    element.className = 'new-class';
+                    element.title = 'Tooltip text';</div>
+            </div>
+
+            <div class="concept-card">
+                <h3>3. Style Manipulation</h3>
+                <p>Modifying element styles:</p>
+                <div class="code-example">
+                    // Individual style properties
+                    element.style.color = 'red';
+                    element.style.backgroundColor = '#f0f0f0';
+                    element.style.fontSize = '18px';
+
+                    // Multiple styles at once
+                    element.style.cssText = 'color: red; background: yellow;';
+
+                    // Getting computed styles
+                    const computedStyle = getComputedStyle(element);
+                    const color = computedStyle.color;
+
+                    // Removing styles
+                    element.style.removeProperty('color');
+                    element.style.color = ''; // Alternative method</div>
+            </div>
+
+            <div class="concept-card">
+                <h3>4. Class Management</h3>
+                <p>Working with CSS classes:</p>
+                <div class="code-example">
+                    // Add class
+                    element.classList.add('new-class');
+
+                    // Remove class
+                    element.classList.remove('old-class');
+
+                    // Toggle class
+                    element.classList.toggle('active');
+
+                    // Check if class exists
+                    if (element.classList.contains('active')) {
+                    console.log('Element has active class');
+                    }
+
+                    // Replace class
+                    element.classList.replace('old-class', 'new-class');
+
+                    // Multiple classes
+                    element.classList.add('class1', 'class2', 'class3');</div>
+            </div>
+
+            <div class="concept-card">
+                <h3>5. Security Considerations</h3>
+                <p>Always be careful with user input:</p>
+                <div class="code-example">
+                    // UNSAFE - Can execute malicious scripts
+                    element.innerHTML = userInput;
+
+                    // SAFE - Treats as plain text
+                    element.textContent = userInput;
+
+                    // SAFE - Sanitize HTML input
+                    function sanitizeHTML(html) {
+                    const div = document.createElement('div');
+                    div.textContent = html;
+                    return div.innerHTML;
+                    }
+
+                    // Use with caution and validation
+                    element.innerHTML = sanitizeHTML(userInput);</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let modificationHistory = [];
+        let originalContent = {};
+
+        // Initialize the demo
+        function init() {
+            console.log('✏️ DOM Content Modification Demo initialized!');
+            logToOutput('Demo initialized! Select a method tab and start modifying elements.');
+
+            // Store original content for reset functionality
+            storeOriginalContent();
+
+            // Setup event listeners
+            setupEventListeners();
+        }
+
+        // Store original content
+        function storeOriginalContent() {
+            const targets = document.querySelectorAll('.target-element');
+            targets.forEach(element => {
+                originalContent[element.id] = {
+                    innerHTML: element.innerHTML,
+                    className: element.className,
+                    style: element.style.cssText,
+                    attributes: {}
+                };
+
+                // Store all attributes
+                for (let attr of element.attributes) {
+                    originalContent[element.id].attributes[attr.name] = attr.value;
+                }
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Enter key support for inputs
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    if (e.target.id === 'listItemInput') {
+                        addListItem();
+                    } else if (e.target.id === 'newContent') {
+                        modifyContent();
+                    }
+                }
+            });
+
+            // Real-time preview for some inputs
+            document.getElementById('newContent').addEventListener('input', debounce(previewContent, 500));
+        }
+
+        // Method tab switching
+        function showMethodTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.method-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Remove active class from all buttons
+            document.querySelectorAll('.method-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+
+            // Add active class to button
+            event.target.classList.add('active');
+
+            logToOutput(`Switched to ${tabName} modification mode`, 'info');
+        }
+
+        // Content modification functions
+        function modifyContent() {
+            const targetSelector = document.getElementById('targetSelector').value;
+            const contentType = document.getElementById('contentType').value;
+            const newContent = document.getElementById('newContent').value;
+
+            const element = document.querySelector(targetSelector);
+            if (!element) {
+                logToOutput('Target element not found!', 'error');
+                return;
+            }
+
+            try {
+                const oldContent = element[contentType];
+
+                if (contentType === 'value') {
+                    const input = element.querySelector('input') || element;
+                    input.value = newContent;
+                } else {
+                    element[contentType] = newContent;
+                }
+
+                // Visual feedback
+                element.classList.add('modified');
+                setTimeout(() => element.classList.remove('modified'), 2000);
+
+                logToOutput(`Modified ${contentType} of ${targetSelector}`, 'success');
+                logToOutput(`Old: "${oldContent}"`, 'info');
+                logToOutput(`New: "${newContent}"`, 'info');
+
+                // Save to history
+                modificationHistory.push({
+                    type: 'content',
+                    target: targetSelector,
+                    property: contentType,
+                    oldValue: oldContent,
+                    newValue: newContent,
+                    timestamp: new Date()
+                });
+
+            } catch (error) {
+                logToOutput(`Error modifying content: ${error.message}`, 'error');
+                element.classList.add('error');
+                setTimeout(() => element.classList.remove('error'), 2000);
+            }
+        }
+
+        function getContent() {
+            const targetSelector = document.getElementById('targetSelector').value;
+            const contentType = document.getElementById('contentType').value;
+
+            const element = document.querySelector(targetSelector);
+            if (!element) {
+                logToOutput('Target element not found!', 'error');
+                return;
+            }
+
+            let content;
+            if (contentType === 'value') {
+                const input = element.querySelector('input') || element;
+                content = input.value;
+            } else {
+                content = element[contentType];
+            }
+
+            logToOutput(`Current ${contentType} of ${targetSelector}:`, 'info');
+            logToOutput(`"${content}"`, 'success');
+
+            // Update the textarea with current content
+            document.getElementById('newContent').value = content;
+        }
+
+        function resetContent() {
+            const targetSelector = document.getElementById('targetSelector').value;
+            const element = document.querySelector(targetSelector);
+
+            if (!element) {
+                logToOutput('Target element not found!', 'error');
+                return;
+            }
+
+            const elementId = element.id;
+            if (originalContent[elementId]) {
+                element.innerHTML = originalContent[elementId].innerHTML;
+                element.className = originalContent[elementId].className;
+                element.style.cssText = originalContent[elementId].style;
+
+                // Reset attributes
+                for (let [name, value] of Object.entries(originalContent[elementId].attributes)) {
+                    element.setAttribute(name, value);
+                }
+
+                logToOutput(`Reset ${targetSelector} to original state`, 'success');
+            }
+        }
+
+        // Attribute manipulation functions
+        function setAttribute() {
+            const targetSelector = document.getElementById('attrTarget').value;
+            const attrName = document.getElementById('attrName').value.trim();
+            const attrValue = document.getElementById('attrValue').value;
+
+            const element = document.querySelector(targetSelector);
+            if (!element) {
+                logToOutput('Target element not found!', 'error');
+                return;
+            }
+
+            if (!attrName) {
+                logToOutput('Attribute name is required!', 'error');
+                return;
+            }
+
+            try {
+                const oldValue = element.getAttribute(attrName);
+                element.setAttribute(attrName, attrValue);
+
+                element.classList.add('modified');
+                setTimeout(() => element.classList.remove('modified'), 2000);
+
+                logToOutput(`Set attribute "${attrName}" = "${attrValue}" on ${targetSelector}`, 'success');
+                if (oldValue !== null) {
+                    logToOutput(`Previous value: "${oldValue}"`, 'info');
+                }
+
+            } catch (error) {
+                logToOutput(`Error setting attribute: ${error.message}`, 'error');
+            }
+        }
+
+        function getAttribute() {
+            const targetSelector = document.getElementById('attrTarget').value;
+            const attrName = document.getElementById('attrName').value.trim();
+
+            const element = document.querySelector(targetSelector);
+            if (!element) {
+                logToOutput('Target element not found!', 'error');
+                return;
+            }
+
+            if (!attrName) {
+                logToOutput('Attribute name is required!', 'error');
+                return;
+            }
+
+            const value = element.getAttribute(attrName);
+
+            if (value !== null) {
+                logToOutput(`Attribute "${attrName}" = "${value}"`, 'success');
+                document.getElementById('attrValue').value = value;
+            } else {
+                logToOutput(`Attribute "${attrName}" does not exist`, 'info');
+            }
+        }
+
+        function removeAttribute() {
+            const targetSelector = document.getElementById('attrTarget').value;
+            const attrName = document.getElementById('attrName').value.trim();
+
+            const element = document.querySelector(targetSelector);
+            if (!element) {
+                logToOutput('Target element not found!', 'error');
+                return;
+            }
+
+            if (!attrName) {
+                logToOutput('Attribute name is required!', 'error');
+                return;
+            }
+
+            if (element.hasAttribute(attrName)) {
+                element.removeAttribute(attrName);
+
+                element.classList.add('modified');
+                setTimeout(() => element.classList.remove('modified'), 2000);
+
+                logToOutput(`Removed attribute "${attrName}" from ${targetSelector}`, 'success');
+            } else {
+                logToOutput(`Attribute "${attrName}" does not exist`, 'info');
+            }
+        }
+
+        // Style manipulation functions
+        function setStyle() {
+            const targetSelector = document.getElementById('styleTarget').value;
+            const styleProperty = document.getElementById('styleProperty').value.trim();
+            const styleValue = document.getElementById('styleValue').value.trim();
+
+            const element = document.querySelector(targetSelector);
+            if (!element) {
+                logToOutput('Target element not found!', 'error');
+                return;
+            }
+
+            if (!styleProperty) {
+                logToOutput('Style property is required!', 'error');
+                return;
+            }
+
+            try {
+                const oldValue = element.style[styleProperty];
+                element.style[styleProperty] = styleValue;
+
+                element.classList.add('modified');
+                setTimeout(() => element.classList.remove('modified'), 2000);
+
+                logToOutput(`Set style "${styleProperty}" = "${styleValue}" on ${targetSelector}`, 'success');
+                if (oldValue) {
+                    logToOutput(`Previous value: "${oldValue}"`, 'info');
+                }
+
+            } catch (error) {
+                logToOutput(`Error setting style: ${error.message}`, 'error');
+            }
+        }
+
+        function getStyle() {
+            const targetSelector = document.getElementById('styleTarget').value;
+            const styleProperty = document.getElementById('styleProperty').value.trim();
+
+            const element = document.querySelector(targetSelector);
+            if (!element) {
+                logToOutput('Target element not found!', 'error');
+                return;
+            }
+
+            if (!styleProperty) {
+                logToOutput('Style property is required!', 'error');
+                return;
+            }
+
+            const inlineValue = element.style[styleProperty];
+            const computedValue = getComputedStyle(element)[styleProperty];
+
+            logToOutput(`Style "${styleProperty}" on ${targetSelector}:`, 'info');
+            logToOutput(`Inline value: "${inlineValue}"`, 'success');
+            logToOutput(`Computed value: "${computedValue}"`, 'success');
+
+            document.getElementById('styleValue').value = inlineValue || computedValue;
+        }
+
+        function removeStyle() {
+            const targetSelector = document.getElementById('styleTarget').value;
+            const styleProperty = document.getElementById('styleProperty').value.trim();
+
+            const element = document.querySelector(targetSelector);
+            if (!element) {
+                logToOutput('Target element not found!', 'error');
+                return;
+            }
+
+            if (!styleProperty) {
+                logToOutput('Style property is required!', 'error');
+                return;
+            }
+
+            if (element.style[styleProperty]) {
+                element.style.removeProperty(styleProperty);
+
+                element.classList.add('modified');
+                setTimeout(() => element.classList.remove('modified'), 2000);
+
+                logToOutput(`Removed style "${styleProperty}" from ${targetSelector}`, 'success');
+            } else {
+                logToOutput(`Style "${styleProperty}" is not set inline`, 'info');
+            }
+        }
+
+        // Class manipulation functions
+        function addClass() {
+            const targetSelector = document.getElementById('classTarget').value;
+            const className = document.getElementById('className').value.trim();
+
+            const element = document.querySelector(targetSelector);
+            if (!element) {
+                logToOutput('Target element not found!', 'error');
+                return;
+            }
+
+            if (!className) {
+                logToOutput('Class name is required!', 'error');
+                return;
+            }
+
+            element.classList.add(className);
+
+            element.classList.add('modified');
+            setTimeout(() => element.classList.remove('modified'), 2000);
+
+            logToOutput(`Added class "${className}" to ${targetSelector}`, 'success');
+            logToOutput(`Current classes: "${element.className}"`, 'info');
+        }
+
+        function removeClass() {
+            const targetSelector = document.getElementById('classTarget').value;
+            const className = document.getElementById('className').value.trim();
+
+            const element = document.querySelector(targetSelector);
+            if (!element) {
+                logToOutput('Target element not found!', 'error');
+                return;
+            }
+
+            if (!className) {
+                logToOutput('Class name is required!', 'error');
+                return;
+            }
+
+            if (element.classList.contains(className)) {
+                element.classList.remove(className);
+
+                element.classList.add('modified');
+                setTimeout(() => element.classList.remove('modified'), 2000);
+
+                logToOutput(`Removed class "${className}" from ${targetSelector}`, 'success');
+            } else {
+                logToOutput(`Class "${className}" not found on element`, 'info');
+            }
+
+            logToOutput(`Current classes: "${element.className}"`, 'info');
+        }
+
+        function toggleClass() {
+            const targetSelector = document.getElementById('classTarget').value;
+            const className = document.getElementById('className').value.trim();
+
+            const element = document.querySelector(targetSelector);
+            if (!element) {
+                logToOutput('Target element not found!', 'error');
+                return;
+            }
+
+            if (!className) {
+                logToOutput('Class name is required!', 'error');
+                return;
+            }
+
+            const wasAdded = element.classList.toggle(className);
+
+            element.classList.add('modified');
+            setTimeout(() => element.classList.remove('modified'), 2000);
+
+            const action = wasAdded ? 'Added' : 'Removed';
+            logToOutput(`${action} class "${className}" on ${targetSelector}`, 'success');
+            logToOutput(`Current classes: "${element.className}"`, 'info');
+        }
+
+        function hasClass() {
+            const targetSelector = document.getElementById('classTarget').value;
+            const className = document.getElementById('className').value.trim();
+
+            const element = document.querySelector(targetSelector);
+            if (!element) {
+                logToOutput('Target element not found!', 'error');
+                return;
+            }
+
+            if (!className) {
+                logToOutput('Class name is required!', 'error');
+                return;
+            }
+
+            const hasClass = element.classList.contains(className);
+            const message = hasClass ? `Element HAS class "${className}"` : `Element does NOT have class "${className}"`;
+
+            logToOutput(message, hasClass ? 'success' : 'info');
+            logToOutput(`Current classes: "${element.className}"`, 'info');
+        }
+
+        // Advanced features
+        function updateStyleDemo(property, value) {
+            const element = document.getElementById('style-demo-target');
+            element.style[property] = value;
+
+            element.classList.add('highlighted');
+            setTimeout(() => element.classList.remove('highlighted'), 500);
+
+            logToOutput(`Updated ${property} to ${value}`, 'info');
+        }
+
+        function addListItem() {
+            const input = document.getElementById('listItemInput');
+            const text = input.value.trim();
+
+            if (!text) {
+                logToOutput('Enter item text first!', 'error');
+                return;
+            }
+
+            const listContainer = document.getElementById('dynamicList');
+            const listItem = document.createElement('div');
+            listItem.className = 'list-item';
+            listItem.innerHTML = `
+                <span>${escapeHtml(text)}</span>
+                <button onclick="removeListItem(this)">Delete</button>
+            `;
+
+            listContainer.appendChild(listItem);
+            input.value = '';
+
+            logToOutput(`Added list item: "${text}"`, 'success');
+        }
+
+        function removeListItem(button) {
+            const listItem = button.parentElement;
+            const text = listItem.querySelector('span').textContent;
+            listItem.remove();
+
+            logToOutput(`Removed list item: "${text}"`, 'info');
+        }
+
+        function clearList() {
+            const listContainer = document.getElementById('dynamicList');
+            const count = listContainer.children.length;
+            listContainer.innerHTML = '';
+
+            logToOutput(`Cleared ${count} list items`, 'info');
+        }
+
+        // Preview function
+        function previewContent() {
+            const targetSelector = document.getElementById('targetSelector').value;
+            const contentType = document.getElementById('contentType').value;
+            const newContent = document.getElementById('newContent').value;
+
+            if (!newContent) return;
+
+            const element = document.querySelector(targetSelector);
+            if (element) {
+                element.classList.add('highlighted');
+                setTimeout(() => element.classList.remove('highlighted'), 1000);
+            }
+        }
+
+        // Utility functions
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function logToOutput(message, type = 'info') {
+            const output = document.getElementById('output');
+            const timestamp = new Date().toLocaleTimeString();
+            const colors = {
+                info: '#00ff00',
+                success: '#00ff00',
+                error: '#ff0000',
+                warning: '#ffff00'
+            };
+
+            const logEntry = document.createElement('div');
+            logEntry.style.color = colors[type] || '#00ff00';
+            logEntry.textContent = `[${timestamp}] ${message}`;
+
+            output.appendChild(logEntry);
+            output.scrollTop = output.scrollHeight;
+
+            // Keep only last 50 entries
+            while (output.children.length > 50) {
+                output.removeChild(output.firstChild);
+            }
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Add demo object to global scope
+        window.domModificationDemo = {
+            modifyContent,
+            setAttribute,
+            getAttribute,
+            removeAttribute,
+            setStyle,
+            getStyle,
+            removeStyle,
+            addClass,
+            removeClass,
+            toggleClass,
+            hasClass,
+            modificationHistory,
+            originalContent
+        };
+
+        console.log('✏️ DOM Content Modification Demo loaded!');
+        console.log('📚 This demo teaches:');
+        console.log('• Content modification methods');
+        console.log('• Attribute manipulation');
+        console.log('• Style modification');
+        console.log('• Class management');
+        console.log('• Security considerations');
+        console.log('• Real-time updates and feedback');
+        console.log('💡 Try the domModificationDemo object in console!');
+    </script>
+</body>
+
+</html>

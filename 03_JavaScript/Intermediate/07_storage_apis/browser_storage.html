@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser Storage APIs - localStorage & sessionStorage</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            background: #f8f9fa;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #9b59b6;
+            font-size: 1.5rem;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            border-left: 4px solid #9b59b6;
+        }
+
+        .demo-area {
+            background: white;
+            border: 2px dashed #9b59b6;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            min-height: 100px;
+        }
+
+        .btn {
+            background: #9b59b6;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 0.25rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            background: #8e44ad;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-success {
+            background: #27ae60;
+        }
+
+        .btn-success:hover {
+            background: #219a52;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-info {
+            background: #3498db;
+        }
+
+        .btn-info:hover {
+            background: #2980b9;
+        }
+
+        .btn-warning {
+            background: #f39c12;
+        }
+
+        .btn-warning:hover {
+            background: #e67e22;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #9b59b6;
+            box-shadow: 0 0 0 0.2rem rgba(155, 89, 182, 0.25);
+        }
+
+        .output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            margin: 1rem 0;
+            border-left: 4px solid #27ae60;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+        }
+
+        .storage-item {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .storage-item strong {
+            color: #2c3e50;
+        }
+
+        .storage-item .value {
+            color: #6c757d;
+            font-family: monospace;
+        }
+
+        .storage-item .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .tip {
+            background: #d4edda;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .warning {
+            background: #f8d7da;
+            border: 1px solid #e74c3c;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .stats {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .stats h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .stats .stat-item {
+            display: inline-block;
+            margin: 0 1rem;
+            padding: 0.5rem;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            border: none;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background: #9b59b6;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 1rem;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .shopping-cart {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            border-bottom: 1px solid #27ae60;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .todo-item {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .todo-item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💾 Browser Storage APIs</h1>
+            <p>Master localStorage, sessionStorage, and IndexedDB</p>
+        </div>
+
+        <div class="content">
+            <!-- Storage Overview -->
+            <div class="section">
+                <h2>1. Storage Technologies Overview</h2>
+                <p>Modern browsers provide several storage mechanisms for client-side data persistence.</p>
+
+                <div class="code-block">// Storage Types Comparison
+                    // localStorage - Persistent storage across browser sessions
+                    // sessionStorage - Storage for current session only
+                    // IndexedDB - Large-scale structured data storage
+                    // Cookies - Small data sent with HTTP requests
+
+                    // localStorage API
+                    localStorage.setItem('key', 'value');
+                    const value = localStorage.getItem('key');
+                    localStorage.removeItem('key');
+                    localStorage.clear();
+
+                    // sessionStorage API (same methods as localStorage)
+                    sessionStorage.setItem('key', 'value');
+                    const sessionValue = sessionStorage.getItem('key');
+
+                    // Storage events
+                    window.addEventListener('storage', (event) => {
+                    console.log('Storage changed:', event);
+                    // event.key - the key that was changed
+                    // event.oldValue - the old value
+                    // event.newValue - the new value
+                    // event.storageArea - localStorage or sessionStorage
+                    });
+
+                    // Check storage availability
+                    function isStorageAvailable(type) {
+                    try {
+                    const storage = window[type];
+                    const test = '__storage_test__';
+                    storage.setItem(test, test);
+                    storage.removeItem(test);
+                    return true;
+                    } catch (e) {
+                    return false;
+                    }
+                    }</div>
+
+                <div class="demo-area">
+                    <h3>Storage Availability Check</h3>
+                    <button class="btn" onclick="checkStorageSupport()">Check Storage Support</button>
+                    <button class="btn btn-info" onclick="getStorageInfo()">Get Storage Info</button>
+                    <div id="storage-info" class="output" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- localStorage Demo -->
+            <div class="section">
+                <h2>2. localStorage Implementation</h2>
+                <p>Persistent storage that survives browser sessions and computer restarts.</p>
+
+                <div class="code-block">// localStorage utility functions
+                    class LocalStorageManager {
+                    // Store data with expiration
+                    setWithExpiry(key, value, ttl) {
+                    const now = new Date();
+                    const item = {
+                    value: value,
+                    expiry: now.getTime() + ttl
+                    };
+                    localStorage.setItem(key, JSON.stringify(item));
+                    }
+
+                    // Get data with expiration check
+                    getWithExpiry(key) {
+                    const itemStr = localStorage.getItem(key);
+                    if (!itemStr) return null;
+
+                    const item = JSON.parse(itemStr);
+                    const now = new Date();
+
+                    if (now.getTime() > item.expiry) {
+                    localStorage.removeItem(key);
+                    return null;
+                    }
+
+                    return item.value;
+                    }
+
+                    // Store complex objects
+                    setObject(key, obj) {
+                    localStorage.setItem(key, JSON.stringify(obj));
+                    }
+
+                    // Get complex objects
+                    getObject(key) {
+                    const item = localStorage.getItem(key);
+                    return item ? JSON.parse(item) : null;
+                    }
+
+                    // Get all keys with prefix
+                    getKeysWithPrefix(prefix) {
+                    const keys = [];
+                    for (let i = 0; i < localStorage.length; i++) { const key=localStorage.key(i); if
+                        (key.startsWith(prefix)) { keys.push(key); } } return keys; } // Get storage usage
+                        getStorageUsage() { let total=0; for (let key in localStorage) { if
+                        (localStorage.hasOwnProperty(key)) { total +=localStorage[key].length + key.length; } } return
+                        total; } }</div>
+
+                        <div class="demo-area">
+                            <h3>localStorage Manager</h3>
+                            <div class="grid">
+                                <div>
+                                    <div class="form-group">
+                                        <label for="local-key">Key:</label>
+                                        <input type="text" class="form-control" id="local-key" placeholder="Enter key">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="local-value">Value:</label>
+                                        <input type="text" class="form-control" id="local-value"
+                                            placeholder="Enter value">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="local-ttl">TTL (seconds):</label>
+                                        <input type="number" class="form-control" id="local-ttl"
+                                            placeholder="0 for permanent">
+                                    </div>
+                                    <button class="btn" onclick="setLocalStorage()">Set Item</button>
+                                    <button class="btn btn-success" onclick="getLocalStorage()">Get Item</button>
+                                    <button class="btn btn-warning" onclick="removeLocalStorage()">Remove Item</button>
+                                    <button class="btn btn-danger" onclick="clearLocalStorage()">Clear All</button>
+                                </div>
+                                <div>
+                                    <div id="local-storage-items">
+                                        <h4>localStorage Items:</h4>
+                                        <div id="local-items-list"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="stats">
+                                <h4>Storage Statistics</h4>
+                                <div class="stat-item">
+                                    <strong>Items:</strong> <span id="local-count">0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <strong>Size:</strong> <span id="local-size">0 bytes</span>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
+                <!-- sessionStorage Demo -->
+                <div class="section">
+                    <h2>3. sessionStorage Implementation</h2>
+                    <p>Session-based storage that persists only for the current browser session.</p>
+
+                    <div class="demo-area">
+                        <h3>sessionStorage Manager</h3>
+                        <div class="grid">
+                            <div>
+                                <div class="form-group">
+                                    <label for="session-key">Key:</label>
+                                    <input type="text" class="form-control" id="session-key" placeholder="Enter key">
+                                </div>
+                                <div class="form-group">
+                                    <label for="session-value">Value:</label>
+                                    <input type="text" class="form-control" id="session-value"
+                                        placeholder="Enter value">
+                                </div>
+                                <button class="btn" onclick="setSessionStorage()">Set Item</button>
+                                <button class="btn btn-success" onclick="getSessionStorage()">Get Item</button>
+                                <button class="btn btn-warning" onclick="removeSessionStorage()">Remove Item</button>
+                                <button class="btn btn-danger" onclick="clearSessionStorage()">Clear All</button>
+                            </div>
+                            <div>
+                                <div id="session-storage-items">
+                                    <h4>sessionStorage Items:</h4>
+                                    <div id="session-items-list"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stats">
+                            <h4>Session Storage Statistics</h4>
+                            <div class="stat-item">
+                                <strong>Items:</strong> <span id="session-count">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <strong>Size:</strong> <span id="session-size">0 bytes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Practical Applications -->
+                <div class="section">
+                    <h2>4. Practical Applications</h2>
+                    <p>Real-world examples of using browser storage in web applications.</p>
+
+                    <div class="tabs">
+                        <button class="tab active" onclick="switchTab('shopping-cart')">Shopping Cart</button>
+                        <button class="tab" onclick="switchTab('user-preferences')">User Preferences</button>
+                        <button class="tab" onclick="switchTab('form-data')">Form Data</button>
+                        <button class="tab" onclick="switchTab('todo-list')">Todo List</button>
+                    </div>
+
+                    <!-- Shopping Cart Tab -->
+                    <div id="shopping-cart" class="tab-content active">
+                        <h3>🛒 Shopping Cart</h3>
+                        <div class="grid">
+                            <div>
+                                <div class="form-group">
+                                    <label for="product-name">Product Name:</label>
+                                    <input type="text" class="form-control" id="product-name"
+                                        placeholder="Enter product name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="product-price">Price:</label>
+                                    <input type="number" class="form-control" id="product-price"
+                                        placeholder="Enter price" step="0.01">
+                                </div>
+                                <div class="form-group">
+                                    <label for="product-quantity">Quantity:</label>
+                                    <input type="number" class="form-control" id="product-quantity"
+                                        placeholder="Enter quantity" min="1" value="1">
+                                </div>
+                                <button class="btn" onclick="addToCart()">Add to Cart</button>
+                                <button class="btn btn-danger" onclick="clearCart()">Clear Cart</button>
+                            </div>
+                            <div>
+                                <div class="shopping-cart">
+                                    <h4>Shopping Cart</h4>
+                                    <div id="cart-items"></div>
+                                    <div class="cart-total">
+                                        <strong>Total: $<span id="cart-total">0.00</span></strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Preferences Tab -->
+                    <div id="user-preferences" class="tab-content">
+                        <h3>⚙️ User Preferences</h3>
+                        <div class="grid">
+                            <div>
+                                <div class="form-group">
+                                    <label for="theme">Theme:</label>
+                                    <select class="form-control" id="theme">
+                                        <option value="light">Light</option>
+                                        <option value="dark">Dark</option>
+                                        <option value="auto">Auto</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="language">Language:</label>
+                                    <select class="form-control" id="language">
+                                        <option value="en">English</option>
+                                        <option value="es">Spanish</option>
+                                        <option value="fr">French</option>
+                                        <option value="de">German</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="notifications">
+                                        <input type="checkbox" id="notifications"> Enable Notifications
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="auto-save">
+                                        <input type="checkbox" id="auto-save"> Auto-save
+                                    </label>
+                                </div>
+                                <button class="btn" onclick="savePreferences()">Save Preferences</button>
+                                <button class="btn btn-info" onclick="loadPreferences()">Load Preferences</button>
+                                <button class="btn btn-warning" onclick="resetPreferences()">Reset to Defaults</button>
+                            </div>
+                            <div>
+                                <div id="preferences-output" class="output" style="display: none;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Data Tab -->
+                    <div id="form-data" class="tab-content">
+                        <h3>📝 Form Data Auto-save</h3>
+                        <div class="grid">
+                            <div>
+                                <div class="form-group">
+                                    <label for="form-name">Name:</label>
+                                    <input type="text" class="form-control auto-save" id="form-name"
+                                        placeholder="Enter your name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="form-email">Email:</label>
+                                    <input type="email" class="form-control auto-save" id="form-email"
+                                        placeholder="Enter your email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="form-message">Message:</label>
+                                    <textarea class="form-control auto-save" id="form-message" rows="4"
+                                        placeholder="Enter your message"></textarea>
+                                </div>
+                                <button class="btn" onclick="saveFormData()">Save Form</button>
+                                <button class="btn btn-info" onclick="loadFormData()">Load Form</button>
+                                <button class="btn btn-warning" onclick="clearFormData()">Clear Form</button>
+                            </div>
+                            <div>
+                                <div id="form-data-output" class="output" style="display: none;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Todo List Tab -->
+                    <div id="todo-list" class="tab-content">
+                        <h3>✅ Todo List</h3>
+                        <div class="grid">
+                            <div>
+                                <div class="form-group">
+                                    <label for="todo-input">New Todo:</label>
+                                    <input type="text" class="form-control" id="todo-input"
+                                        placeholder="Enter a new todo">
+                                </div>
+                                <button class="btn" onclick="addTodo()">Add Todo</button>
+                                <button class="btn btn-danger" onclick="clearTodos()">Clear All</button>
+                            </div>
+                            <div>
+                                <div id="todo-items"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Storage Events -->
+                <div class="section">
+                    <h2>5. Storage Events and Synchronization</h2>
+                    <p>Listen for storage changes and synchronize data across browser tabs.</p>
+
+                    <div class="code-block">// Storage event handling
+                        window.addEventListener('storage', function(e) {
+                        console.log('Storage changed:', {
+                        key: e.key,
+                        oldValue: e.oldValue,
+                        newValue: e.newValue,
+                        url: e.url,
+                        storageArea: e.storageArea
+                        });
+
+                        // Update UI based on storage changes
+                        if (e.key === 'user-preferences') {
+                        updateUIFromPreferences();
+                        }
+                        });
+
+                        // Cross-tab communication
+                        function broadcastMessage(message) {
+                        const channel = new BroadcastChannel('app-channel');
+                        channel.postMessage(message);
+                        }
+
+                        // Listen for broadcast messages
+                        const channel = new BroadcastChannel('app-channel');
+                        channel.addEventListener('message', function(event) {
+                        console.log('Received message:', event.data);
+                        });
+
+                        // Custom storage event system
+                        class StorageEventSystem {
+                        constructor() {
+                        this.listeners = new Map();
+                        this.setupStorageListener();
+                        }
+
+                        setupStorageListener() {
+                        window.addEventListener('storage', (e) => {
+                        if (this.listeners.has(e.key)) {
+                        this.listeners.get(e.key).forEach(callback => {
+                        callback(e.newValue, e.oldValue);
+                        });
+                        }
+                        });
+                        }
+
+                        on(key, callback) {
+                        if (!this.listeners.has(key)) {
+                        this.listeners.set(key, []);
+                        }
+                        this.listeners.get(key).push(callback);
+                        }
+
+                        off(key, callback) {
+                        if (this.listeners.has(key)) {
+                        const callbacks = this.listeners.get(key);
+                        const index = callbacks.indexOf(callback);
+                        if (index > -1) {
+                        callbacks.splice(index, 1);
+                        }
+                        }
+                        }
+                        }</div>
+
+                    <div class="demo-area">
+                        <h3>Storage Events Demo</h3>
+                        <div class="grid">
+                            <div>
+                                <button class="btn" onclick="startStorageEventDemo()">Start Event Monitoring</button>
+                                <button class="btn btn-info" onclick="triggerStorageEvent()">Trigger Event</button>
+                                <button class="btn btn-warning" onclick="stopStorageEventDemo()">Stop
+                                    Monitoring</button>
+                            </div>
+                            <div>
+                                <div id="storage-events" class="output" style="display: none;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Tips -->
+                <div class="tip">
+                    <h3>🚀 Performance Tips</h3>
+                    <ul>
+                        <li><strong>Minimize storage operations:</strong> Batch updates when possible</li>
+                        <li><strong>Use compression:</strong> Compress large data before storing</li>
+                        <li><strong>Implement caching:</strong> Cache frequently accessed data in memory</li>
+                        <li><strong>Monitor storage usage:</strong> Regularly check and clean up unused data</li>
+                        <li><strong>Use appropriate storage:</strong> Choose the right storage type for your needs</li>
+                    </ul>
+                </div>
+
+                <!-- Best Practices -->
+                <div class="highlight">
+                    <h3>💡 Best Practices</h3>
+                    <ul>
+                        <li><strong>Always check for support:</strong> Test storage availability before use</li>
+                        <li><strong>Handle exceptions:</strong> Wrap storage operations in try-catch blocks</li>
+                        <li><strong>Use structured data:</strong> Store complex objects as JSON</li>
+                        <li><strong>Implement expiration:</strong> Add TTL for temporary data</li>
+                        <li><strong>Validate data:</strong> Always validate data retrieved from storage</li>
+                    </ul>
+                </div>
+
+                <!-- Security Considerations -->
+                <div class="warning">
+                    <h3>⚠️ Security Considerations</h3>
+                    <ul>
+                        <li><strong>Never store sensitive data:</strong> Avoid passwords, tokens, or personal
+                            information</li>
+                        <li><strong>Sanitize data:</strong> Clean data before storing to prevent XSS</li>
+                        <li><strong>Use encryption:</strong> Encrypt sensitive data if storage is necessary</li>
+                        <li><strong>Regular cleanup:</strong> Remove old or unused data regularly</li>
+                        <li><strong>Respect privacy:</strong> Follow privacy laws and user preferences</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Storage Manager Classes
+            class LocalStorageManager {
+                setWithExpiry(key, value, ttl) {
+                    const now = new Date();
+                    const item = {
+                        value: value,
+                        expiry: ttl ? now.getTime() + (ttl * 1000) : null
+                    };
+                    localStorage.setItem(key, JSON.stringify(item));
+                }
+
+                getWithExpiry(key) {
+                    const itemStr = localStorage.getItem(key);
+                    if (!itemStr) return null;
+
+                    try {
+                        const item = JSON.parse(itemStr);
+                        const now = new Date();
+
+                        if (item.expiry && now.getTime() > item.expiry) {
+                            localStorage.removeItem(key);
+                            return null;
+                        }
+
+                        return item.value;
+                    } catch (e) {
+                        return itemStr; // Return raw value if not JSON
+                    }
+                }
+
+                setObject(key, obj) {
+                    localStorage.setItem(key, JSON.stringify(obj));
+                }
+
+                getObject(key) {
+                    const item = localStorage.getItem(key);
+                    try {
+                        return item ? JSON.parse(item) : null;
+                    } catch (e) {
+                        return item; // Return raw value if not JSON
+                    }
+                }
+
+                getStorageUsage() {
+                    let total = 0;
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const key = localStorage.key(i);
+                        const value = localStorage.getItem(key);
+                        total += key.length + value.length;
+                    }
+                    return total;
+                }
+            }
+
+            const storageManager = new LocalStorageManager();
+
+            // Storage availability check
+            function checkStorageSupport() {
+                const support = {
+                    localStorage: isStorageAvailable('localStorage'),
+                    sessionStorage: isStorageAvailable('sessionStorage'),
+                    indexedDB: 'indexedDB' in window,
+                    cookies: navigator.cookieEnabled
+                };
+
+                const info = document.getElementById('storage-info');
+                info.style.display = 'block';
+                info.innerHTML = `
+                <div class="fade-in">
+                    <h4>Storage Support:</h4>
+                    <p>localStorage: ${support.localStorage ? '✅ Supported' : '❌ Not Supported'}</p>
+                    <p>sessionStorage: ${support.sessionStorage ? '✅ Supported' : '❌ Not Supported'}</p>
+                    <p>IndexedDB: ${support.indexedDB ? '✅ Supported' : '❌ Not Supported'}</p>
+                    <p>Cookies: ${support.cookies ? '✅ Enabled' : '❌ Disabled'}</p>
+                </div>
+            `;
+            }
+
+            function isStorageAvailable(type) {
+                try {
+                    const storage = window[type];
+                    const test = '__storage_test__';
+                    storage.setItem(test, test);
+                    storage.removeItem(test);
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            }
+
+            function getStorageInfo() {
+                const localUsage = storageManager.getStorageUsage();
+                let sessionUsage = 0;
+
+                for (let i = 0; i < sessionStorage.length; i++) {
+                    const key = sessionStorage.key(i);
+                    const value = sessionStorage.getItem(key);
+                    sessionUsage += key.length + value.length;
+                }
+
+                const info = document.getElementById('storage-info');
+                info.style.display = 'block';
+                info.innerHTML = `
+                <div class="fade-in">
+                    <h4>Storage Usage:</h4>
+                    <p>localStorage: ${localStorage.length} items (${localUsage} bytes)</p>
+                    <p>sessionStorage: ${sessionStorage.length} items (${sessionUsage} bytes)</p>
+                    <p>Estimated localStorage limit: ~5-10MB</p>
+                    <p>Estimated sessionStorage limit: ~5-10MB</p>
+                </div>
+            `;
+            }
+
+            // localStorage functions
+            function setLocalStorage() {
+                const key = document.getElementById('local-key').value;
+                const value = document.getElementById('local-value').value;
+                const ttl = parseInt(document.getElementById('local-ttl').value) || 0;
+
+                if (!key || !value) {
+                    alert('Please enter both key and value');
+                    return;
+                }
+
+                try {
+                    if (ttl > 0) {
+                        storageManager.setWithExpiry(key, value, ttl);
+                    } else {
+                        localStorage.setItem(key, value);
+                    }
+
+                    document.getElementById('local-key').value = '';
+                    document.getElementById('local-value').value = '';
+                    document.getElementById('local-ttl').value = '';
+
+                    updateLocalStorageDisplay();
+                } catch (e) {
+                    alert('Error setting localStorage: ' + e.message);
+                }
+            }
+
+            function getLocalStorage() {
+                const key = document.getElementById('local-key').value;
+                if (!key) {
+                    alert('Please enter a key');
+                    return;
+                }
+
+                const value = storageManager.getWithExpiry(key);
+                alert(`Value for "${key}": ${value !== null ? value : 'Not found or expired'}`);
+            }
+
+            function removeLocalStorage() {
+                const key = document.getElementById('local-key').value;
+                if (!key) {
+                    alert('Please enter a key');
+                    return;
+                }
+
+                localStorage.removeItem(key);
+                updateLocalStorageDisplay();
+            }
+
+            function clearLocalStorage() {
+                if (confirm('Are you sure you want to clear all localStorage?')) {
+                    localStorage.clear();
+                    updateLocalStorageDisplay();
+                }
+            }
+
+            function updateLocalStorageDisplay() {
+                const itemsList = document.getElementById('local-items-list');
+                const count = document.getElementById('local-count');
+                const size = document.getElementById('local-size');
+
+                itemsList.innerHTML = '';
+
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    const value = localStorage.getItem(key);
+
+                    const item = document.createElement('div');
+                    item.className = 'storage-item';
+                    item.innerHTML = `
+                    <div>
+                        <strong>${key}:</strong>
+                        <span class="value">${value.length > 50 ? value.substring(0, 50) + '...' : value}</span>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-danger" onclick="removeSpecificItem('${key}', 'local')">Remove</button>
+                    </div>
+                `;
+                    itemsList.appendChild(item);
+                }
+
+                count.textContent = localStorage.length;
+                size.textContent = storageManager.getStorageUsage();
+            }
+
+            // sessionStorage functions
+            function setSessionStorage() {
+                const key = document.getElementById('session-key').value;
+                const value = document.getElementById('session-value').value;
+
+                if (!key || !value) {
+                    alert('Please enter both key and value');
+                    return;
+                }
+
+                try {
+                    sessionStorage.setItem(key, value);
+                    document.getElementById('session-key').value = '';
+                    document.getElementById('session-value').value = '';
+                    updateSessionStorageDisplay();
+                } catch (e) {
+                    alert('Error setting sessionStorage: ' + e.message);
+                }
+            }
+
+            function getSessionStorage() {
+                const key = document.getElementById('session-key').value;
+                if (!key) {
+                    alert('Please enter a key');
+                    return;
+                }
+
+                const value = sessionStorage.getItem(key);
+                alert(`Value for "${key}": ${value !== null ? value : 'Not found'}`);
+            }
+
+            function removeSessionStorage() {
+                const key = document.getElementById('session-key').value;
+                if (!key) {
+                    alert('Please enter a key');
+                    return;
+                }
+
+                sessionStorage.removeItem(key);
+                updateSessionStorageDisplay();
+            }
+
+            function clearSessionStorage() {
+                if (confirm('Are you sure you want to clear all sessionStorage?')) {
+                    sessionStorage.clear();
+                    updateSessionStorageDisplay();
+                }
+            }
+
+            function updateSessionStorageDisplay() {
+                const itemsList = document.getElementById('session-items-list');
+                const count = document.getElementById('session-count');
+                const size = document.getElementById('session-size');
+
+                itemsList.innerHTML = '';
+                let totalSize = 0;
+
+                for (let i = 0; i < sessionStorage.length; i++) {
+                    const key = sessionStorage.key(i);
+                    const value = sessionStorage.getItem(key);
+                    totalSize += key.length + value.length;
+
+                    const item = document.createElement('div');
+                    item.className = 'storage-item';
+                    item.innerHTML = `
+                    <div>
+                        <strong>${key}:</strong>
+                        <span class="value">${value.length > 50 ? value.substring(0, 50) + '...' : value}</span>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-danger" onclick="removeSpecificItem('${key}', 'session')">Remove</button>
+                    </div>
+                `;
+                    itemsList.appendChild(item);
+                }
+
+                count.textContent = sessionStorage.length;
+                size.textContent = totalSize;
+            }
+
+            function removeSpecificItem(key, type) {
+                if (type === 'local') {
+                    localStorage.removeItem(key);
+                    updateLocalStorageDisplay();
+                } else if (type === 'session') {
+                    sessionStorage.removeItem(key);
+                    updateSessionStorageDisplay();
+                }
+            }
+
+            // Tab switching
+            function switchTab(tabId) {
+                // Hide all tabs
+                document.querySelectorAll('.tab-content').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+
+                // Remove active class from all tab buttons
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+
+                // Show selected tab
+                document.getElementById(tabId).classList.add('active');
+
+                // Add active class to clicked tab button
+                event.target.classList.add('active');
+            }
+
+            // Shopping Cart functionality
+            function addToCart() {
+                const name = document.getElementById('product-name').value;
+                const price = parseFloat(document.getElementById('product-price').value);
+                const quantity = parseInt(document.getElementById('product-quantity').value);
+
+                if (!name || !price || !quantity) {
+                    alert('Please fill in all fields');
+                    return;
+                }
+
+                const cart = storageManager.getObject('shopping-cart') || [];
+                const existingItem = cart.find(item => item.name === name);
+
+                if (existingItem) {
+                    existingItem.quantity += quantity;
+                } else {
+                    cart.push({ name, price, quantity });
+                }
+
+                storageManager.setObject('shopping-cart', cart);
+                displayCart();
+
+                // Clear form
+                document.getElementById('product-name').value = '';
+                document.getElementById('product-price').value = '';
+                document.getElementById('product-quantity').value = '1';
+            }
+
+            function displayCart() {
+                const cart = storageManager.getObject('shopping-cart') || [];
+                const cartItems = document.getElementById('cart-items');
+                const cartTotal = document.getElementById('cart-total');
+
+                cartItems.innerHTML = '';
+                let total = 0;
+
+                cart.forEach((item, index) => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
+                    <div>${item.name} x${item.quantity}</div>
+                    <div>$${itemTotal.toFixed(2)} 
+                        <button class="btn btn-danger" onclick="removeFromCart(${index})">Remove</button>
+                    </div>
+                `;
+                    cartItems.appendChild(cartItem);
+                });
+
+                cartTotal.textContent = total.toFixed(2);
+            }
+
+            function removeFromCart(index) {
+                const cart = storageManager.getObject('shopping-cart') || [];
+                cart.splice(index, 1);
+                storageManager.setObject('shopping-cart', cart);
+                displayCart();
+            }
+
+            function clearCart() {
+                localStorage.removeItem('shopping-cart');
+                displayCart();
+            }
+
+            // User Preferences functionality
+            function savePreferences() {
+                const preferences = {
+                    theme: document.getElementById('theme').value,
+                    language: document.getElementById('language').value,
+                    notifications: document.getElementById('notifications').checked,
+                    autoSave: document.getElementById('auto-save').checked
+                };
+
+                storageManager.setObject('user-preferences', preferences);
+
+                const output = document.getElementById('preferences-output');
+                output.style.display = 'block';
+                output.innerHTML = `
+                <div class="fade-in">
+                    <h4>Preferences Saved:</h4>
+                    <pre>${JSON.stringify(preferences, null, 2)}</pre>
+                </div>
+            `;
+            }
+
+            function loadPreferences() {
+                const preferences = storageManager.getObject('user-preferences');
+
+                if (preferences) {
+                    document.getElementById('theme').value = preferences.theme || 'light';
+                    document.getElementById('language').value = preferences.language || 'en';
+                    document.getElementById('notifications').checked = preferences.notifications || false;
+                    document.getElementById('auto-save').checked = preferences.autoSave || false;
+
+                    const output = document.getElementById('preferences-output');
+                    output.style.display = 'block';
+                    output.innerHTML = `
+                    <div class="fade-in">
+                        <h4>Preferences Loaded:</h4>
+                        <pre>${JSON.stringify(preferences, null, 2)}</pre>
+                    </div>
+                `;
+                } else {
+                    alert('No preferences found');
+                }
+            }
+
+            function resetPreferences() {
+                const defaults = {
+                    theme: 'light',
+                    language: 'en',
+                    notifications: false,
+                    autoSave: false
+                };
+
+                document.getElementById('theme').value = defaults.theme;
+                document.getElementById('language').value = defaults.language;
+                document.getElementById('notifications').checked = defaults.notifications;
+                document.getElementById('auto-save').checked = defaults.autoSave;
+
+                localStorage.removeItem('user-preferences');
+
+                const output = document.getElementById('preferences-output');
+                output.style.display = 'block';
+                output.innerHTML = `
+                <div class="fade-in">
+                    <h4>Preferences Reset to Defaults</h4>
+                    <pre>${JSON.stringify(defaults, null, 2)}</pre>
+                </div>
+            `;
+            }
+
+            // Form Data Auto-save
+            function saveFormData() {
+                const formData = {
+                    name: document.getElementById('form-name').value,
+                    email: document.getElementById('form-email').value,
+                    message: document.getElementById('form-message').value
+                };
+
+                storageManager.setObject('form-data', formData);
+
+                const output = document.getElementById('form-data-output');
+                output.style.display = 'block';
+                output.innerHTML = `
+                <div class="fade-in">
+                    <h4>Form Data Saved:</h4>
+                    <pre>${JSON.stringify(formData, null, 2)}</pre>
+                </div>
+            `;
+            }
+
+            function loadFormData() {
+                const formData = storageManager.getObject('form-data');
+
+                if (formData) {
+                    document.getElementById('form-name').value = formData.name || '';
+                    document.getElementById('form-email').value = formData.email || '';
+                    document.getElementById('form-message').value = formData.message || '';
+
+                    const output = document.getElementById('form-data-output');
+                    output.style.display = 'block';
+                    output.innerHTML = `
+                    <div class="fade-in">
+                        <h4>Form Data Loaded:</h4>
+                        <pre>${JSON.stringify(formData, null, 2)}</pre>
+                    </div>
+                `;
+                } else {
+                    alert('No form data found');
+                }
+            }
+
+            function clearFormData() {
+                document.getElementById('form-name').value = '';
+                document.getElementById('form-email').value = '';
+                document.getElementById('form-message').value = '';
+
+                localStorage.removeItem('form-data');
+
+                const output = document.getElementById('form-data-output');
+                output.style.display = 'block';
+                output.innerHTML = `
+                <div class="fade-in">
+                    <h4>Form Data Cleared</h4>
+                </div>
+            `;
+            }
+
+            // Auto-save functionality
+            function setupAutoSave() {
+                const autoSaveFields = document.querySelectorAll('.auto-save');
+                autoSaveFields.forEach(field => {
+                    field.addEventListener('input', () => {
+                        const autoSaveData = {};
+                        autoSaveFields.forEach(f => {
+                            autoSaveData[f.id] = f.value;
+                        });
+                        storageManager.setObject('auto-save-data', autoSaveData);
+                    });
+                });
+
+                // Load auto-saved data
+                const autoSaveData = storageManager.getObject('auto-save-data');
+                if (autoSaveData) {
+                    Object.keys(autoSaveData).forEach(key => {
+                        const field = document.getElementById(key);
+                        if (field) field.value = autoSaveData[key];
+                    });
+                }
+            }
+
+            // Todo List functionality
+            function addTodo() {
+                const input = document.getElementById('todo-input');
+                const todoText = input.value.trim();
+
+                if (!todoText) {
+                    alert('Please enter a todo');
+                    return;
+                }
+
+                const todos = storageManager.getObject('todos') || [];
+                todos.push({
+                    id: Date.now(),
+                    text: todoText,
+                    completed: false,
+                    created: new Date().toISOString()
+                });
+
+                storageManager.setObject('todos', todos);
+                input.value = '';
+                displayTodos();
+            }
+
+            function displayTodos() {
+                const todos = storageManager.getObject('todos') || [];
+                const todoItems = document.getElementById('todo-items');
+
+                todoItems.innerHTML = '';
+
+                todos.forEach(todo => {
+                    const todoItem = document.createElement('div');
+                    todoItem.className = `todo-item ${todo.completed ? 'completed' : ''}`;
+                    todoItem.innerHTML = `
+                    <div>${todo.text}</div>
+                    <div>
+                        <button class="btn btn-success" onclick="toggleTodo(${todo.id})">
+                            ${todo.completed ? 'Undo' : 'Complete'}
+                        </button>
+                        <button class="btn btn-danger" onclick="removeTodo(${todo.id})">Remove</button>
+                    </div>
+                `;
+                    todoItems.appendChild(todoItem);
+                });
+            }
+
+            function toggleTodo(id) {
+                const todos = storageManager.getObject('todos') || [];
+                const todo = todos.find(t => t.id === id);
+                if (todo) {
+                    todo.completed = !todo.completed;
+                    storageManager.setObject('todos', todos);
+                    displayTodos();
+                }
+            }
+
+            function removeTodo(id) {
+                const todos = storageManager.getObject('todos') || [];
+                const updatedTodos = todos.filter(t => t.id !== id);
+                storageManager.setObject('todos', updatedTodos);
+                displayTodos();
+            }
+
+            function clearTodos() {
+                if (confirm('Are you sure you want to clear all todos?')) {
+                    localStorage.removeItem('todos');
+                    displayTodos();
+                }
+            }
+
+            // Storage Events
+            let eventMonitoring = false;
+
+            function startStorageEventDemo() {
+                if (eventMonitoring) return;
+
+                eventMonitoring = true;
+                const output = document.getElementById('storage-events');
+                output.style.display = 'block';
+                output.innerHTML = '<div class="fade-in">Monitoring storage events...</div>';
+
+                window.addEventListener('storage', handleStorageEvent);
+            }
+
+            function handleStorageEvent(e) {
+                if (!eventMonitoring) return;
+
+                const output = document.getElementById('storage-events');
+                const eventInfo = `
+                <div class="fade-in">
+                    <strong>Storage Event Detected:</strong><br>
+                    Key: ${e.key}<br>
+                    Old Value: ${e.oldValue}<br>
+                    New Value: ${e.newValue}<br>
+                    URL: ${e.url}<br>
+                    Timestamp: ${new Date().toLocaleTimeString()}
+                </div>
+            `;
+
+                output.innerHTML += eventInfo;
+                output.scrollTop = output.scrollHeight;
+            }
+
+            function triggerStorageEvent() {
+                const randomKey = 'event-demo-' + Math.random().toString(36).substr(2, 9);
+                const randomValue = 'value-' + Math.random().toString(36).substr(2, 9);
+
+                localStorage.setItem(randomKey, randomValue);
+
+                setTimeout(() => {
+                    localStorage.removeItem(randomKey);
+                }, 2000);
+            }
+
+            function stopStorageEventDemo() {
+                eventMonitoring = false;
+                window.removeEventListener('storage', handleStorageEvent);
+
+                const output = document.getElementById('storage-events');
+                output.innerHTML += '<div class="fade-in"><strong>Event monitoring stopped.</strong></div>';
+            }
+
+            // Initialize displays on page load
+            document.addEventListener('DOMContentLoaded', function () {
+                updateLocalStorageDisplay();
+                updateSessionStorageDisplay();
+                displayCart();
+                displayTodos();
+                setupAutoSave();
+
+                // Load preferences on page load
+                loadPreferences();
+            });
+        </script>
+</body>
+
+</html>

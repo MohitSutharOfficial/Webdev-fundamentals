@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Element Selection - JavaScript Fundamentals</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 40px;
+        }
+
+        .demo-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #e9ecef;
+        }
+
+        .demo-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .control-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .control-group input,
+        .control-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .control-group input:focus,
+        .control-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .demo-elements {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            min-height: 300px;
+            border: 2px dashed #e9ecef;
+        }
+
+        .demo-elements h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .sample-element {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .sample-element:hover {
+            background: #f8f9fa;
+            border-color: #667eea;
+        }
+
+        .highlighted {
+            background: #fff3cd !important;
+            border-color: #ffc107 !important;
+            border-width: 2px !important;
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+        }
+
+        .selected {
+            background: #d4edda !important;
+            border-color: #28a745 !important;
+            border-width: 2px !important;
+        }
+
+        .error {
+            background: #f8d7da !important;
+            border-color: #dc3545 !important;
+            border-width: 2px !important;
+        }
+
+        .output {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 15px;
+            border: 1px solid #333;
+        }
+
+        .concept-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .concept-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .concept-card p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .code-example {
+            background: #1a1a1a;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .method-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .method-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .method-item:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .method-item h4 {
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .method-item p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .selector-builder {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .selector-builder h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .selector-output {
+            background: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-family: 'Courier New', monospace;
+            margin-top: 10px;
+        }
+
+        .performance-meter {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border: 1px solid #ddd;
+        }
+
+        .performance-bar {
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .performance-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #ffc107, #dc3545);
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .method-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 DOM Element Selection</h1>
+            <p>Master the art of selecting and targeting DOM elements with JavaScript</p>
+        </div>
+
+        <div class="main-content">
+            <div class="demo-section">
+                <h2>Interactive Demo</h2>
+
+                <div class="control-panel">
+                    <div class="control-group">
+                        <label for="selectorInput">CSS Selector:</label>
+                        <input type="text" id="selectorInput" placeholder="e.g., .my-class, #my-id, p, [data-attr]">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="methodSelect">Selection Method:</label>
+                        <select id="methodSelect">
+                            <option value="querySelector">querySelector</option>
+                            <option value="querySelectorAll">querySelectorAll</option>
+                            <option value="getElementById">getElementById</option>
+                            <option value="getElementsByClassName">getElementsByClassName</option>
+                            <option value="getElementsByTagName">getElementsByTagName</option>
+                            <option value="getElementsByName">getElementsByName</option>
+                        </select>
+                    </div>
+
+                    <button class="btn" onclick="selectElements()">Select Elements</button>
+                    <button class="btn btn-secondary" onclick="clearSelection()">Clear Selection</button>
+                    <button class="btn" onclick="generateElements()">Generate New Elements</button>
+                </div>
+
+                <div class="demo-elements" id="demoElements">
+                    <h3>Sample Elements</h3>
+                    <div class="sample-element" id="unique-element">Element with ID "unique-element"</div>
+                    <div class="sample-element class-a">Element with class "class-a"</div>
+                    <div class="sample-element class-b">Element with class "class-b"</div>
+                    <div class="sample-element class-a class-b">Element with both classes</div>
+                    <p class="sample-element">Paragraph element</p>
+                    <span class="sample-element">Span element</span>
+                    <button class="sample-element" name="demo-button">Button with name attribute</button>
+                    <input class="sample-element" type="text" placeholder="Input element" name="demo-input">
+                    <div class="sample-element" data-type="special">Element with data attribute</div>
+                    <ul class="sample-element">
+                        <li>List item 1</li>
+                        <li>List item 2</li>
+                        <li>List item 3</li>
+                    </ul>
+                </div>
+
+                <div class="output" id="output">
+                    Welcome to DOM Element Selection Demo!
+                    Try different selectors to see how they work.
+                </div>
+
+                <div class="performance-meter">
+                    <h4>Performance Meter</h4>
+                    <div class="performance-bar">
+                        <div class="performance-fill" id="performanceFill"></div>
+                    </div>
+                    <p id="performanceText">Ready to measure selection performance</p>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h2>Selection Methods</h2>
+
+                <div class="method-list">
+                    <div class="method-item" onclick="demonstrateMethod('querySelector')">
+                        <h4>querySelector()</h4>
+                        <p>Returns the first element that matches the CSS selector</p>
+                    </div>
+
+                    <div class="method-item" onclick="demonstrateMethod('querySelectorAll')">
+                        <h4>querySelectorAll()</h4>
+                        <p>Returns all elements that match the CSS selector</p>
+                    </div>
+
+                    <div class="method-item" onclick="demonstrateMethod('getElementById')">
+                        <h4>getElementById()</h4>
+                        <p>Returns element with the specified ID (fastest method)</p>
+                    </div>
+
+                    <div class="method-item" onclick="demonstrateMethod('getElementsByClassName')">
+                        <h4>getElementsByClassName()</h4>
+                        <p>Returns live HTMLCollection of elements with the class</p>
+                    </div>
+
+                    <div class="method-item" onclick="demonstrateMethod('getElementsByTagName')">
+                        <h4>getElementsByTagName()</h4>
+                        <p>Returns live HTMLCollection of elements with the tag</p>
+                    </div>
+
+                    <div class="method-item" onclick="demonstrateMethod('getElementsByName')">
+                        <h4>getElementsByName()</h4>
+                        <p>Returns elements with the specified name attribute</p>
+                    </div>
+                </div>
+
+                <div class="selector-builder">
+                    <h3>Selector Builder</h3>
+                    <div class="control-group">
+                        <label>Target Type:</label>
+                        <select id="targetType" onchange="updateSelectorBuilder()">
+                            <option value="id">ID</option>
+                            <option value="class">Class</option>
+                            <option value="tag">Tag</option>
+                            <option value="attribute">Attribute</option>
+                            <option value="pseudo">Pseudo-class</option>
+                            <option value="combinator">Combinator</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Value:</label>
+                        <input type="text" id="selectorValue" placeholder="Enter value"
+                            onchange="updateSelectorBuilder()">
+                    </div>
+                    <div class="selector-output" id="selectorBuilderOutput">
+                        #my-id
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="padding: 40px; background: #f8f9fa;">
+            <h2>Key Concepts</h2>
+            <div class="concept-card">
+                <h3>1. CSS Selectors</h3>
+                <p>Use CSS selector syntax to target elements precisely:</p>
+                <div class="code-example">
+                    // Basic selectors
+                    document.querySelector('#myId'); // ID selector
+                    document.querySelector('.myClass'); // Class selector
+                    document.querySelector('div'); // Tag selector
+                    document.querySelector('[data-id]'); // Attribute selector
+
+                    // Combined selectors
+                    document.querySelector('div.myClass'); // Tag + class
+                    document.querySelector('#parent > .child'); // Direct child
+                    document.querySelector('p:first-child'); // Pseudo-class</div>
+            </div>
+
+            <div class="concept-card">
+                <h3>2. Performance Considerations</h3>
+                <p>Different selection methods have different performance characteristics:</p>
+                <div class="code-example">
+                    // Fastest - Direct ID lookup
+                    document.getElementById('myId');
+
+                    // Fast - Class lookup
+                    document.getElementsByClassName('myClass');
+
+                    // Slower - CSS selector parsing
+                    document.querySelector('.myClass');
+
+                    // Slowest - Complex selectors
+                    document.querySelectorAll('div > .class:nth-child(2n+1)');</div>
+            </div>
+
+            <div class="concept-card">
+                <h3>3. Live vs Static Collections</h3>
+                <p>Understanding the difference between live and static collections:</p>
+                <div class="code-example">
+                    // Live HTMLCollection - updates automatically
+                    let liveElements = document.getElementsByClassName('dynamic');
+
+                    // Static NodeList - snapshot at time of query
+                    let staticElements = document.querySelectorAll('.dynamic');
+
+                    // Adding a new element with class 'dynamic'
+                    document.body.innerHTML += '&lt;div class="dynamic"&gt;New&lt;/div&gt;';
+
+                    console.log(liveElements.length); // Updated count
+                    console.log(staticElements.length); // Original count</div>
+            </div>
+
+            <div class="concept-card">
+                <h3>4. Error Handling</h3>
+                <p>Always handle cases where elements might not exist:</p>
+                <div class="code-example">
+                    // Safe element selection
+                    function safeSelect(selector) {
+                    try {
+                    const element = document.querySelector(selector);
+                    if (element) {
+                    return element;
+                    } else {
+                    console.warn(`Element not found: ${selector}`);
+                    return null;
+                    }
+                    } catch (error) {
+                    console.error(`Invalid selector: ${selector}`, error);
+                    return null;
+                    }
+                    }
+
+                    // Usage
+                    const element = safeSelect('#myId');
+                    if (element) {
+                    element.style.color = 'blue';
+                    }</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let selectedElements = [];
+        let selectionHistory = [];
+        let performanceData = [];
+
+        // Initialize the demo
+        function init() {
+            console.log('🎯 DOM Element Selection Demo initialized!');
+            logToOutput('Demo initialized! Try selecting elements with different methods.');
+
+            // Set up event listeners
+            setupEventListeners();
+
+            // Generate initial performance baseline
+            measurePerformance();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            const selectorInput = document.getElementById('selectorInput');
+            const methodSelect = document.getElementById('methodSelect');
+
+            // Auto-update on input change
+            selectorInput.addEventListener('input', debounce(autoSelect, 300));
+            methodSelect.addEventListener('change', autoSelect);
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && e.target.id === 'selectorInput') {
+                    selectElements();
+                }
+                if (e.key === 'Escape') {
+                    clearSelection();
+                }
+            });
+        }
+
+        // Main selection function
+        function selectElements() {
+            const selector = document.getElementById('selectorInput').value.trim();
+            const method = document.getElementById('methodSelect').value;
+
+            if (!selector) {
+                logToOutput('Please enter a selector first!', 'error');
+                return;
+            }
+
+            // Clear previous selection
+            clearSelection();
+
+            // Start performance measurement
+            const startTime = performance.now();
+
+            try {
+                let elements;
+                let resultCount = 0;
+
+                switch (method) {
+                    case 'querySelector':
+                        elements = document.querySelector(selector);
+                        resultCount = elements ? 1 : 0;
+                        if (elements) selectedElements = [elements];
+                        break;
+
+                    case 'querySelectorAll':
+                        elements = document.querySelectorAll(selector);
+                        resultCount = elements.length;
+                        selectedElements = Array.from(elements);
+                        break;
+
+                    case 'getElementById':
+                        if (selector.startsWith('#')) {
+                            elements = document.getElementById(selector.substring(1));
+                            resultCount = elements ? 1 : 0;
+                            if (elements) selectedElements = [elements];
+                        } else {
+                            throw new Error('getElementById requires an ID (use # prefix)');
+                        }
+                        break;
+
+                    case 'getElementsByClassName':
+                        if (selector.startsWith('.')) {
+                            elements = document.getElementsByClassName(selector.substring(1));
+                            resultCount = elements.length;
+                            selectedElements = Array.from(elements);
+                        } else {
+                            throw new Error('getElementsByClassName requires a class name (use . prefix)');
+                        }
+                        break;
+
+                    case 'getElementsByTagName':
+                        elements = document.getElementsByTagName(selector);
+                        resultCount = elements.length;
+                        selectedElements = Array.from(elements);
+                        break;
+
+                    case 'getElementsByName':
+                        elements = document.getElementsByName(selector);
+                        resultCount = elements.length;
+                        selectedElements = Array.from(elements);
+                        break;
+
+                    default:
+                        throw new Error('Unknown selection method');
+                }
+
+                // End performance measurement
+                const endTime = performance.now();
+                const executionTime = endTime - startTime;
+
+                // Highlight selected elements
+                highlightElements();
+
+                // Log results
+                logToOutput(`✅ ${method}: Found ${resultCount} element(s) in ${executionTime.toFixed(2)}ms`, 'success');
+                logToOutput(`Selector: "${selector}"`, 'info');
+
+                if (selectedElements.length > 0) {
+                    selectedElements.forEach((el, index) => {
+                        logToOutput(`[${index}] ${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''}${el.className ? '.' + el.className.split(' ').join('.') : ''}`, 'element');
+                    });
+                }
+
+                // Update performance meter
+                updatePerformanceMeter(executionTime);
+
+                // Save to history
+                selectionHistory.push({
+                    selector,
+                    method,
+                    count: resultCount,
+                    time: executionTime,
+                    timestamp: new Date()
+                });
+
+            } catch (error) {
+                logToOutput(`❌ Error: ${error.message}`, 'error');
+
+                // Show error styling
+                const demoElements = document.getElementById('demoElements');
+                demoElements.classList.add('error');
+                setTimeout(() => {
+                    demoElements.classList.remove('error');
+                }, 2000);
+            }
+        }
+
+        // Auto-select function (debounced)
+        function autoSelect() {
+            const selector = document.getElementById('selectorInput').value.trim();
+            if (selector && selector.length > 2) {
+                selectElements();
+            }
+        }
+
+        // Highlight selected elements
+        function highlightElements() {
+            selectedElements.forEach(element => {
+                element.classList.add('highlighted');
+
+                // Add selected class after a short delay
+                setTimeout(() => {
+                    element.classList.remove('highlighted');
+                    element.classList.add('selected');
+                }, 300);
+            });
+        }
+
+        // Clear selection
+        function clearSelection() {
+            // Remove all highlighting classes
+            document.querySelectorAll('.highlighted, .selected').forEach(element => {
+                element.classList.remove('highlighted', 'selected');
+            });
+
+            selectedElements = [];
+            logToOutput('Selection cleared.', 'info');
+        }
+
+        // Generate new elements
+        function generateElements() {
+            const demoElements = document.getElementById('demoElements');
+            const randomId = Math.random().toString(36).substr(2, 9);
+            const randomClass = `generated-${Math.random().toString(36).substr(2, 5)}`;
+
+            const newElement = document.createElement('div');
+            newElement.className = `sample-element ${randomClass}`;
+            newElement.id = `generated-${randomId}`;
+            newElement.textContent = `Generated element #${randomId}`;
+            newElement.setAttribute('data-generated', 'true');
+
+            demoElements.appendChild(newElement);
+
+            logToOutput(`Generated new element: #${newElement.id}.${randomClass}`, 'success');
+        }
+
+        // Demonstrate specific method
+        function demonstrateMethod(method) {
+            const methodExamples = {
+                querySelector: '.sample-element',
+                querySelectorAll: '.sample-element',
+                getElementById: '#unique-element',
+                getElementsByClassName: '.class-a',
+                getElementsByTagName: 'div',
+                getElementsByName: 'demo-button'
+            };
+
+            document.getElementById('selectorInput').value = methodExamples[method];
+            document.getElementById('methodSelect').value = method;
+            selectElements();
+        }
+
+        // Update selector builder
+        function updateSelectorBuilder() {
+            const targetType = document.getElementById('targetType').value;
+            const value = document.getElementById('selectorValue').value || 'example';
+            let selector = '';
+
+            switch (targetType) {
+                case 'id':
+                    selector = `#${value}`;
+                    break;
+                case 'class':
+                    selector = `.${value}`;
+                    break;
+                case 'tag':
+                    selector = value;
+                    break;
+                case 'attribute':
+                    selector = `[${value}]`;
+                    break;
+                case 'pseudo':
+                    selector = `element:${value}`;
+                    break;
+                case 'combinator':
+                    selector = `parent ${value}`;
+                    break;
+            }
+
+            document.getElementById('selectorBuilderOutput').textContent = selector;
+        }
+
+        // Performance measurement
+        function measurePerformance() {
+            const testSelectors = [
+                '#unique-element',
+                '.class-a',
+                'div',
+                '.sample-element',
+                '[data-type="special"]'
+            ];
+
+            performanceData = [];
+
+            testSelectors.forEach(selector => {
+                const startTime = performance.now();
+                try {
+                    document.querySelectorAll(selector);
+                    const endTime = performance.now();
+                    performanceData.push(endTime - startTime);
+                } catch (error) {
+                    performanceData.push(10); // Arbitrary high value for errors
+                }
+            });
+        }
+
+        // Update performance meter
+        function updatePerformanceMeter(executionTime) {
+            const performanceFill = document.getElementById('performanceFill');
+            const performanceText = document.getElementById('performanceText');
+
+            // Calculate percentage (0-10ms = good, 10-50ms = okay, 50ms+ = slow)
+            let percentage = Math.min((executionTime / 50) * 100, 100);
+            let status = 'Excellent';
+
+            if (executionTime > 10) {
+                status = 'Good';
+            }
+            if (executionTime > 25) {
+                status = 'Okay';
+            }
+            if (executionTime > 50) {
+                status = 'Slow';
+            }
+
+            performanceFill.style.width = percentage + '%';
+            performanceText.textContent = `${status}: ${executionTime.toFixed(2)}ms execution time`;
+        }
+
+        // Logging function
+        function logToOutput(message, type = 'info') {
+            const output = document.getElementById('output');
+            const timestamp = new Date().toLocaleTimeString();
+            const colors = {
+                info: '#00ff00',
+                success: '#00ff00',
+                error: '#ff0000',
+                element: '#ffff00'
+            };
+
+            const logEntry = document.createElement('div');
+            logEntry.style.color = colors[type] || '#00ff00';
+            logEntry.textContent = `[${timestamp}] ${message}`;
+
+            output.appendChild(logEntry);
+            output.scrollTop = output.scrollHeight;
+
+            // Keep only last 50 entries
+            while (output.children.length > 50) {
+                output.removeChild(output.firstChild);
+            }
+        }
+
+        // Utility functions
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Advanced selector examples
+        const advancedSelectors = {
+            'Descendant': 'div .sample-element',
+            'Direct Child': 'div > .sample-element',
+            'Adjacent Sibling': '.class-a + .class-b',
+            'General Sibling': '.class-a ~ .sample-element',
+            'Attribute Contains': '[class*="sample"]',
+            'Attribute Starts With': '[class^="sample"]',
+            'Attribute Ends With': '[class$="element"]',
+            'Multiple Classes': '.class-a.class-b',
+            'Pseudo First Child': '.sample-element:first-child',
+            'Pseudo Last Child': '.sample-element:last-child',
+            'Pseudo Nth Child': '.sample-element:nth-child(2n+1)',
+            'Not Selector': '.sample-element:not(.class-a)',
+            'Multiple Selectors': '.class-a, .class-b',
+            'Has Pseudo': 'div:has(.sample-element)'
+        };
+
+        // Add advanced selector examples
+        function showAdvancedSelectors() {
+            logToOutput('--- Advanced Selector Examples ---', 'info');
+            Object.entries(advancedSelectors).forEach(([name, selector]) => {
+                logToOutput(`${name}: ${selector}`, 'element');
+            });
+        }
+
+        // DOM traversal demonstration
+        function demonstrateTraversal() {
+            const element = document.querySelector('.sample-element');
+            if (element) {
+                logToOutput('--- DOM Traversal Methods ---', 'info');
+                logToOutput(`Parent: ${element.parentElement?.tagName}`, 'element');
+                logToOutput(`Next Sibling: ${element.nextElementSibling?.tagName}`, 'element');
+                logToOutput(`Previous Sibling: ${element.previousElementSibling?.tagName}`, 'element');
+                logToOutput(`Children: ${element.children.length}`, 'element');
+                logToOutput(`First Child: ${element.firstElementChild?.tagName}`, 'element');
+                logToOutput(`Last Child: ${element.lastElementChild?.tagName}`, 'element');
+            }
+        }
+
+        // Element relationship checker
+        function checkElementRelationships() {
+            const elements = document.querySelectorAll('.sample-element');
+            logToOutput('--- Element Relationships ---', 'info');
+
+            elements.forEach((element, index) => {
+                const hasClass = element.classList.contains('class-a');
+                const hasId = element.id !== '';
+                const hasDataAttr = element.hasAttribute('data-type');
+
+                logToOutput(`Element ${index}: class-a=${hasClass}, id=${hasId}, data-attr=${hasDataAttr}`, 'element');
+            });
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Add some utility functions to global scope for console experimentation
+        window.domSelectionDemo = {
+            selectElements,
+            clearSelection,
+            generateElements,
+            showAdvancedSelectors,
+            demonstrateTraversal,
+            checkElementRelationships,
+            selectionHistory,
+            performanceData
+        };
+
+        console.log('🎯 DOM Element Selection Demo loaded!');
+        console.log('📚 This demo teaches:');
+        console.log('• Different DOM selection methods');
+        console.log('• CSS selector syntax and power');
+        console.log('• Performance considerations');
+        console.log('• Live vs static collections');
+        console.log('• Error handling in selection');
+        console.log('• Advanced selector patterns');
+        console.log('💡 Try the domSelectionDemo object in console for more features!');
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Promises - Complete Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.3em;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 30px 0;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-section h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 2.2em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .content-section h3 {
+            color: #2d3748;
+            margin: 30px 0 15px 0;
+            font-size: 1.5em;
+        }
+
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            position: relative;
+            border-left: 4px solid #667eea;
+        }
+
+        .code-block::before {
+            content: "JavaScript";
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 0.8em;
+            color: #a0aec0;
+        }
+
+        .interactive-demo {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            color: white;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .demo-controls button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .demo-controls button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .demo-controls button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .demo-controls input,
+        .demo-controls select {
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 1em;
+        }
+
+        .result-display {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-family: 'Courier New', monospace;
+        }
+
+        .promise-state {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .promise-pending {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .promise-fulfilled {
+            background: #10b981;
+            color: white;
+        }
+
+        .promise-rejected {
+            background: #ef4444;
+            color: white;
+        }
+
+        .highlight {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .state-diagram {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .state-box {
+            display: inline-block;
+            padding: 15px 25px;
+            margin: 10px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            background: #f8f9fa;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .state-arrow {
+            font-size: 1.5em;
+            color: #667eea;
+            margin: 0 10px;
+        }
+
+        .best-practices {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            color: #2d3748;
+        }
+
+        .best-practices h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .best-practices ul {
+            padding-left: 20px;
+        }
+
+        .best-practices li {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .loading-indicator {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #3b82f6);
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .demo-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>JavaScript Promises</h1>
+            <p>Master asynchronous programming with Promises - From basics to advanced patterns</p>
+        </div>
+
+        <div class="content-section">
+            <h2>🤝 What Are Promises?</h2>
+            <p>A Promise is an object representing the eventual completion or failure of an asynchronous operation. It's
+                a placeholder for a value that will be available in the future.</p>
+
+            <div class="state-diagram">
+                <div class="state-box promise-pending">Pending</div>
+                <span class="state-arrow">→</span>
+                <div class="state-box promise-fulfilled">Fulfilled</div>
+                <br>
+                <div class="state-box" style="visibility: hidden;">Pending</div>
+                <span class="state-arrow">→</span>
+                <div class="state-box promise-rejected">Rejected</div>
+            </div>
+
+            <h3>Promise States</h3>
+            <ul>
+                <li><strong>Pending:</strong> Initial state, neither fulfilled nor rejected</li>
+                <li><strong>Fulfilled:</strong> Operation completed successfully</li>
+                <li><strong>Rejected:</strong> Operation failed</li>
+            </ul>
+
+            <h3>Basic Promise Syntax</h3>
+            <div class="code-block">
+                // Creating a Promise
+                const myPromise = new Promise((resolve, reject) => {
+                // Asynchronous operation
+                const success = true;
+
+                if (success) {
+                resolve("Operation successful!"); // Fulfill the promise
+                } else {
+                reject("Operation failed!"); // Reject the promise
+                }
+                });
+
+                // Using the Promise
+                myPromise
+                .then(result => {
+                console.log(result); // "Operation successful!"
+                })
+                .catch(error => {
+                console.error(error); // "Operation failed!"
+                });
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔧 Creating Promises</h2>
+
+            <h3>Basic Promise Constructor</h3>
+            <div class="code-block">
+                // Promise constructor takes an executor function
+                const promise = new Promise((resolve, reject) => {
+                // Simulate async operation
+                setTimeout(() => {
+                const randomNumber = Math.random();
+
+                if (randomNumber > 0.5) {
+                resolve({ success: true, value: randomNumber });
+                } else {
+                reject(new Error(`Random number too low: ${randomNumber}`));
+                }
+                }, 1000);
+                });
+
+                promise
+                .then(result => console.log('Success:', result))
+                .catch(error => console.error('Error:', error.message));
+            </div>
+
+            <h3>Practical Examples</h3>
+            <div class="code-block">
+                // 1. File reading simulation
+                function readFile(filename) {
+                return new Promise((resolve, reject) => {
+                // Simulate file reading
+                setTimeout(() => {
+                if (filename.endsWith('.txt')) {
+                resolve(`Content of ${filename}`);
+                } else {
+                reject(new Error(`Invalid file type: ${filename}`));
+                }
+                }, 1000);
+                });
+                }
+
+                // 2. API request simulation
+                function fetchUserData(userId) {
+                return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                if (userId > 0) {
+                resolve({
+                id: userId,
+                name: `User ${userId}`,
+                email: `user${userId}@example.com`
+                });
+                } else {
+                reject(new Error('Invalid user ID'));
+                }
+                }, 1500);
+                });
+                }
+
+                // 3. Database operation simulation
+                function saveData(data) {
+                return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                if (data && data.name) {
+                resolve({ id: Date.now(), ...data, saved: true });
+                } else {
+                reject(new Error('Invalid data format'));
+                }
+                }, 800);
+                });
+                }
+
+                // Usage
+                readFile('data.txt')
+                .then(content => console.log('File content:', content))
+                .catch(error => console.error('File error:', error.message));
+
+                fetchUserData(123)
+                .then(user => console.log('User data:', user))
+                .catch(error => console.error('User error:', error.message));
+            </div>
+
+            <div class="interactive-demo">
+                <h3>🎮 Interactive Promise Creation</h3>
+                <div class="demo-controls">
+                    <input type="number" id="promiseDelay" placeholder="Delay (ms)" value="1000" min="100" max="5000">
+                    <select id="promiseOutcome">
+                        <option value="success">Success</option>
+                        <option value="failure">Failure</option>
+                        <option value="random">Random</option>
+                    </select>
+                    <button onclick="createPromise()">Create Promise</button>
+                    <button onclick="createMultiplePromises()">Create Multiple</button>
+                </div>
+                <div class="result-display" id="promiseResult">
+                    Click "Create Promise" to see it in action...
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔗 Promise Chaining</h2>
+            <p>Promises can be chained together to perform sequential asynchronous operations. Each <code>.then()</code>
+                returns a new promise.</p>
+
+            <h3>Basic Chaining</h3>
+            <div class="code-block">
+                // Sequential operations
+                fetchUserData(1)
+                .then(user => {
+                console.log('Got user:', user.name);
+                return fetchUserPosts(user.id); // Return another promise
+                })
+                .then(posts => {
+                console.log('Got posts:', posts.length);
+                return fetchPostComments(posts[0].id); // Return another promise
+                })
+                .then(comments => {
+                console.log('Got comments:', comments.length);
+                })
+                .catch(error => {
+                console.error('Error in chain:', error.message);
+                });
+
+                // Each .then() gets the resolved value from the previous promise
+            </div>
+
+            <h3>Transforming Data in Chains</h3>
+            <div class="code-block">
+                // Data transformation pipeline
+                fetchUserData(1)
+                .then(user => {
+                // Transform user data
+                return {
+                ...user,
+                displayName: user.name.toUpperCase(),
+                emailDomain: user.email.split('@')[1]
+                };
+                })
+                .then(enhancedUser => {
+                // Further processing
+                return {
+                ...enhancedUser,
+                isVip: enhancedUser.emailDomain === 'vip.com'
+                };
+                })
+                .then(finalUser => {
+                console.log('Final user data:', finalUser);
+                })
+                .catch(error => {
+                console.error('Processing error:', error.message);
+                });
+            </div>
+
+            <h3>Error Handling in Chains</h3>
+            <div class="code-block">
+                // Error handling strategies
+                fetchUserData(1)
+                .then(user => {
+                if (!user.email) {
+                throw new Error('User has no email');
+                }
+                return validateEmail(user.email);
+                })
+                .then(isValid => {
+                if (!isValid) {
+                throw new Error('Invalid email format');
+                }
+                return sendWelcomeEmail(user.email);
+                })
+                .then(emailResult => {
+                console.log('Email sent successfully:', emailResult);
+                })
+                .catch(error => {
+                // Catches errors from any step in the chain
+                console.error('Chain error:', error.message);
+
+                // Optional: return a default value to continue the chain
+                return { success: false, error: error.message };
+                })
+                .then(result => {
+                // This will run even if there was an error (if catch returns a value)
+                console.log('Final result:', result);
+                });
+            </div>
+
+            <div class="interactive-demo">
+                <h3>🎮 Interactive Promise Chaining</h3>
+                <div class="demo-controls">
+                    <input type="number" id="chainSteps" placeholder="Number of steps" value="3" min="1" max="5">
+                    <button onclick="demonstrateChaining()">Run Chain</button>
+                    <button onclick="demonstrateChainError()">Chain with Error</button>
+                    <button onclick="demonstrateDataTransform()">Data Transform</button>
+                </div>
+                <div class="result-display" id="chainResult">
+                    Chain results will appear here...
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🚀 Promise Static Methods</h2>
+            <p>JavaScript provides several static methods on the Promise constructor for handling multiple promises.</p>
+
+            <h3>Promise.all()</h3>
+            <div class="code-block">
+                // Promise.all() - waits for all promises to resolve
+                const promises = [
+                fetchUserData(1),
+                fetchUserData(2),
+                fetchUserData(3)
+                ];
+
+                Promise.all(promises)
+                .then(users => {
+                console.log('All users loaded:', users);
+                // All promises resolved successfully
+                })
+                .catch(error => {
+                console.error('One or more promises failed:', error);
+                // If ANY promise rejects, this catch will run
+                });
+
+                // Real-world example: Loading multiple resources
+                Promise.all([
+                fetch('/api/user/profile'),
+                fetch('/api/user/settings'),
+                fetch('/api/user/notifications')
+                ])
+                .then(responses => Promise.all(responses.map(r => r.json())))
+                .then(([profile, settings, notifications]) => {
+                console.log('All data loaded:', { profile, settings, notifications });
+                })
+                .catch(error => {
+                console.error('Failed to load user data:', error);
+                });
+            </div>
+
+            <h3>Promise.allSettled()</h3>
+            <div class="code-block">
+                // Promise.allSettled() - waits for all promises to settle (resolve or reject)
+                const mixedPromises = [
+                Promise.resolve('Success 1'),
+                Promise.reject('Error 1'),
+                Promise.resolve('Success 2'),
+                Promise.reject('Error 2')
+                ];
+
+                Promise.allSettled(mixedPromises)
+                .then(results => {
+                results.forEach((result, index) => {
+                if (result.status === 'fulfilled') {
+                console.log(`Promise ${index} succeeded:`, result.value);
+                } else {
+                console.log(`Promise ${index} failed:`, result.reason);
+                }
+                });
+                });
+
+                // Output:
+                // Promise 0 succeeded: Success 1
+                // Promise 1 failed: Error 1
+                // Promise 2 succeeded: Success 2
+                // Promise 3 failed: Error 2
+            </div>
+
+            <h3>Promise.race()</h3>
+            <div class="code-block">
+                // Promise.race() - resolves/rejects with the first promise that settles
+                const racePromises = [
+                new Promise(resolve => setTimeout(() => resolve('Fast'), 100)),
+                new Promise(resolve => setTimeout(() => resolve('Medium'), 200)),
+                new Promise(resolve => setTimeout(() => resolve('Slow'), 300))
+                ];
+
+                Promise.race(racePromises)
+                .then(result => {
+                console.log('Winner:', result); // "Fast"
+                });
+
+                // Practical example: Timeout implementation
+                function withTimeout(promise, timeoutMs) {
+                const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('Operation timed out')), timeoutMs);
+                });
+
+                return Promise.race([promise, timeoutPromise]);
+                }
+
+                // Usage
+                withTimeout(fetchUserData(1), 2000)
+                .then(user => console.log('User loaded in time:', user))
+                .catch(error => console.error('Timeout or error:', error.message));
+            </div>
+
+            <h3>Promise.any()</h3>
+            <div class="code-block">
+                // Promise.any() - resolves with the first successful promise
+                const anyPromises = [
+                Promise.reject('Error 1'),
+                Promise.reject('Error 2'),
+                Promise.resolve('Success!'),
+                Promise.resolve('Another success')
+                ];
+
+                Promise.any(anyPromises)
+                .then(result => {
+                console.log('First success:', result); // "Success!"
+                })
+                .catch(error => {
+                console.error('All promises failed:', error);
+                });
+
+                // Practical example: Multiple API endpoints
+                const apiEndpoints = [
+                fetch('/api/v1/data'),
+                fetch('/api/v2/data'),
+                fetch('/api/backup/data')
+                ];
+
+                Promise.any(apiEndpoints)
+                .then(response => response.json())
+                .then(data => console.log('Got data from fastest endpoint:', data))
+                .catch(error => console.error('All endpoints failed:', error));
+            </div>
+
+            <div class="interactive-demo">
+                <h3>🎮 Interactive Promise Methods</h3>
+                <div class="demo-controls">
+                    <button onclick="demonstratePromiseAll()">Promise.all()</button>
+                    <button onclick="demonstratePromiseAllSettled()">Promise.allSettled()</button>
+                    <button onclick="demonstratePromiseRace()">Promise.race()</button>
+                    <button onclick="demonstratePromiseAny()">Promise.any()</button>
+                </div>
+                <div class="result-display" id="methodResult">
+                    Promise method results will appear here...
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚡ Real-world Promise Patterns</h2>
+
+            <h3>1. Retry Logic</h3>
+            <div class="code-block">
+                function retry(promiseFactory, maxRetries = 3, delay = 1000) {
+                return new Promise((resolve, reject) => {
+                let retries = 0;
+
+                function attempt() {
+                promiseFactory()
+                .then(resolve)
+                .catch(error => {
+                retries++;
+                if (retries <= maxRetries) { console.log(`Attempt ${retries} failed, retrying in ${delay}ms...`);
+                    setTimeout(attempt, delay); } else { reject(new Error(`Failed after ${maxRetries} retries:
+                    ${error.message}`)); } }); } attempt(); }); } // Usage retry(()=> fetchUserData(1), 3, 1000)
+                    .then(user => console.log('User loaded:', user))
+                    .catch(error => console.error('Final error:', error.message));
+            </div>
+
+            <h3>2. Promise Queue</h3>
+            <div class="code-block">
+                class PromiseQueue {
+                constructor(concurrency = 1) {
+                this.concurrency = concurrency;
+                this.running = 0;
+                this.queue = [];
+                }
+
+                add(promiseFactory) {
+                return new Promise((resolve, reject) => {
+                this.queue.push({
+                promiseFactory,
+                resolve,
+                reject
+                });
+
+                this.process();
+                });
+                }
+
+                process() {
+                if (this.running >= this.concurrency || this.queue.length === 0) {
+                return;
+                }
+
+                this.running++;
+                const { promiseFactory, resolve, reject } = this.queue.shift();
+
+                promiseFactory()
+                .then(resolve)
+                .catch(reject)
+                .finally(() => {
+                this.running--;
+                this.process();
+                });
+                }
+                }
+
+                // Usage
+                const queue = new PromiseQueue(2); // Max 2 concurrent operations
+
+                const userIds = [1, 2, 3, 4, 5];
+                const userPromises = userIds.map(id =>
+                queue.add(() => fetchUserData(id))
+                );
+
+                Promise.all(userPromises)
+                .then(users => console.log('All users loaded:', users))
+                .catch(error => console.error('Queue error:', error));
+            </div>
+
+            <h3>3. Caching with Promises</h3>
+            <div class="code-block">
+                class PromiseCache {
+                constructor(ttl = 60000) { // 1 minute TTL
+                this.cache = new Map();
+                this.ttl = ttl;
+                }
+
+                get(key, promiseFactory) {
+                const cached = this.cache.get(key);
+
+                if (cached && (Date.now() - cached.timestamp) < this.ttl) { return Promise.resolve(cached.value); }
+                    const promise=promiseFactory() .then(value=> {
+                    this.cache.set(key, {
+                    value,
+                    timestamp: Date.now()
+                    });
+                    return value;
+                    })
+                    .catch(error => {
+                    this.cache.delete(key);
+                    throw error;
+                    });
+
+                    return promise;
+                    }
+
+                    clear() {
+                    this.cache.clear();
+                    }
+                    }
+
+                    // Usage
+                    const cache = new PromiseCache(30000); // 30 second cache
+
+                    function getCachedUser(userId) {
+                    return cache.get(`user:${userId}`, () => fetchUserData(userId));
+                    }
+
+                    // First call: fetches from server
+                    getCachedUser(1).then(user => console.log('User (from server):', user));
+
+                    // Second call: returns from cache
+                    getCachedUser(1).then(user => console.log('User (from cache):', user));
+            </div>
+
+            <div class="interactive-demo">
+                <h3>🎮 Interactive Advanced Patterns</h3>
+                <div class="demo-controls">
+                    <button onclick="demonstrateRetry()">Retry Pattern</button>
+                    <button onclick="demonstrateQueue()">Promise Queue</button>
+                    <button onclick="demonstrateCache()">Promise Cache</button>
+                    <button onclick="demonstrateCircuitBreaker()">Circuit Breaker</button>
+                </div>
+                <div class="result-display" id="patternResult">
+                    Pattern results will appear here...
+                </div>
+            </div>
+        </div>
+
+        <div class="best-practices">
+            <h3>✅ Best Practices</h3>
+            <ul>
+                <li><strong>Always handle errors:</strong> Use .catch() or try-catch with async/await</li>
+                <li><strong>Return promises in chains:</strong> Return the next promise in .then() for proper chaining
+                </li>
+                <li><strong>Use Promise.all() for parallel operations:</strong> When operations can run simultaneously
+                </li>
+                <li><strong>Prefer async/await for readability:</strong> For complex promise chains</li>
+                <li><strong>Don't create unnecessary promises:</strong> Avoid wrapping already-async functions</li>
+                <li><strong>Use Promise.allSettled() for error tolerance:</strong> When you need all results regardless
+                    of failures</li>
+                <li><strong>Implement timeouts:</strong> Use Promise.race() for operations that might hang</li>
+                <li><strong>Consider using libraries:</strong> For complex scenarios (p-limit, p-retry, etc.)</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>⚠️ Common Pitfalls</h2>
+
+            <h3>1. Promise Constructor Antipattern</h3>
+            <div class="code-block">
+                // ❌ Wrong: Wrapping already-async functions
+                function fetchUserBad(id) {
+                return new Promise((resolve, reject) => {
+                fetch(`/api/users/${id}`)
+                .then(response => response.json())
+                .then(user => resolve(user))
+                .catch(error => reject(error));
+                });
+                }
+
+                // ✅ Correct: Just return the promise
+                function fetchUserGood(id) {
+                return fetch(`/api/users/${id}`)
+                .then(response => response.json());
+                }
+            </div>
+
+            <h3>2. Not Returning Promises in Chains</h3>
+            <div class="code-block">
+                // ❌ Wrong: Not returning the promise
+                fetchUserData(1)
+                .then(user => {
+                fetchUserPosts(user.id); // Not returned!
+                })
+                .then(posts => {
+                console.log(posts); // undefined!
+                });
+
+                // ✅ Correct: Return the promise
+                fetchUserData(1)
+                .then(user => {
+                return fetchUserPosts(user.id); // Returned
+                })
+                .then(posts => {
+                console.log(posts); // Actual posts
+                });
+            </div>
+
+            <h3>3. Nested Promises (Callback Hell)</h3>
+            <div class="code-block">
+                // ❌ Wrong: Nested promises
+                fetchUserData(1)
+                .then(user => {
+                fetchUserPosts(user.id)
+                .then(posts => {
+                fetchPostComments(posts[0].id)
+                .then(comments => {
+                console.log(comments); // Nested hell!
+                });
+                });
+                });
+
+                // ✅ Correct: Flat promise chain
+                fetchUserData(1)
+                .then(user => fetchUserPosts(user.id))
+                .then(posts => fetchPostComments(posts[0].id))
+                .then(comments => console.log(comments));
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function createPromise() {
+            const delay = parseInt(document.getElementById('promiseDelay').value) || 1000;
+            const outcome = document.getElementById('promiseOutcome').value;
+
+            const resultDiv = document.getElementById('promiseResult');
+            resultDiv.innerHTML = `<div class="loading-indicator"></div> Creating promise with ${delay}ms delay...`;
+
+            const promise = new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    const success = outcome === 'success' || (outcome === 'random' && Math.random() > 0.5);
+
+                    if (success) {
+                        resolve({
+                            message: 'Promise resolved successfully!',
+                            timestamp: new Date().toISOString(),
+                            delay: delay
+                        });
+                    } else {
+                        reject(new Error('Promise rejected as requested'));
+                    }
+                }, delay);
+            });
+
+            promise
+                .then(result => {
+                    resultDiv.innerHTML = `
+                        <h4>✅ Promise Fulfilled</h4>
+                        <p><strong>Result:</strong> ${result.message}</p>
+                        <p><strong>Delay:</strong> ${result.delay}ms</p>
+                        <p><strong>Timestamp:</strong> ${result.timestamp}</p>
+                    `;
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `
+                        <h4>❌ Promise Rejected</h4>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p><strong>Delay:</strong> ${delay}ms</p>
+                        <p><strong>Timestamp:</strong> ${new Date().toISOString()}</p>
+                    `;
+                });
+        }
+
+        function createMultiplePromises() {
+            const delay = parseInt(document.getElementById('promiseDelay').value) || 1000;
+            const resultDiv = document.getElementById('promiseResult');
+
+            resultDiv.innerHTML = `<div class="loading-indicator"></div> Creating multiple promises...`;
+
+            const promises = [
+                new Promise(resolve => setTimeout(() => resolve('Promise 1 resolved'), delay)),
+                new Promise(resolve => setTimeout(() => resolve('Promise 2 resolved'), delay + 500)),
+                new Promise(resolve => setTimeout(() => resolve('Promise 3 resolved'), delay + 1000))
+            ];
+
+            Promise.all(promises)
+                .then(results => {
+                    resultDiv.innerHTML = `
+                        <h4>✅ All Promises Fulfilled</h4>
+                        ${results.map((result, index) => `<p><strong>Promise ${index + 1}:</strong> ${result}</p>`).join('')}
+                    `;
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `
+                        <h4>❌ Promise Failed</h4>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                    `;
+                });
+        }
+
+        function demonstrateChaining() {
+            const steps = parseInt(document.getElementById('chainSteps').value) || 3;
+            const resultDiv = document.getElementById('chainResult');
+
+            resultDiv.innerHTML = `<div class="loading-indicator"></div> Running ${steps} chained operations...`;
+
+            let chain = Promise.resolve({ step: 0, data: 'Initial' });
+
+            for (let i = 1; i <= steps; i++) {
+                chain = chain.then(result => {
+                    return new Promise(resolve => {
+                        setTimeout(() => {
+                            resolve({
+                                step: i,
+                                data: `Step ${i} data`,
+                                previous: result.data
+                            });
+                        }, 500);
+                    });
+                });
+            }
+
+            chain
+                .then(finalResult => {
+                    resultDiv.innerHTML = `
+                        <h4>✅ Chain Completed</h4>
+                        <p><strong>Final Step:</strong> ${finalResult.step}</p>
+                        <p><strong>Final Data:</strong> ${finalResult.data}</p>
+                        <p><strong>Previous Data:</strong> ${finalResult.previous}</p>
+                    `;
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `
+                        <h4>❌ Chain Failed</h4>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                    `;
+                });
+        }
+
+        function demonstrateChainError() {
+            const resultDiv = document.getElementById('chainResult');
+            resultDiv.innerHTML = `<div class="loading-indicator"></div> Running chain with error...`;
+
+            Promise.resolve('Step 1')
+                .then(result => {
+                    return new Promise(resolve => {
+                        setTimeout(() => resolve('Step 2'), 500);
+                    });
+                })
+                .then(result => {
+                    throw new Error('Intentional error in step 3');
+                })
+                .then(result => {
+                    return 'Step 4 (should not execute)';
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `
+                        <h4>❌ Chain Error Caught</h4>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p><strong>Note:</strong> Error occurred at step 3, skipping step 4</p>
+                    `;
+                    return 'Recovered from error';
+                })
+                .then(result => {
+                    resultDiv.innerHTML += `
+                        <p><strong>Recovery:</strong> ${result}</p>
+                        <p><strong>Note:</strong> Chain continued after error handling</p>
+                    `;
+                });
+        }
+
+        function demonstrateDataTransform() {
+            const resultDiv = document.getElementById('chainResult');
+            resultDiv.innerHTML = `<div class="loading-indicator"></div> Transforming data through chain...`;
+
+            Promise.resolve({ name: 'john doe', age: 25, score: 85 })
+                .then(user => {
+                    return {
+                        ...user,
+                        name: user.name.toUpperCase(),
+                        displayName: user.name.split(' ').map(n => n.charAt(0).toUpperCase() + n.slice(1)).join(' ')
+                    };
+                })
+                .then(user => {
+                    return {
+                        ...user,
+                        grade: user.score >= 90 ? 'A' : user.score >= 80 ? 'B' : user.score >= 70 ? 'C' : 'F',
+                        category: user.age >= 18 ? 'Adult' : 'Minor'
+                    };
+                })
+                .then(finalUser => {
+                    resultDiv.innerHTML = `
+                        <h4>✅ Data Transformation Complete</h4>
+                        <p><strong>Original:</strong> john doe, 25, 85</p>
+                        <p><strong>Transformed:</strong></p>
+                        <p>- Name: ${finalUser.name}</p>
+                        <p>- Display Name: ${finalUser.displayName}</p>
+                        <p>- Grade: ${finalUser.grade}</p>
+                        <p>- Category: ${finalUser.category}</p>
+                    `;
+                });
+        }
+
+        function demonstratePromiseAll() {
+            const resultDiv = document.getElementById('methodResult');
+            resultDiv.innerHTML = `<div class="loading-indicator"></div> Running Promise.all()...`;
+
+            const promises = [
+                new Promise(resolve => setTimeout(() => resolve('Task 1 complete'), 1000)),
+                new Promise(resolve => setTimeout(() => resolve('Task 2 complete'), 1500)),
+                new Promise(resolve => setTimeout(() => resolve('Task 3 complete'), 800))
+            ];
+
+            Promise.all(promises)
+                .then(results => {
+                    resultDiv.innerHTML = `
+                        <h4>✅ Promise.all() Completed</h4>
+                        <p><strong>All tasks completed simultaneously:</strong></p>
+                        ${results.map((result, index) => `<p>- ${result}</p>`).join('')}
+                        <p><strong>Total time:</strong> ~1.5 seconds (longest task)</p>
+                    `;
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `
+                        <h4>❌ Promise.all() Failed</h4>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                    `;
+                });
+        }
+
+        function demonstratePromiseAllSettled() {
+            const resultDiv = document.getElementById('methodResult');
+            resultDiv.innerHTML = `<div class="loading-indicator"></div> Running Promise.allSettled()...`;
+
+            const promises = [
+                Promise.resolve('Success 1'),
+                Promise.reject('Error 1'),
+                Promise.resolve('Success 2'),
+                Promise.reject('Error 2')
+            ];
+
+            Promise.allSettled(promises)
+                .then(results => {
+                    let html = '<h4>✅ Promise.allSettled() Completed</h4>';
+                    results.forEach((result, index) => {
+                        if (result.status === 'fulfilled') {
+                            html += `<p>✅ Promise ${index + 1}: ${result.value}</p>`;
+                        } else {
+                            html += `<p>❌ Promise ${index + 1}: ${result.reason}</p>`;
+                        }
+                    });
+                    html += '<p><strong>Note:</strong> All promises settled, regardless of outcome</p>';
+                    resultDiv.innerHTML = html;
+                });
+        }
+
+        function demonstratePromiseRace() {
+            const resultDiv = document.getElementById('methodResult');
+            resultDiv.innerHTML = `<div class="loading-indicator"></div> Running Promise.race()...`;
+
+            const promises = [
+                new Promise(resolve => setTimeout(() => resolve('Fast (100ms)'), 100)),
+                new Promise(resolve => setTimeout(() => resolve('Medium (500ms)'), 500)),
+                new Promise(resolve => setTimeout(() => resolve('Slow (1000ms)'), 1000))
+            ];
+
+            Promise.race(promises)
+                .then(result => {
+                    resultDiv.innerHTML = `
+                        <h4>🏁 Promise.race() Winner</h4>
+                        <p><strong>First to resolve:</strong> ${result}</p>
+                        <p><strong>Note:</strong> Other promises continue running in background</p>
+                    `;
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `
+                        <h4>❌ Promise.race() Failed</h4>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                    `;
+                });
+        }
+
+        function demonstratePromiseAny() {
+            const resultDiv = document.getElementById('methodResult');
+            resultDiv.innerHTML = `<div class="loading-indicator"></div> Running Promise.any()...`;
+
+            const promises = [
+                Promise.reject('Error 1'),
+                new Promise(resolve => setTimeout(() => resolve('First Success'), 300)),
+                Promise.reject('Error 2'),
+                new Promise(resolve => setTimeout(() => resolve('Second Success'), 200))
+            ];
+
+            Promise.any(promises)
+                .then(result => {
+                    resultDiv.innerHTML = `
+                        <h4>✅ Promise.any() First Success</h4>
+                        <p><strong>First successful result:</strong> ${result}</p>
+                        <p><strong>Note:</strong> Ignores rejected promises, waits for first success</p>
+                    `;
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `
+                        <h4>❌ Promise.any() All Failed</h4>
+                        <p><strong>Error:</strong> All promises rejected</p>
+                    `;
+                });
+        }
+
+        function demonstrateRetry() {
+            const resultDiv = document.getElementById('patternResult');
+            resultDiv.innerHTML = `<div class="loading-indicator"></div> Testing retry pattern...`;
+
+            let attempts = 0;
+
+            function unreliableOperation() {
+                attempts++;
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        if (attempts < 3) {
+                            reject(new Error(`Attempt ${attempts} failed`));
+                        } else {
+                            resolve(`Success on attempt ${attempts}`);
+                        }
+                    }, 300);
+                });
+            }
+
+            function retry(promiseFactory, maxRetries = 3) {
+                return promiseFactory().catch(error => {
+                    if (maxRetries > 0) {
+                        return retry(promiseFactory, maxRetries - 1);
+                    }
+                    throw error;
+                });
+            }
+
+            retry(unreliableOperation, 3)
+                .then(result => {
+                    resultDiv.innerHTML = `
+                        <h4>✅ Retry Pattern Success</h4>
+                        <p><strong>Result:</strong> ${result}</p>
+                        <p><strong>Total attempts:</strong> ${attempts}</p>
+                    `;
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `
+                        <h4>❌ Retry Pattern Failed</h4>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p><strong>Total attempts:</strong> ${attempts}</p>
+                    `;
+                });
+        }
+
+        function demonstrateQueue() {
+            const resultDiv = document.getElementById('patternResult');
+            resultDiv.innerHTML = `<div class="loading-indicator"></div> Testing promise queue...`;
+
+            class SimpleQueue {
+                constructor() {
+                    this.running = 0;
+                    this.queue = [];
+                }
+
+                add(promiseFactory) {
+                    return new Promise((resolve, reject) => {
+                        this.queue.push({ promiseFactory, resolve, reject });
+                        this.process();
+                    });
+                }
+
+                process() {
+                    if (this.running >= 2 || this.queue.length === 0) return;
+
+                    this.running++;
+                    const { promiseFactory, resolve, reject } = this.queue.shift();
+
+                    promiseFactory()
+                        .then(resolve)
+                        .catch(reject)
+                        .finally(() => {
+                            this.running--;
+                            this.process();
+                        });
+                }
+            }
+
+            const queue = new SimpleQueue();
+            const tasks = [1, 2, 3, 4, 5].map(i =>
+                queue.add(() => new Promise(resolve =>
+                    setTimeout(() => resolve(`Task ${i} complete`), 500)
+                ))
+            );
+
+            Promise.all(tasks)
+                .then(results => {
+                    resultDiv.innerHTML = `
+                        <h4>✅ Queue Pattern Success</h4>
+                        <p><strong>Results:</strong></p>
+                        ${results.map(result => `<p>- ${result}</p>`).join('')}
+                        <p><strong>Note:</strong> Max 2 concurrent tasks</p>
+                    `;
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `
+                        <h4>❌ Queue Pattern Failed</h4>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                    `;
+                });
+        }
+
+        function demonstrateCache() {
+            const resultDiv = document.getElementById('patternResult');
+            resultDiv.innerHTML = `<div class="loading-indicator"></div> Testing promise cache...`;
+
+            class SimpleCache {
+                constructor() {
+                    this.cache = new Map();
+                }
+
+                get(key, factory) {
+                    if (this.cache.has(key)) {
+                        return Promise.resolve(this.cache.get(key));
+                    }
+
+                    const promise = factory().then(value => {
+                        this.cache.set(key, value);
+                        return value;
+                    });
+
+                    return promise;
+                }
+            }
+
+            const cache = new SimpleCache();
+            let callCount = 0;
+
+            function expensiveOperation(id) {
+                callCount++;
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        resolve(`Data for ${id} (call #${callCount})`);
+                    }, 500);
+                });
+            }
+
+            // First call
+            cache.get('user1', () => expensiveOperation('user1'))
+                .then(result1 => {
+                    // Second call (should be cached)
+                    return cache.get('user1', () => expensiveOperation('user1'))
+                        .then(result2 => {
+                            resultDiv.innerHTML = `
+                                <h4>✅ Cache Pattern Success</h4>
+                                <p><strong>First call:</strong> ${result1}</p>
+                                <p><strong>Second call:</strong> ${result2}</p>
+                                <p><strong>Total expensive calls:</strong> ${callCount}</p>
+                                <p><strong>Note:</strong> Second call returned cached result</p>
+                            `;
+                        });
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `
+                        <h4>❌ Cache Pattern Failed</h4>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                    `;
+                });
+        }
+
+        function demonstrateCircuitBreaker() {
+            const resultDiv = document.getElementById('patternResult');
+            resultDiv.innerHTML = `<div class="loading-indicator"></div> Testing circuit breaker...`;
+
+            class CircuitBreaker {
+                constructor(threshold = 3, timeout = 5000) {
+                    this.threshold = threshold;
+                    this.timeout = timeout;
+                    this.failures = 0;
+                    this.state = 'CLOSED'; // CLOSED, OPEN, HALF_OPEN
+                    this.nextAttempt = Date.now();
+                }
+
+                async call(operation) {
+                    if (this.state === 'OPEN') {
+                        if (Date.now() < this.nextAttempt) {
+                            throw new Error('Circuit breaker is OPEN');
+                        }
+                        this.state = 'HALF_OPEN';
+                    }
+
+                    try {
+                        const result = await operation();
+                        this.onSuccess();
+                        return result;
+                    } catch (error) {
+                        this.onFailure();
+                        throw error;
+                    }
+                }
+
+                onSuccess() {
+                    this.failures = 0;
+                    this.state = 'CLOSED';
+                }
+
+                onFailure() {
+                    this.failures++;
+                    if (this.failures >= this.threshold) {
+                        this.state = 'OPEN';
+                        this.nextAttempt = Date.now() + this.timeout;
+                    }
+                }
+            }
+
+            const breaker = new CircuitBreaker(2, 2000);
+            let callCount = 0;
+
+            function flakyOperation() {
+                callCount++;
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        if (callCount <= 2) {
+                            reject(new Error(`Call ${callCount} failed`));
+                        } else {
+                            resolve(`Call ${callCount} succeeded`);
+                        }
+                    }, 300);
+                });
+            }
+
+            // Make multiple calls to trigger circuit breaker
+            const calls = [];
+            for (let i = 0; i < 5; i++) {
+                calls.push(
+                    breaker.call(flakyOperation)
+                        .then(result => ({ success: true, result }))
+                        .catch(error => ({ success: false, error: error.message }))
+                );
+            }
+
+            Promise.all(calls)
+                .then(results => {
+                    let html = '<h4>🔧 Circuit Breaker Pattern</h4>';
+                    results.forEach((result, index) => {
+                        if (result.success) {
+                            html += `<p>✅ Call ${index + 1}: ${result.result}</p>`;
+                        } else {
+                            html += `<p>❌ Call ${index + 1}: ${result.error}</p>`;
+                        }
+                    });
+                    html += `<p><strong>Total operations attempted:</strong> ${callCount}</p>`;
+                    html += `<p><strong>Note:</strong> Circuit breaker opened after failures</p>`;
+                    resultDiv.innerHTML = html;
+                });
+        }
+
+        // Initialize with default demonstrations
+        document.addEventListener('DOMContentLoaded', function () {
+            createPromise();
+            demonstrateChaining();
+            demonstratePromiseAll();
+            demonstrateRetry();
+        });
+    </script>
+</body>
+
+</html>

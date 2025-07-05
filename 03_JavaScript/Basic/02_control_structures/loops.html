@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Loops - Basic Level</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #4facfe;
+        }
+
+        .section h2 {
+            color: #4facfe;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .code-example {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-example::before {
+            content: "JavaScript";
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: #4facfe;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.8em;
+        }
+
+        .keyword {
+            color: #ff79c6;
+        }
+
+        .string {
+            color: #50fa7b;
+        }
+
+        .number {
+            color: #ffb86c;
+        }
+
+        .comment {
+            color: #6272a4;
+        }
+
+        .function {
+            color: #8be9fd;
+        }
+
+        .demo-container {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .demo-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .output {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-family: monospace;
+            min-height: 50px;
+            border: 2px solid #2d3748;
+        }
+
+        .loop-type {
+            background: #e6f3ff;
+            border: 1px solid #b3d9ff;
+            color: #0066cc;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .loop-type h3 {
+            color: #0066cc;
+            margin-bottom: 10px;
+        }
+
+        .performance-tip {
+            background: #fff3cd;
+            border: 1px solid #ffecb5;
+            color: #856404;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .warning {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .best-practices {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .best-practices h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .best-practices ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .best-practices li {
+            background: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .best-practices li::before {
+            content: "✓";
+            color: #48bb78;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .navigation {
+            background: #2d3748;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .nav-button {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background: white;
+            color: #2d3748;
+            transform: translateY(-2px);
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .visualization {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .loop-counter {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            font-weight: bold;
+        }
+
+        .array-item {
+            display: inline-block;
+            background: #4facfe;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 5px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔄 JavaScript Loops</h1>
+            <p>Master the art of iteration and repetition in JavaScript</p>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 75%"></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2>🎯 Learning Objectives</h2>
+                <ul>
+                    <li>Understand different types of loops in JavaScript</li>
+                    <li>Learn when to use each loop type</li>
+                    <li>Master loop control statements (break, continue)</li>
+                    <li>Implement nested loops effectively</li>
+                    <li>Avoid common loop pitfalls and infinite loops</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>🔁 The For Loop</h2>
+                <p>The most commonly used loop for iterating a known number of times.</p>
+
+                <div class="loop-type">
+                    <h3>Basic For Loop</h3>
+                    <p>Perfect when you know exactly how many times to loop.</p>
+                </div>
+
+                <div class="code-example">
+                    <span class="comment">// Basic for loop syntax</span>
+                    <span class="keyword">for</span> (initialization; condition; increment) {
+                    <span class="comment">// Code to be executed</span>
+                    }
+
+                    <span class="comment">// Example: Print numbers 1 to 5</span>
+                    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span
+                        class="number">1</span>; i <= <span class="number">5</span>; i++) {
+                        <span class="keyword">console</span>.<span class="function">log</span>(<span
+                            class="string">"Number:"</span>, i);
+                        }
+
+                        <span class="comment">// Example: Sum of numbers 1 to 10</span>
+                        <span class="keyword">let</span> sum = <span class="number">0</span>;
+                        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span
+                            class="number">1</span>; i <= <span class="number">10</span>; i++) {
+                            sum += i;
+                            }
+                            <span class="keyword">console</span>.<span class="function">log</span>(<span
+                                class="string">"Sum:"</span>, sum); <span class="comment">// 55</span>
+                </div>
+
+                <div class="demo-container">
+                    <h3>🎮 Interactive Demo: For Loop</h3>
+                    <input type="number" id="forLoopCount" placeholder="Enter count" min="1" max="20" value="5"
+                        style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; margin: 5px;">
+                    <button class="demo-button" onclick="demonstrateForLoop()">Run For Loop</button>
+                    <div class="output" id="forLoopOutput">Enter a number and click run!</div>
+                    <div class="visualization" id="forLoopViz"></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📊 Array Iteration with For Loop</h2>
+
+                <div class="code-example">
+                    <span class="comment">// Iterating through an array</span>
+                    <span class="keyword">let</span> fruits = [<span class="string">"apple"</span>, <span
+                        class="string">"banana"</span>, <span class="string">"orange"</span>, <span
+                        class="string">"grape"</span>];
+
+                    <span class="comment">// Method 1: Using array length</span>
+                    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span
+                        class="number">0</span>; i < fruits.<span class="function">length</span>; i++) {
+                        <span class="keyword">console</span>.<span class="function">log</span>(<span
+                            class="string">`Fruit ${i + 1}: ${fruits[i]}`</span>);
+                        }
+
+                        <span class="comment">// Method 2: Reverse iteration</span>
+                        <span class="keyword">for</span> (<span class="keyword">let</span> i = fruits.<span
+                            class="function">length</span> - <span class="number">1</span>; i >= <span
+                            class="number">0</span>; i--) {
+                        <span class="keyword">console</span>.<span class="function">log</span>(<span
+                            class="string">`Reverse ${i}: ${fruits[i]}`</span>);
+                        }
+
+                        <span class="comment">// Method 3: Step by 2</span>
+                        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span
+                            class="number">0</span>; i < fruits.<span class="function">length</span>; i += <span
+                                class="number">2</span>) {
+                            <span class="keyword">console</span>.<span class="function">log</span>(<span
+                                class="string">`Every other: ${fruits[i]}`</span>);
+                            }
+                </div>
+
+                <div class="demo-container">
+                    <h3>🎮 Interactive Demo: Array Iteration</h3>
+                    <button class="demo-button" onclick="demonstrateArrayIteration()">Forward</button>
+                    <button class="demo-button" onclick="demonstrateReverseIteration()">Reverse</button>
+                    <button class="demo-button" onclick="demonstrateStepIteration()">Step by 2</button>
+                    <div class="output" id="arrayIterationOutput">Click a button to see array iteration!</div>
+                    <div class="visualization" id="arrayIterationViz"></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔂 The While Loop</h2>
+                <p>Executes code as long as a condition is true. Great for unknown iterations.</p>
+
+                <div class="loop-type">
+                    <h3>While Loop</h3>
+                    <p>Use when you don't know how many iterations you need.</p>
+                </div>
+
+                <div class="code-example">
+                    <span class="comment">// Basic while loop syntax</span>
+                    <span class="keyword">while</span> (condition) {
+                    <span class="comment">// Code to be executed</span>
+                    <span class="comment">// Don't forget to update the condition!</span>
+                    }
+
+                    <span class="comment">// Example: Countdown</span>
+                    <span class="keyword">let</span> count = <span class="number">5</span>;
+                    <span class="keyword">while</span> (count > <span class="number">0</span>) {
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span
+                        class="string">"Countdown:"</span>, count);
+                    count--; <span class="comment">// Important: update the condition</span>
+                    }
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Blast
+                        off!"</span>);
+
+                    <span class="comment">// Example: Generate random numbers until we get 7</span>
+                    <span class="keyword">let</span> randomNum;
+                    <span class="keyword">let</span> attempts = <span class="number">0</span>;
+                    <span class="keyword">while</span> (randomNum !== <span class="number">7</span>) {
+                    randomNum = <span class="function">Math</span>.<span class="function">floor</span>(<span
+                        class="function">Math</span>.<span class="function">random</span>() * <span
+                        class="number">10</span>) + <span class="number">1</span>;
+                    attempts++;
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span class="string">`Attempt
+                        ${attempts}: ${randomNum}`</span>);
+                    }
+                </div>
+
+                <div class="demo-container">
+                    <h3>🎮 Interactive Demo: While Loop</h3>
+                    <button class="demo-button" onclick="demonstrateWhileLoop()">Countdown</button>
+                    <button class="demo-button" onclick="demonstrateRandomWhile()">Find Lucky 7</button>
+                    <div class="output" id="whileLoopOutput">Click a button to see while loops!</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔄 The Do-While Loop</h2>
+                <p>Similar to while, but guaranteed to execute at least once.</p>
+
+                <div class="loop-type">
+                    <h3>Do-While Loop</h3>
+                    <p>Executes code first, then checks condition.</p>
+                </div>
+
+                <div class="code-example">
+                    <span class="comment">// Do-while loop syntax</span>
+                    <span class="keyword">do</span> {
+                    <span class="comment">// Code to be executed</span>
+                    } <span class="keyword">while</span> (condition);
+
+                    <span class="comment">// Example: Input validation</span>
+                    <span class="keyword">let</span> userInput;
+                    <span class="keyword">do</span> {
+                    userInput = <span class="function">prompt</span>(<span class="string">"Enter a number between 1 and
+                        10:"</span>);
+                    } <span class="keyword">while</span> (userInput < <span class="number">1</span> || userInput > <span
+                            class="number">10</span>);
+
+                        <span class="comment">// Example: Menu system</span>
+                        <span class="keyword">let</span> choice;
+                        <span class="keyword">do</span> {
+                        <span class="keyword">console</span>.<span class="function">log</span>(<span
+                            class="string">"Menu:"</span>);
+                        <span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"1.
+                            Play Game"</span>);
+                        <span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"2.
+                            Settings"</span>);
+                        <span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"3.
+                            Exit"</span>);
+                        choice = <span class="function">parseInt</span>(<span class="function">prompt</span>(<span
+                            class="string">"Choose option:"</span>));
+                        } <span class="keyword">while</span> (choice !== <span class="number">3</span>);
+                </div>
+
+                <div class="demo-container">
+                    <h3>🎮 Interactive Demo: Do-While Loop</h3>
+                    <button class="demo-button" onclick="demonstrateDoWhile()">Guess Number</button>
+                    <div class="output" id="doWhileOutput">Click to play a guessing game!</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📝 For-In and For-Of Loops</h2>
+
+                <div class="loop-type">
+                    <h3>For-In Loop</h3>
+                    <p>Iterates over object properties or array indices.</p>
+                </div>
+
+                <div class="code-example">
+                    <span class="comment">// For-in loop - iterates over object properties</span>
+                    <span class="keyword">let</span> person = {
+                    name: <span class="string">"John"</span>,
+                    age: <span class="number">30</span>,
+                    city: <span class="string">"New York"</span>
+                    };
+
+                    <span class="keyword">for</span> (<span class="keyword">let</span> property <span
+                        class="keyword">in</span> person) {
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span
+                        class="string">`${property}: ${person[property]}`</span>);
+                    }
+
+                    <span class="comment">// For-in with arrays (not recommended)</span>
+                    <span class="keyword">let</span> colors = [<span class="string">"red"</span>, <span
+                        class="string">"green"</span>, <span class="string">"blue"</span>];
+                    <span class="keyword">for</span> (<span class="keyword">let</span> index <span
+                        class="keyword">in</span> colors) {
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span class="string">`Index
+                        ${index}: ${colors[index]}`</span>);
+                    }
+                </div>
+
+                <div class="loop-type">
+                    <h3>For-Of Loop</h3>
+                    <p>Iterates over iterable objects (arrays, strings, etc.).</p>
+                </div>
+
+                <div class="code-example">
+                    <span class="comment">// For-of loop - iterates over array values</span>
+                    <span class="keyword">let</span> fruits = [<span class="string">"apple"</span>, <span
+                        class="string">"banana"</span>, <span class="string">"orange"</span>];
+
+                    <span class="keyword">for</span> (<span class="keyword">let</span> fruit <span
+                        class="keyword">of</span> fruits) {
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span class="string">`Fruit:
+                        ${fruit}`</span>);
+                    }
+
+                    <span class="comment">// For-of with strings</span>
+                    <span class="keyword">let</span> word = <span class="string">"Hello"</span>;
+                    <span class="keyword">for</span> (<span class="keyword">let</span> letter <span
+                        class="keyword">of</span> word) {
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span class="string">`Letter:
+                        ${letter}`</span>);
+                    }
+
+                    <span class="comment">// For-of with array destructuring</span>
+                    <span class="keyword">let</span> coordinates = [[<span class="number">0</span>, <span
+                        class="number">0</span>], [<span class="number">1</span>, <span class="number">1</span>], [<span
+                        class="number">2</span>, <span class="number">2</span>]];
+                    <span class="keyword">for</span> (<span class="keyword">let</span> [x, y] <span
+                        class="keyword">of</span> coordinates) {
+                    <span class="keyword">console</span>.<span class="function">log</span>(<span class="string">`Point:
+                        (${x}, ${y})`</span>);
+                    }
+                </div>
+
+                <div class="demo-container">
+                    <h3>🎮 Interactive Demo: For-In vs For-Of</h3>
+                    <button class="demo-button" onclick="demonstrateForIn()">For-In Loop</button>
+                    <button class="demo-button" onclick="demonstrateForOf()">For-Of Loop</button>
+                    <div class="output" id="forInOfOutput">Click a button to see the difference!</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🛑 Loop Control Statements</h2>
+
+                <h3>Break Statement</h3>
+                <p>Terminates the loop completely.</p>
+
+                <div class="code-example">
+                    <span class="comment">// Break statement example</span>
+                    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span
+                        class="number">1</span>; i <= <span class="number">10</span>; i++) {
+                        <span class="keyword">if</span> (i === <span class="number">6</span>) {
+                        <span class="keyword">console</span>.<span class="function">log</span>(<span
+                            class="string">"Breaking at 6"</span>);
+                        <span class="keyword">break</span>; <span class="comment">// Exit the loop</span>
+                        }
+                        <span class="keyword">console</span>.<span class="function">log</span>(<span
+                            class="string">"Number:"</span>, i);
+                        }
+
+                        <span class="comment">// Finding first even number</span>
+                        <span class="keyword">let</span> numbers = [<span class="number">1</span>, <span
+                            class="number">3</span>, <span class="number">5</span>, <span class="number">8</span>, <span
+                            class="number">9</span>, <span class="number">10</span>];
+                        <span class="keyword">for</span> (<span class="keyword">let</span> num <span
+                            class="keyword">of</span> numbers) {
+                        <span class="keyword">if</span> (num % <span class="number">2</span> === <span
+                            class="number">0</span>) {
+                        <span class="keyword">console</span>.<span class="function">log</span>(<span
+                            class="string">"First even number:"</span>, num);
+                        <span class="keyword">break</span>;
+                        }
+                        }
+                </div>
+
+                <h3>Continue Statement</h3>
+                <p>Skips the current iteration and continues with the next.</p>
+
+                <div class="code-example">
+                    <span class="comment">// Continue statement example</span>
+                    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span
+                        class="number">1</span>; i <= <span class="number">10</span>; i++) {
+                        <span class="keyword">if</span> (i % <span class="number">2</span> === <span
+                            class="number">0</span>) {
+                        <span class="keyword">continue</span>; <span class="comment">// Skip even numbers</span>
+                        }
+                        <span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Odd
+                            number:"</span>, i);
+                        }
+
+                        <span class="comment">// Skip negative numbers</span>
+                        <span class="keyword">let</span> mixed = [-<span class="number">2</span>, <span
+                            class="number">3</span>, -<span class="number">1</span>, <span class="number">5</span>,
+                        -<span class="number">3</span>, <span class="number">7</span>];
+                        <span class="keyword">for</span> (<span class="keyword">let</span> num <span
+                            class="keyword">of</span> mixed) {
+                        <span class="keyword">if</span> (num < <span class="number">0</span>) {
+                            <span class="keyword">continue</span>; <span class="comment">// Skip negative numbers</span>
+                            }
+                            <span class="keyword">console</span>.<span class="function">log</span>(<span
+                                class="string">"Positive number:"</span>, num);
+                            }
+                </div>
+
+                <div class="demo-container">
+                    <h3>🎮 Interactive Demo: Break and Continue</h3>
+                    <button class="demo-button" onclick="demonstrateBreak()">Break Example</button>
+                    <button class="demo-button" onclick="demonstrateContinue()">Continue Example</button>
+                    <div class="output" id="breakContinueOutput">Click a button to see control statements!</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔢 Nested Loops</h2>
+                <p>Loops inside other loops - powerful but use carefully!</p>
+
+                <div class="code-example">
+                    <span class="comment">// Nested loops example - multiplication table</span>
+                    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span
+                        class="number">1</span>; i <= <span class="number">5</span>; i++) {
+                        <span class="keyword">let</span> row = <span class="string">""</span>;
+                        <span class="keyword">for</span> (<span class="keyword">let</span> j = <span
+                            class="number">1</span>; j <= <span class="number">5</span>; j++) {
+                            row += <span class="string">`${i * j}\t`</span>;
+                            }
+                            <span class="keyword">console</span>.<span class="function">log</span>(row);
+                            }
+
+                            <span class="comment">// Pattern printing</span>
+                            <span class="keyword">for</span> (<span class="keyword">let</span> i = <span
+                                class="number">1</span>; i <= <span class="number">5</span>; i++) {
+                                <span class="keyword">let</span> pattern = <span class="string">""</span>;
+                                <span class="keyword">for</span> (<span class="keyword">let</span> j = <span
+                                    class="number">1</span>; j <= i; j++) { pattern +=<span class="string">"* "</span>;
+                                    }
+                                    <span class="keyword">console</span>.<span class="function">log</span>(pattern);
+                                    }
+
+                                    <span class="comment">// 2D array processing</span>
+                                    <span class="keyword">let</span> matrix = [
+                                    [<span class="number">1</span>, <span class="number">2</span>, <span
+                                        class="number">3</span>],
+                                    [<span class="number">4</span>, <span class="number">5</span>, <span
+                                        class="number">6</span>],
+                                    [<span class="number">7</span>, <span class="number">8</span>, <span
+                                        class="number">9</span>]
+                                    ];
+
+                                    <span class="keyword">for</span> (<span class="keyword">let</span> row = <span
+                                        class="number">0</span>; row < matrix.<span class="function">length</span>;
+                                        row++) {
+                                        <span class="keyword">for</span> (<span class="keyword">let</span> col = <span
+                                            class="number">0</span>; col < matrix[row].<span class="function">
+                                            length</span>; col++) {
+                                            <span class="keyword">console</span>.<span class="function">log</span>(<span
+                                                class="string">`matrix[${row}][${col}] = ${matrix[row][col]}`</span>);
+                                            }
+                                            }
+                </div>
+
+                <div class="demo-container">
+                    <h3>🎮 Interactive Demo: Nested Loops</h3>
+                    <button class="demo-button" onclick="demonstrateMultiplicationTable()">Multiplication Table</button>
+                    <button class="demo-button" onclick="demonstrateStarPattern()">Star Pattern</button>
+                    <button class="demo-button" onclick="demonstrate2DArray()">2D Array</button>
+                    <div class="output" id="nestedLoopOutput">Click a button to see nested loops!</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>⚠️ Common Pitfalls and Best Practices</h2>
+
+                <div class="warning">
+                    <h3>🚨 Infinite Loop Warning</h3>
+                    <p>Always ensure your loop condition will eventually become false!</p>
+                    <div class="code-example">
+                        <span class="comment">// BAD - Infinite loop!</span>
+                        <span class="keyword">let</span> i = <span class="number">0</span>;
+                        <span class="keyword">while</span> (i < <span class="number">10</span>) {
+                            <span class="keyword">console</span>.<span class="function">log</span>(i);
+                            <span class="comment">// i is never incremented - infinite loop!</span>
+                            }
+
+                            <span class="comment">// GOOD - Proper increment</span>
+                            <span class="keyword">let</span> i = <span class="number">0</span>;
+                            <span class="keyword">while</span> (i < <span class="number">10</span>) {
+                                <span class="keyword">console</span>.<span class="function">log</span>(i);
+                                i++; <span class="comment">// Don't forget this!</span>
+                                }
+                    </div>
+                </div>
+
+                <div class="performance-tip">
+                    <h3>⚡ Performance Tips</h3>
+                    <ul>
+                        <li>Cache array length in for loops:
+                            <code>for (let i = 0, len = arr.length; i < len; i++)</code></li>
+                        <li>Use appropriate loop type for your use case</li>
+                        <li>Avoid creating objects inside loops when possible</li>
+                        <li>Consider using array methods like <code>forEach</code>, <code>map</code>,
+                            <code>filter</code> for simple operations</li>
+                    </ul>
+                </div>
+
+                <div class="demo-container">
+                    <h3>🎮 Interactive Demo: Loop Performance</h3>
+                    <button class="demo-button" onclick="demonstratePerformance()">Performance Test</button>
+                    <div class="output" id="performanceOutput">Click to test loop performance!</div>
+                </div>
+            </div>
+
+            <div class="best-practices">
+                <h3>🌟 Loop Best Practices</h3>
+                <ul>
+                    <li>Use descriptive variable names (not just i, j, k)</li>
+                    <li>Keep loop bodies as simple as possible</li>
+                    <li>Always initialize loop variables</li>
+                    <li>Use for-of for arrays when you don't need indices</li>
+                    <li>Use for-in for objects when iterating properties</li>
+                    <li>Consider alternative array methods for common operations</li>
+                    <li>Test loop boundaries and edge cases</li>
+                    <li>Avoid modifying arrays while iterating over them</li>
+                    <li>Use break and continue to control flow efficiently</li>
+                    <li>Comment complex loop logic clearly</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>🎯 Practice Exercises</h2>
+
+                <div class="warning">
+                    <strong>Exercise 1:</strong> Write a loop to find the largest number in an array.
+                </div>
+
+                <div class="warning">
+                    <strong>Exercise 2:</strong> Create a function that reverses a string using a loop.
+                </div>
+
+                <div class="warning">
+                    <strong>Exercise 3:</strong> Build a simple times table generator using nested loops.
+                </div>
+
+                <div class="demo-container">
+                    <h3>🎮 Interactive Exercise: String Reverser</h3>
+                    <input type="text" id="stringInput" placeholder="Enter a string"
+                        style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; margin: 5px;">
+                    <button class="demo-button" onclick="reverseString()">Reverse String</button>
+                    <div class="output" id="stringReverseOutput">Enter a string and click reverse!</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <h3>🧭 Navigation</h3>
+            <a href="conditionals.html" class="nav-button">← Previous: Conditionals</a>
+            <a href="error_handling.html" class="nav-button">Next: Error Handling →</a>
+        </div>
+    </div>
+
+    <script>
+        // Interactive demos
+        function demonstrateForLoop() {
+            const output = document.getElementById('forLoopOutput');
+            const viz = document.getElementById('forLoopViz');
+            const count = parseInt(document.getElementById('forLoopCount').value) || 5;
+
+            output.innerHTML = '';
+            viz.innerHTML = '';
+
+            let sum = 0;
+            for (let i = 1; i <= count; i++) {
+                sum += i;
+                output.innerHTML += `Iteration ${i}: Sum = ${sum}<br>`;
+                viz.innerHTML += `<span class="loop-counter">${i}</span>`;
+            }
+
+            output.innerHTML += `<br><strong>Final Sum: ${sum}</strong>`;
+        }
+
+        function demonstrateArrayIteration() {
+            const output = document.getElementById('arrayIterationOutput');
+            const viz = document.getElementById('arrayIterationViz');
+            const fruits = ['🍎', '🍌', '🍊', '🍇', '🍓'];
+
+            output.innerHTML = '';
+            viz.innerHTML = '';
+
+            for (let i = 0; i < fruits.length; i++) {
+                output.innerHTML += `Index ${i}: ${fruits[i]}<br>`;
+                viz.innerHTML += `<span class="array-item">${fruits[i]}</span>`;
+            }
+        }
+
+        function demonstrateReverseIteration() {
+            const output = document.getElementById('arrayIterationOutput');
+            const viz = document.getElementById('arrayIterationViz');
+            const fruits = ['🍎', '🍌', '🍊', '🍇', '🍓'];
+
+            output.innerHTML = '';
+            viz.innerHTML = '';
+
+            for (let i = fruits.length - 1; i >= 0; i--) {
+                output.innerHTML += `Index ${i}: ${fruits[i]}<br>`;
+                viz.innerHTML += `<span class="array-item">${fruits[i]}</span>`;
+            }
+        }
+
+        function demonstrateStepIteration() {
+            const output = document.getElementById('arrayIterationOutput');
+            const viz = document.getElementById('arrayIterationViz');
+            const fruits = ['🍎', '🍌', '🍊', '🍇', '🍓'];
+
+            output.innerHTML = '';
+            viz.innerHTML = '';
+
+            for (let i = 0; i < fruits.length; i += 2) {
+                output.innerHTML += `Index ${i}: ${fruits[i]}<br>`;
+                viz.innerHTML += `<span class="array-item">${fruits[i]}</span>`;
+            }
+        }
+
+        function demonstrateWhileLoop() {
+            const output = document.getElementById('whileLoopOutput');
+            output.innerHTML = '';
+
+            let count = 5;
+            while (count > 0) {
+                output.innerHTML += `Countdown: ${count}<br>`;
+                count--;
+            }
+            output.innerHTML += `🚀 Blast off!`;
+        }
+
+        function demonstrateRandomWhile() {
+            const output = document.getElementById('whileLoopOutput');
+            output.innerHTML = '';
+
+            let randomNum;
+            let attempts = 0;
+            const target = 7;
+
+            while (randomNum !== target) {
+                randomNum = Math.floor(Math.random() * 10) + 1;
+                attempts++;
+                output.innerHTML += `Attempt ${attempts}: ${randomNum}<br>`;
+
+                if (attempts > 20) {
+                    output.innerHTML += `<br>Stopping after 20 attempts for demo purposes!`;
+                    break;
+                }
+            }
+
+            if (randomNum === target) {
+                output.innerHTML += `<br>🎉 Found lucky ${target} in ${attempts} attempts!`;
+            }
+        }
+
+        function demonstrateDoWhile() {
+            const output = document.getElementById('doWhileOutput');
+            output.innerHTML = '';
+
+            const secretNumber = Math.floor(Math.random() * 10) + 1;
+            let guess;
+            let attempts = 0;
+
+            output.innerHTML += `🎯 Secret number is ${secretNumber}<br>`;
+
+            do {
+                guess = Math.floor(Math.random() * 10) + 1;
+                attempts++;
+                output.innerHTML += `Guess ${attempts}: ${guess}<br>`;
+            } while (guess !== secretNumber && attempts < 5);
+
+            if (guess === secretNumber) {
+                output.innerHTML += `🎉 Correct! Found it in ${attempts} attempts!`;
+            } else {
+                output.innerHTML += `💔 Didn't find it in 5 attempts. Secret was ${secretNumber}`;
+            }
+        }
+
+        function demonstrateForIn() {
+            const output = document.getElementById('forInOfOutput');
+            output.innerHTML = '';
+
+            const person = {
+                name: 'John',
+                age: 30,
+                city: 'New York',
+                job: 'Developer'
+            };
+
+            output.innerHTML += '<strong>For-In Loop (Object Properties):</strong><br>';
+            for (let property in person) {
+                output.innerHTML += `${property}: ${person[property]}<br>`;
+            }
+        }
+
+        function demonstrateForOf() {
+            const output = document.getElementById('forInOfOutput');
+            output.innerHTML = '';
+
+            const fruits = ['🍎 Apple', '🍌 Banana', '🍊 Orange', '🍇 Grape'];
+
+            output.innerHTML += '<strong>For-Of Loop (Array Values):</strong><br>';
+            for (let fruit of fruits) {
+                output.innerHTML += `${fruit}<br>`;
+            }
+        }
+
+        function demonstrateBreak() {
+            const output = document.getElementById('breakContinueOutput');
+            output.innerHTML = '';
+
+            output.innerHTML += '<strong>Break Example - Stop at 6:</strong><br>';
+            for (let i = 1; i <= 10; i++) {
+                if (i === 6) {
+                    output.innerHTML += `💥 Breaking at ${i}<br>`;
+                    break;
+                }
+                output.innerHTML += `Number: ${i}<br>`;
+            }
+        }
+
+        function demonstrateContinue() {
+            const output = document.getElementById('breakContinueOutput');
+            output.innerHTML = '';
+
+            output.innerHTML += '<strong>Continue Example - Skip even numbers:</strong><br>';
+            for (let i = 1; i <= 10; i++) {
+                if (i % 2 === 0) {
+                    continue;
+                }
+                output.innerHTML += `Odd number: ${i}<br>`;
+            }
+        }
+
+        function demonstrateMultiplicationTable() {
+            const output = document.getElementById('nestedLoopOutput');
+            output.innerHTML = '';
+
+            output.innerHTML += '<strong>5x5 Multiplication Table:</strong><br>';
+            for (let i = 1; i <= 5; i++) {
+                let row = '';
+                for (let j = 1; j <= 5; j++) {
+                    row += `${i * j}\t`;
+                }
+                output.innerHTML += `${row}<br>`;
+            }
+        }
+
+        function demonstrateStarPattern() {
+            const output = document.getElementById('nestedLoopOutput');
+            output.innerHTML = '';
+
+            output.innerHTML += '<strong>Star Pattern:</strong><br>';
+            for (let i = 1; i <= 5; i++) {
+                let pattern = '';
+                for (let j = 1; j <= i; j++) {
+                    pattern += '⭐ ';
+                }
+                output.innerHTML += `${pattern}<br>`;
+            }
+        }
+
+        function demonstrate2DArray() {
+            const output = document.getElementById('nestedLoopOutput');
+            output.innerHTML = '';
+
+            const matrix = [
+                [1, 2, 3],
+                [4, 5, 6],
+                [7, 8, 9]
+            ];
+
+            output.innerHTML += '<strong>2D Array Processing:</strong><br>';
+            for (let row = 0; row < matrix.length; row++) {
+                for (let col = 0; col < matrix[row].length; col++) {
+                    output.innerHTML += `matrix[${row}][${col}] = ${matrix[row][col]}<br>`;
+                }
+            }
+        }
+
+        function demonstratePerformance() {
+            const output = document.getElementById('performanceOutput');
+            output.innerHTML = '';
+
+            const arr = Array.from({ length: 100000 }, (_, i) => i);
+
+            // Method 1: No length caching
+            let start = performance.now();
+            for (let i = 0; i < arr.length; i++) {
+                // Do nothing, just iterate
+            }
+            let end = performance.now();
+            const time1 = end - start;
+
+            // Method 2: Length caching
+            start = performance.now();
+            for (let i = 0, len = arr.length; i < len; i++) {
+                // Do nothing, just iterate
+            }
+            end = performance.now();
+            const time2 = end - start;
+
+            output.innerHTML += `<strong>Performance Test (100,000 iterations):</strong><br>`;
+            output.innerHTML += `Without length caching: ${time1.toFixed(2)}ms<br>`;
+            output.innerHTML += `With length caching: ${time2.toFixed(2)}ms<br>`;
+            output.innerHTML += `Difference: ${Math.abs(time1 - time2).toFixed(2)}ms`;
+        }
+
+        function reverseString() {
+            const output = document.getElementById('stringReverseOutput');
+            const input = document.getElementById('stringInput').value;
+
+            if (!input) {
+                output.innerHTML = 'Please enter a string!';
+                return;
+            }
+
+            let reversed = '';
+            for (let i = input.length - 1; i >= 0; i--) {
+                reversed += input[i];
+            }
+
+            output.innerHTML = `
+                <strong>Original:</strong> ${input}<br>
+                <strong>Reversed:</strong> ${reversed}<br>
+                <strong>Method:</strong> Used a for loop iterating backwards
+            `;
+        }
+
+        // Initialize progress bar animation
+        window.addEventListener('load', function () {
+            const progressBar = document.querySelector('.progress-fill');
+            setTimeout(() => {
+                progressBar.style.width = '100%';
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>

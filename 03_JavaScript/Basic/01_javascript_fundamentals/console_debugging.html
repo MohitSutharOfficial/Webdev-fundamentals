@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -186,7 +187,8 @@
             margin: 20px 0;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ddd;
             padding: 12px;
             text-align: left;
@@ -210,17 +212,20 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="hero">
             <h1>JavaScript Console & Debugging</h1>
-            <p>Master the art of debugging and console manipulation in JavaScript. Learn professional debugging techniques, console methods, and development tools.</p>
+            <p>Master the art of debugging and console manipulation in JavaScript. Learn professional debugging
+                techniques, console methods, and development tools.</p>
         </div>
 
         <div class="section">
             <h2>1. Console Object Overview</h2>
-            <p>The console object provides access to the browser's debugging console. It's an essential tool for development, testing, and debugging JavaScript applications.</p>
-            
+            <p>The console object provides access to the browser's debugging console. It's an essential tool for
+                development, testing, and debugging JavaScript applications.</p>
+
             <h3>Basic Console Methods</h3>
             <div class="console-methods">
                 <div class="method-card">
@@ -250,20 +255,20 @@
             </div>
 
             <div class="code-block">
-// Basic console methods
-console.log('Hello, World!');
-console.error('This is an error message');
-console.warn('This is a warning');
-console.info('This is informational');
-console.debug('This is debug information');
+                // Basic console methods
+                console.log('Hello, World!');
+                console.error('This is an error message');
+                console.warn('This is a warning');
+                console.info('This is informational');
+                console.debug('This is debug information');
 
-// Console with variables
-let name = 'JavaScript';
-let version = 'ES2023';
-console.log('Language:', name, 'Version:', version);
+                // Console with variables
+                let name = 'JavaScript';
+                let version = 'ES2023';
+                console.log('Language:', name, 'Version:', version);
 
-// Multiple arguments
-console.log('User:', {name: 'John', age: 30}, 'Active:', true);
+                // Multiple arguments
+                console.log('User:', {name: 'John', age: 30}, 'Active:', true);
             </div>
 
             <div class="interactive-demo">
@@ -275,909 +280,862 @@ console.log('User:', {name: 'John', age: 30}, 'Active:', true);
 
         <div class="section">
             <h2>2. Advanced Console Methods</h2>
-            
+
             <h3>console.table() - Data Visualization</h3>
             <div class="code-block">
-// Arrays
-const fruits = ['apple', 'banana', 'orange'];
-console.table(fruits);
+                // Arrays
+                const fruits = ['apple', 'banana', 'orange'];
+                console.table(fruits);
 
-// Objects
-const user = {
-    name: 'John Doe',
-    age: 30,
-    occupation: 'Developer'
-};
-console.table(user);
+                // Objects
+                const user = {
+                name: 'John Doe',
+                age: 30,
+                occupation: 'Developer'
+                };
+                console.table(user);
 
-// Array of objects
-const users = [
-    {name: 'John', age: 30, role: 'Developer'},
-    {name: 'Jane', age: 25, role: 'Designer'},
-    {name: 'Bob', age: 35, role: 'Manager'}
-];
-console.table(users);
+                // Array of objects
+                const users = [
+                {name: 'John', age: 30, role: 'Developer'},
+                {name: 'Jane', age: 25, role: 'Designer'},
+                {name: 'Bob', age: 35, role: 'Manager'}
+                ];
+                console.table(users);
 
-// Specific columns
-console.table(users, ['name', 'role']);
+                // Specific columns
+                console.table(users, ['name', 'role']);
             </div>
 
             <h3>console.group() - Organizing Output</h3>
             <div class="code-block">
-// Grouping related logs
-console.group('User Information');
-console.log('Name: John Doe');
-console.log('Age: 30');
-console.log('Role: Developer');
-console.groupEnd();
+                // Grouping related logs
+                console.group('User Information');
+                console.log('Name: John Doe');
+                console.log('Age: 30');
+                console.log('Role: Developer');
+                console.groupEnd();
 
-// Nested groups
-console.group('Application Startup');
-console.log('Loading configuration...');
-console.group('Database Connection');
-console.log('Connecting to database...');
-console.log('Connection successful');
-console.groupEnd();
-console.log('Application ready');
-console.groupEnd();
+                // Nested groups
+                console.group('Application Startup');
+                console.log('Loading configuration...');
+                console.group('Database Connection');
+                console.log('Connecting to database...');
+                console.log('Connection successful');
+                console.groupEnd();
+                console.log('Application ready');
+                console.groupEnd();
 
-// Collapsed groups
-console.groupCollapsed('Debug Information');
-console.log('Memory usage: 45MB');
-console.log('CPU usage: 12%');
-console.groupEnd();
+                // Collapsed groups
+                console.groupCollapsed('Debug Information');
+                console.log('Memory usage: 45MB');
+                console.log('CPU usage: 12%');
+                console.groupEnd();
             </div>
 
             <h3>console.time() - Performance Measurement</h3>
             <div class="code-block">
-// Timing operations
-console.time('arrayLoop');
-for (let i = 0; i < 1000000; i++) {
-    // Some operation
-}
-console.timeEnd('arrayLoop');
+                // Timing operations
+                console.time('arrayLoop');
+                for (let i = 0; i < 1000000; i++) { // Some operation } console.timeEnd('arrayLoop'); // Multiple timers
+                    console.time('fetchData'); console.time('processData'); // Simulate async operations setTimeout(()=>
+                    {
+                    console.timeEnd('fetchData');
+                    console.timeEnd('processData');
+                    }, 1000);
 
-// Multiple timers
-console.time('fetchData');
-console.time('processData');
+                    // Time logging
+                    console.time('calculation');
+                    let sum = 0;
+                    for (let i = 0; i < 1000; i++) { sum +=i; } console.timeLog('calculation', 'Halfway done' ); //
+                        Continue calculation console.timeEnd('calculation'); </div>
 
-// Simulate async operations
-setTimeout(() => {
-    console.timeEnd('fetchData');
-    console.timeEnd('processData');
-}, 1000);
-
-// Time logging
-console.time('calculation');
-let sum = 0;
-for (let i = 0; i < 1000; i++) {
-    sum += i;
-}
-console.timeLog('calculation', 'Halfway done');
-// Continue calculation
-console.timeEnd('calculation');
+                        <div class="interactive-demo">
+                            <h4>Try Advanced Console Methods:</h4>
+                            <button class="btn" onclick="demoConsoleTable()">Table Demo</button>
+                            <button class="btn" onclick="demoConsoleGroup()">Group Demo</button>
+                            <button class="btn" onclick="demoConsoleTime()">Timing Demo</button>
+                        </div>
             </div>
 
-            <div class="interactive-demo">
-                <h4>Try Advanced Console Methods:</h4>
-                <button class="btn" onclick="demoConsoleTable()">Table Demo</button>
-                <button class="btn" onclick="demoConsoleGroup()">Group Demo</button>
-                <button class="btn" onclick="demoConsoleTime()">Timing Demo</button>
-            </div>
-        </div>
+            <div class="section">
+                <h2>3. Console Formatting and Styling</h2>
 
-        <div class="section">
-            <h2>3. Console Formatting and Styling</h2>
-            
-            <h3>String Substitution</h3>
-            <div class="code-block">
-// String substitution patterns
-console.log('Hello %s', 'World');
-console.log('Number: %d', 42);
-console.log('Float: %f', 3.14159);
-console.log('Object: %o', {name: 'John', age: 30});
-console.log('DOM Element: %O', document.body);
-
-// Multiple substitutions
-let name = 'JavaScript';
-let year = 2023;
-console.log('%s was created in %d', name, 1995);
-console.log('Current year: %d, Language: %s', year, name);
-            </div>
-
-            <h3>CSS Styling in Console</h3>
-            <div class="code-block">
-// Styled console output
-console.log('%cHello World!', 'color: red; font-size: 20px;');
-console.log('%cSuccess!', 'color: green; font-weight: bold;');
-console.log('%cError!', 'color: red; background: yellow; padding: 2px;');
-
-// Multiple styles
-console.log(
-    '%cBlue %cRed %cGreen', 
-    'color: blue;', 
-    'color: red;', 
-    'color: green;'
-);
-
-// Complex styling
-console.log(
-    '%c JavaScript %c Console %c Styling',
-    'background: #222; color: #bada55; padding: 3px;',
-    'background: #f06; color: white; padding: 3px;',
-    'background: #0cf; color: #222; padding: 3px;'
-);
-            </div>
-
-            <h3>console.assert() - Conditional Logging</h3>
-            <div class="code-block">
-// Assertions
-let x = 5;
-console.assert(x > 0, 'x should be positive');
-console.assert(x > 10, 'x should be greater than 10', x);
-
-// Function validation
-function divide(a, b) {
-    console.assert(b !== 0, 'Division by zero!', {a, b});
-    return a / b;
-}
-
-divide(10, 2);  // No assertion
-divide(10, 0);  // Assertion fails
-
-// Array validation
-let arr = [1, 2, 3];
-console.assert(Array.isArray(arr), 'Should be an array');
-console.assert(arr.length > 0, 'Array should not be empty');
-            </div>
-
-            <div class="interactive-demo">
-                <h4>Try Console Formatting:</h4>
-                <button class="btn" onclick="demoConsoleFormatting()">Formatting Demo</button>
-                <button class="btn" onclick="demoConsoleStyling()">Styling Demo</button>
-                <button class="btn" onclick="demoConsoleAssert()">Assert Demo</button>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>4. Browser Developer Tools</h2>
-            
-            <h3>DevTools Features</h3>
-            <div class="debug-tools">
-                <div class="tool-card">
-                    <h4>Console Tab</h4>
-                    <p>Execute JavaScript, view logs, and interact with the page</p>
-                </div>
-                <div class="tool-card">
-                    <h4>Sources Tab</h4>
-                    <p>Debug JavaScript code with breakpoints and step-through</p>
-                </div>
-                <div class="tool-card">
-                    <h4>Network Tab</h4>
-                    <p>Monitor network requests and responses</p>
-                </div>
-                <div class="tool-card">
-                    <h4>Elements Tab</h4>
-                    <p>Inspect and modify HTML/CSS in real-time</p>
-                </div>
-            </div>
-
-            <h3>Console Commands</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Command</th>
-                        <th>Description</th>
-                        <th>Example</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>$0</td>
-                        <td>References the selected element</td>
-                        <td>$0.style.color = 'red'</td>
-                    </tr>
-                    <tr>
-                        <td>$1, $2, $3, $4</td>
-                        <td>Previous selected elements</td>
-                        <td>$1.innerHTML</td>
-                    </tr>
-                    <tr>
-                        <td>$(selector)</td>
-                        <td>Shorthand for querySelector</td>
-                        <td>$('#myId')</td>
-                    </tr>
-                    <tr>
-                        <td>$$(selector)</td>
-                        <td>Shorthand for querySelectorAll</td>
-                        <td>$$('.myClass')</td>
-                    </tr>
-                    <tr>
-                        <td>clear()</td>
-                        <td>Clears the console</td>
-                        <td>clear()</td>
-                    </tr>
-                    <tr>
-                        <td>copy()</td>
-                        <td>Copies value to clipboard</td>
-                        <td>copy(myObject)</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class="code-block">
-// Console helper functions
-console.clear();  // Clear console
-console.dir(document.body);  // Detailed object view
-console.count('function calls');  // Count occurrences
-console.trace();  // Stack trace
-
-// Console shortcuts (in DevTools)
-$('#myElement')  // document.querySelector('#myElement')
-$$('.myClass')   // document.querySelectorAll('.myClass')
-copy(myVariable) // Copy to clipboard
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>5. Debugging Techniques</h2>
-            
-            <h3>Breakpoints and Debugging</h3>
-            <div class="code-block">
-// debugger statement
-function calculateTotal(items) {
-    let total = 0;
-    debugger;  // Execution will pause here
-    
-    for (let item of items) {
-        total += item.price;
-        debugger;  // Pause on each iteration
-    }
-    
-    return total;
-}
-
-// Conditional breakpoints
-function processUser(user) {
-    if (user.age < 18) {
-        debugger;  // Only pause for minors
-    }
-    return user;
-}
-            </div>
-
-            <h3>Error Handling and Logging</h3>
-            <div class="code-block">
-// Try-catch with console logging
-function riskyOperation() {
-    try {
-        console.log('Starting risky operation...');
-        // Potentially problematic code
-        let result = someComplexCalculation();
-        console.log('Operation successful:', result);
-        return result;
-    } catch (error) {
-        console.error('Operation failed:', error.message);
-        console.error('Stack trace:', error.stack);
-        console.group('Error Details');
-        console.log('Error name:', error.name);
-        console.log('Error message:', error.message);
-        console.log('Error stack:', error.stack);
-        console.groupEnd();
-        throw error;
-    } finally {
-        console.log('Cleanup operations...');
-    }
-}
-
-// Custom error logging
-function logError(error, context = {}) {
-    console.group(`❌ Error: ${error.message}`);
-    console.error('Full error:', error);
-    console.table(context);
-    console.trace('Error trace');
-    console.groupEnd();
-}
-            </div>
-
-            <h3>Performance Debugging</h3>
-            <div class="code-block">
-// Performance measurement
-function measurePerformance(fn, label) {
-    console.time(label);
-    console.group(`🔍 Performance: ${label}`);
-    
-    const start = performance.now();
-    const result = fn();
-    const end = performance.now();
-    
-    console.log(`Execution time: ${end - start} milliseconds`);
-    console.log('Result:', result);
-    console.groupEnd();
-    console.timeEnd(label);
-    
-    return result;
-}
-
-// Memory usage monitoring
-function checkMemory() {
-    if (performance.memory) {
-        console.table({
-            'Used JS Heap Size': `${Math.round(performance.memory.usedJSHeapSize / 1024 / 1024)} MB`,
-            'Total JS Heap Size': `${Math.round(performance.memory.totalJSHeapSize / 1024 / 1024)} MB`,
-            'JS Heap Size Limit': `${Math.round(performance.memory.jsHeapSizeLimit / 1024 / 1024)} MB`
-        });
-    }
-}
-
-// Function call tracking
-function trackFunctionCalls(fn, name) {
-    return function(...args) {
-        console.count(`${name} called`);
-        console.log(`${name} arguments:`, args);
-        const result = fn.apply(this, args);
-        console.log(`${name} result:`, result);
-        return result;
-    };
-}
-            </div>
-
-            <div class="debug-scenario">
-                <h4>🐛 Debug Scenario:</h4>
-                <p>A function is not returning expected results. Use console methods to debug:</p>
+                <h3>String Substitution</h3>
                 <div class="code-block">
-function problematicFunction(data) {
-    console.log('Input data:', data);
-    console.assert(Array.isArray(data), 'Data should be an array');
-    
-    let result = [];
-    for (let i = 0; i < data.length; i++) {
-        console.log(`Processing item ${i}:`, data[i]);
-        // Process each item
-        let processed = processItem(data[i]);
-        console.log(`Processed result:`, processed);
-        result.push(processed);
-    }
-    
-    console.log('Final result:', result);
-    return result;
-}
+                    // String substitution patterns
+                    console.log('Hello %s', 'World');
+                    console.log('Number: %d', 42);
+                    console.log('Float: %f', 3.14159);
+                    console.log('Object: %o', {name: 'John', age: 30});
+                    console.log('DOM Element: %O', document.body);
+
+                    // Multiple substitutions
+                    let name = 'JavaScript';
+                    let year = 2023;
+                    console.log('%s was created in %d', name, 1995);
+                    console.log('Current year: %d, Language: %s', year, name);
+                </div>
+
+                <h3>CSS Styling in Console</h3>
+                <div class="code-block">
+                    // Styled console output
+                    console.log('%cHello World!', 'color: red; font-size: 20px;');
+                    console.log('%cSuccess!', 'color: green; font-weight: bold;');
+                    console.log('%cError!', 'color: red; background: yellow; padding: 2px;');
+
+                    // Multiple styles
+                    console.log(
+                    '%cBlue %cRed %cGreen',
+                    'color: blue;',
+                    'color: red;',
+                    'color: green;'
+                    );
+
+                    // Complex styling
+                    console.log(
+                    '%c JavaScript %c Console %c Styling',
+                    'background: #222; color: #bada55; padding: 3px;',
+                    'background: #f06; color: white; padding: 3px;',
+                    'background: #0cf; color: #222; padding: 3px;'
+                    );
+                </div>
+
+                <h3>console.assert() - Conditional Logging</h3>
+                <div class="code-block">
+                    // Assertions
+                    let x = 5;
+                    console.assert(x > 0, 'x should be positive');
+                    console.assert(x > 10, 'x should be greater than 10', x);
+
+                    // Function validation
+                    function divide(a, b) {
+                    console.assert(b !== 0, 'Division by zero!', {a, b});
+                    return a / b;
+                    }
+
+                    divide(10, 2); // No assertion
+                    divide(10, 0); // Assertion fails
+
+                    // Array validation
+                    let arr = [1, 2, 3];
+                    console.assert(Array.isArray(arr), 'Should be an array');
+                    console.assert(arr.length > 0, 'Array should not be empty');
+                </div>
+
+                <div class="interactive-demo">
+                    <h4>Try Console Formatting:</h4>
+                    <button class="btn" onclick="demoConsoleFormatting()">Formatting Demo</button>
+                    <button class="btn" onclick="demoConsoleStyling()">Styling Demo</button>
+                    <button class="btn" onclick="demoConsoleAssert()">Assert Demo</button>
                 </div>
             </div>
-        </div>
 
-        <div class="section">
-            <h2>6. Advanced Debugging Patterns</h2>
-            
-            <h3>Debugging Utility Functions</h3>
-            <div class="code-block">
-// Debug utility class
-class Debug {
-    static enabled = true;
-    static level = 'info'; // 'error', 'warn', 'info', 'debug'
-    
-    static log(message, level = 'info', ...args) {
-        if (!this.enabled) return;
-        
-        const levels = ['error', 'warn', 'info', 'debug'];
-        const currentLevelIndex = levels.indexOf(this.level);
-        const messageLevelIndex = levels.indexOf(level);
-        
-        if (messageLevelIndex <= currentLevelIndex) {
-            const timestamp = new Date().toISOString();
-            console[level](`[${timestamp}] [${level.toUpperCase()}]`, message, ...args);
-        }
-    }
-    
-    static error(message, ...args) {
-        this.log(message, 'error', ...args);
-    }
-    
-    static warn(message, ...args) {
-        this.log(message, 'warn', ...args);
-    }
-    
-    static info(message, ...args) {
-        this.log(message, 'info', ...args);
-    }
-    
-    static debug(message, ...args) {
-        this.log(message, 'debug', ...args);
-    }
-    
-    static group(label, fn) {
-        console.group(label);
-        try {
-            return fn();
-        } finally {
-            console.groupEnd();
-        }
-    }
-}
+            <div class="section">
+                <h2>4. Browser Developer Tools</h2>
 
-// Usage
-Debug.info('Application started');
-Debug.warn('This is a warning');
-Debug.error('An error occurred');
-Debug.debug('Debug information');
+                <h3>DevTools Features</h3>
+                <div class="debug-tools">
+                    <div class="tool-card">
+                        <h4>Console Tab</h4>
+                        <p>Execute JavaScript, view logs, and interact with the page</p>
+                    </div>
+                    <div class="tool-card">
+                        <h4>Sources Tab</h4>
+                        <p>Debug JavaScript code with breakpoints and step-through</p>
+                    </div>
+                    <div class="tool-card">
+                        <h4>Network Tab</h4>
+                        <p>Monitor network requests and responses</p>
+                    </div>
+                    <div class="tool-card">
+                        <h4>Elements Tab</h4>
+                        <p>Inspect and modify HTML/CSS in real-time</p>
+                    </div>
+                </div>
+
+                <h3>Console Commands</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Command</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>$0</td>
+                            <td>References the selected element</td>
+                            <td>$0.style.color = 'red'</td>
+                        </tr>
+                        <tr>
+                            <td>$1, $2, $3, $4</td>
+                            <td>Previous selected elements</td>
+                            <td>$1.innerHTML</td>
+                        </tr>
+                        <tr>
+                            <td>$(selector)</td>
+                            <td>Shorthand for querySelector</td>
+                            <td>$('#myId')</td>
+                        </tr>
+                        <tr>
+                            <td>$$(selector)</td>
+                            <td>Shorthand for querySelectorAll</td>
+                            <td>$$('.myClass')</td>
+                        </tr>
+                        <tr>
+                            <td>clear()</td>
+                            <td>Clears the console</td>
+                            <td>clear()</td>
+                        </tr>
+                        <tr>
+                            <td>copy()</td>
+                            <td>Copies value to clipboard</td>
+                            <td>copy(myObject)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="code-block">
+                    // Console helper functions
+                    console.clear(); // Clear console
+                    console.dir(document.body); // Detailed object view
+                    console.count('function calls'); // Count occurrences
+                    console.trace(); // Stack trace
+
+                    // Console shortcuts (in DevTools)
+                    $('#myElement') // document.querySelector('#myElement')
+                    $$('.myClass') // document.querySelectorAll('.myClass')
+                    copy(myVariable) // Copy to clipboard
+                </div>
             </div>
 
-            <h3>Object Inspection</h3>
-            <div class="code-block">
-// Deep object inspection
-function inspectObject(obj, name = 'Object') {
-    console.group(`🔍 Inspecting: ${name}`);
-    
-    console.log('Type:', typeof obj);
-    console.log('Constructor:', obj.constructor?.name);
-    console.log('Is Array:', Array.isArray(obj));
-    console.log('Keys:', Object.keys(obj));
-    console.log('Values:', Object.values(obj));
-    console.log('Entries:', Object.entries(obj));
-    
-    console.group('Properties');
-    for (let key in obj) {
-        if (obj.hasOwnProperty(key)) {
-            console.log(`${key}:`, obj[key], `(${typeof obj[key]})`);
-        }
-    }
-    console.groupEnd();
-    
-    console.group('Methods');
-    Object.getOwnPropertyNames(obj).forEach(prop => {
-        if (typeof obj[prop] === 'function') {
-            console.log(`${prop}():`, obj[prop]);
-        }
-    });
-    console.groupEnd();
-    
-    console.groupEnd();
-}
+            <div class="section">
+                <h2>5. Debugging Techniques</h2>
 
-// Function parameter inspection
-function inspectFunction(fn) {
-    console.group(`🔧 Function: ${fn.name}`);
-    console.log('Function string:', fn.toString());
-    console.log('Length (parameters):', fn.length);
-    console.log('Name:', fn.name);
-    console.groupEnd();
-}
-            </div>
+                <h3>Breakpoints and Debugging</h3>
+                <div class="code-block">
+                    // debugger statement
+                    function calculateTotal(items) {
+                    let total = 0;
+                    debugger; // Execution will pause here
 
-            <h3>Async Debugging</h3>
-            <div class="code-block">
-// Promise debugging
-function debugPromise(promise, label) {
-    console.log(`🔄 Starting: ${label}`);
-    
-    return promise
-        .then(result => {
-            console.log(`✅ Success: ${label}`, result);
-            return result;
-        })
-        .catch(error => {
-            console.error(`❌ Error: ${label}`, error);
-            throw error;
-        });
-}
-
-// Async function debugging
-async function debugAsyncOperation() {
-    try {
-        console.time('async-operation');
-        console.log('Starting async operation...');
-        
-        const result1 = await debugPromise(
-            fetch('/api/data'),
-            'Fetch API data'
-        );
-        
-        const result2 = await debugPromise(
-            processData(result1),
-            'Process data'
-        );
-        
-        console.log('Final result:', result2);
-        console.timeEnd('async-operation');
-        
-        return result2;
-    } catch (error) {
-        console.error('Async operation failed:', error);
-        throw error;
-    }
-}
-            </div>
-
-            <div class="interactive-demo">
-                <h4>Try Advanced Debugging:</h4>
-                <button class="btn" onclick="demoDebugUtils()">Debug Utils Demo</button>
-                <button class="btn" onclick="demoObjectInspection()">Object Inspection Demo</button>
-                <button class="btn" onclick="demoAsyncDebugging()">Async Debugging Demo</button>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>7. Best Practices and Tips</h2>
-            
-            <div class="tip">
-                <h3>✅ Best Practices:</h3>
-                <ul>
-                    <li>Use descriptive labels for console.time() and console.group()</li>
-                    <li>Remove console.log() statements before production</li>
-                    <li>Use console.table() for arrays and objects</li>
-                    <li>Leverage console.assert() for runtime validation</li>
-                    <li>Use console.trace() to understand call stacks</li>
-                    <li>Group related console output with console.group()</li>
-                </ul>
-            </div>
-
-            <div class="warning">
-                <h3>⚠️ Common Pitfalls:</h3>
-                <ul>
-                    <li>Forgetting to remove debug code in production</li>
-                    <li>Over-relying on console.log() instead of using debugger</li>
-                    <li>Not checking if console exists in older browsers</li>
-                    <li>Logging sensitive information to console</li>
-                    <li>Not using appropriate console methods for different message types</li>
-                </ul>
-            </div>
-
-            <h3>Production-Safe Debugging</h3>
-            <div class="code-block">
-// Environment-aware debugging
-const DEBUG = process.env.NODE_ENV !== 'production';
-
-function debugLog(...args) {
-    if (DEBUG && typeof console !== 'undefined') {
-        console.log(...args);
-    }
-}
-
-// Conditional debugging
-class Logger {
-    constructor(enabled = false) {
-        this.enabled = enabled;
-    }
-    
-    log(...args) {
-        if (this.enabled) {
-            console.log(...args);
-        }
-    }
-    
-    error(...args) {
-        if (this.enabled) {
-            console.error(...args);
-        }
-    }
-}
-
-const logger = new Logger(DEBUG);
-
-// Safe console usage
-function safeConsole(method, ...args) {
-    if (typeof console !== 'undefined' && console[method]) {
-        console[method](...args);
-    }
-}
-            </div>
-
-            <h3>Performance Considerations</h3>
-            <div class="code-block">
-// Efficient debugging
-function efficientDebug(condition, message, ...args) {
-    if (condition && DEBUG) {
-        console.log(message, ...args);
-    }
-}
-
-// Lazy evaluation for expensive operations
-function expensiveDebug(getMessage) {
-    if (DEBUG) {
-        console.log(getMessage());
-    }
-}
-
-// Usage
-expensiveDebug(() => `Complex calculation: ${doExpensiveCalculation()}`);
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>8. Interactive Examples</h2>
-            
-            <div class="interactive-demo">
-                <h4>Console Practice Area:</h4>
-                <button class="btn" onclick="runConsoleExercise1()">Exercise 1: Basic Logging</button>
-                <button class="btn" onclick="runConsoleExercise2()">Exercise 2: Error Handling</button>
-                <button class="btn" onclick="runConsoleExercise3()">Exercise 3: Performance Timing</button>
-                <button class="btn" onclick="runConsoleExercise4()">Exercise 4: Object Debugging</button>
-                <button class="btn" onclick="clearConsole()">Clear Console</button>
-            </div>
-
-            <div class="debug-scenario">
-                <h4>🎯 Challenge:</h4>
-                <p>Create a debugging session for a shopping cart function. Use various console methods to track the execution flow, validate inputs, and measure performance.</p>
-                <button class="btn" onclick="debugShoppingCart()">Debug Shopping Cart</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Interactive demo functions
-        function demoBasicConsole() {
-            console.log('🚀 Basic Console Demo');
-            console.log('This is a regular log message');
-            console.info('This is an info message');
-            console.warn('This is a warning message');
-            console.error('This is an error message');
-            console.log('Multiple values:', 42, true, {name: 'John'});
-        }
-
-        function demoConsoleTypes() {
-            console.log('%c Console Types Demo', 'color: blue; font-size: 18px; font-weight: bold;');
-            
-            const user = {name: 'Alice', age: 28, skills: ['JavaScript', 'React', 'Node.js']};
-            console.log('User object:', user);
-            console.dir(user);
-            console.table(user);
-            
-            console.assert(user.age > 21, 'User should be an adult');
-            console.assert(user.age > 30, 'User should be over 30', user);
-        }
-
-        function demoConsoleTable() {
-            console.log('%c Table Demo', 'color: green; font-size: 16px;');
-            
-            const employees = [
-                {name: 'John', department: 'Engineering', salary: 75000},
-                {name: 'Jane', department: 'Design', salary: 65000},
-                {name: 'Bob', department: 'Marketing', salary: 55000}
-            ];
-            
-            console.table(employees);
-            console.table(employees, ['name', 'department']);
-        }
-
-        function demoConsoleGroup() {
-            console.group('🗂️ Group Demo');
-            console.log('This is inside the main group');
-            
-            console.group('Nested Group');
-            console.log('This is in a nested group');
-            console.warn('Warning in nested group');
-            console.groupEnd();
-            
-            console.groupCollapsed('Collapsed Group');
-            console.log('This group starts collapsed');
-            console.groupEnd();
-            
-            console.groupEnd();
-        }
-
-        function demoConsoleTime() {
-            console.log('⏱️ Timing Demo');
-            
-            console.time('loop-performance');
-            for (let i = 0; i < 100000; i++) {
-                // Simulate work
-            }
-            console.timeEnd('loop-performance');
-            
-            console.time('async-operation');
-            setTimeout(() => {
-                console.timeEnd('async-operation');
-            }, 1000);
-        }
-
-        function demoConsoleFormatting() {
-            console.log('🎨 Formatting Demo');
-            console.log('String: %s, Number: %d, Float: %f', 'Hello', 42, 3.14);
-            console.log('Object: %o', {x: 10, y: 20});
-            console.log('JSON: %j', {name: 'Test', value: 123});
-        }
-
-        function demoConsoleStyling() {
-            console.log('%c🎨 Styling Demo', 'color: purple; font-size: 20px;');
-            console.log('%cSuccess!', 'color: green; font-weight: bold; background: #e8f5e8; padding: 2px 4px;');
-            console.log('%cError!', 'color: red; font-weight: bold; background: #fee; padding: 2px 4px;');
-            console.log('%cWarning!', 'color: orange; font-weight: bold; background: #fff3cd; padding: 2px 4px;');
-            
-            console.log(
-                '%c JavaScript %c Console %c Mastery',
-                'background: #222; color: #00ff00; padding: 4px 8px; border-radius: 3px;',
-                'background: #ff6b6b; color: white; padding: 4px 8px; border-radius: 3px;',
-                'background: #4ecdc4; color: #333; padding: 4px 8px; border-radius: 3px;'
-            );
-        }
-
-        function demoConsoleAssert() {
-            console.log('🔍 Assert Demo');
-            
-            const testValue = 5;
-            console.assert(testValue > 0, 'Value should be positive', testValue);
-            console.assert(testValue > 10, 'Value should be greater than 10', testValue);
-            
-            const user = {name: 'John', age: 30};
-            console.assert(user.name, 'User should have a name');
-            console.assert(user.age >= 18, 'User should be an adult', user);
-        }
-
-        function demoDebugUtils() {
-            console.log('🛠️ Debug Utils Demo');
-            
-            // Simulating the Debug class
-            const timestamp = new Date().toISOString();
-            console.log(`[${timestamp}] [INFO] Application started`);
-            console.warn(`[${timestamp}] [WARN] This is a warning`);
-            console.error(`[${timestamp}] [ERROR] This is an error`);
-        }
-
-        function demoObjectInspection() {
-            console.log('🔍 Object Inspection Demo');
-            
-            const testObj = {
-                name: 'Test Object',
-                value: 42,
-                nested: {a: 1, b: 2},
-                method: function() { return 'Hello'; }
-            };
-            
-            console.group('Object Inspection');
-            console.log('Object:', testObj);
-            console.log('Type:', typeof testObj);
-            console.log('Keys:', Object.keys(testObj));
-            console.log('Values:', Object.values(testObj));
-            console.dir(testObj);
-            console.groupEnd();
-        }
-
-        function demoAsyncDebugging() {
-            console.log('🔄 Async Debugging Demo');
-            
-            console.time('async-demo');
-            
-            // Simulate async operation
-            const asyncOperation = new Promise((resolve) => {
-                setTimeout(() => {
-                    console.log('✅ Async operation completed');
-                    resolve('Success');
-                }, 1000);
-            });
-            
-            asyncOperation.then(result => {
-                console.log('Result:', result);
-                console.timeEnd('async-demo');
-            });
-        }
-
-        // Exercise functions
-        function runConsoleExercise1() {
-            console.log('%c Exercise 1: Basic Logging', 'color: blue; font-size: 16px; font-weight: bold;');
-            console.log('Welcome to JavaScript Console!');
-            console.log('Today is:', new Date().toLocaleDateString());
-            console.log('Your browser is:', navigator.userAgent.split(' ')[0]);
-        }
-
-        function runConsoleExercise2() {
-            console.log('%c Exercise 2: Error Handling', 'color: red; font-size: 16px; font-weight: bold;');
-            
-            try {
-                // Intentional error
-                throw new Error('This is a test error');
-            } catch (error) {
-                console.error('Caught error:', error.message);
-                console.error('Error stack:', error.stack);
-                console.group('Error Details');
-                console.log('Error name:', error.name);
-                console.log('Error message:', error.message);
-                console.groupEnd();
-            }
-        }
-
-        function runConsoleExercise3() {
-            console.log('%c Exercise 3: Performance Timing', 'color: orange; font-size: 16px; font-weight: bold;');
-            
-            console.time('array-creation');
-            const largeArray = new Array(100000).fill(0).map((_, i) => i);
-            console.timeEnd('array-creation');
-            
-            console.time('array-processing');
-            const sum = largeArray.reduce((acc, val) => acc + val, 0);
-            console.timeEnd('array-processing');
-            
-            console.log('Sum of array:', sum);
-        }
-
-        function runConsoleExercise4() {
-            console.log('%c Exercise 4: Object Debugging', 'color: green; font-size: 16px; font-weight: bold;');
-            
-            const complexObject = {
-                user: {
-                    name: 'John Doe',
-                    age: 30,
-                    preferences: {
-                        theme: 'dark',
-                        language: 'en'
+                    for (let item of items) {
+                    total += item.price;
+                    debugger; // Pause on each iteration
                     }
-                },
-                settings: {
-                    notifications: true,
-                    autoSave: false
-                }
-            };
-            
-            console.log('Complex object:', complexObject);
-            console.table(complexObject.user);
-            console.dir(complexObject);
-            console.group('Object Properties');
-            Object.entries(complexObject).forEach(([key, value]) => {
-                console.log(`${key}:`, value);
-            });
-            console.groupEnd();
-        }
 
-        function debugShoppingCart() {
-            console.log('%c 🛒 Shopping Cart Debug Challenge', 'color: purple; font-size: 18px; font-weight: bold;');
-            
-            function ShoppingCart() {
-                this.items = [];
-                this.total = 0;
-            }
-            
-            ShoppingCart.prototype.addItem = function(item) {
-                console.log('Adding item:', item);
-                console.assert(item.name, 'Item must have a name');
-                console.assert(item.price > 0, 'Item price must be positive');
-                
-                this.items.push(item);
-                this.total += item.price;
-                
-                console.log('Current cart:', this.items);
-                console.log('Current total:', this.total);
-            };
-            
-            ShoppingCart.prototype.removeItem = function(itemName) {
-                console.log('Removing item:', itemName);
-                
-                const index = this.items.findIndex(item => item.name === itemName);
-                if (index > -1) {
-                    const removedItem = this.items.splice(index, 1)[0];
-                    this.total -= removedItem.price;
-                    console.log('Removed item:', removedItem);
-                } else {
-                    console.warn('Item not found:', itemName);
-                }
-                
-                console.log('Updated cart:', this.items);
-                console.log('Updated total:', this.total);
-            };
-            
-            // Test the shopping cart
-            console.time('shopping-cart-test');
-            const cart = new ShoppingCart();
-            
-            cart.addItem({name: 'Laptop', price: 999.99});
-            cart.addItem({name: 'Mouse', price: 29.99});
-            cart.addItem({name: 'Keyboard', price: 79.99});
-            
-            console.table(cart.items);
-            
-            cart.removeItem('Mouse');
-            
-            console.table(cart.items);
-            console.timeEnd('shopping-cart-test');
-        }
+                    return total;
+                    }
 
-        function clearConsole() {
-            console.clear();
-            console.log('%c Console cleared! 🧹', 'color: blue; font-size: 16px;');
-        }
+                    // Conditional breakpoints
+                    function processUser(user) {
+                    if (user.age < 18) { debugger; // Only pause for minors } return user; } </div>
 
-        // Initialize page
-        console.log('%c Welcome to JavaScript Console & Debugging! 🚀', 'color: #4CAF50; font-size: 24px; font-weight: bold;');
-        console.log('Open your browser\'s developer tools to see the console in action!');
-        console.log('Try the interactive demos above to practice console methods.');
-    </script>
+                        <h3>Error Handling and Logging</h3>
+                        <div class="code-block">
+                            // Try-catch with console logging
+                            function riskyOperation() {
+                            try {
+                            console.log('Starting risky operation...');
+                            // Potentially problematic code
+                            let result = someComplexCalculation();
+                            console.log('Operation successful:', result);
+                            return result;
+                            } catch (error) {
+                            console.error('Operation failed:', error.message);
+                            console.error('Stack trace:', error.stack);
+                            console.group('Error Details');
+                            console.log('Error name:', error.name);
+                            console.log('Error message:', error.message);
+                            console.log('Error stack:', error.stack);
+                            console.groupEnd();
+                            throw error;
+                            } finally {
+                            console.log('Cleanup operations...');
+                            }
+                            }
+
+                            // Custom error logging
+                            function logError(error, context = {}) {
+                            console.group(`❌ Error: ${error.message}`);
+                            console.error('Full error:', error);
+                            console.table(context);
+                            console.trace('Error trace');
+                            console.groupEnd();
+                            }
+                        </div>
+
+                        <h3>Performance Debugging</h3>
+                        <div class="code-block">
+                            // Performance measurement
+                            function measurePerformance(fn, label) {
+                            console.time(label);
+                            console.group(`🔍 Performance: ${label}`);
+
+                            const start = performance.now();
+                            const result = fn();
+                            const end = performance.now();
+
+                            console.log(`Execution time: ${end - start} milliseconds`);
+                            console.log('Result:', result);
+                            console.groupEnd();
+                            console.timeEnd(label);
+
+                            return result;
+                            }
+
+                            // Memory usage monitoring
+                            function checkMemory() {
+                            if (performance.memory) {
+                            console.table({
+                            'Used JS Heap Size': `${Math.round(performance.memory.usedJSHeapSize / 1024 / 1024)} MB`,
+                            'Total JS Heap Size': `${Math.round(performance.memory.totalJSHeapSize / 1024 / 1024)} MB`,
+                            'JS Heap Size Limit': `${Math.round(performance.memory.jsHeapSizeLimit / 1024 / 1024)} MB`
+                            });
+                            }
+                            }
+
+                            // Function call tracking
+                            function trackFunctionCalls(fn, name) {
+                            return function(...args) {
+                            console.count(`${name} called`);
+                            console.log(`${name} arguments:`, args);
+                            const result = fn.apply(this, args);
+                            console.log(`${name} result:`, result);
+                            return result;
+                            };
+                            }
+                        </div>
+
+                        <div class="debug-scenario">
+                            <h4>🐛 Debug Scenario:</h4>
+                            <p>A function is not returning expected results. Use console methods to debug:</p>
+                            <div class="code-block">
+                                function problematicFunction(data) {
+                                console.log('Input data:', data);
+                                console.assert(Array.isArray(data), 'Data should be an array');
+
+                                let result = [];
+                                for (let i = 0; i < data.length; i++) { console.log(`Processing item ${i}:`, data[i]);
+                                    // Process each item let processed=processItem(data[i]); console.log(`Processed
+                                    result:`, processed); result.push(processed); } console.log('Final result:',
+                                    result); return result; } </div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <h2>6. Advanced Debugging Patterns</h2>
+
+                            <h3>Debugging Utility Functions</h3>
+                            <div class="code-block">
+                                // Debug utility class
+                                class Debug {
+                                static enabled = true;
+                                static level = 'info'; // 'error', 'warn', 'info', 'debug'
+
+                                static log(message, level = 'info', ...args) {
+                                if (!this.enabled) return;
+
+                                const levels = ['error', 'warn', 'info', 'debug'];
+                                const currentLevelIndex = levels.indexOf(this.level);
+                                const messageLevelIndex = levels.indexOf(level);
+
+                                if (messageLevelIndex <= currentLevelIndex) { const timestamp=new Date().toISOString();
+                                    console[level](`[${timestamp}] [${level.toUpperCase()}]`, message, ...args); } }
+                                    static error(message, ...args) { this.log(message, 'error' , ...args); } static
+                                    warn(message, ...args) { this.log(message, 'warn' , ...args); } static info(message,
+                                    ...args) { this.log(message, 'info' , ...args); } static debug(message, ...args) {
+                                    this.log(message, 'debug' , ...args); } static group(label, fn) {
+                                    console.group(label); try { return fn(); } finally { console.groupEnd(); } } } //
+                                    Usage Debug.info('Application started'); Debug.warn('This is a warning');
+                                    Debug.error('An error occurred'); Debug.debug('Debug information'); </div>
+
+                                    <h3>Object Inspection</h3>
+                                    <div class="code-block">
+                                        // Deep object inspection
+                                        function inspectObject(obj, name = 'Object') {
+                                        console.group(`🔍 Inspecting: ${name}`);
+
+                                        console.log('Type:', typeof obj);
+                                        console.log('Constructor:', obj.constructor?.name);
+                                        console.log('Is Array:', Array.isArray(obj));
+                                        console.log('Keys:', Object.keys(obj));
+                                        console.log('Values:', Object.values(obj));
+                                        console.log('Entries:', Object.entries(obj));
+
+                                        console.group('Properties');
+                                        for (let key in obj) {
+                                        if (obj.hasOwnProperty(key)) {
+                                        console.log(`${key}:`, obj[key], `(${typeof obj[key]})`);
+                                        }
+                                        }
+                                        console.groupEnd();
+
+                                        console.group('Methods');
+                                        Object.getOwnPropertyNames(obj).forEach(prop => {
+                                        if (typeof obj[prop] === 'function') {
+                                        console.log(`${prop}():`, obj[prop]);
+                                        }
+                                        });
+                                        console.groupEnd();
+
+                                        console.groupEnd();
+                                        }
+
+                                        // Function parameter inspection
+                                        function inspectFunction(fn) {
+                                        console.group(`🔧 Function: ${fn.name}`);
+                                        console.log('Function string:', fn.toString());
+                                        console.log('Length (parameters):', fn.length);
+                                        console.log('Name:', fn.name);
+                                        console.groupEnd();
+                                        }
+                                    </div>
+
+                                    <h3>Async Debugging</h3>
+                                    <div class="code-block">
+                                        // Promise debugging
+                                        function debugPromise(promise, label) {
+                                        console.log(`🔄 Starting: ${label}`);
+
+                                        return promise
+                                        .then(result => {
+                                        console.log(`✅ Success: ${label}`, result);
+                                        return result;
+                                        })
+                                        .catch(error => {
+                                        console.error(`❌ Error: ${label}`, error);
+                                        throw error;
+                                        });
+                                        }
+
+                                        // Async function debugging
+                                        async function debugAsyncOperation() {
+                                        try {
+                                        console.time('async-operation');
+                                        console.log('Starting async operation...');
+
+                                        const result1 = await debugPromise(
+                                        fetch('/api/data'),
+                                        'Fetch API data'
+                                        );
+
+                                        const result2 = await debugPromise(
+                                        processData(result1),
+                                        'Process data'
+                                        );
+
+                                        console.log('Final result:', result2);
+                                        console.timeEnd('async-operation');
+
+                                        return result2;
+                                        } catch (error) {
+                                        console.error('Async operation failed:', error);
+                                        throw error;
+                                        }
+                                        }
+                                    </div>
+
+                                    <div class="interactive-demo">
+                                        <h4>Try Advanced Debugging:</h4>
+                                        <button class="btn" onclick="demoDebugUtils()">Debug Utils Demo</button>
+                                        <button class="btn" onclick="demoObjectInspection()">Object Inspection
+                                            Demo</button>
+                                        <button class="btn" onclick="demoAsyncDebugging()">Async Debugging Demo</button>
+                                    </div>
+                            </div>
+
+                            <div class="section">
+                                <h2>7. Best Practices and Tips</h2>
+
+                                <div class="tip">
+                                    <h3>✅ Best Practices:</h3>
+                                    <ul>
+                                        <li>Use descriptive labels for console.time() and console.group()</li>
+                                        <li>Remove console.log() statements before production</li>
+                                        <li>Use console.table() for arrays and objects</li>
+                                        <li>Leverage console.assert() for runtime validation</li>
+                                        <li>Use console.trace() to understand call stacks</li>
+                                        <li>Group related console output with console.group()</li>
+                                    </ul>
+                                </div>
+
+                                <div class="warning">
+                                    <h3>⚠️ Common Pitfalls:</h3>
+                                    <ul>
+                                        <li>Forgetting to remove debug code in production</li>
+                                        <li>Over-relying on console.log() instead of using debugger</li>
+                                        <li>Not checking if console exists in older browsers</li>
+                                        <li>Logging sensitive information to console</li>
+                                        <li>Not using appropriate console methods for different message types</li>
+                                    </ul>
+                                </div>
+
+                                <h3>Production-Safe Debugging</h3>
+                                <div class="code-block">
+                                    // Environment-aware debugging
+                                    const DEBUG = process.env.NODE_ENV !== 'production';
+
+                                    function debugLog(...args) {
+                                    if (DEBUG && typeof console !== 'undefined') {
+                                    console.log(...args);
+                                    }
+                                    }
+
+                                    // Conditional debugging
+                                    class Logger {
+                                    constructor(enabled = false) {
+                                    this.enabled = enabled;
+                                    }
+
+                                    log(...args) {
+                                    if (this.enabled) {
+                                    console.log(...args);
+                                    }
+                                    }
+
+                                    error(...args) {
+                                    if (this.enabled) {
+                                    console.error(...args);
+                                    }
+                                    }
+                                    }
+
+                                    const logger = new Logger(DEBUG);
+
+                                    // Safe console usage
+                                    function safeConsole(method, ...args) {
+                                    if (typeof console !== 'undefined' && console[method]) {
+                                    console[method](...args);
+                                    }
+                                    }
+                                </div>
+
+                                <h3>Performance Considerations</h3>
+                                <div class="code-block">
+                                    // Efficient debugging
+                                    function efficientDebug(condition, message, ...args) {
+                                    if (condition && DEBUG) {
+                                    console.log(message, ...args);
+                                    }
+                                    }
+
+                                    // Lazy evaluation for expensive operations
+                                    function expensiveDebug(getMessage) {
+                                    if (DEBUG) {
+                                    console.log(getMessage());
+                                    }
+                                    }
+
+                                    // Usage
+                                    expensiveDebug(() => `Complex calculation: ${doExpensiveCalculation()}`);
+                                </div>
+                            </div>
+
+                            <div class="section">
+                                <h2>8. Interactive Examples</h2>
+
+                                <div class="interactive-demo">
+                                    <h4>Console Practice Area:</h4>
+                                    <button class="btn" onclick="runConsoleExercise1()">Exercise 1: Basic
+                                        Logging</button>
+                                    <button class="btn" onclick="runConsoleExercise2()">Exercise 2: Error
+                                        Handling</button>
+                                    <button class="btn" onclick="runConsoleExercise3()">Exercise 3: Performance
+                                        Timing</button>
+                                    <button class="btn" onclick="runConsoleExercise4()">Exercise 4: Object
+                                        Debugging</button>
+                                    <button class="btn" onclick="clearConsole()">Clear Console</button>
+                                </div>
+
+                                <div class="debug-scenario">
+                                    <h4>🎯 Challenge:</h4>
+                                    <p>Create a debugging session for a shopping cart function. Use various console
+                                        methods to track the execution flow, validate inputs, and measure performance.
+                                    </p>
+                                    <button class="btn" onclick="debugShoppingCart()">Debug Shopping Cart</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            // Interactive demo functions
+                            function demoBasicConsole() {
+                                console.log('🚀 Basic Console Demo');
+                                console.log('This is a regular log message');
+                                console.info('This is an info message');
+                                console.warn('This is a warning message');
+                                console.error('This is an error message');
+                                console.log('Multiple values:', 42, true, { name: 'John' });
+                            }
+
+                            function demoConsoleTypes() {
+                                console.log('%c Console Types Demo', 'color: blue; font-size: 18px; font-weight: bold;');
+
+                                const user = { name: 'Alice', age: 28, skills: ['JavaScript', 'React', 'Node.js'] };
+                                console.log('User object:', user);
+                                console.dir(user);
+                                console.table(user);
+
+                                console.assert(user.age > 21, 'User should be an adult');
+                                console.assert(user.age > 30, 'User should be over 30', user);
+                            }
+
+                            function demoConsoleTable() {
+                                console.log('%c Table Demo', 'color: green; font-size: 16px;');
+
+                                const employees = [
+                                    { name: 'John', department: 'Engineering', salary: 75000 },
+                                    { name: 'Jane', department: 'Design', salary: 65000 },
+                                    { name: 'Bob', department: 'Marketing', salary: 55000 }
+                                ];
+
+                                console.table(employees);
+                                console.table(employees, ['name', 'department']);
+                            }
+
+                            function demoConsoleGroup() {
+                                console.group('🗂️ Group Demo');
+                                console.log('This is inside the main group');
+
+                                console.group('Nested Group');
+                                console.log('This is in a nested group');
+                                console.warn('Warning in nested group');
+                                console.groupEnd();
+
+                                console.groupCollapsed('Collapsed Group');
+                                console.log('This group starts collapsed');
+                                console.groupEnd();
+
+                                console.groupEnd();
+                            }
+
+                            function demoConsoleTime() {
+                                console.log('⏱️ Timing Demo');
+
+                                console.time('loop-performance');
+                                for (let i = 0; i < 100000; i++) {
+                                    // Simulate work
+                                }
+                                console.timeEnd('loop-performance');
+
+                                console.time('async-operation');
+                                setTimeout(() => {
+                                    console.timeEnd('async-operation');
+                                }, 1000);
+                            }
+
+                            function demoConsoleFormatting() {
+                                console.log('🎨 Formatting Demo');
+                                console.log('String: %s, Number: %d, Float: %f', 'Hello', 42, 3.14);
+                                console.log('Object: %o', { x: 10, y: 20 });
+                                console.log('JSON: %j', { name: 'Test', value: 123 });
+                            }
+
+                            function demoConsoleStyling() {
+                                console.log('%c🎨 Styling Demo', 'color: purple; font-size: 20px;');
+                                console.log('%cSuccess!', 'color: green; font-weight: bold; background: #e8f5e8; padding: 2px 4px;');
+                                console.log('%cError!', 'color: red; font-weight: bold; background: #fee; padding: 2px 4px;');
+                                console.log('%cWarning!', 'color: orange; font-weight: bold; background: #fff3cd; padding: 2px 4px;');
+
+                                console.log(
+                                    '%c JavaScript %c Console %c Mastery',
+                                    'background: #222; color: #00ff00; padding: 4px 8px; border-radius: 3px;',
+                                    'background: #ff6b6b; color: white; padding: 4px 8px; border-radius: 3px;',
+                                    'background: #4ecdc4; color: #333; padding: 4px 8px; border-radius: 3px;'
+                                );
+                            }
+
+                            function demoConsoleAssert() {
+                                console.log('🔍 Assert Demo');
+
+                                const testValue = 5;
+                                console.assert(testValue > 0, 'Value should be positive', testValue);
+                                console.assert(testValue > 10, 'Value should be greater than 10', testValue);
+
+                                const user = { name: 'John', age: 30 };
+                                console.assert(user.name, 'User should have a name');
+                                console.assert(user.age >= 18, 'User should be an adult', user);
+                            }
+
+                            function demoDebugUtils() {
+                                console.log('🛠️ Debug Utils Demo');
+
+                                // Simulating the Debug class
+                                const timestamp = new Date().toISOString();
+                                console.log(`[${timestamp}] [INFO] Application started`);
+                                console.warn(`[${timestamp}] [WARN] This is a warning`);
+                                console.error(`[${timestamp}] [ERROR] This is an error`);
+                            }
+
+                            function demoObjectInspection() {
+                                console.log('🔍 Object Inspection Demo');
+
+                                const testObj = {
+                                    name: 'Test Object',
+                                    value: 42,
+                                    nested: { a: 1, b: 2 },
+                                    method: function () { return 'Hello'; }
+                                };
+
+                                console.group('Object Inspection');
+                                console.log('Object:', testObj);
+                                console.log('Type:', typeof testObj);
+                                console.log('Keys:', Object.keys(testObj));
+                                console.log('Values:', Object.values(testObj));
+                                console.dir(testObj);
+                                console.groupEnd();
+                            }
+
+                            function demoAsyncDebugging() {
+                                console.log('🔄 Async Debugging Demo');
+
+                                console.time('async-demo');
+
+                                // Simulate async operation
+                                const asyncOperation = new Promise((resolve) => {
+                                    setTimeout(() => {
+                                        console.log('✅ Async operation completed');
+                                        resolve('Success');
+                                    }, 1000);
+                                });
+
+                                asyncOperation.then(result => {
+                                    console.log('Result:', result);
+                                    console.timeEnd('async-demo');
+                                });
+                            }
+
+                            // Exercise functions
+                            function runConsoleExercise1() {
+                                console.log('%c Exercise 1: Basic Logging', 'color: blue; font-size: 16px; font-weight: bold;');
+                                console.log('Welcome to JavaScript Console!');
+                                console.log('Today is:', new Date().toLocaleDateString());
+                                console.log('Your browser is:', navigator.userAgent.split(' ')[0]);
+                            }
+
+                            function runConsoleExercise2() {
+                                console.log('%c Exercise 2: Error Handling', 'color: red; font-size: 16px; font-weight: bold;');
+
+                                try {
+                                    // Intentional error
+                                    throw new Error('This is a test error');
+                                } catch (error) {
+                                    console.error('Caught error:', error.message);
+                                    console.error('Error stack:', error.stack);
+                                    console.group('Error Details');
+                                    console.log('Error name:', error.name);
+                                    console.log('Error message:', error.message);
+                                    console.groupEnd();
+                                }
+                            }
+
+                            function runConsoleExercise3() {
+                                console.log('%c Exercise 3: Performance Timing', 'color: orange; font-size: 16px; font-weight: bold;');
+
+                                console.time('array-creation');
+                                const largeArray = new Array(100000).fill(0).map((_, i) => i);
+                                console.timeEnd('array-creation');
+
+                                console.time('array-processing');
+                                const sum = largeArray.reduce((acc, val) => acc + val, 0);
+                                console.timeEnd('array-processing');
+
+                                console.log('Sum of array:', sum);
+                            }
+
+                            function runConsoleExercise4() {
+                                console.log('%c Exercise 4: Object Debugging', 'color: green; font-size: 16px; font-weight: bold;');
+
+                                const complexObject = {
+                                    user: {
+                                        name: 'John Doe',
+                                        age: 30,
+                                        preferences: {
+                                            theme: 'dark',
+                                            language: 'en'
+                                        }
+                                    },
+                                    settings: {
+                                        notifications: true,
+                                        autoSave: false
+                                    }
+                                };
+
+                                console.log('Complex object:', complexObject);
+                                console.table(complexObject.user);
+                                console.dir(complexObject);
+                                console.group('Object Properties');
+                                Object.entries(complexObject).forEach(([key, value]) => {
+                                    console.log(`${key}:`, value);
+                                });
+                                console.groupEnd();
+                            }
+
+                            function debugShoppingCart() {
+                                console.log('%c 🛒 Shopping Cart Debug Challenge', 'color: purple; font-size: 18px; font-weight: bold;');
+
+                                function ShoppingCart() {
+                                    this.items = [];
+                                    this.total = 0;
+                                }
+
+                                ShoppingCart.prototype.addItem = function (item) {
+                                    console.log('Adding item:', item);
+                                    console.assert(item.name, 'Item must have a name');
+                                    console.assert(item.price > 0, 'Item price must be positive');
+
+                                    this.items.push(item);
+                                    this.total += item.price;
+
+                                    console.log('Current cart:', this.items);
+                                    console.log('Current total:', this.total);
+                                };
+
+                                ShoppingCart.prototype.removeItem = function (itemName) {
+                                    console.log('Removing item:', itemName);
+
+                                    const index = this.items.findIndex(item => item.name === itemName);
+                                    if (index > -1) {
+                                        const removedItem = this.items.splice(index, 1)[0];
+                                        this.total -= removedItem.price;
+                                        console.log('Removed item:', removedItem);
+                                    } else {
+                                        console.warn('Item not found:', itemName);
+                                    }
+
+                                    console.log('Updated cart:', this.items);
+                                    console.log('Updated total:', this.total);
+                                };
+
+                                // Test the shopping cart
+                                console.time('shopping-cart-test');
+                                const cart = new ShoppingCart();
+
+                                cart.addItem({ name: 'Laptop', price: 999.99 });
+                                cart.addItem({ name: 'Mouse', price: 29.99 });
+                                cart.addItem({ name: 'Keyboard', price: 79.99 });
+
+                                console.table(cart.items);
+
+                                cart.removeItem('Mouse');
+
+                                console.table(cart.items);
+                                console.timeEnd('shopping-cart-test');
+                            }
+
+                            function clearConsole() {
+                                console.clear();
+                                console.log('%c Console cleared! 🧹', 'color: blue; font-size: 16px;');
+                            }
+
+                            // Initialize page
+                            console.log('%c Welcome to JavaScript Console & Debugging! 🚀', 'color: #4CAF50; font-size: 24px; font-weight: bold;');
+                            console.log('Open your browser\'s developer tools to see the console in action!');
+                            console.log('Try the interactive demos above to practice console methods.');
+                        </script>
 </body>
+
 </html>
